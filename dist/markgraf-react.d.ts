@@ -41,6 +41,8 @@ export interface UseMarkgrafOptions<R extends "canvas" | "svg" = "canvas"> {
   renderer?: R;
   /** Visual theme. `"light"` (default), `"dark"`, or `"blueprint"`. */
   theme?: "light" | "dark" | "blueprint";
+  /** When `true`, skip the background fill so the page bg shows through. */
+  transparent?: boolean;
 }
 
 /**
@@ -74,6 +76,8 @@ export interface MarkgrafPlayerProps {
   renderer?: "canvas" | "svg";
   /** Visual theme. `"light"` (default), `"dark"`, or `"blueprint"`. */
   theme?: "light" | "dark" | "blueprint";
+  /** When `true`, skip the background fill so the page bg shows through. */
+  transparent?: boolean;
   width?: number;
   height?: number;
 }
