@@ -6,12 +6,17 @@
   "main": "./dist/markgraf-react.js",
   "module": "./dist/markgraf-react.js",
   "types": "./dist/markgraf-react.d.ts",
+  "style": "./dist/markgraf-react.css",
   "exports": {
     ".": {
       "types": "./dist/markgraf-react.d.ts",
       "default": "./dist/markgraf-react.js"
     },
-    "./css": "./dist/markgraf-react.css"
+    "./css": {
+      "style": "./dist/markgraf-react.css",
+      "default": "./dist/markgraf-react.css"
+    },
+    "./dist/CommitMono-Regular.woff2": "./dist/CommitMono-Regular.woff2"
   },
   "files": [
     "dist",
