@@ -39,6 +39,8 @@ export interface MarkgrafApi<E extends Element = HTMLCanvasElement> {
 export interface UseMarkgrafOptions<R extends "canvas" | "svg" = "canvas"> {
   /** `"canvas"` (default) or `"svg"`.  Determines the type of `elementRef`. */
   renderer?: R;
+  /** Visual theme. `"light"` (default), `"dark"`, or `"blueprint"`. */
+  theme?: "light" | "dark" | "blueprint";
 }
 
 /**
@@ -70,6 +72,10 @@ export interface MarkgrafPlayerProps {
   src: string;
   /** `"canvas"` (default) or `"svg"`. */
   renderer?: "canvas" | "svg";
+  /** Visual theme. `"light"` (default), `"dark"`, or `"blueprint"`. */
+  theme?: "light" | "dark" | "blueprint";
+  width?: number;
+  height?: number;
 }
 
 /**
