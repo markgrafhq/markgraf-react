@@ -34,6 +34,14 @@ export interface MarkgrafApi<E extends Element = HTMLCanvasElement> {
   seek(seconds: number): void;
   /** `1.0` is normal playback speed. */
   setSpeed(speed: number): void;
+  /**
+   * Register a callback that fires every time the player enters the named
+   * keyframe.  Fires immediately if already in that frame.  Returns an
+   * unsubscribe function.
+   */
+  onFrameEnter(frameName: string, callback: () => void): () => void;
+  /** Seek to the start of the named keyframe.  No-op if the frame doesn't exist. */
+  seekFrame(frameName: string): void;
 }
 
 export interface UseMarkgrafOptions<R extends "canvas" | "svg" = "canvas"> {
@@ -80,6 +88,14 @@ export interface MarkgrafPlayerProps {
   transparent?: boolean;
   width?: number;
   height?: number;
+  /**
+   * Map of keyframe names to callbacks.  Each callback fires once when the
+   * player enters that keyframe (not on every animation frame).  Callbacks
+   * registered when the player is already in the matching frame fire
+   * immediately.  Use `useMarkgraf` if you need more control (e.g. pausing
+   * from the callback).
+   */
+  onFrameEnter?: Record<string, () => void>;
 }
 
 /**
