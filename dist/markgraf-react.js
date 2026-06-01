@@ -1,5 +1,5 @@
-import mn from "react";
-function vf(t) {
+import In from "react";
+function gf(t) {
   let n = 0, e;
   return () => {
     if (n === 2)
@@ -12,15 +12,21 @@ function vf(t) {
 function f() {
   throw new Error("Failed pattern match");
 }
-function Ke(t, n) {
+function Ce(t, n) {
   return n > 0 ? Math.floor(t / n) : n < 0 ? -Math.floor(t / -n) : 0;
 }
-const an = function(t) {
+const Sn = (t) => (n) => t, z = function(t) {
+  return function(n) {
+    for (var e = n.length, r = new Array(e), o = 0; o < e; o++)
+      r[o] = t(n[o]);
+    return r;
+  };
+}, El = { map: z }, lf = (t) => t, un = function(t) {
   return t.toString();
-}, ec = function(t) {
+}, _f = function(t) {
   var n = t.toString();
   return isNaN(n + ".0") ? n : n + ".0";
-}, Tf = function(t) {
+}, Os = function(t) {
   var n = t.length;
   return '"' + t.replace(
     /[\0-\x1F\x7F"\\]/g,
@@ -50,33 +56,106 @@ const an = function(t) {
       return "\\" + e.charCodeAt(0).toString(10) + i;
     }
   ) + '"';
-}, Yi = (t) => t, dn = /* @__PURE__ */ Yi("LT"), hn = /* @__PURE__ */ Yi("GT"), yn = /* @__PURE__ */ Yi("EQ"), b = (t, n) => ({ tag: t, _1: n }), T = /* @__PURE__ */ b("Nothing"), Yt = (t) => b("Just", t), rc = (t) => {
+}, bu = (t) => t, yn = /* @__PURE__ */ bu("LT"), Nn = /* @__PURE__ */ bu("GT"), Gn = /* @__PURE__ */ bu("EQ"), v = (t, n) => ({ tag: t, _1: n }), J = /* @__PURE__ */ v("Nothing"), qt = (t) => v("Just", t), df = (t) => {
   if (t.tag === "Nothing")
     return !0;
   if (t.tag === "Just")
     return !1;
   f();
-}, yf = (t) => {
+}, hf = (t) => {
   if (t.tag === "Nothing")
     return !1;
   if (t.tag === "Just")
     return !0;
   f();
-}, wf = null;
-function Ye(t, n, e) {
+}, po = function(t) {
+  return function(n) {
+    return function(e) {
+      for (var r = n, o = e.length, i = o - 1; i >= 0; i--)
+        r = t(e[i])(r);
+      return r;
+    };
+  };
+}, x = function(t) {
+  return function(n) {
+    return function(e) {
+      for (var r = n, o = e.length, i = 0; i < o; i++)
+        r = t(r)(e[i]);
+      return r;
+    };
+  };
+}, Wi = (t) => {
+  const n = t.Apply0();
+  return (e) => (r) => e.foldr((o) => {
+    const i = r(o);
+    return (s) => n.apply(n.Functor0().map((u) => lf)(i))(s);
+  })(t.pure());
+}, Sl = (t) => {
+  const n = Wi(t);
+  return (e) => {
+    const r = n(e);
+    return (o) => (i) => r(i)(o);
+  };
+}, Cl = {
+  foldr: (t) => (n) => (e) => {
+    if (e.tag === "Nothing")
+      return n;
+    if (e.tag === "Just")
+      return t(e._1)(n);
+    f();
+  },
+  foldl: (t) => (n) => (e) => {
+    if (e.tag === "Nothing")
+      return n;
+    if (e.tag === "Just")
+      return t(n)(e._1);
+    f();
+  },
+  foldMap: (t) => {
+    const n = t.mempty;
+    return (e) => (r) => {
+      if (r.tag === "Nothing")
+        return n;
+      if (r.tag === "Just")
+        return e(r._1);
+      f();
+    };
+  }
+}, Ht = {
+  foldr: po,
+  foldl: x,
+  foldMap: (t) => {
+    const n = t.mempty;
+    return (e) => Ht.foldr((r) => (o) => t.Semigroup0().append(e(r))(o))(n);
+  }
+}, Pl = null;
+function rr(t, n, e) {
   return t == null ? n : e(t);
 }
-const L = (t, n) => ({ tag: "Tuple", _1: t, _2: n }), gr = (t) => (n) => L(t, n), Ro = (t) => t._2, Fo = (t) => t._1, Lf = function(t) {
+const b = (t, n) => ({ tag: "Tuple", _1: t, _2: n }), Xe = (t) => (n) => b(t, n), Di = (t) => t._2, Hi = (t) => t._1, Gl = function(t) {
+  return function() {
+    return t;
+  };
+}, Il = {
+  apply: (t) => (n) => () => {
+    const e = t(), r = n();
+    return Oi.pure(e(r))();
+  },
+  Functor0: () => Al
+}, Oi = { pure: Gl, Apply0: () => Il }, Al = {
+  map: (t) => (n) => () => {
+    const e = n();
+    return t(e);
+  }
+}, Fl = function(t) {
   return function() {
     console.log(t);
   };
-}, Ln = (t) => (n) => t, O = function(t) {
-  return function(n) {
-    for (var e = n.length, r = new Array(e), o = 0; o < e; o++)
-      r[o] = t(n[o]);
-    return r;
+}, kc = function(t) {
+  return function() {
+    console.warn(t);
   };
-}, kf = { map: O }, oc = (t) => t, bt = typeof Array.prototype.flatMap == "function" ? function(t) {
+}, Jt = typeof Array.prototype.flatMap == "function" ? function(t) {
   return function(n) {
     return t.flatMap(n);
   };
@@ -87,32 +166,32 @@ const L = (t, n) => ({ tag: "Tuple", _1: t, _2: n }), gr = (t) => (n) => L(t, n)
         e.push(i[u]);
     return e;
   };
-}, kt = (t, n) => ({ tag: t, _1: n }), bf = (t) => kt("Right", t), Ef = {
+}, Et = (t, n) => ({ tag: t, _1: n }), Rl = (t) => Et("Right", t), Bl = {
   map: (t) => (n) => {
     if (n.tag === "Left")
-      return kt("Left", n._1);
+      return Et("Left", n._1);
     if (n.tag === "Right")
-      return kt("Right", t(n._1));
+      return Et("Right", t(n._1));
     f();
   }
-}, ic = {
+}, pf = {
   apply: (t) => (n) => {
     if (t.tag === "Left")
-      return kt("Left", t._1);
+      return Et("Left", t._1);
     if (t.tag === "Right") {
       if (n.tag === "Left")
-        return kt("Left", n._1);
+        return Et("Left", n._1);
       if (n.tag === "Right")
-        return kt("Right", t._1(n._1));
+        return Et("Right", t._1(n._1));
     }
     f();
   },
-  Functor0: () => Ef
-}, xf = {
+  Functor0: () => Bl
+}, Ql = {
   bind: (t) => {
     if (t.tag === "Left") {
       const n = t._1;
-      return (e) => kt("Left", n);
+      return (e) => Et("Left", n);
     }
     if (t.tag === "Right") {
       const n = t._1;
@@ -120,23 +199,8 @@ const L = (t, n) => ({ tag: "Tuple", _1: t, _2: n }), gr = (t) => (n) => L(t, n)
     }
     f();
   },
-  Apply0: () => ic
-}, Cf = { pure: bf, Apply0: () => ic }, Sf = { Applicative0: () => Cf, Bind1: () => xf }, Gf = (t) => t, If = { map: (t) => (n) => t(n) }, sc = { apply: (t) => (n) => t(n), Functor0: () => If }, Pf = { bind: (t) => (n) => n(t), Apply0: () => sc }, Af = { pure: Gf, Apply0: () => sc }, Te = { Applicative0: () => Af, Bind1: () => Pf }, Rf = function(t) {
-  return function() {
-    return t;
-  };
-}, Ff = {
-  apply: (t) => (n) => () => {
-    const e = t(), r = n();
-    return Xi.pure(e(r))();
-  },
-  Functor0: () => Bf
-}, Xi = { pure: Rf, Apply0: () => Ff }, Bf = {
-  map: (t) => (n) => () => {
-    const e = n();
-    return t(e);
-  }
-}, vr = (t, n) => ({ tag: t, _1: n }), uc = (t) => vr("Loop", t), Qf = {
+  Apply0: () => pf
+}, Wl = { pure: Rl, Apply0: () => pf }, $f = { Applicative0: () => Wl, Bind1: () => Ql }, Dl = (t) => t, Hl = { map: (t) => (n) => t(n) }, mf = { apply: (t) => (n) => t(n), Functor0: () => Hl }, Ol = { bind: (t) => (n) => n(t), Apply0: () => mf }, zl = { pure: Dl, Apply0: () => mf }, Ve = { Applicative0: () => zl, Bind1: () => Ol }, io = (t, n) => ({ tag: t, _1: n }), yf = (t) => io("Loop", t), ql = {
   tailRecM: (t) => {
     const n = (e) => {
       let r = e, o = !0, i;
@@ -156,8 +220,24 @@ const L = (t, n) => ({ tag: "Tuple", _1: t, _2: n }), gr = (t) => (n) => L(t, n)
     };
     return (e) => n(t(e));
   },
-  Monad0: () => Te
-}, Df = function(n) {
+  Monad0: () => Ve
+}, Yl = function(t) {
+  return function(n) {
+    return function() {
+      return t(n());
+    };
+  };
+}, Xl = function(t) {
+  return function() {
+    return t;
+  };
+}, Vl = { map: Yl }, Ul = {
+  apply: (t) => (n) => () => {
+    const e = t(), r = n();
+    return Nf.pure(e(r))();
+  },
+  Functor0: () => Vl
+}, Nf = { pure: Xl, Apply0: () => Ul }, Kl = function(n) {
   return function(e) {
     return function(r) {
       return function() {
@@ -165,9 +245,9 @@ const L = (t, n) => ({ tag: "Tuple", _1: t, _2: n }), gr = (t) => (n) => L(t, n)
       };
     };
   };
-}, Wf = function(t, n) {
+}, Ml = function(t, n) {
   return n.push(t);
-}, qf = /* @__PURE__ */ Df(Wf), Hf = (t, n) => ({ tag: "Iterator", _1: t, _2: n }), Of = (t) => (n) => (e) => () => {
+}, jl = /* @__PURE__ */ Kl(Ml), Zl = (t, n) => ({ tag: "Iterator", _1: t, _2: n }), t_ = (t) => (n) => (e) => () => {
   let r = !1;
   const o = n._2;
   for (; !r; ) {
@@ -180,7 +260,7 @@ const L = (t, n) => ({ tag: "Tuple", _1: t, _2: n }), gr = (t) => (n) => L(t, n)
     }
     r = !0;
   }
-}, zf = (t) => (n) => () => {
+}, n_ = (t) => (n) => () => {
   let e = !1;
   const r = t._2;
   for (; !e; ) {
@@ -197,48 +277,19 @@ const L = (t, n) => ({ tag: "Tuple", _1: t, _2: n }), gr = (t) => (n) => L(t, n)
     }
     f();
   }
-}, br = function(t) {
-  return function(n) {
-    return function(e) {
-      for (var r = n, o = e.length, i = o - 1; i >= 0; i--)
-        r = t(e[i])(r);
-      return r;
-    };
-  };
-}, J = function(t) {
-  return function(n) {
-    return function(e) {
-      for (var r = n, o = e.length, i = 0; i < o; i++)
-        r = t(r)(e[i]);
-      return r;
-    };
-  };
-}, Vf = (t) => {
-  const n = t.Apply0();
-  return (e) => (r) => e.foldr((o) => {
-    const i = r(o);
-    return (s) => n.apply(n.Functor0().map((u) => oc)(i))(s);
-  })(t.pure());
-}, Bt = {
-  foldr: br,
-  foldl: J,
-  foldMap: (t) => {
-    const n = t.mempty;
-    return (e) => Bt.foldr((r) => (o) => t.Semigroup0().append(e(r))(o))(n);
-  }
-}, Pt = function(t) {
+}, Ft = function(t) {
   return function(n) {
     for (var e = n.length, r = Array(e), o = 0; o < e; o++)
       r[o] = t(o)(n[o]);
     return r;
   };
 };
-var Ui = function(t) {
+var Lu = function(t) {
   return function(n) {
     return t === n;
   };
 };
-const Yf = Ui, Xf = Ui, Mi = Ui, Uf = function(t) {
+const e_ = Lu, r_ = Lu, Bo = Lu, Eu = function(t) {
   return function(n) {
     return function(e) {
       if (n.length !== e.length) return !1;
@@ -247,8 +298,8 @@ const Yf = Ui, Xf = Ui, Mi = Ui, Uf = function(t) {
       return !0;
     };
   };
-}, te = { eq: Mi }, Mf = { eq: Xf }, Er = { eq: Yf };
-var Ki = function(t) {
+}, ge = { eq: Bo }, o_ = { eq: r_ }, Ir = { eq: e_ };
+var Su = function(t) {
   return function(n) {
     return function(e) {
       return function(r) {
@@ -259,9 +310,9 @@ var Ki = function(t) {
     };
   };
 };
-const Kf = Ki, jf = Ki, Zf = Ki, G = { compare: /* @__PURE__ */ Zf(dn)(yn)(hn), Eq0: () => te }, pt = { compare: /* @__PURE__ */ jf(dn)(yn)(hn), Eq0: () => Mf }, rt = { compare: /* @__PURE__ */ Kf(dn)(yn)(hn), Eq0: () => Er }, tg = function(t) {
+const i_ = Su, s_ = Su, u_ = Su, C = { compare: /* @__PURE__ */ u_(yn)(Gn)(Nn), Eq0: () => ge }, ft = { compare: /* @__PURE__ */ s_(yn)(Gn)(Nn), Eq0: () => o_ }, it = { compare: /* @__PURE__ */ i_(yn)(Gn)(Nn), Eq0: () => Ir }, c_ = function(t) {
   return t;
-}, ng = /* @__PURE__ */ (function() {
+}, a_ = /* @__PURE__ */ (function() {
   function t(o) {
     return [o];
   }
@@ -287,8 +338,8 @@ const Kf = Ki, jf = Ki, Zf = Ki, G = { compare: /* @__PURE__ */ Zf(dn)(yn)(hn), 
       return function(s) {
         return function(u) {
           return function(c) {
-            function a(g, l) {
-              switch (l - g) {
+            function a(g, _) {
+              switch (_ - g) {
                 case 0:
                   return s([]);
                 case 1:
@@ -298,8 +349,8 @@ const Kf = Ki, jf = Ki, Zf = Ki, G = { compare: /* @__PURE__ */ Zf(dn)(yn)(hn), 
                 case 3:
                   return o(o(i(e)(u(c[g])))(u(c[g + 1])))(u(c[g + 2]));
                 default:
-                  var d = g + Math.floor((l - g) / 4) * 2;
-                  return o(i(r)(a(g, d)))(a(d, l));
+                  var d = g + Math.floor((_ - g) / 4) * 2;
+                  return o(i(r)(a(g, d)))(a(d, _));
               }
             }
             return a(0, c.length);
@@ -308,30 +359,30 @@ const Kf = Ki, jf = Ki, Zf = Ki, G = { compare: /* @__PURE__ */ Zf(dn)(yn)(hn), 
       };
     };
   };
-})(), eg = (t) => t, Yr = {
+})(), f_ = (t) => t, $r = {
   traverse: (t) => {
     const n = t.Apply0();
-    return ng(n.apply)(n.Functor0().map)(t.pure);
+    return a_(n.apply)(n.Functor0().map)(t.pure);
   },
-  sequence: (t) => Yr.traverse(t)(eg),
-  Functor0: () => kf,
-  Foldable1: () => Bt
-}, Xt = function(t, n) {
+  sequence: (t) => $r.traverse(t)(f_),
+  Functor0: () => El,
+  Foldable1: () => Ht
+}, It = function(t, n) {
   for (var e = t > n ? -1 : 1, r = new Array(e * (n - t) + 1), o = t, i = 0; o !== n; )
     r[i++] = o, o += e;
   return r[i] = o, r;
 };
-var rg = function(t, n) {
+var g_ = function(t, n) {
   if (t < 1)
     return [];
   var e = new Array(t);
   return e.fill(n);
-}, og = function(t, n) {
+}, l_ = function(t, n) {
   for (var e = [], r = 0, o = 0; o < t; o++)
     e[r++] = n;
   return e;
 };
-const ig = typeof Array.prototype.fill == "function" ? rg : og, Et = /* @__PURE__ */ (function() {
+const __ = typeof Array.prototype.fill == "function" ? g_ : l_, Lt = /* @__PURE__ */ (function() {
   function t(o, i) {
     this.head = o, this.tail = i;
   }
@@ -349,50 +400,54 @@ const ig = typeof Array.prototype.fill == "function" ? rg : og, Et = /* @__PURE_
   return function(o, i) {
     return r(o(e)(n)(i));
   };
-})(), Wt = function(t, n, e) {
+})(), Rt = function(t, n, e) {
   return e.length === 0 ? t({}) : n(e[0])(e.slice(1));
-}, sg = function(t, n, e, r) {
+}, xf = function(t, n, e, r) {
   for (var o = 0; o < r.length; o++) {
     var i = e(r[o]);
     if (n(i)) return i;
   }
   return t;
-}, er = function(t, n, e, r) {
+}, _r = function(t, n, e, r) {
   for (var o = 0, i = r.length; o < i; o++)
     if (e(r[o])) return t(o);
   return n;
-}, ug = function(t, n, e, r) {
+}, Jf = function(t, n, e, r) {
   for (var o = r.length - 1; o >= 0; o--)
     if (e(r[o])) return t(o);
   return n;
-}, cg = function(t, n, e, r, o) {
+}, Tf = function(t, n, e, r, o) {
   if (e < 0 || e > o.length) return n;
   var i = o.slice();
   return i.splice(e, 0, r), t(i);
-}, cc = function(t, n, e, r) {
+}, vf = function(t, n, e, r) {
   if (e < 0 || e >= r.length) return n;
   var o = r.slice();
   return o.splice(e, 1), t(o);
-}, rr = function(t, n, e, r, o) {
+}, Ue = function(t, n, e, r, o) {
   if (e < 0 || e >= o.length) return n;
   var i = o.slice();
   return i[e] = r, t(i);
-}, vn = function(t) {
+}, Ln = function(t) {
   return t.slice().reverse();
-}, Cn = function(t) {
+}, zn = function(t) {
   if (t.length <= 1e4)
     return Array.prototype.concat.apply([], t);
   for (var n = [], e = 0, r = t.length; e < r; e++)
     for (var o = t[e], i = 0, s = o.length; i < s; i++)
       n.push(o[i]);
   return n;
-}, gt = function(t, n) {
+}, lt = function(t, n) {
   return n.filter(t);
-}, ag = /* @__PURE__ */ (function() {
+}, d_ = function(t, n, e) {
+  for (var r = e.length, o = n, i = new Array(r), s = 0; s < r; s++)
+    o = t(o)(e[s]), i[s] = o;
+  return i;
+}, h_ = /* @__PURE__ */ (function() {
   function t(n, e, r, o, i, s) {
-    var u, c, a, g, l, d, _;
+    var u, c, a, g, _, d, l;
     for (u = i + (s - i >> 1), u - i > 1 && t(n, e, o, r, i, u), s - u > 1 && t(n, e, o, r, u, s), c = i, a = u, g = i; c < u && a < s; )
-      l = o[c], d = o[a], _ = e(n(l)(d)), _ > 0 ? (r[g++] = d, ++a) : (r[g++] = l, ++c);
+      _ = o[c], d = o[a], l = e(n(_)(d)), l > 0 ? (r[g++] = d, ++a) : (r[g++] = _, ++c);
     for (; c < u; )
       r[g++] = o[c++];
     for (; a < s; )
@@ -402,21 +457,21 @@ const ig = typeof Array.prototype.fill == "function" ? rg : og, Et = /* @__PURE_
     var o;
     return r.length < 2 ? r : (o = r.slice(0), t(n, e, o, r.slice(0), 0, r.length), o);
   };
-})(), Gt = function(t, n, e) {
+})(), bt = function(t, n, e) {
   return e.slice(t, n);
-}, $n = function(t, n, e) {
+}, wn = function(t, n, e) {
   for (var r = n.length < e.length ? n.length : e.length, o = new Array(r), i = 0; i < r; i++)
     o[i] = t(n[i])(e[i]);
   return o;
-}, de = function(t, n) {
+}, qn = function(t, n) {
   for (var e = n.length, r = 0; r < e; r++)
     if (t(n[r])) return !0;
   return !1;
-}, ac = function(t, n) {
+}, wf = function(t, n) {
   for (var e = n.length, r = 0; r < e; r++)
     if (!t(n[r])) return !1;
   return !0;
-}, Lt = (t) => (n) => ag(
+}, kt = (t) => (n) => h_(
   t,
   (e) => {
     if (e === "GT")
@@ -428,18 +483,18 @@ const ig = typeof Array.prototype.fill == "function" ? rg : og, Et = /* @__PURE_
     f();
   },
   n
-), fg = (t) => (n) => Lt((e) => (r) => t.compare(n(e))(n(r))), gn = (t) => (n) => (() => {
-  const e = qf(n);
+), p_ = (t) => (n) => kt((e) => (r) => t.compare(n(e))(n(r))), Dt = (t) => (n) => (() => {
+  const e = jl(n);
   return () => {
     const r = [...t];
     return e(r)(), r;
   };
-})()(), gg = (t) => {
+})()(), zi = (t) => {
   if (t.length === 0)
-    return t.length - 1 | 0, T;
+    return t.length - 1 | 0, J;
   const n = t.length - 1 | 0;
-  return n >= 0 && n < t.length ? b("Just", { init: Gt(0, t.length - 1 | 0, t), last: t[n] }) : T;
-}, _g = (t) => (n) => (e) => t >= 0 && t < e.length ? rr(Yt, T, t, n(e[t]), e) : T, Ce = (t) => (n) => {
+  return n >= 0 && n < t.length ? v("Just", { init: bt(0, t.length - 1 | 0, t), last: t[n] }) : J;
+}, $_ = (t) => (n) => (e) => t >= 0 && t < e.length ? Ue(qt, J, t, n(e[t]), e) : J, ur = (t) => (n) => {
   const r = ((o) => {
     let i = o, s = !0, u;
     for (; s; ) {
@@ -449,21 +504,21 @@ const ig = typeof Array.prototype.fill == "function" ? rg : og, Et = /* @__PURE_
           i = c + 1 | 0;
           continue;
         }
-        s = !1, u = b("Just", c);
+        s = !1, u = v("Just", c);
         continue;
       }
-      s = !1, u = T;
+      s = !1, u = J;
     }
     return u;
   })(0);
   if (r.tag === "Just")
-    return r._1 === 0 ? { init: [], rest: n } : { init: Gt(0, r._1, n), rest: Gt(r._1, n.length, n) };
+    return r._1 === 0 ? { init: [], rest: n } : { init: bt(0, r._1, n), rest: bt(r._1, n.length, n) };
   if (r.tag === "Nothing")
     return { init: n, rest: [] };
   f();
-}, or = (t) => (n) => {
-  const e = Lt((r) => (o) => t(r._2)(o._2))(Pt(gr)(n));
-  return 0 < e.length ? O(Ro)(fg(rt)(Fo)((() => {
+}, Ar = (t) => (n) => {
+  const e = kt((r) => (o) => t(r._2)(o._2))(Ft(Xe)(n));
+  return 0 < e.length ? z(Di)(p_(it)(Hi)((() => {
     const r = [e[0]];
     for (const o of e) {
       const i = t((() => {
@@ -476,45 +531,53 @@ const ig = typeof Array.prototype.fill == "function" ? rg : og, Et = /* @__PURE_
     }
     return r;
   })())) : [];
-}, lg = (t) => (n) => {
-  const e = [], o = Hf(
-    (i) => i >= 0 && i < n.length ? b("Just", n[i]) : T,
+}, m_ = (t) => (n) => {
+  const e = [], o = Zl(
+    (i) => i >= 0 && i < n.length ? v("Just", n[i]) : J,
     { value: 0 }
   );
-  return zf(o)((i) => () => {
+  return n_(o)((i) => () => {
     const s = [];
-    s.push(i), Of(t(i))(o)(s)(), e.push(s);
+    s.push(i), t_(t(i))(o)(s)(), e.push(s);
   })(), e;
-}, ln = (t) => (n) => {
-  const e = er(Yt, T, t, n);
-  return e.tag === "Just" ? b("Just", n[e._1]) : T;
-}, fc = (t) => (n) => gt(t, n), In = (t) => (n) => (e) => {
-  const r = er(Yt, T, (o) => t.eq(o)(n), e);
+}, jt = (t) => (n) => {
+  const e = _r(qt, J, t, n);
+  return e.tag === "Just" ? v("Just", n[e._1]) : J;
+}, kf = (t) => (n) => lt(t, n), Hn = (t) => (n) => (e) => {
+  const r = _r(qt, J, (o) => t.eq(o)(n), e);
   if (r.tag === "Nothing")
     return !1;
   if (r.tag === "Just")
     return !0;
   f();
-}, gc = (t) => (n) => bt(n)(t), vt = (t) => gc((n) => {
+}, bf = (t) => (n) => Jt(n)(t), yt = (t) => bf((n) => {
   const e = t(n);
   if (e.tag === "Nothing")
     return [];
   if (e.tag === "Just")
     return [e._1];
   f();
-}), dg = isFinite, ir = Math.abs, ji = Math.ceil, Zi = Math.cos, _c = Math.exp, lc = Math.floor, yi = function(t) {
+}), y_ = isFinite, Ke = Math.abs, N_ = Math.acos, cr = function(t) {
+  return function(n) {
+    return Math.atan2(t, n);
+  };
+}, qi = Math.ceil, re = Math.cos, Yi = Math.exp, Ne = Math.floor, bc = Math.log, x_ = function(t) {
+  return function(n) {
+    return Math.min(t, n);
+  };
+}, zs = function(t) {
   return function(n) {
     return Math.pow(t, n);
   };
-}, jr = Math.round, ts = Math.sin, _r = Math.sqrt, hg = function(t) {
+}, sr = Math.round, Un = Math.sin, En = Math.sqrt, J_ = Math.tan, T_ = function(t) {
   return function(n) {
     return function(e) {
       return (e | 0) === e ? t(e) : n;
     };
   };
-}, ct = function(t) {
+}, nt = function(t) {
   return t;
-}, pg = function(t) {
+}, v_ = function(t) {
   return function(n) {
     return function(e) {
       var r;
@@ -529,37 +592,37 @@ const ig = typeof Array.prototype.fill == "function" ? rg : og, Et = /* @__PURE_
       };
     };
   };
-}, $g = /* @__PURE__ */ pg(Yt)(T), mg = /* @__PURE__ */ $g(10), dc = /* @__PURE__ */ hg(Yt)(T), ce = (t) => {
-  if (!dg(t))
+}, w_ = /* @__PURE__ */ v_(qt)(J), k_ = /* @__PURE__ */ w_(10), Lf = /* @__PURE__ */ T_(qt)(J), $n = (t) => {
+  if (!y_(t))
     return 0;
-  if (t >= ct(2147483647))
+  if (t >= nt(2147483647))
     return 2147483647;
-  if (t <= ct(-2147483648))
+  if (t <= nt(-2147483648))
     return -2147483648;
-  const n = dc(t);
+  const n = Lf(t);
   if (n.tag === "Nothing")
     return 0;
   if (n.tag === "Just")
     return n._1;
   f();
-}, qt = (t, n, e) => ({ tag: t, _1: n, _2: e }), zt = /* @__PURE__ */ qt("Nil"), Mt = {
+}, zt = (t, n, e) => ({ tag: t, _1: n, _2: e }), Yt = /* @__PURE__ */ zt("Nil"), Xt = {
   foldr: (t) => (n) => {
-    const e = Mt.foldl((i) => (s) => t(s)(i))(n), o = ((i) => (s) => {
+    const e = Xt.foldl((i) => (s) => t(s)(i))(n), o = ((i) => (s) => {
       let u = i, c = s, a = !0, g;
       for (; a; ) {
-        const l = u, d = c;
+        const _ = u, d = c;
         if (d.tag === "Nil") {
-          a = !1, g = l;
+          a = !1, g = _;
           continue;
         }
         if (d.tag === "Cons") {
-          u = qt("Cons", d._1, l), c = d._2;
+          u = zt("Cons", d._1, _), c = d._2;
           continue;
         }
         f();
       }
       return g;
-    })(zt);
+    })(Yt);
     return (i) => e(o(i));
   },
   foldl: (t) => (e) => (r) => {
@@ -580,12 +643,12 @@ const ig = typeof Array.prototype.fill == "function" ? rg : og, Et = /* @__PURE_
   },
   foldMap: (t) => {
     const n = t.mempty;
-    return (e) => Mt.foldl((r) => {
+    return (e) => Xt.foldl((r) => {
       const o = t.Semigroup0().append(r);
       return (i) => o(e(i));
     })(n);
   }
-}, Ng = function(t) {
+}, b_ = function(t) {
   return function(n) {
     return function(e) {
       return function(r) {
@@ -603,11 +666,11 @@ const ig = typeof Array.prototype.fill == "function" ? rg : og, Et = /* @__PURE_
       };
     };
   };
-}, Jg = (t) => {
+}, L_ = (t) => {
   if (t.tag === "Just")
     return t._1;
   f();
-}, vg = { unfoldr1: /* @__PURE__ */ Ng(rc)(Jg)(Fo)(Ro) }, Tg = function(t) {
+}, E_ = { unfoldr1: /* @__PURE__ */ b_(df)(L_)(Hi)(Di) }, S_ = function(t) {
   return function(n) {
     return function(e) {
       return function(r) {
@@ -624,37 +687,37 @@ const ig = typeof Array.prototype.fill == "function" ? rg : og, Et = /* @__PURE_
       };
     };
   };
-}, yg = (t) => {
+}, C_ = (t) => {
   if (t.tag === "Just")
     return t._1;
   f();
-}, On = {
-  unfoldr: /* @__PURE__ */ Tg(rc)(yg)(Fo)(Ro),
-  Unfoldable10: () => vg
-}, Dt = (t, n, e, r, o, i, s) => ({ tag: t, _1: n, _2: e, _3: r, _4: o, _5: i, _6: s }), Wn = (t, n, e, r) => ({ tag: t, _1: n, _2: e, _3: r }), Zr = (t, n, e) => ({ tag: "Split", _1: t, _2: n, _3: e }), Ks = (t, n, e) => ({ tag: "SplitLast", _1: t, _2: n, _3: e }), Q = /* @__PURE__ */ Dt("Leaf"), Qe = /* @__PURE__ */ Wn("IterLeaf"), en = (t, n, e, r) => {
+}, te = {
+  unfoldr: /* @__PURE__ */ S_(df)(C_)(Hi)(Di),
+  Unfoldable10: () => E_
+}, Ot = (t, n, e, r, o, i, s) => ({ tag: t, _1: n, _2: e, _3: r, _4: o, _5: i, _6: s }), Kn = (t, n, e, r) => ({ tag: t, _1: n, _2: e, _3: r }), Vo = (t, n, e) => ({ tag: "Split", _1: t, _2: n, _3: e }), Lc = (t, n, e) => ({ tag: "SplitLast", _1: t, _2: n, _3: e }), A = /* @__PURE__ */ Ot("Leaf"), we = /* @__PURE__ */ Kn("IterLeaf"), an = (t, n, e, r) => {
   if (e.tag === "Leaf") {
     if (r.tag === "Leaf")
-      return Dt("Node", 1, 1, t, n, e, r);
+      return Ot("Node", 1, 1, t, n, e, r);
     if (r.tag === "Node")
-      return Dt("Node", 1 + r._1 | 0, 1 + r._2 | 0, t, n, e, r);
+      return Ot("Node", 1 + r._1 | 0, 1 + r._2 | 0, t, n, e, r);
     f();
   }
   if (e.tag === "Node") {
     if (r.tag === "Leaf")
-      return Dt("Node", 1 + e._1 | 0, 1 + e._2 | 0, t, n, e, r);
+      return Ot("Node", 1 + e._1 | 0, 1 + e._2 | 0, t, n, e, r);
     if (r.tag === "Node")
-      return Dt("Node", e._1 > r._1 ? 1 + e._1 | 0 : 1 + r._1 | 0, (1 + e._2 | 0) + r._2 | 0, t, n, e, r);
+      return Ot("Node", e._1 > r._1 ? 1 + e._1 | 0 : 1 + r._1 | 0, (1 + e._2 | 0) + r._2 | 0, t, n, e, r);
   }
   f();
-}, kn = (t, n, e, r) => {
+}, Yn = (t, n, e, r) => {
   if (e.tag === "Leaf")
-    return r.tag === "Leaf" ? Dt("Node", 1, 1, t, n, Q, Q) : r.tag === "Node" && r._1 > 1 ? r._5.tag === "Node" && (() => {
+    return r.tag === "Leaf" ? Ot("Node", 1, 1, t, n, A, A) : r.tag === "Node" && r._1 > 1 ? r._5.tag === "Node" && (() => {
       if (r._6.tag === "Leaf")
         return r._5._1 > 0;
       if (r._6.tag === "Node")
         return r._5._1 > r._6._1;
       f();
-    })() ? en(r._5._3, r._5._4, en(t, n, e, r._5._5), en(r._3, r._4, r._5._6, r._6)) : en(r._3, r._4, en(t, n, e, r._5), r._6) : en(t, n, e, r);
+    })() ? an(r._5._3, r._5._4, an(t, n, e, r._5._5), an(r._3, r._4, r._5._6, r._6)) : an(r._3, r._4, an(t, n, e, r._5), r._6) : an(t, n, e, r);
   if (e.tag === "Node")
     return r.tag === "Node" ? r._1 > (e._1 + 1 | 0) ? r._5.tag === "Node" && (() => {
       if (r._6.tag === "Leaf")
@@ -662,102 +725,102 @@ const ig = typeof Array.prototype.fill == "function" ? rg : og, Et = /* @__PURE_
       if (r._6.tag === "Node")
         return r._5._1 > r._6._1;
       f();
-    })() ? en(r._5._3, r._5._4, en(t, n, e, r._5._5), en(r._3, r._4, r._5._6, r._6)) : en(r._3, r._4, en(t, n, e, r._5), r._6) : e._1 > (r._1 + 1 | 0) ? e._6.tag === "Node" && (() => {
+    })() ? an(r._5._3, r._5._4, an(t, n, e, r._5._5), an(r._3, r._4, r._5._6, r._6)) : an(r._3, r._4, an(t, n, e, r._5), r._6) : e._1 > (r._1 + 1 | 0) ? e._6.tag === "Node" && (() => {
       if (e._5.tag === "Leaf")
         return 0 <= e._6._1;
       if (e._5.tag === "Node")
         return e._5._1 <= e._6._1;
       f();
-    })() ? en(e._6._3, e._6._4, en(e._3, e._4, e._5, e._6._5), en(t, n, e._6._6, r)) : en(e._3, e._4, e._5, en(t, n, e._6, r)) : en(t, n, e, r) : r.tag === "Leaf" && e._1 > 1 ? e._6.tag === "Node" && (() => {
+    })() ? an(e._6._3, e._6._4, an(e._3, e._4, e._5, e._6._5), an(t, n, e._6._6, r)) : an(e._3, e._4, e._5, an(t, n, e._6, r)) : an(t, n, e, r) : r.tag === "Leaf" && e._1 > 1 ? e._6.tag === "Node" && (() => {
       if (e._5.tag === "Leaf")
         return 0 <= e._6._1;
       if (e._5.tag === "Node")
         return e._5._1 <= e._6._1;
       f();
-    })() ? en(e._6._3, e._6._4, en(e._3, e._4, e._5, e._6._5), en(t, n, e._6._6, r)) : en(e._3, e._4, e._5, en(t, n, e._6, r)) : en(t, n, e, r);
+    })() ? an(e._6._3, e._6._4, an(e._3, e._4, e._5, e._6._5), an(t, n, e._6._6, r)) : an(e._3, e._4, e._5, an(t, n, e._6, r)) : an(t, n, e, r);
   f();
-}, sr = (t, n, e) => {
+}, Fr = (t, n, e) => {
   if (e.tag === "Leaf")
-    return Zr(T, Q, Q);
+    return Vo(J, A, A);
   if (e.tag === "Node") {
     const r = t(n)(e._3);
     if (r === "LT") {
-      const o = sr(t, n, e._5);
-      return Zr(o._1, o._2, kn(e._3, e._4, o._3, e._6));
+      const o = Fr(t, n, e._5);
+      return Vo(o._1, o._2, Yn(e._3, e._4, o._3, e._6));
     }
     if (r === "GT") {
-      const o = sr(t, n, e._6);
-      return Zr(o._1, kn(e._3, e._4, e._5, o._2), o._3);
+      const o = Fr(t, n, e._6);
+      return Vo(o._1, Yn(e._3, e._4, e._5, o._2), o._3);
     }
     if (r === "EQ")
-      return Zr(b("Just", e._4), e._5, e._6);
+      return Vo(v("Just", e._4), e._5, e._6);
   }
   f();
-}, hc = (t, n, e, r) => {
+}, Ef = (t, n, e, r) => {
   if (r.tag === "Leaf")
-    return Ks(t, n, e);
+    return Lc(t, n, e);
   if (r.tag === "Node") {
-    const o = hc(r._3, r._4, r._5, r._6);
-    return Ks(o._1, o._2, kn(t, n, e, o._3));
+    const o = Ef(r._3, r._4, r._5, r._6);
+    return Lc(o._1, o._2, Yn(t, n, e, o._3));
   }
   f();
-}, Xr = (t, n) => {
+}, Qo = (t, n) => {
   if (t.tag === "Leaf")
     return n;
   if (t.tag === "Node") {
-    const e = hc(t._3, t._4, t._5, t._6);
-    return kn(e._1, e._2, e._3, n);
+    const e = Ef(t._3, t._4, t._5, t._6);
+    return Yn(e._1, e._2, e._3, n);
   }
   f();
-}, ae = (t, n, e) => {
+}, Pe = (t, n, e) => {
   if (n.tag === "Leaf")
-    return Q;
+    return A;
   if (e.tag === "Leaf")
     return n;
   if (e.tag === "Node") {
-    const r = sr(t, e._3, n);
-    return Xr(ae(t, r._2, e._5), ae(t, r._3, e._6));
+    const r = Fr(t, e._3, n);
+    return Qo(Pe(t, r._2, e._5), Pe(t, r._3, e._6));
   }
   f();
-}, po = (t, n, e, r) => {
+}, gi = (t, n, e, r) => {
   if (e.tag === "Leaf" || r.tag === "Leaf")
-    return Q;
+    return A;
   if (r.tag === "Node") {
-    const o = sr(t, r._3, e), i = po(t, n, o._2, r._5), s = po(t, n, o._3, r._6);
+    const o = Fr(t, r._3, e), i = gi(t, n, o._2, r._5), s = gi(t, n, o._3, r._6);
     if (o._1.tag === "Just")
-      return kn(r._3, n(o._1._1)(r._4), i, s);
+      return Yn(r._3, n(o._1._1)(r._4), i, s);
     if (o._1.tag === "Nothing")
-      return Xr(i, s);
+      return Qo(i, s);
   }
   f();
-}, bn = (t, n, e, r) => {
+}, Cn = (t, n, e, r) => {
   if (e.tag === "Leaf")
     return r;
   if (r.tag === "Leaf")
     return e;
   if (r.tag === "Node") {
-    const o = sr(t, r._3, e), i = bn(t, n, o._2, r._5), s = bn(t, n, o._3, r._6);
+    const o = Fr(t, r._3, e), i = Cn(t, n, o._2, r._5), s = Cn(t, n, o._3, r._6);
     if (o._1.tag === "Just")
-      return kn(r._3, n(o._1._1)(r._4), i, s);
+      return Yn(r._3, n(o._1._1)(r._4), i, s);
     if (o._1.tag === "Nothing")
-      return kn(r._3, r._4, i, s);
+      return Yn(r._3, r._4, i, s);
   }
   f();
-}, wg = (t) => (n) => {
+}, P_ = (t) => (n) => {
   const e = (r) => {
     if (r.tag === "Leaf")
-      return Q;
+      return A;
     if (r.tag === "Node") {
       const o = n(r._3)(r._4);
       if (o.tag === "Just")
-        return kn(r._3, o._1, e(r._5), e(r._6));
+        return Yn(r._3, o._1, e(r._5), e(r._6));
       if (o.tag === "Nothing")
-        return Xr(e(r._5), e(r._6));
+        return Qo(e(r._5), e(r._6));
     }
     f();
   };
   return e;
-}, Lg = (t) => (n) => (r) => {
+}, G_ = (t) => (n) => (r) => {
   let o = r, i = !0, s;
   for (; i; ) {
     const u = o;
@@ -771,19 +834,19 @@ const ig = typeof Array.prototype.fill == "function" ? rg : og, Et = /* @__PURE_
     }
     if (u.tag === "IterNode") {
       o = ((a) => (g) => {
-        let l = a, d = g, _ = !0, h;
-        for (; _; ) {
-          const p = l, $ = d;
-          if ($.tag === "Leaf") {
-            _ = !1, h = p;
+        let _ = a, d = g, l = !0, h;
+        for (; l; ) {
+          const $ = _, p = d;
+          if (p.tag === "Leaf") {
+            l = !1, h = $;
             continue;
           }
-          if ($.tag === "Node") {
-            if ($._6.tag === "Leaf") {
-              l = Wn("IterEmit", $._3, $._4, p), d = $._5;
+          if (p.tag === "Node") {
+            if (p._6.tag === "Leaf") {
+              _ = Kn("IterEmit", p._3, p._4, $), d = p._5;
               continue;
             }
-            l = Wn("IterEmit", $._3, $._4, Wn("IterNode", $._6, p)), d = $._5;
+            _ = Kn("IterEmit", p._3, p._4, Kn("IterNode", p._6, $)), d = p._5;
             continue;
           }
           f();
@@ -795,214 +858,214 @@ const ig = typeof Array.prototype.fill == "function" ? rg : og, Et = /* @__PURE_
     f();
   }
   return s;
-}, De = /* @__PURE__ */ Lg((t, n, e) => b("Just", L(L(t, n), e)))((t) => T), yt = (t) => (n) => (e) => (r) => {
+}, ke = /* @__PURE__ */ G_((t, n, e) => v("Just", b(b(t, n), e)))((t) => J), vt = (t) => (n) => (e) => (r) => {
   const o = (i) => {
     if (i.tag === "Leaf")
-      return Dt("Node", 1, 1, e, r, Q, Q);
+      return Ot("Node", 1, 1, e, r, A, A);
     if (i.tag === "Node") {
       const s = t.compare(e)(i._3);
       if (s === "LT")
-        return kn(i._3, i._4, o(i._5), i._6);
+        return Yn(i._3, i._4, o(i._5), i._6);
       if (s === "GT")
-        return kn(i._3, i._4, i._5, o(i._6));
+        return Yn(i._3, i._4, i._5, o(i._6));
       if (s === "EQ")
-        return Dt("Node", i._1, i._2, e, n(i._4)(r), i._5, i._6);
+        return Ot("Node", i._1, i._2, e, n(i._4)(r), i._5, i._6);
     }
     f();
   };
   return o;
-}, Y = (t) => (n) => (e) => {
+}, U = (t) => (n) => (e) => {
   const r = (o) => {
     if (o.tag === "Leaf")
-      return Dt("Node", 1, 1, n, e, Q, Q);
+      return Ot("Node", 1, 1, n, e, A, A);
     if (o.tag === "Node") {
       const i = t.compare(n)(o._3);
       if (i === "LT")
-        return kn(o._3, o._4, r(o._5), o._6);
+        return Yn(o._3, o._4, r(o._5), o._6);
       if (i === "GT")
-        return kn(o._3, o._4, o._5, r(o._6));
+        return Yn(o._3, o._4, o._5, r(o._6));
       if (i === "EQ")
-        return Dt("Node", o._1, o._2, n, e, o._5, o._6);
+        return Ot("Node", o._1, o._2, n, e, o._5, o._6);
     }
     f();
   };
   return r;
-}, jt = (t) => (n) => n.foldl((e) => (r) => Y(t)(r._1)(r._2)(e))(Q), xr = (t) => (n) => {
+}, nn = (t) => (n) => n.foldl((e) => (r) => U(t)(r._1)(r._2)(e))(A), $o = (t) => (n) => {
   const e = (r) => {
     if (r.tag === "Leaf")
-      return Q;
+      return A;
     if (r.tag === "Node") {
       const o = t.compare(n)(r._3);
       if (o === "LT")
-        return kn(r._3, r._4, e(r._5), r._6);
+        return Yn(r._3, r._4, e(r._5), r._6);
       if (o === "GT")
-        return kn(r._3, r._4, r._5, e(r._6));
+        return Yn(r._3, r._4, r._5, e(r._6));
       if (o === "EQ")
-        return Xr(r._5, r._6);
+        return Qo(r._5, r._6);
     }
     f();
   };
   return e;
-}, kg = (t) => {
+}, Sf = (t) => {
   const n = t.compare;
   return (e) => (r) => (o) => {
-    const i = sr(n, r, o), s = e(i._1);
+    const i = Fr(n, r, o), s = e(i._1);
     if (s.tag === "Nothing")
-      return Xr(i._2, i._3);
+      return Qo(i._2, i._3);
     if (s.tag === "Just")
-      return kn(r, s._1, i._2, i._3);
+      return Yn(r, s._1, i._2, i._3);
     f();
   };
-}, Zt = function(t) {
+}, on = function(t) {
   return function(n) {
     return t + n | 0;
   };
-}, ur = function(t) {
+}, Rr = function(t) {
   return function(n) {
     return t + n;
   };
-}, ns = function(t) {
+}, ze = function(t) {
   return function(n) {
     if (n === 0) return 0;
     var e = Math.abs(n);
     return (t % e + e) % e;
   };
-}, fn = function(t) {
+}, rn = function(t) {
   return function(n) {
     return t.length === 0 ? n : n.length === 0 ? t : t.concat(n);
   };
-};
-function es(t) {
+}, I_ = { append: rn }, A_ = { mempty: [], Semigroup0: () => I_ };
+function Cu(t) {
   return function(n) {
     return function(e) {
       return t.apply(e, [n]);
     };
   };
 }
-const bg = es(Number.prototype.toPrecision), Eg = es(Number.prototype.toFixed), xg = es(Number.prototype.toExponential), Xn = (t, n) => ({ tag: t, _1: n }), Un = (t) => (n) => (e) => {
-  const r = rt.compare(t)(e), o = (() => {
+const F_ = Cu(Number.prototype.toPrecision), R_ = Cu(Number.prototype.toFixed), B_ = Cu(Number.prototype.toExponential), Cf = (t, n) => ({ tag: t, _1: n }), Pf = (t) => (n) => (e) => {
+  const r = it.compare(t)(e), o = (() => {
     if (r === "LT")
       return e;
     if (r === "EQ" || r === "GT")
       return t;
     f();
-  })(), i = rt.compare(n)(o);
+  })(), i = it.compare(n)(o);
   if (i === "LT" || i === "EQ")
     return n;
   if (i === "GT")
     return o;
   f();
-}, Mn = (t) => {
+}, Gf = (t) => {
   if (t.tag === "Precision")
-    return bg(t._1);
+    return F_(t._1);
   if (t.tag === "Fixed")
-    return Eg(t._1);
+    return R_(t._1);
   if (t.tag === "Exponential")
-    return xg(t._1);
+    return B_(t._1);
   f();
 };
-function pc() {
+function Q_() {
   return Date.now();
 }
-function Cg(t) {
+function W_(t) {
   return function() {
     return t.getContext("2d");
   };
 }
-function Sg(t) {
+function D_(t) {
   return function() {
     return t.width;
   };
 }
-function Gg(t) {
+function H_(t) {
   return function() {
     return t.height;
   };
 }
-function Ig(t) {
+function O_(t) {
   return function(n) {
     return function() {
       t.width = n;
     };
   };
 }
-function Pg(t) {
+function z_(t) {
   return function(n) {
     return function() {
       t.height = n;
     };
   };
 }
-function rs(t) {
+function Pu(t) {
   return function(n) {
     return function() {
       t.lineWidth = n;
     };
   };
 }
-function Ag(t) {
+function q_(t) {
   return function(n) {
     return function() {
       t.fillStyle = n;
     };
   };
 }
-function Rg(t) {
+function Y_(t) {
   return function(n) {
     return function() {
       t.strokeStyle = n;
     };
   };
 }
-function ni(t) {
+function ys(t) {
   return function(n) {
     return function() {
       t.lineCap = n;
     };
   };
 }
-function ei(t) {
+function Ns(t) {
   return function(n) {
     return function() {
       t.lineJoin = n;
     };
   };
 }
-function Fg(t) {
+function X_(t) {
   return function(n) {
     return function() {
       t.globalCompositeOperation = n;
     };
   };
 }
-function Bg(t) {
+function V_(t) {
   return function(n) {
     return function() {
       t.globalAlpha = n;
     };
   };
 }
-function $c(t) {
+function If(t) {
   return function() {
     t.beginPath();
   };
 }
-function os(t) {
+function Gu(t) {
   return function() {
     t.stroke();
   };
 }
-function is(t) {
+function Iu(t) {
   return function() {
     t.fill();
   };
 }
-function Qg(t) {
+function U_(t) {
   return function() {
     t.clip();
   };
 }
-function Dg(t) {
+function to(t) {
   return function(n) {
     return function(e) {
       return function() {
@@ -1011,7 +1074,7 @@ function Dg(t) {
     };
   };
 }
-function Wg(t) {
+function Af(t) {
   return function(n) {
     return function(e) {
       return function() {
@@ -1020,61 +1083,68 @@ function Wg(t) {
     };
   };
 }
-function qg(t) {
+function Ff(t) {
   return function() {
     t.closePath();
   };
 }
-function Hg(t) {
+function K_(t) {
   return function(n) {
     return function() {
       t.fillRect(n.x, n.y, n.width, n.height);
     };
   };
 }
-function Og(t) {
+function M_(t) {
   return function(n) {
     return function() {
       t.clearRect(n.x, n.y, n.width, n.height);
     };
   };
 }
-function ss(t) {
+function li(t) {
   return function(n) {
     return function() {
       t.scale(n.scaleX, n.scaleY);
     };
   };
 }
-function mc(t) {
+function qs(t) {
   return function(n) {
     return function() {
       t.translate(n.translateX, n.translateY);
     };
   };
 }
-function zg(t) {
+function j_(t) {
+  return function(n) {
+    return function() {
+      t.transform(n.a, n.b, n.c, n.d, n.e, n.f);
+    };
+  };
+}
+function Z_(t) {
   return function(n) {
     return function() {
       t.textAlign = n;
     };
   };
 }
-function Vg(t) {
+function t1(t) {
   return function(n) {
     return function() {
       t.textBaseline = n;
     };
   };
 }
-function Yg(t) {
+function n1(t) {
   return function(n) {
     return function() {
       t.font = n;
     };
   };
 }
-function Xg(t) {
+function e1(t) {
   return function(n) {
     return function(e) {
       return function(r) {
@@ -1085,31 +1155,31 @@ function Xg(t) {
     };
   };
 }
-function hr(t) {
+function or(t) {
   return function() {
     t.save();
   };
 }
-function pr(t) {
+function ir(t) {
   return function() {
     t.restore();
   };
 }
-function Ug(t) {
+function no(t) {
   return function(n) {
     return function() {
       t.quadraticCurveTo(n.cpx, n.cpy, n.x, n.y);
     };
   };
 }
-function Mg(t) {
+function r1(t) {
   return function(n) {
     return function() {
       t.bezierCurveTo(n.cp1x, n.cp1y, n.cp2x, n.cp2y, n.x, n.y);
     };
   };
 }
-const Nc = (t) => t, us = (t) => t, cs = (t) => t, as = (t) => t, Bo = (t) => t, Kg = /* @__PURE__ */ Bo("BaselineTop"), jg = /* @__PURE__ */ Bo("BaselineMiddle"), Zg = /* @__PURE__ */ Bo("BaselineAlphabetic"), t0 = /* @__PURE__ */ Bo("BaselineBottom"), n0 = /* @__PURE__ */ as("AlignLeft"), e0 = /* @__PURE__ */ as("AlignRight"), r0 = /* @__PURE__ */ as("AlignCenter"), fs = /* @__PURE__ */ cs("BevelJoin"), Qo = /* @__PURE__ */ cs("RoundJoin"), gs = /* @__PURE__ */ cs("MiterJoin"), _s = /* @__PURE__ */ us("Round"), ls = /* @__PURE__ */ us("Square"), ds = /* @__PURE__ */ us("Butt"), o0 = /* @__PURE__ */ Nc("SourceOver"), i0 = /* @__PURE__ */ Nc("Difference"), s0 = (t) => (n) => Vg(t)((() => {
+const Rf = (t) => t, Au = (t) => t, Fu = (t) => t, Ru = (t) => t, Xi = (t) => t, o1 = /* @__PURE__ */ Xi("BaselineTop"), i1 = /* @__PURE__ */ Xi("BaselineMiddle"), s1 = /* @__PURE__ */ Xi("BaselineAlphabetic"), u1 = /* @__PURE__ */ Xi("BaselineBottom"), c1 = /* @__PURE__ */ Ru("AlignLeft"), a1 = /* @__PURE__ */ Ru("AlignRight"), f1 = /* @__PURE__ */ Ru("AlignCenter"), Bu = /* @__PURE__ */ Fu("BevelJoin"), Vi = /* @__PURE__ */ Fu("RoundJoin"), Qu = /* @__PURE__ */ Fu("MiterJoin"), Wu = /* @__PURE__ */ Au("Round"), Du = /* @__PURE__ */ Au("Square"), Hu = /* @__PURE__ */ Au("Butt"), g1 = /* @__PURE__ */ Rf("SourceOver"), l1 = /* @__PURE__ */ Rf("Difference"), _1 = (t) => (n) => t1(t)((() => {
   if (n === "BaselineTop")
     return "top";
   if (n === "BaselineHanging")
@@ -1123,7 +1193,7 @@ const Nc = (t) => t, us = (t) => t, cs = (t) => t, as = (t) => t, Bo = (t) => t,
   if (n === "BaselineBottom")
     return "bottom";
   f();
-})()), u0 = (t) => (n) => zg(t)((() => {
+})()), d1 = (t) => (n) => Z_(t)((() => {
   if (n === "AlignLeft")
     return "left";
   if (n === "AlignRight")
@@ -1135,23 +1205,23 @@ const Nc = (t) => t, us = (t) => t, cs = (t) => t, as = (t) => t, Bo = (t) => t,
   if (n === "AlignEnd")
     return "end";
   f();
-})()), Do = (t) => (n) => {
+})()), Ui = (t) => (n) => {
   if (n === "BevelJoin")
-    return ei(t)("bevel");
+    return Ns(t)("bevel");
   if (n === "RoundJoin")
-    return ei(t)("round");
+    return Ns(t)("round");
   if (n === "MiterJoin")
-    return ei(t)("miter");
+    return Ns(t)("miter");
   f();
-}, hs = (t) => (n) => {
+}, Ou = (t) => (n) => {
   if (n === "Round")
-    return ni(t)("round");
+    return ys(t)("round");
   if (n === "Square")
-    return ni(t)("square");
+    return ys(t)("square");
   if (n === "Butt")
-    return ni(t)("butt");
+    return ys(t)("butt");
   f();
-}, js = (t) => (n) => Fg(t)((() => {
+}, Ec = (t) => (n) => X_(t)((() => {
   if (n === "SourceOver")
     return "source-over";
   if (n === "SourceIn")
@@ -1205,299 +1275,135 @@ const Nc = (t) => t, us = (t) => t, cs = (t) => t, as = (t) => t, Bo = (t) => t,
   if (n === "Luminosity")
     return "luminosity";
   f();
-})()), Pn = {
+})()), On = {
   foldr: (t) => (n) => {
-    const e = Mt.foldr(t)(n);
+    const e = Xt.foldr(t)(n);
     return (r) => e((() => {
       const o = (i, s) => {
         if (i.tag === "Leaf")
           return s;
         if (i.tag === "Node")
-          return o(i._5, qt("Cons", i._3, o(i._6, s)));
+          return o(i._5, zt("Cons", i._3, o(i._6, s)));
         f();
       };
-      return o(r, zt);
+      return o(r, Yt);
     })());
   }
-}, Wo = (t) => t, c0 = (t) => t, a0 = /* @__PURE__ */ Wo("Linear"), f0 = /* @__PURE__ */ Wo("EaseInOutQuad"), g0 = /* @__PURE__ */ Wo("EaseOutExpo"), _0 = /* @__PURE__ */ Wo("SpringBouncy"), Cr = (t) => (n) => (e) => {
-  const r = _r(1 - n * n), o = t * r;
-  return 1 - _c(-n * t * e) * (Zi(o * e) + n / r * ts(o * e));
-}, l0 = (t) => {
-  const n = pt.compare(0)(t), e = (() => {
-    if (n === "LT")
-      return t;
-    if (n === "EQ" || n === "GT")
-      return 0;
-    f();
-  })(), r = pt.compare(1)(e);
-  if (r === "LT" || r === "EQ")
-    return 1;
-  if (r === "GT")
-    return e;
-  f();
-}, ps = (t) => (n) => (() => {
-  if (t === "Linear")
-    return c0;
-  if (t === "EaseInQuad")
-    return (e) => e * e;
-  if (t === "EaseOutQuad")
-    return (e) => 1 - (1 - e) * (1 - e);
-  if (t === "EaseInOutQuad")
-    return (e) => e < 0.5 ? 2 * e * e : 1 - 2 * (1 - e) * (1 - e);
-  if (t === "EaseInCubic")
-    return (e) => e * e * e;
-  if (t === "EaseOutCubic")
-    return (e) => 1 - (1 - e) * (1 - e) * (1 - e);
-  if (t === "EaseInOutCubic")
-    return (e) => e < 0.5 ? 4 * e * e * e : 1 - (-2 * e + 2) * (-2 * e + 2) * (-2 * e + 2) / 2;
-  if (t === "EaseOutExpo")
-    return (e) => e >= 1 ? 1 : 1 - yi(2)(-10 * e);
-  if (t === "Spring")
-    return (e) => 1 - (1 + 6 * e) * _c(-6 * e);
-  if (t === "SpringBouncy")
-    return Cr(6)(0.7);
-  f();
-})()(l0(n)), Jc = /* @__PURE__ */ J(ur)(0), d0 = (t) => (n) => (e) => {
-  const r = pt.compare(t)(e), o = (() => {
-    if (r === "LT")
-      return e;
-    if (r === "EQ" || r === "GT")
-      return t;
-    f();
-  })(), i = pt.compare(n)(o);
-  if (i === "LT" || i === "EQ")
-    return n;
-  if (i === "GT")
-    return o;
-  f();
-}, Zs = (t) => (n) => {
-  const e = pt.compare(t)(n);
-  if (e === "LT" || e === "EQ")
-    return t;
-  if (e === "GT")
-    return n;
-  f();
-}, tu = (t) => (n) => {
-  const e = pt.compare(t)(n);
-  if (e === "LT")
-    return n;
-  if (e === "EQ" || e === "GT")
-    return t;
-  f();
-}, vc = (t) => (n) => {
-  const e = $n(
-    (s) => (u) => ({
-      a: s,
-      b: u,
-      len: (() => {
-        const c = u.y - s.y, a = u.x - s.x;
-        return _r(a * a + c * c);
-      })()
-    }),
-    t,
-    Gt(1, t.length, t)
-  ), r = Jc(O((s) => s.len)(e)), o = d0(0)(r)(n * r), i = (s) => (u) => (c) => {
-    let a = s, g = u, l = c, d = !0, _;
-    for (; d; ) {
-      const h = a, p = g, $ = l, m = Wt((N) => T, (N) => (v) => b("Just", { head: N, tail: v }), h);
-      if (m.tag === "Nothing") {
-        const N = t.length - 1 | 0;
-        if (N >= 0 && N < t.length) {
-          d = !1, _ = t[N];
-          continue;
-        }
-        d = !1, _ = $;
-        continue;
-      }
-      if (m.tag === "Just") {
-        if (p <= m._1.head.len) {
-          const N = m._1.head.len <= 0 ? 0 : p / m._1.head.len;
-          d = !1, _ = { x: m._1.head.a.x + (m._1.head.b.x - m._1.head.a.x) * N, y: m._1.head.a.y + (m._1.head.b.y - m._1.head.a.y) * N };
-          continue;
-        }
-        a = m._1.tail, g = p - m._1.head.len, l = $;
-        continue;
-      }
-      f();
-    }
-    return _;
+}, h1 = (t) => {
+  const n = {
+    append: (() => {
+      const e = t.compare;
+      return (r) => (o) => Cn(e, Sn, r, o);
+    })()
   };
-  return 0 < t.length ? b("Just", i(e)(o)(t[0])) : T;
-}, $s = (t) => Jc($n(
-  (n) => (e) => {
-    const r = e.y - n.y, o = e.x - n.x;
-    return _r(o * o + r * r);
-  },
-  t,
-  Gt(1, t.length, t)
-)), ye = (t) => {
-  const n = Wt(
-    (e) => T,
-    (e) => (r) => b("Just", { head: e, tail: r }),
-    [
-      ...(() => {
-        const e = (r, o) => {
-          if (r.tag === "Leaf")
-            return o;
-          if (r.tag === "Node")
-            return e(r._5, qt("Cons", r._4, e(r._6, o)));
-          f();
-        };
-        return bt(Et(Mt.foldr, e(t.nodes, zt)))((r) => [
-          { x: r.x, y: r.y },
-          { x: r.x + r.w, y: r.y + r.h }
-        ]);
-      })(),
-      ...Cn((() => {
-        const e = (r, o) => {
-          if (r.tag === "Leaf")
-            return o;
-          if (r.tag === "Node")
-            return e(r._5, qt("Cons", r._4, e(r._6, o)));
-          f();
-        };
-        return Et(Mt.foldr, e(t.edges, zt));
-      })()),
-      ...Cn((() => {
-        const e = (r, o) => {
-          if (r.tag === "Leaf")
-            return o;
-          if (r.tag === "Node")
-            return e(r._5, qt("Cons", r._4, e(r._6, o)));
-          f();
-        };
-        return Et(Mt.foldr, e(t.chipExtras, zt));
-      })())
-    ]
-  );
-  if (n.tag === "Nothing")
-    return { x: 0, y: 0, w: 0, h: 0 };
-  if (n.tag === "Just") {
-    const e = J((r) => (o) => ({ minX: Zs(r.minX)(o.x), minY: Zs(r.minY)(o.y), maxX: tu(r.maxX)(o.x), maxY: tu(r.maxY)(o.y) }))({
-      minX: n._1.head.x,
-      minY: n._1.head.y,
-      maxX: n._1.head.x,
-      maxY: n._1.head.y
-    })(n._1.tail);
-    return { x: e.minX, y: e.minY, w: e.maxX - e.minX, h: e.maxY - e.minY };
-  }
-  f();
-}, Tr = function(t) {
+  return { mempty: A, Semigroup0: () => n };
+}, so = function(t) {
   return function(n) {
     if (t >= 0 && t < n.length) return n.charAt(t);
     throw new Error("Data.String.Unsafe.charAt: Invalid index.");
   };
-}, We = function(t) {
+}, mr = function(t) {
   return t.join("");
-}, ms = function(t) {
+}, Ze = function(t) {
   return t.split("");
-}, Ns = function(t) {
+}, Ki = function(t) {
   return t;
-}, Pe = function(t) {
+}, Me = function(t) {
   return t.length;
-}, nu = function(t) {
+}, Sc = function(t) {
   return function(n) {
     return n.substr(0, t);
   };
-}, Sr = function(t) {
+}, mo = function(t) {
   return function(n) {
     return n.substring(t);
   };
-}, h0 = function(t) {
+}, p1 = function(t) {
   return function(n) {
     return { before: n.substring(0, t), after: n.substring(t) };
   };
-}, p0 = (t) => (n) => {
-  const e = h0(Pe(t))(n);
-  return e.before === t ? b("Just", e.after) : T;
-}, $0 = function(n) {
+}, $1 = (t) => (n) => {
+  const e = p1(Me(t))(n);
+  return e.before === t ? v("Just", e.after) : J;
+}, m1 = function(t) {
+  var n = null;
+  return function() {
+    return t === void 0 || (n = t(), t = void 0), n;
+  };
+}, y1 = function(t) {
+  return t();
+}, N1 = function(n) {
   return function(e) {
     return function() {
       return n(e);
     };
   };
-}, m0 = (t) => (n) => (e) => {
+}, x1 = (t) => (n) => (e) => {
   try {
     var r = BigInt(e);
     return t(r);
   } catch {
     return n;
   }
-}, N0 = (t) => (n) => (e) => {
+}, J1 = (t) => (n) => (e) => {
   try {
     var r = BigInt(e);
     return t(r);
   } catch {
     return n;
   }
-}, Ae = (t) => BigInt(t), J0 = (t) => Number(t), lo = (t) => (n) => t + n, ho = (t) => (n) => t * n, wi = (t) => (n) => t - n, Tc = 0n, $o = 1n, yc = (t) => (n) => t ^ n, Gr = (t) => (n) => t & n, Js = (t) => (n) => t << n, Li = (t) => (n) => t >> n, v0 = (t) => (n) => t == n, T0 = (t) => (n) => t === n ? 0 : t > n ? 1 : -1, y0 = { eq: v0 }, eu = {
+}, dr = (t) => BigInt(t), T1 = (t) => Number(t), ui = (t) => (n) => t + n, ci = (t) => (n) => t * n, Ys = (t) => (n) => t - n, Bf = 0n, _i = 1n, Qf = (t) => (n) => t ^ n, yo = (t) => (n) => t & n, zu = (t) => (n) => t << n, Xs = (t) => (n) => t >> n, v1 = (t) => (n) => t == n, w1 = (t) => (n) => t === n ? 0 : t > n ? 1 : -1, k1 = { eq: v1 }, Cc = {
   compare: (t) => (n) => {
-    const e = T0(t)(n);
-    return e === 1 ? hn : e === 0 ? yn : dn;
+    const e = w1(t)(n);
+    return e === 1 ? Nn : e === 0 ? Gn : yn;
   },
-  Eq0: () => y0
-}, w0 = /* @__PURE__ */ m0(Yt)(T), L0 = /* @__PURE__ */ N0(Yt)(T), wc = /* @__PURE__ */ (() => {
+  Eq0: () => k1
+}, b1 = /* @__PURE__ */ x1(qt)(J), L1 = /* @__PURE__ */ J1(qt)(J), Wf = /* @__PURE__ */ (() => {
   const t = { eq: (n) => (e) => n._1 === e._1 && n._2 === e._2 };
   return {
     compare: (n) => (e) => {
-      const r = pt.compare(n._1)(e._1);
-      return r === "LT" ? dn : r === "GT" ? hn : pt.compare(n._2)(e._2);
+      const r = ft.compare(n._1)(e._1);
+      return r === "LT" ? yn : r === "GT" ? Nn : ft.compare(n._2)(e._2);
     },
     Eq0: () => t
   };
-})(), k0 = (t) => (n) => ir(t._1 - n._1) + ir(t._2 - n._2), qo = (t) => t, un = /* @__PURE__ */ qo("North"), cn = /* @__PURE__ */ qo("South"), Kn = /* @__PURE__ */ qo("East"), xe = /* @__PURE__ */ qo("West"), ru = (t) => t, Lc = (t) => t, ou = (t, n) => ({ tag: t, _1: n }), kc = (t, n) => ({ tag: t, _1: n }), vs = (t, n) => ({ tag: t, _1: n }), b0 = /* @__PURE__ */ vs("First"), E0 = /* @__PURE__ */ Lc("Forward"), x0 = /* @__PURE__ */ Lc("Backward"), C0 = /* @__PURE__ */ jt(G)(Bt), S0 = (t) => br((n) => (e) => ({
-  nodes: bn(G.compare, Ln, n.nodes, e.nodes),
-  edges: bn(G.compare, Ln, n.edges, e.edges)
-}))({ nodes: Q, edges: Q })(t.keyframes), G0 = (t) => (n) => ({
-  entering: {
-    nodes: ae(G.compare, n.nodes, t.nodes),
-    edges: ae(G.compare, n.edges, t.edges)
-  },
-  leaving: {
-    nodes: ae(G.compare, t.nodes, n.nodes),
-    edges: ae(G.compare, t.edges, n.edges)
-  },
-  surviving: {
-    nodes: po(G.compare, Ln, t.nodes, n.nodes),
-    edges: po(G.compare, Ln, t.edges, n.edges)
-  }
-}), bc = (t) => t, Ts = (t) => (n) => (e) => {
-  const r = pt.compare(t)(e), o = (() => {
+})(), E1 = (t) => (n) => Ke(t._1 - n._1) + Ke(t._2 - n._2), yr = (t) => t, Mi = (t) => t, dn = /* @__PURE__ */ Mi("North"), hn = /* @__PURE__ */ Mi("South"), pe = /* @__PURE__ */ Mi("East"), nr = /* @__PURE__ */ Mi("West"), Ge = /* @__PURE__ */ yr("Rectangle"), Pc = /* @__PURE__ */ yr("Cylinder"), S1 = /* @__PURE__ */ yr("Parallelogram"), C1 = /* @__PURE__ */ yr("Diamond"), P1 = /* @__PURE__ */ yr("Ellipse"), Gc = /* @__PURE__ */ yr("Document"), G1 = /* @__PURE__ */ yr("Cloud"), Ic = (t) => t, Df = /* @__PURE__ */ x(Rr)(0), I1 = (t) => (n) => (e) => {
+  const r = ft.compare(t)(e), o = (() => {
     if (r === "LT")
       return e;
     if (r === "EQ" || r === "GT")
       return t;
     f();
-  })(), i = pt.compare(n)(o);
+  })(), i = ft.compare(n)(o);
   if (i === "LT" || i === "EQ")
     return n;
   if (i === "GT")
     return o;
   f();
-}, Re = (t) => (n) => {
-  const e = pt.compare(t)(n);
+}, ye = (t) => (n) => {
+  const e = ft.compare(t)(n);
   if (e === "LT")
     return n;
   if (e === "EQ" || e === "GT")
     return t;
   f();
-}, cr = (t) => (n) => {
-  const e = pt.compare(t)(n);
+}, No = (t) => (n) => {
+  const e = ft.compare(t)(n);
   if (e === "LT" || e === "EQ")
     return t;
   if (e === "GT")
     return n;
   f();
-}, je = (t) => (e) => {
+}, Ac = (t) => (e) => {
   let r = e, o = !0, i;
   for (; o; ) {
     const s = r;
     if (s.tag === "Leaf") {
-      o = !1, i = T;
+      o = !1, i = J;
       continue;
     }
     if (s.tag === "Node") {
-      const u = G.compare(t)(s._3);
+      const u = C.compare(t)(s._3);
       if (u === "LT") {
         r = s._5;
         continue;
@@ -1507,14 +1413,267 @@ const Nc = (t) => t, us = (t) => t, cs = (t) => t, as = (t) => t, Bo = (t) => t,
         continue;
       }
       if (u === "EQ") {
-        o = !1, i = b("Just", s._4);
+        o = !1, i = v("Just", s._4);
         continue;
       }
     }
     f();
   }
   return i;
-}, ki = (t) => (e) => {
+}, Br = (t) => (n) => {
+  const e = wn(
+    (s) => (u) => ({
+      a: s,
+      b: u,
+      len: (() => {
+        const c = u.y - s.y, a = u.x - s.x;
+        return En(a * a + c * c);
+      })()
+    }),
+    t,
+    bt(1, t.length, t)
+  ), r = Df(z((s) => s.len)(e)), o = I1(0)(r)(n * r), i = (s) => (u) => (c) => {
+    let a = s, g = u, _ = c, d = !0, l;
+    for (; d; ) {
+      const h = a, $ = g, p = _, m = Rt((y) => J, (y) => (N) => v("Just", { head: y, tail: N }), h);
+      if (m.tag === "Nothing") {
+        const y = t.length - 1 | 0;
+        if (y >= 0 && y < t.length) {
+          d = !1, l = t[y];
+          continue;
+        }
+        d = !1, l = p;
+        continue;
+      }
+      if (m.tag === "Just") {
+        if ($ <= m._1.head.len) {
+          const y = m._1.head.len <= 0 ? 0 : $ / m._1.head.len;
+          d = !1, l = { x: m._1.head.a.x + (m._1.head.b.x - m._1.head.a.x) * y, y: m._1.head.a.y + (m._1.head.b.y - m._1.head.a.y) * y };
+          continue;
+        }
+        a = m._1.tail, g = $ - m._1.head.len, _ = p;
+        continue;
+      }
+      f();
+    }
+    return l;
+  };
+  return 0 < t.length ? v("Just", i(e)(o)(t[0])) : J;
+}, A1 = (t) => (n) => {
+  const e = ye(1)(t.w), r = ye(1)(t.h), o = ye(1)(n.w - 8), i = ye(1)(n.h - 8), s = No(o / e)(i / r);
+  return { scale: s, tx: n.x + 4 + (o - e * s) / 2 - t.x * s, ty: n.y + 4 + (i - r * s) / 2 - t.y * s };
+}, Wo = (t) => Df(wn(
+  (n) => (e) => {
+    const r = e.y - n.y, o = e.x - n.x;
+    return En(o * o + r * r);
+  },
+  t,
+  bt(1, t.length, t)
+)), F1 = (t) => (n) => (e) => (r) => (o) => {
+  const i = 0 < t.length ? v("Just", t[0]) : J, s = (() => {
+    if (i.tag === "Nothing")
+      return n;
+    if (i.tag === "Just")
+      return i._1;
+    f();
+  })(), u = t.length - 1 | 0, c = u >= 0 && u < t.length ? v("Just", t[u]) : J, a = (() => {
+    if (c.tag === "Nothing")
+      return e;
+    if (c.tag === "Just")
+      return c._1;
+    f();
+  })(), g = ye(0.05)(1 - o.pre - o.post), _ = r < o.pre ? 0 : r > 1 - o.post ? 1 : (r - o.pre) / g, d = a.x - e.x, l = 2 * (() => {
+    const T = a.y - e.y;
+    return (d < 0 ? -d : d) + (T < 0 ? -T : T);
+  })(), h = s.x - n.x, $ = 2 * (() => {
+    const T = s.y - n.y;
+    return (h < 0 ? -h : h) + (T < 0 ? -T : T);
+  })(), p = $ + Wo(t) + l, m = p <= 1e-4 ? 1 : 1 - l / p, y = p <= 1e-4 ? 0 : $ / p;
+  if (_ <= y) {
+    const T = y <= 1e-4 ? 1 : _ / y;
+    return { x: n.x + (s.x - n.x) * T, y: n.y + (s.y - n.y) * T };
+  }
+  if (_ >= m) {
+    const T = m >= 1 ? 0 : (_ - m) / (1 - m);
+    return { x: a.x + (e.x - a.x) * T, y: a.y + (e.y - a.y) * T };
+  }
+  const N = Br(t)((_ - y) / ye(1e-4)(m - y));
+  if (N.tag === "Nothing")
+    return s;
+  if (N.tag === "Just")
+    return N._1;
+  f();
+}, R1 = (t) => {
+  const n = Rt(
+    (e) => J,
+    (e) => (r) => v("Just", { head: e, tail: r }),
+    (() => {
+      const e = (r, o) => {
+        if (r.tag === "Leaf")
+          return o;
+        if (r.tag === "Node")
+          return e(r._5, zt("Cons", r._4, e(r._6, o)));
+        f();
+      };
+      return Jt(Lt(Xt.foldr, e(t.nodes, Yt)))((r) => [
+        { x: r.x, y: r.y },
+        { x: r.x + r.w, y: r.y + r.h }
+      ]);
+    })()
+  );
+  if (n.tag === "Nothing")
+    return { x: 0, y: 0, w: 0, h: 0 };
+  if (n.tag === "Just") {
+    const e = x((r) => (o) => ({ minX: No(r.minX)(o.x), minY: No(r.minY)(o.y), maxX: ye(r.maxX)(o.x), maxY: ye(r.maxY)(o.y) }))({
+      minX: n._1.head.x,
+      minY: n._1.head.y,
+      maxX: n._1.head.x,
+      maxY: n._1.head.y
+    })(n._1.tail);
+    return { x: e.minX, y: e.minY, w: e.maxX - e.minX, h: e.maxY - e.minY };
+  }
+  f();
+}, qu = { scale: 1, tx: 0, ty: 0 }, Mn = (t) => {
+  const n = Rt(
+    (e) => J,
+    (e) => (r) => v("Just", { head: e, tail: r }),
+    [
+      ...(() => {
+        const e = (r, o) => {
+          if (r.tag === "Leaf")
+            return o;
+          if (r.tag === "Node")
+            return e(r._5, zt("Cons", r._4, e(r._6, o)));
+          f();
+        };
+        return Jt(Lt(Xt.foldr, e(t.nodes, Yt)))((r) => [
+          { x: r.x, y: r.y },
+          { x: r.x + r.w, y: r.y + r.h }
+        ]);
+      })(),
+      ...zn((() => {
+        const e = (r, o) => {
+          if (r.tag === "Leaf")
+            return o;
+          if (r.tag === "Node")
+            return e(r._5, zt("Cons", r._4, e(r._6, o)));
+          f();
+        };
+        return Lt(Xt.foldr, e(t.edges, Yt));
+      })()),
+      ...zn((() => {
+        const e = (r, o) => {
+          if (r.tag === "Leaf")
+            return o;
+          if (r.tag === "Node")
+            return e(r._5, zt("Cons", r._4, e(r._6, o)));
+          f();
+        };
+        return Lt(Xt.foldr, e(t.chipExtras, Yt));
+      })())
+    ]
+  );
+  if (n.tag === "Nothing")
+    return { x: 0, y: 0, w: 0, h: 0 };
+  if (n.tag === "Just") {
+    const e = x((r) => (o) => ({ minX: No(r.minX)(o.x), minY: No(r.minY)(o.y), maxX: ye(r.maxX)(o.x), maxY: ye(r.maxY)(o.y) }))({
+      minX: n._1.head.x,
+      minY: n._1.head.y,
+      maxX: n._1.head.x,
+      maxY: n._1.head.y
+    })(n._1.tail);
+    return { x: e.minX, y: e.minY, w: e.maxX - e.minX, h: e.maxY - e.minY };
+  }
+  f();
+}, B1 = (t) => (n) => ((r) => (o) => (i) => {
+  let s = r, u = o, c = i, a = !0, g;
+  for (; a; ) {
+    const _ = s, d = u, l = c, h = Rt(($) => J, ($) => (p) => v("Just", { head: $, tail: p }), d);
+    if (h.tag === "Nothing") {
+      a = !1, g = l;
+      continue;
+    }
+    if (h.tag === "Just") {
+      const $ = Ac(h._1.head)(_.interiors);
+      if ($.tag === "Nothing") {
+        a = !1, g = l;
+        continue;
+      }
+      if ($.tag === "Just") {
+        s = $._1, u = h._1.tail, c = (() => {
+          const p = A1(Mn($._1.layout))((() => {
+            const m = Ac(h._1.head)(_.layout.nodes);
+            if (m.tag === "Nothing")
+              return { x: 0, y: 0, w: 1, h: 1, label: "", shape: Ge };
+            if (m.tag === "Just")
+              return m._1;
+            f();
+          })());
+          return { scale: l.scale * p.scale, tx: l.scale * p.tx + l.tx, ty: l.scale * p.ty + l.ty };
+        })();
+        continue;
+      }
+    }
+    f();
+  }
+  return g;
+})(t)(n)(qu), Hf = (t) => t, Fc = (t, n) => ({ tag: t, _1: n }), ji = (t, n) => ({ tag: t, _1: n }), Yu = (t, n) => ({ tag: t, _1: n }), Q1 = /* @__PURE__ */ Yu("First"), W1 = /* @__PURE__ */ Hf("Forward"), D1 = /* @__PURE__ */ Hf("Backward"), H1 = /* @__PURE__ */ ji("ExitNode"), Of = /* @__PURE__ */ nn(C)(Ht), O1 = (t) => po((n) => (e) => ({
+  nodes: Cn(C.compare, Sn, n.nodes, e.nodes),
+  edges: Cn(C.compare, Sn, n.edges, e.edges)
+}))({ nodes: A, edges: A })(t.keyframes), z1 = (t) => (n) => ({
+  entering: {
+    nodes: Pe(C.compare, n.nodes, t.nodes),
+    edges: Pe(C.compare, n.edges, t.edges)
+  },
+  leaving: {
+    nodes: Pe(C.compare, t.nodes, n.nodes),
+    edges: Pe(C.compare, t.edges, n.edges)
+  },
+  surviving: {
+    nodes: gi(C.compare, Sn, t.nodes, n.nodes),
+    edges: gi(C.compare, Sn, t.edges, n.edges)
+  }
+}), di = (t) => (n) => {
+  const e = ft.compare(t)(n);
+  if (e === "LT" || e === "EQ")
+    return t;
+  if (e === "GT")
+    return n;
+  f();
+}, Qr = (t) => (n) => {
+  const e = ft.compare(t)(n);
+  if (e === "LT")
+    return n;
+  if (e === "EQ" || e === "GT")
+    return t;
+  f();
+}, xo = (t) => (e) => {
+  let r = e, o = !0, i;
+  for (; o; ) {
+    const s = r;
+    if (s.tag === "Leaf") {
+      o = !1, i = J;
+      continue;
+    }
+    if (s.tag === "Node") {
+      const u = C.compare(t)(s._3);
+      if (u === "LT") {
+        r = s._5;
+        continue;
+      }
+      if (u === "GT") {
+        r = s._6;
+        continue;
+      }
+      if (u === "EQ") {
+        o = !1, i = v("Just", s._4);
+        continue;
+      }
+    }
+    f();
+  }
+  return i;
+}, Vs = (t) => (e) => {
   let r = e, o = !0, i;
   for (; o; ) {
     const s = r;
@@ -1523,7 +1682,7 @@ const Nc = (t) => t, us = (t) => t, cs = (t) => t, as = (t) => t, Bo = (t) => t,
       continue;
     }
     if (s.tag === "Node") {
-      const u = G.compare(t)(s._3);
+      const u = C.compare(t)(s._3);
       if (u === "LT") {
         r = s._5;
         continue;
@@ -1540,19 +1699,19 @@ const Nc = (t) => t, us = (t) => t, cs = (t) => t, as = (t) => t, Bo = (t) => t,
     f();
   }
   return i;
-}, I0 = /* @__PURE__ */ J((t) => (n) => Y(G)(n)()(t))(Q), P0 = /* @__PURE__ */ J((t) => (n) => Y(G)(n)()(t))(Q), A0 = /* @__PURE__ */ (() => {
-  const t = On.unfoldr(De);
-  return (n) => t(Wn("IterNode", n, Qe));
-})(), Ec = (t) => (e) => {
+}, q1 = /* @__PURE__ */ x((t) => (n) => U(C)(n)()(t))(A), Y1 = /* @__PURE__ */ x((t) => (n) => U(C)(n)()(t))(A), X1 = /* @__PURE__ */ (() => {
+  const t = te.unfoldr(ke);
+  return (n) => t(Kn("IterNode", n, we));
+})(), zf = (t) => (e) => {
   let r = e, o = !0, i;
   for (; o; ) {
     const s = r;
     if (s.tag === "Leaf") {
-      o = !1, i = T;
+      o = !1, i = J;
       continue;
     }
     if (s.tag === "Node") {
-      const u = G.compare(t)(s._3);
+      const u = C.compare(t)(s._3);
       if (u === "LT") {
         r = s._5;
         continue;
@@ -1562,32 +1721,19 @@ const Nc = (t) => t, us = (t) => t, cs = (t) => t, as = (t) => t, Bo = (t) => t,
         continue;
       }
       if (u === "EQ") {
-        o = !1, i = b("Just", s._4);
+        o = !1, i = v("Just", s._4);
         continue;
       }
     }
     f();
   }
   return i;
-}, iu = /* @__PURE__ */ jt(G)(Bt), R0 = (t) => (n) => {
-  const e = rt.compare(t)(n);
-  if (e === "LT")
-    return n;
-  if (e === "EQ" || e === "GT")
-    return t;
-  f();
-}, F0 = /* @__PURE__ */ bc("Hold"), B0 = /* @__PURE__ */ bc("Gap"), Q0 = (t) => (n) => (e) => {
-  const r = e.center.y - n.center.y, o = e.center.x - n.center.x, i = _r(o * o + r * r), s = e.zoom - n.zoom, u = s < 0 ? -s : s;
-  return Ts(t.minTransition)(t.maxTransition)(Re(t.panSpeed <= 0 ? t.minTransition : i / t.panSpeed)(t.zoomSpeed <= 0 ? t.minTransition : u / t.zoomSpeed));
-}, D0 = /* @__PURE__ */ J((t) => (n) => {
-  const e = t.length - 1 | 0;
-  return e >= 0 && e < t.length && t[e] === n ? t : gn(t)(n);
-})([]), ys = (t) => {
-  const n = Wt((e) => T, (e) => (r) => b("Just", { head: e, tail: r }), t);
+}, Rc = /* @__PURE__ */ nn(C)(Ht), uo = (t) => {
+  const n = Rt((e) => J, (e) => (r) => v("Just", { head: e, tail: r }), t);
   if (n.tag === "Nothing")
     return { x: 0, y: 0, w: 0, h: 0 };
   if (n.tag === "Just") {
-    const e = J((r) => (o) => ({ minX: cr(r.minX)(o.x), minY: cr(r.minY)(o.y), maxX: Re(r.maxX)(o.x), maxY: Re(r.maxY)(o.y) }))({
+    const e = x((r) => (o) => ({ minX: di(r.minX)(o.x), minY: di(r.minY)(o.y), maxX: Qr(r.maxX)(o.x), maxY: Qr(r.maxY)(o.y) }))({
       minX: n._1.head.x,
       minY: n._1.head.y,
       maxX: n._1.head.x,
@@ -1596,30 +1742,209 @@ const Nc = (t) => t, us = (t) => t, cs = (t) => t, as = (t) => t, Bo = (t) => t,
     return { x: e.minX, y: e.minY, w: e.maxX - e.minX, h: e.maxY - e.minY };
   }
   f();
-}, xc = (t) => {
-  const n = Wt((e) => T, (e) => (r) => b("Just", { head: e, tail: r }), t);
+}, V1 = (t) => {
+  const n = Rt((e) => J, (e) => (r) => v("Just", { head: e, tail: r }), t);
   if (n.tag === "Nothing")
-    return T;
+    return J;
   if (n.tag === "Just")
-    return b("Just", ys(t));
+    return v("Just", uo(t));
   f();
-}, W0 = (t) => (n) => (e) => I0(bt(Et(Pn.foldr, e))((r) => {
-  const o = je(r)(t);
+}, U1 = (t) => (n) => (e) => q1(Jt(Lt(On.foldr, e))((r) => {
+  const o = xo(r)(t);
   if (o.tag === "Just")
-    return gt((i) => !ki(i)(n), [o._1.source, o._1.target]);
+    return lt((i) => !Vs(i)(n), [o._1.source, o._1.target]);
   if (o.tag === "Nothing")
     return [];
   f();
-})), q0 = (t) => (n) => (e) => {
-  const r = ps(t.easing)(Ts(0)(1)(e.endT <= e.startT ? 1 : (n - e.startT) / (e.endT - e.startT)));
-  return {
-    center: { x: e.fromCam.center.x + (e.toCam.center.x - e.fromCam.center.x) * r, y: e.fromCam.center.y + (e.toCam.center.y - e.fromCam.center.y) * r },
-    zoom: e.fromCam.zoom + (e.toCam.zoom - e.fromCam.zoom) * r
-  };
-}, H0 = (t) => (n) => (e) => (r) => {
-  const o = (s, u) => cr(Q0(t)(s.toCam)(u.toCam))(s.endT - s.startT), i = J((s) => (u) => {
+})), K1 = (t) => t.kind.tag === "SendToken" ? v("Just", b(t.kind._1.edge, { source: t.kind._1.from, target: t.kind._1.to })) : J, M1 = (t) => t.tag === "DataFlow" ? yt(K1)(t._1.events) : [], j1 = (t) => (n) => Y1(yt((e) => Vs(e._2.source)(n) || Vs(e._2.target)(n) ? v("Just", e._1) : J)(X1(t))), Z1 = (t) => {
+  const n = t.length - 1 | 0;
+  return n >= 0 && n < t.length ? 0 < t.length ? t[0].x === t[n].x && t[0].y === t[n].y ? v("Just", uo([t[0]])) : v("Just", uo([t[0], t[n]])) : J : 0 < t.length ? v("Just", uo([t[0]])) : J;
+}, hi = (t) => {
+  const n = Rt((e) => J, (e) => (r) => v("Just", { head: e, tail: r }), t);
+  if (n.tag === "Nothing")
+    return { x: 0, y: 0, w: 0, h: 0 };
+  if (n.tag === "Just") {
+    const e = x((r) => (o) => ({ minX: di(r.minX)(o.x), minY: di(r.minY)(o.y), maxX: Qr(r.maxX)(o.x + o.w), maxY: Qr(r.maxY)(o.y + o.h) }))({
+      minX: n._1.head.x,
+      minY: n._1.head.y,
+      maxX: n._1.head.x + n._1.head.w,
+      maxY: n._1.head.y + n._1.head.h
+    })(n._1.tail);
+    return { x: e.minX, y: e.minY, w: e.maxX - e.minX, h: e.maxY - e.minY };
+  }
+  f();
+}, qf = (t) => (n) => (e) => {
+  if (e.tag === "Leaf")
+    return Mn(t);
+  const r = j1(n)(e), o = [
+    ...yt((i) => {
+      const s = zf(i)(t.nodes);
+      return s.tag === "Just" ? v("Just", { x: s._1.x, y: s._1.y, w: s._1.w, h: s._1.h }) : J;
+    })(Lt(
+      On.foldr,
+      Cn(C.compare, Sn, e, U1(n)(e)(r))
+    )),
+    ...yt((i) => {
+      const s = xo(i)(t.edges);
+      return s.tag === "Just" ? v("Just", uo(s._1)) : J;
+    })(Lt(On.foldr, r)),
+    ...yt((i) => {
+      const s = xo(i)(t.chipExtras);
+      if (s.tag === "Just")
+        return V1(s._1);
+      if (s.tag === "Nothing")
+        return J;
+      f();
+    })(Lt(On.foldr, r))
+  ];
+  return o.length === 0 ? Mn(t) : hi(o);
+}, jr = (t) => (n) => (e) => {
+  const r = [
+    ...yt((o) => o)([
+      (() => {
+        const o = xo(e)(t.chipExtras);
+        if (o.tag === "Just")
+          return Z1(o._1);
+        if (o.tag === "Nothing")
+          return J;
+        f();
+      })()
+    ]),
+    ...(() => {
+      const o = xo(e)(n);
+      if (o.tag === "Just")
+        return yt((i) => {
+          const s = zf(i)(t.nodes);
+          return s.tag === "Just" ? v("Just", { x: s._1.x, y: s._1.y, w: s._1.w, h: s._1.h }) : J;
+        })([o._1.source, o._1.target]);
+      if (o.tag === "Nothing")
+        return [];
+      f();
+    })()
+  ];
+  return r.length === 0 ? qf(t)(n)(A) : hi(r);
+}, Xu = (t) => (n) => {
+  const e = Mn(t), r = e.w / Qr(1e-4)(n.zoom), o = e.h / Qr(1e-4)(n.zoom);
+  return { x: n.center.x - r / 2, y: n.center.y - o / 2, w: r, h: o };
+}, td = (t) => Cn(
+  C.compare,
+  Sn,
+  Rc(z((n) => b(n.id, { source: n.from.node, target: n.to.node }))(t.graph.edges)),
+  Rc(Jt(t.scenes)(M1))
+), Vu = (t) => t, nd = (t) => t, hr = /* @__PURE__ */ Vu("Linear"), ed = /* @__PURE__ */ Vu("EaseInOutQuad"), rd = /* @__PURE__ */ Vu("SpringBouncy"), Jo = (t) => (n) => (e) => {
+  const r = En(1 - n * n), o = t * r;
+  return 1 - Yi(-n * t * e) * (re(o * e) + n / r * Un(o * e));
+}, od = (t) => {
+  const n = ft.compare(0)(t), e = (() => {
+    if (n === "LT")
+      return t;
+    if (n === "EQ" || n === "GT")
+      return 0;
+    f();
+  })(), r = ft.compare(1)(e);
+  if (r === "LT" || r === "EQ")
+    return 1;
+  if (r === "GT")
+    return e;
+  f();
+}, Uu = (t) => (n) => (() => {
+  if (t === "Linear")
+    return nd;
+  if (t === "EaseInQuad")
+    return (e) => e * e;
+  if (t === "EaseOutQuad")
+    return (e) => 1 - (1 - e) * (1 - e);
+  if (t === "EaseInOutQuad")
+    return (e) => e < 0.5 ? 2 * e * e : 1 - 2 * (1 - e) * (1 - e);
+  if (t === "EaseInCubic")
+    return (e) => e * e * e;
+  if (t === "EaseOutCubic")
+    return (e) => 1 - (1 - e) * (1 - e) * (1 - e);
+  if (t === "EaseInOutCubic")
+    return (e) => e < 0.5 ? 4 * e * e * e : 1 - (-2 * e + 2) * (-2 * e + 2) * (-2 * e + 2) / 2;
+  if (t === "EaseOutExpo")
+    return (e) => e >= 1 ? 1 : 1 - zs(2)(-10 * e);
+  if (t === "Spring")
+    return (e) => 1 - (1 + 6 * e) * Yi(-6 * e);
+  if (t === "SpringBouncy")
+    return Jo(6)(0.7);
+  f();
+})()(od(n)), Yf = (t) => t, Ku = (t) => t, Zi = (t) => (n) => (e) => {
+  const r = ft.compare(t)(e), o = (() => {
+    if (r === "LT")
+      return e;
+    if (r === "EQ" || r === "GT")
+      return t;
+    f();
+  })(), i = ft.compare(n)(o);
+  if (i === "LT" || i === "EQ")
+    return n;
+  if (i === "GT")
+    return o;
+  f();
+}, To = (t) => (n) => {
+  const e = ft.compare(t)(n);
+  if (e === "LT")
+    return n;
+  if (e === "EQ" || e === "GT")
+    return t;
+  f();
+}, Xf = (t) => (n) => {
+  const e = ft.compare(t)(n);
+  if (e === "LT" || e === "EQ")
+    return t;
+  if (e === "GT")
+    return n;
+  f();
+}, id = (t) => (n) => {
+  const e = it.compare(t)(n);
+  if (e === "LT")
+    return n;
+  if (e === "EQ" || e === "GT")
+    return t;
+  f();
+}, sd = /* @__PURE__ */ Ku("Hold"), ud = /* @__PURE__ */ Ku("Gap"), cd = /* @__PURE__ */ Ku("Move"), co = /* @__PURE__ */ Yf("LinearLerp"), Bc = /* @__PURE__ */ Yf("LogLerp"), ad = (t) => (n) => (e) => {
+  const r = e.center.y - n.center.y, o = e.center.x - n.center.x, i = En(o * o + r * r), s = e.zoom - n.zoom, u = s < 0 ? -s : s;
+  return Zi(t.minTransition)(t.maxTransition)(To(t.panSpeed <= 0 ? t.minTransition : i / t.panSpeed)(t.zoomSpeed <= 0 ? t.minTransition : u / t.zoomSpeed));
+}, fd = /* @__PURE__ */ x((t) => (n) => {
+  const e = t.length - 1 | 0;
+  return e >= 0 && e < t.length && t[e] === n ? t : Dt(t)(n);
+})([]), Qc = (t) => (n) => {
+  const e = { x: 0, y: 0 }, r = 0 < t.length ? t[0].pos : e, o = Jf(qt, J, (i) => i.t <= n, t);
+  if (o.tag === "Nothing")
+    return r;
+  if (o.tag === "Just") {
+    const i = o._1 + 1 | 0;
+    if (i >= 0 && i < t.length) {
+      if (o._1 >= 0 && o._1 < t.length) {
+        const s = Zi(0)(1)(t[i].t <= t[o._1].t ? 0 : (n - t[o._1].t) / (t[i].t - t[o._1].t));
+        return { x: t[o._1].pos.x + (t[i].pos.x - t[o._1].pos.x) * s, y: t[o._1].pos.y + (t[i].pos.y - t[o._1].pos.y) * s };
+      }
+      return e;
+    }
+    return o._1 >= 0 && o._1 < t.length ? t[o._1].pos : e;
+  }
+  f();
+}, Us = (t) => (n) => ({ center: { x: n.center.x * t.scale + t.tx, y: n.center.y * t.scale + t.ty }, zoom: n.zoom / To(1e-6)(t.scale) }), gd = (t) => (n) => (e) => ({
+  center: { x: t.center.x + (n.center.x - t.center.x) * e, y: t.center.y + (n.center.y - t.center.y) * e },
+  zoom: Yi((() => {
+    const r = bc(To(1e-6)(t.zoom));
+    return r + (bc(To(1e-6)(n.zoom)) - r) * e;
+  })())
+}), ld = (t) => (n) => (e) => {
+  const r = Uu(e.easing)(Zi(0)(1)(e.endT <= e.startT ? 1 : (n - e.startT) / (e.endT - e.startT)));
+  if (e.interp === "LinearLerp")
+    return {
+      center: { x: e.fromCam.center.x + (e.toCam.center.x - e.fromCam.center.x) * r, y: e.fromCam.center.y + (e.toCam.center.y - e.fromCam.center.y) * r },
+      zoom: e.fromCam.zoom + (e.toCam.zoom - e.fromCam.zoom) * r
+    };
+  if (e.interp === "LogLerp")
+    return gd(e.fromCam)(e.toCam)(r);
+  f();
+}, _d = (t) => (n) => (e) => (r) => {
+  const o = (s, u) => Xf(ad(t)(s.toCam)(u.toCam))(s.endT - s.startT), i = x((s) => (u) => {
     if (s.pending.tag === "Nothing")
-      return { acc: s.acc, pending: b("Just", u) };
+      return { acc: s.acc, pending: v("Just", u) };
     if (s.pending.tag === "Just")
       return !(u.fromCam.zoom === u.toCam.zoom && u.fromCam.center.x === u.toCam.center.x && u.fromCam.center.y === u.toCam.center.y) || (() => {
         const c = s.pending._1.toCam.center.x - u.toCam.center.x;
@@ -1630,34 +1955,38 @@ const Nc = (t) => t, us = (t) => t, cs = (t) => t, as = (t) => t, Bo = (t) => t,
             return g < 0 ? -g < 0.08 : g < 0.08;
           })();
         })();
-      })() || o(s.pending._1, u) <= 0 ? { acc: gn(s.acc)(s.pending._1), pending: b("Just", u) } : {
-        acc: gn(gn(s.acc)({ ...s.pending._1, endT: u.startT - o(s.pending._1, u) }))({
+      })() || o(s.pending._1, u) <= 0 ? { acc: Dt(s.acc)(s.pending._1), pending: v("Just", u) } : {
+        acc: Dt(Dt(s.acc)({ ...s.pending._1, endT: u.startT - o(s.pending._1, u) }))({
           startT: u.startT - o(s.pending._1, u),
           endT: u.startT,
           fromCam: s.pending._1.toCam,
-          toCam: u.toCam
+          toCam: u.toCam,
+          easing: u.easing,
+          interp: co
         }),
-        pending: b("Just", u)
+        pending: v("Just", u)
       };
     f();
-  })({ acc: [], pending: T })(r);
+  })({ acc: [], pending: J })(r);
   if (i.pending.tag === "Nothing")
     return i.acc;
   if (i.pending.tag === "Just")
-    return gn(i.acc)(i.pending._1);
+    return Dt(i.acc)(i.pending._1);
   f();
-}, O0 = (t) => t.kind.tag === "SendToken" ? b("Just", L(t.kind._1.edge, { source: t.kind._1.from, target: t.kind._1.to })) : T, z0 = (t) => t.tag === "DataFlow" ? vt(O0)(t._1.events) : [], V0 = (t) => (n) => P0(vt((e) => ki(e._2.source)(n) || ki(e._2.target)(n) ? b("Just", e._1) : T)(A0(t))), Y0 = (t) => (n) => {
+}, dd = (t) => (n) => {
   const e = (r) => {
-    const o = ug(Yt, T, (i) => i.kind === "Hold", r < 1 ? [] : Gt(0, r, n));
+    const o = Jf(qt, J, (i) => i.kind === "Hold" || i.kind === "Move", r < 1 ? [] : bt(0, r, n));
     if (o.tag === "Just")
-      return o._1 >= 0 && o._1 < n.length ? b("Just", n[o._1].cam) : T;
+      return o._1 >= 0 && o._1 < n.length ? v("Just", n[o._1].toCam) : J;
     if (o.tag === "Nothing")
-      return T;
+      return J;
     f();
   };
-  return Pt((r) => (o) => {
+  return Ft((r) => (o) => {
     if (o.kind === "Hold")
-      return { startT: o.startT, endT: o.endT, fromCam: o.cam, toCam: o.cam };
+      return { startT: o.startT, endT: o.endT, fromCam: o.fromCam, toCam: o.toCam, easing: o.easing, interp: co };
+    if (o.kind === "Move")
+      return { startT: o.startT, endT: o.endT, fromCam: o.fromCam, toCam: o.toCam, easing: hr, interp: co };
     if (o.kind === "Gap")
       return {
         startT: o.startT,
@@ -1677,100 +2006,41 @@ const Nc = (t) => t, us = (t) => t, cs = (t) => t, as = (t) => t, Bo = (t) => t,
             if (i.tag === "Just")
               return i._1;
             f();
-          })(), u = r + 1 | 0, c = er(Yt, T, (a) => a.kind === "Hold", u < 1 ? n : Gt(u, n.length, n));
+          })(), u = r + 1 | 0, c = _r(
+            qt,
+            J,
+            (a) => a.kind === "Hold" || a.kind === "Move",
+            u < 1 ? n : bt(u, n.length, n)
+          );
           if (c.tag === "Just") {
             const a = (r + 1 | 0) + c._1 | 0;
-            return a >= 0 && a < n.length ? n[a].cam : s;
+            return a >= 0 && a < n.length ? n[a].fromCam : s;
           }
           if (c.tag === "Nothing")
             return s;
           f();
-        })()
+        })(),
+        easing: o.easing,
+        interp: co
       };
     f();
   })(n);
-}, X0 = {
+}, hd = {
   padding: 24,
-  easing: g0,
+  easing: hr,
   minZoom: 0.9,
   maxZoom: 2.5,
-  panSpeed: 700,
-  zoomSpeed: 1.5,
-  minTransition: 0.3,
-  maxTransition: 1.4
-}, U0 = (t) => (n) => (e) => {
-  const r = n.w + e * 2, o = n.h + e * 2, i = ye(t);
-  return r <= 0 || o <= 0 || i.w <= 0 || i.h <= 0 ? 1 : cr(i.w / r)(i.h / o);
-}, ws = (t) => {
-  const n = Wt((e) => T, (e) => (r) => b("Just", { head: e, tail: r }), t);
-  if (n.tag === "Nothing")
-    return { x: 0, y: 0, w: 0, h: 0 };
-  if (n.tag === "Just") {
-    const e = J((r) => (o) => ({ minX: cr(r.minX)(o.x), minY: cr(r.minY)(o.y), maxX: Re(r.maxX)(o.x + o.w), maxY: Re(r.maxY)(o.y + o.h) }))({
-      minX: n._1.head.x,
-      minY: n._1.head.y,
-      maxX: n._1.head.x + n._1.head.w,
-      maxY: n._1.head.y + n._1.head.h
-    })(n._1.tail);
-    return { x: e.minX, y: e.minY, w: e.maxX - e.minX, h: e.maxY - e.minY };
-  }
-  f();
-}, Cc = (t) => (n) => (e) => {
-  if (e.tag === "Leaf")
-    return ye(t);
-  const r = V0(n)(e), o = [
-    ...vt((i) => {
-      const s = Ec(i)(t.nodes);
-      return s.tag === "Just" ? b("Just", { x: s._1.x, y: s._1.y, w: s._1.w, h: s._1.h }) : T;
-    })(Et(
-      Pn.foldr,
-      bn(G.compare, Ln, e, W0(n)(e)(r))
-    )),
-    ...vt((i) => {
-      const s = je(i)(t.edges);
-      return s.tag === "Just" ? b("Just", ys(s._1)) : T;
-    })(Et(Pn.foldr, r)),
-    ...vt((i) => {
-      const s = je(i)(t.chipExtras);
-      if (s.tag === "Just")
-        return xc(s._1);
-      if (s.tag === "Nothing")
-        return T;
-      f();
-    })(Et(Pn.foldr, r))
-  ];
-  return o.length === 0 ? ye(t) : ws(o);
-}, M0 = (t) => (n) => (e) => (r) => {
-  const o = [
-    ...vt((i) => i)([
-      (() => {
-        const i = je(e)(t.edges);
-        return i.tag === "Just" ? b("Just", ys(i._1)) : T;
-      })(),
-      (() => {
-        const i = je(e)(t.chipExtras);
-        if (i.tag === "Just")
-          return xc(i._1);
-        if (i.tag === "Nothing")
-          return T;
-        f();
-      })()
-    ]),
-    ...(() => {
-      const i = je(e)(n);
-      if (i.tag === "Just")
-        return vt((s) => {
-          const u = Ec(s)(t.nodes);
-          return u.tag === "Just" ? b("Just", { x: u._1.x, y: u._1.y, w: u._1.w, h: u._1.h }) : T;
-        })([i._1.source, i._1.target]);
-      if (i.tag === "Nothing")
-        return [];
-      f();
-    })()
-  ];
-  return o.length === 0 ? Cc(t)(n)(r) : ws(o);
-}, K0 = /* @__PURE__ */ J((t) => (n) => {
-  const e = t.length - 1 | 0, r = e >= 0 && e < t.length ? b("Just", t[e]) : T;
+  tokenZoomFloor: 0,
+  panSpeed: 1500,
+  zoomSpeed: 4,
+  minTransition: 0.15,
+  maxTransition: 0.6,
+  cameraDecay: 16
+}, Mu = (t) => (n) => (e) => {
+  const r = n.w + e * 2, o = n.h + e * 2, i = Mn(t);
+  return r <= 0 || o <= 0 || i.w <= 0 || i.h <= 0 ? 1 : Xf(i.w / r)(i.h / o);
+}, pd = /* @__PURE__ */ x((t) => (n) => {
+  const e = t.length - 1 | 0, r = e >= 0 && e < t.length ? v("Just", t[e]) : J;
   return r.tag === "Just" && r._1.fromCam.zoom === r._1.toCam.zoom && r._1.fromCam.center.x === r._1.toCam.center.x && r._1.fromCam.center.y === r._1.toCam.center.y && n.fromCam.zoom === n.toCam.zoom && n.fromCam.center.x === n.toCam.center.x && n.fromCam.center.y === n.toCam.center.y && (() => {
     const o = r._1.toCam.center.x - n.toCam.center.x;
     return (o < 0 ? -o < 8 : o < 8) && (() => {
@@ -1780,82 +2050,114 @@ const Nc = (t) => t, us = (t) => t, cs = (t) => t, as = (t) => t, Bo = (t) => t,
         return s < 0 ? -s < 0.08 : s < 0.08;
       })();
     })();
-  })() ? gn((() => {
+  })() ? Dt((() => {
     const o = t.length - 1 | 0;
-    return o < 1 ? [] : Gt(0, o, t);
-  })())({ ...r._1, endT: n.endT }) : gn(t)(n);
-})([]), Sc = (t) => (n) => {
-  const e = ye(t), r = e.w / Re(1e-4)(n.zoom), o = e.h / Re(1e-4)(n.zoom);
-  return { x: n.center.x - r / 2, y: n.center.y - o / 2, w: r, h: o };
-}, j0 = (t) => bn(
-  G.compare,
-  Ln,
-  iu(O((n) => L(n.id, { source: n.from.node, target: n.to.node }))(t.graph.edges)),
-  iu(bt(t.scenes)(z0))
-), bi = (t) => (n) => (e) => ({ center: { x: e.x + e.w / 2, y: e.y + e.h / 2 }, zoom: Ts(t.minZoom)(t.maxZoom)(U0(n)(e)(t.padding)) }), Z0 = (t) => (n) => (e) => (r) => {
-  const o = bi(t)(n)(ye(n)), i = gt(
-    (s) => s >= 0 && s <= e,
-    D0(Lt(pt.compare)([0, e, ...bt(r)((s) => [s.startT, s.endT])]))
+    return o < 1 ? [] : bt(0, o, t);
+  })())({ ...r._1, endT: n.endT }) : Dt(t)(n);
+})([]), ao = (t) => (n) => (e) => (r) => ({ center: { x: e.x + e.w / 2, y: e.y + e.h / 2 }, zoom: To(r)(Zi(t.minZoom)(t.maxZoom)(Mu(n)(e)(t.padding))) }), $d = (t) => (n) => (e) => (r) => {
+  const o = kt((u) => (c) => it.compare(c.priority)(u.priority)), i = ao(t)(n)(Mn(n))(0), s = lt(
+    (u) => u >= 0 && u <= e,
+    fd(kt(ft.compare)([
+      0,
+      e,
+      ...Jt(r)((u) => [u.startT, u.endT]),
+      ...Jt(r)((u) => {
+        if (u.pathFollow.tag === "Nothing")
+          return [];
+        if (u.pathFollow.tag === "Just")
+          return z((c) => c.t)(u.pathFollow._1.samples);
+        f();
+      })
+    ]))
   );
-  return H0(t)(n)(o)(K0(Y0(o)(vt((s) => {
-    const u = (s._1 + s._2) / 2;
-    if (s._2 <= s._1)
-      return T;
-    const c = J(R0)(0)(O((g) => g.priority)(gt(
-      (g) => g.startT <= u && u < g.endT,
-      r
-    ))), a = O((g) => g.bbox)(gt(
-      (g) => g.priority === c,
-      gt((g) => g.startT <= u && u < g.endT, r)
+  return _d(t)(n)(i)(pd(dd(i)(yt((u) => {
+    const c = (u._1 + u._2) / 2;
+    if (u._2 <= u._1)
+      return J;
+    const a = yt((_) => _.pathFollow)(o(lt((_) => _.startT <= c && c < _.endT, r)));
+    if (0 < a.length)
+      return v(
+        "Just",
+        {
+          kind: cd,
+          startT: u._1,
+          endT: u._2,
+          fromCam: { center: Qc(a[0].samples)(u._1), zoom: a[0].zoom },
+          toCam: { center: Qc(a[0].samples)(u._2), zoom: a[0].zoom },
+          easing: hr
+        }
+      );
+    const g = z((_) => _.bbox)(lt(
+      (_) => _.priority === x(id)(0)(z((d) => d.priority)(lt(
+        (d) => d.startT <= c && c < d.endT,
+        r
+      ))),
+      lt((_) => _.startT <= c && c < _.endT, r)
     ));
-    return a.length === 0 ? b("Just", { kind: B0, startT: s._1, endT: s._2, cam: o }) : b("Just", { kind: F0, startT: s._1, endT: s._2, cam: bi(t)(n)(ws(a)) });
-  })($n(gr, i, Gt(1, i.length, i))))));
-}, t_ = (t) => (n) => (e) => (r) => {
-  const o = ln((i) => r >= i.startT && r < i.endT)(e);
+    return g.length === 0 ? v("Just", { kind: ud, startT: u._1, endT: u._2, fromCam: i, toCam: i, easing: t.easing }) : v(
+      "Just",
+      {
+        kind: sd,
+        startT: u._1,
+        endT: u._2,
+        fromCam: ao(t)(n)(hi(g))(qn(
+          (_) => _.priority >= 1,
+          lt((_) => _.startT <= c && c < _.endT, r)
+        ) ? t.tokenZoomFloor : 0),
+        toCam: ao(t)(n)(hi(g))(qn(
+          (_) => _.priority >= 1,
+          lt((_) => _.startT <= c && c < _.endT, r)
+        ) ? t.tokenZoomFloor : 0),
+        easing: t.easing
+      }
+    );
+  })(wn(Xe, s, bt(1, s.length, s))))));
+}, Vf = (t) => (n) => (e) => (r) => {
+  const o = jt((i) => r >= i.startT && r < i.endT)(e);
   if (o.tag === "Just")
-    return q0(t)(r)(o._1);
+    return ld()(r)(o._1);
   if (o.tag === "Nothing") {
     const i = e.length - 1 | 0;
     if (i >= 0 && i < e.length && r >= e[i].endT)
       return e[i].toCam;
-    const s = bi(t)(n)(ye(n));
+    const s = ao(t)(n)(Mn(n))(0);
     return 0 < e.length ? e[0].fromCam : s;
   }
   f();
 };
-function yr(t) {
+function Re(t) {
   return t.charCodeAt(0);
 }
-function Gc(t) {
+function Uf(t) {
   return String.fromCharCode(t);
 }
-const $e = function(t) {
+const Oe = function(t) {
   return function(n) {
     return function(e) {
       return e.replace(new RegExp(t.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&"), "g"), n);
     };
   };
-}, Ls = function(t) {
+}, ts = function(t) {
   return function(n) {
     return n.split(t);
   };
-}, n_ = function(t) {
+}, md = function(t) {
   return t.trim();
-}, Ho = function(t) {
+}, ns = function(t) {
   return function(n) {
     return n.join(t);
   };
 };
-var e_ = typeof Array.from == "function", r_ = typeof Symbol < "u" && Symbol != null && typeof Symbol.iterator < "u" && typeof String.prototype[Symbol.iterator] == "function", o_ = typeof String.prototype.fromCodePoint == "function", i_ = typeof String.prototype.codePointAt == "function";
-const s_ = function(t) {
-  return i_ ? function(n) {
+var yd = typeof Array.from == "function", Nd = typeof Symbol < "u" && Symbol != null && typeof Symbol.iterator < "u" && typeof String.prototype[Symbol.iterator] == "function", xd = typeof String.prototype.fromCodePoint == "function", Jd = typeof String.prototype.codePointAt == "function";
+const Td = function(t) {
+  return Jd ? function(n) {
     return n.codePointAt(0);
   } : t;
-}, u_ = function(t) {
-  return o_ ? String.fromCodePoint : t;
-}, c_ = function(t) {
+}, vd = function(t) {
+  return xd ? String.fromCodePoint : t;
+}, wd = function(t) {
   return function(n) {
-    return r_ ? function(e) {
+    return Nd ? function(e) {
       for (var r = "", o = e[Symbol.iterator](), i = 0; i < n; ++i) {
         var s = o.next();
         if (s.done) return r;
@@ -1864,46 +2166,46 @@ const s_ = function(t) {
       return r;
     } : t(n);
   };
-}, a_ = function(t) {
+}, kd = function(t) {
   return function(n) {
-    return e_ ? function(e) {
+    return yd ? function(e) {
       return Array.from(e, n);
     } : t;
   };
-}, Oo = (t) => {
-  const n = Pe(t);
+}, es = (t) => {
+  const n = Me(t);
   if (n === 0)
-    return T;
+    return J;
   if (n === 1)
-    return b("Just", { head: yr(Tr(0)(t)), tail: "" });
-  const e = yr(Tr(1)(t)), r = yr(Tr(0)(t));
-  return 55296 <= r && r <= 56319 && 56320 <= e && e <= 57343 ? b("Just", { head: (((r - 55296 | 0) * 1024 | 0) + (e - 56320 | 0) | 0) + 65536 | 0, tail: Sr(2)(t) }) : b("Just", { head: r, tail: Sr(1)(t) });
-}, f_ = (t) => {
-  const n = Oo(t);
-  return n.tag === "Just" ? b("Just", L(n._1.head, n._1.tail)) : T;
-}, g_ = (t) => On.unfoldr(f_)(t), __ = (t) => {
-  const n = yr(Tr(0)(t));
-  if (55296 <= n && n <= 56319 && Pe(t) > 1) {
-    const e = yr(Tr(1)(t));
+    return v("Just", { head: Re(so(0)(t)), tail: "" });
+  const e = Re(so(1)(t)), r = Re(so(0)(t));
+  return 55296 <= r && r <= 56319 && 56320 <= e && e <= 57343 ? v("Just", { head: (((r - 55296 | 0) * 1024 | 0) + (e - 56320 | 0) | 0) + 65536 | 0, tail: mo(2)(t) }) : v("Just", { head: r, tail: mo(1)(t) });
+}, bd = (t) => {
+  const n = es(t);
+  return n.tag === "Just" ? v("Just", b(n._1.head, n._1.tail)) : J;
+}, Ld = (t) => te.unfoldr(bd)(t), Ed = (t) => {
+  const n = Re(so(0)(t));
+  if (55296 <= n && n <= 56319 && Me(t) > 1) {
+    const e = Re(so(1)(t));
     if (56320 <= e && e <= 57343)
       return (((n - 55296 | 0) * 1024 | 0) + (e - 56320 | 0) | 0) + 65536 | 0;
   }
   return n;
-}, Ic = /* @__PURE__ */ s_(__), ks = /* @__PURE__ */ a_(g_)(Ic), ri = (t) => Ns(t >= 0 && t <= 65535 ? Gc(t) : t < 0 ? "\0" : "￿"), l_ = (t) => t <= 65535 ? ri(t) : ri(Ke(t - 65536 | 0, 1024) + 55296 | 0) + ri(ns(t - 65536 | 0)(1024) + 56320 | 0), d_ = /* @__PURE__ */ u_(l_), Pc = (t) => (n) => {
+}, Kf = /* @__PURE__ */ Td(Ed), rs = /* @__PURE__ */ kd(Ld)(Kf), xs = (t) => Ki(t >= 0 && t <= 65535 ? Uf(t) : t < 0 ? "\0" : "\uffff"), Sd = (t) => t <= 65535 ? xs(t) : xs(Ce(t - 65536 | 0, 1024) + 55296 | 0) + xs(ze(t - 65536 | 0)(1024) + 56320 | 0), Cd = /* @__PURE__ */ vd(Sd), Mf = (t) => (n) => {
   if (t < 1)
     return "";
-  const e = Oo(n);
-  return e.tag === "Just" ? d_(e._1.head) + Pc(t - 1 | 0)(e._1.tail) : n;
-}, _n = /* @__PURE__ */ c_(Pc), h_ = (t) => (n) => n === "" ? T : b("Just", Ic(n)), mo = (t, n, e) => ({ tag: t, _1: n, _2: e }), p_ = () => ({ tag: "ExtendFromSource" }), No = (t, n) => ({ tag: t, _1: n }), bs = (t) => t, Jo = (t, n) => ({ tag: t, _1: n }), oi = /* @__PURE__ */ Jo("NotYet"), su = /* @__PURE__ */ Jo("Consumed"), $_ = /* @__PURE__ */ bs("FromSource"), uu = /* @__PURE__ */ bs("FromTarget"), m_ = /* @__PURE__ */ bs("FromBoth"), ii = /* @__PURE__ */ No("Hidden"), N_ = /* @__PURE__ */ No("Visible"), Ac = /* @__PURE__ */ p_(), si = /* @__PURE__ */ mo("Retracted"), J_ = /* @__PURE__ */ mo("Extended"), Ei = (t, n) => ({ tag: t, _1: n }), Oe = (t, n, e) => ({ tag: t, _1: n, _2: e }), Rc = (t) => t, Se = (t, n) => ({ tag: t, _1: n }), Ue = (t, n, e, r, o, i, s, u, c) => ({ tag: t, _1: n, _2: e, _3: r, _4: o, _5: i, _6: s, _7: u, _8: c }), Fc = (t) => (e) => {
+  const e = es(n);
+  return e.tag === "Just" ? Cd(e._1.head) + Mf(t - 1 | 0)(e._1.tail) : n;
+}, mn = /* @__PURE__ */ wd(Mf), Pd = (t) => (n) => n === "" ? J : v("Just", Kf(n)), Wr = (t, n, e) => ({ tag: t, _1: n, _2: e }), Gd = () => ({ tag: "ExtendFromSource" }), Dr = (t, n) => ({ tag: t, _1: n }), ju = (t) => t, pi = (t, n) => ({ tag: t, _1: n }), Js = /* @__PURE__ */ pi("NotYet"), Wc = /* @__PURE__ */ pi("Consumed"), Id = /* @__PURE__ */ ju("FromSource"), Dc = /* @__PURE__ */ ju("FromTarget"), jf = /* @__PURE__ */ ju("FromBoth"), fo = /* @__PURE__ */ Dr("Hidden"), Ad = /* @__PURE__ */ Dr("Visible"), Zu = /* @__PURE__ */ Gd(), go = /* @__PURE__ */ Wr("Retracted"), Fd = /* @__PURE__ */ Wr("Extended"), Zf = (t) => t, Ks = (t, n) => ({ tag: t, _1: n }), er = (t, n, e) => ({ tag: t, _1: n, _2: e }), t0 = (t) => t, ar = (t, n) => ({ tag: t, _1: n }), wr = (t, n, e, r, o, i, s, u, c) => ({ tag: t, _1: n, _2: e, _3: r, _4: o, _5: i, _6: s, _7: u, _8: c }), Do = (t) => (e) => {
   let r = e, o = !0, i;
   for (; o; ) {
     const s = r;
     if (s.tag === "Leaf") {
-      o = !1, i = T;
+      o = !1, i = J;
       continue;
     }
     if (s.tag === "Node") {
-      const u = G.compare(t)(s._3);
+      const u = C.compare(t)(s._3);
       if (u === "LT") {
         r = s._5;
         continue;
@@ -1913,56 +2215,30 @@ const s_ = function(t) {
         continue;
       }
       if (u === "EQ") {
-        o = !1, i = b("Just", s._4);
+        o = !1, i = v("Just", s._4);
         continue;
       }
     }
     f();
   }
   return i;
-}, zo = (t) => (e) => {
-  let r = e, o = !0, i;
-  for (; o; ) {
-    const s = r;
-    if (s.tag === "Leaf") {
-      o = !1, i = T;
-      continue;
-    }
-    if (s.tag === "Node") {
-      const u = G.compare(t)(s._3);
-      if (u === "LT") {
-        r = s._5;
-        continue;
-      }
-      if (u === "GT") {
-        r = s._6;
-        continue;
-      }
-      if (u === "EQ") {
-        o = !1, i = b("Just", s._4);
-        continue;
-      }
-    }
-    f();
-  }
-  return i;
-}, Ne = (t) => (n) => {
-  const e = pt.compare(t)(n);
+}, xe = (t) => (n) => {
+  const e = ft.compare(t)(n);
   if (e === "LT")
     return n;
   if (e === "EQ" || e === "GT")
     return t;
   f();
-}, wr = (t) => (e) => {
+}, n0 = /* @__PURE__ */ nn(C)(Ht), Ms = /* @__PURE__ */ Eu(Bo), lo = (t) => (e) => {
   let r = e, o = !0, i;
   for (; o; ) {
     const s = r;
     if (s.tag === "Leaf") {
-      o = !1, i = T;
+      o = !1, i = J;
       continue;
     }
     if (s.tag === "Node") {
-      const u = G.compare(t)(s._3);
+      const u = C.compare(t)(s._3);
       if (u === "LT") {
         r = s._5;
         continue;
@@ -1972,21 +2248,47 @@ const s_ = function(t) {
         continue;
       }
       if (u === "EQ") {
-        o = !1, i = b("Just", s._4);
+        o = !1, i = v("Just", s._4);
         continue;
       }
     }
     f();
   }
   return i;
-}, cu = (t) => (n) => {
-  const e = pt.compare(t)(n);
+}, $i = (t) => (n) => {
+  const e = ft.compare(t)(n);
   if (e === "LT" || e === "EQ")
     return t;
   if (e === "GT")
     return n;
   f();
-}, au = (t) => (e) => {
+}, vo = (t) => (e) => {
+  let r = e, o = !0, i;
+  for (; o; ) {
+    const s = r;
+    if (s.tag === "Leaf") {
+      o = !1, i = J;
+      continue;
+    }
+    if (s.tag === "Node") {
+      const u = C.compare(t)(s._3);
+      if (u === "LT") {
+        r = s._5;
+        continue;
+      }
+      if (u === "GT") {
+        r = s._6;
+        continue;
+      }
+      if (u === "EQ") {
+        o = !1, i = v("Just", s._4);
+        continue;
+      }
+    }
+    f();
+  }
+  return i;
+}, Hc = (t) => (e) => {
   let r = e, o = !0, i;
   for (; o; ) {
     const s = r;
@@ -1995,7 +2297,7 @@ const s_ = function(t) {
       continue;
     }
     if (s.tag === "Node") {
-      const u = G.compare(t)(s._3);
+      const u = C.compare(t)(s._3);
       if (u === "LT") {
         r = s._5;
         continue;
@@ -2012,12 +2314,38 @@ const s_ = function(t) {
     f();
   }
   return i;
-}, ze = /* @__PURE__ */ (() => {
-  const t = On.unfoldr((n) => {
+}, e0 = (t) => (e) => {
+  let r = e, o = !0, i;
+  for (; o; ) {
+    const s = r;
+    if (s.tag === "Leaf") {
+      o = !1, i = J;
+      continue;
+    }
+    if (s.tag === "Node") {
+      const u = C.compare(t)(s._3);
+      if (u === "LT") {
+        r = s._5;
+        continue;
+      }
+      if (u === "GT") {
+        r = s._6;
+        continue;
+      }
+      if (u === "EQ") {
+        o = !1, i = v("Just", s._4);
+        continue;
+      }
+    }
+    f();
+  }
+  return i;
+}, xr = /* @__PURE__ */ (() => {
+  const t = te.unfoldr((n) => {
     if (n.tag === "Nil")
-      return T;
+      return J;
     if (n.tag === "Cons")
-      return b("Just", L(n._1, n._2));
+      return v("Just", b(n._1, n._2));
     f();
   });
   return (n) => t((() => {
@@ -2025,12 +2353,12 @@ const s_ = function(t) {
       if (r.tag === "Leaf")
         return o;
       if (r.tag === "Node")
-        return e(r._5, qt("Cons", r._3, e(r._6, o)));
+        return e(r._5, zt("Cons", r._3, e(r._6, o)));
       f();
     };
-    return e(n, zt);
+    return e(n, Yt);
   })());
-})(), v_ = /* @__PURE__ */ J((t) => (n) => Y(G)(n)()(t))(Q), xi = (t) => (e) => {
+})(), Rd = /* @__PURE__ */ x((t) => (n) => U(C)(n)()(t))(A), js = (t) => (e) => {
   let r = e, o = !0, i;
   for (; o; ) {
     const s = r;
@@ -2039,7 +2367,7 @@ const s_ = function(t) {
       continue;
     }
     if (s.tag === "Node") {
-      const u = G.compare(t)(s._3);
+      const u = C.compare(t)(s._3);
       if (u === "LT") {
         r = s._5;
         continue;
@@ -2056,33 +2384,7 @@ const s_ = function(t) {
     f();
   }
   return i;
-}, T_ = /* @__PURE__ */ jt(G)(Bt), y_ = (t) => (e) => {
-  let r = e, o = !0, i;
-  for (; o; ) {
-    const s = r;
-    if (s.tag === "Leaf") {
-      o = !1, i = T;
-      continue;
-    }
-    if (s.tag === "Node") {
-      const u = G.compare(t)(s._3);
-      if (u === "LT") {
-        r = s._5;
-        continue;
-      }
-      if (u === "GT") {
-        r = s._6;
-        continue;
-      }
-      if (u === "EQ") {
-        o = !1, i = b("Just", s._4);
-        continue;
-      }
-    }
-    f();
-  }
-  return i;
-}, ui = (t) => (e) => {
+}, Ts = (t) => (e) => {
   let r = e, o = !0, i;
   for (; o; ) {
     const s = r;
@@ -2091,7 +2393,7 @@ const s_ = function(t) {
       continue;
     }
     if (s.tag === "Node") {
-      const u = G.compare(t)(s._3);
+      const u = C.compare(t)(s._3);
       if (u === "LT") {
         r = s._5;
         continue;
@@ -2108,77 +2410,68 @@ const s_ = function(t) {
     f();
   }
   return i;
-}, w_ = /* @__PURE__ */ Se("NoKeyframes"), L_ = (t) => Se("DuplicateEventId", t), k_ = (t) => Se("UnknownEvent", t), Bc = /* @__PURE__ */ Rc("PlopIn"), b_ = /* @__PURE__ */ Rc("PlopOut"), E_ = (t) => (n) => vt((e) => {
-  if (e.target.tag === "NodeWindow" || e.target.tag === "EdgeWindow")
-    return T;
-  if (e.target.tag === "TokenWindow")
-    return b(
+}, Bd = /* @__PURE__ */ ar("NoKeyframes"), Qd = (t) => ar("DuplicateEventId", t), Wd = (t) => ar("UnknownEvent", t), r0 = /* @__PURE__ */ t0("PlopIn"), Dd = /* @__PURE__ */ t0("PlopOut"), Hd = /* @__PURE__ */ Zf("DiveIn"), Od = /* @__PURE__ */ Zf("DiveOut"), zd = (t) => (n) => (e) => (r) => {
+  const o = Do(r.edge)(n.edges), i = (() => {
+    if (o.tag === "Nothing")
+      return 0;
+    if (o.tag === "Just")
+      return Wo(o._1);
+    f();
+  })(), s = xe(t.minTokenDuration)(xe(nt(x((u) => (c) => u + rs(c).length | 0)(0)(r.labels)) * t.tokenReadSecPerChar)(t.tokenSpeed <= 0 ? 0 : i / t.tokenSpeed)) + e.pre + e.post;
+  return { duration: s, holdPre: s <= 0 ? 0 : e.pre / s, holdPost: s <= 0 ? 0 : e.post / s };
+}, qd = (t) => (n) => n0(yt((e) => {
+  if (e.kind.tag === "SendToken")
+    return v(
       "Just",
-      { startT: e.startT, endT: e.endT, bbox: M0(t)(n)(e.target._2)(Q), priority: 1 }
+      b(
+        e.id,
+        {
+          pre: (() => {
+            const r = e.when;
+            return (() => {
+              const o = e.kind._1.from;
+              return qn(
+                (i) => {
+                  if (i.kind.tag === "SendToken")
+                    return (r.tag === "First" ? !1 : r.tag === "After" && r._1 === i.id) && i.kind._1.to === o;
+                  if (i.kind.tag === "FillNodeWithoutTransition")
+                    return !1;
+                  f();
+                },
+                n
+              );
+            })() ? 0 : t.tokenHold;
+          })(),
+          post: (() => {
+            const r = e.id;
+            return (() => {
+              const o = e.kind._1.to;
+              return qn(
+                (i) => {
+                  if (i.kind.tag === "SendToken")
+                    return (i.when.tag === "First" ? !1 : i.when.tag === "After" && i.when._1 === r) && i.kind._1.from === o;
+                  if (i.kind.tag === "FillNodeWithoutTransition")
+                    return !1;
+                  f();
+                },
+                n
+              );
+            })() ? 0 : t.tokenHold;
+          })()
+        }
+      )
     );
-  if (e.target.tag === "FillWindow")
-    return b(
-      "Just",
-      {
-        startT: e.startT,
-        endT: e.endT,
-        bbox: Cc(t)(n)(Dt(
-          "Node",
-          1,
-          1,
-          e.target._2,
-          void 0,
-          Q,
-          Q
-        )),
-        priority: 1
-      }
-    );
+  if (e.kind.tag === "FillNodeWithoutTransition")
+    return J;
   f();
-}), x_ = (t) => (n) => (e) => (r) => (o) => {
-  const i = ct(J((a) => (g) => a + ks(g).length | 0)(0)(e.labels)) * t.tokenReadSecPerChar, s = (a) => {
-    const g = Fc(a)(n.nodes);
-    if (g.tag === "Just")
-      return { x: g._1.x + g._1.w / 2, y: g._1.y + g._1.h / 2 };
-    if (g.tag === "Nothing")
-      return { x: 0, y: 0 };
-    f();
-  }, u = zo(e.edge)(n.edges), c = (() => {
-    if (u.tag === "Just") {
-      const a = (() => {
-        if (e.direction === "Forward")
-          return u._1;
-        if (e.direction === "Backward")
-          return vn(u._1);
-        f();
-      })(), g = (() => {
-        if (e.direction === "Forward")
-          return u._1;
-        if (e.direction === "Backward")
-          return vn(u._1);
-        f();
-      })(), l = s(e.from), d = g.length - 1 | 0;
-      return (2 * (() => {
-        const _ = 0 < a.length ? a[0] : s(e.from), h = _.x - l.x, p = _.y - l.y;
-        return (h < 0 ? -h : h) + (p < 0 ? -p : p);
-      })() + $s(u._1) + 2 * (() => {
-        const _ = d >= 0 && d < g.length ? g[d] : s(e.to), h = s(e.to), p = h.x - _.x, $ = h.y - _.y;
-        return (p < 0 ? -p : p) + ($ < 0 ? -$ : $);
-      })()) / t.tokenSpeed;
-    }
-    if (u.tag === "Nothing")
-      return 0 / t.tokenSpeed;
-    f();
-  })();
-  return t.tokenSpeed <= 0 ? t.minTokenDuration : Ne(t.minTokenDuration)(Ne(c)(i) / Ne(0.05)(1 - r - o));
-}, C_ = (t) => {
+})(n)), Yd = (t) => {
   if (t.event.kind.tag === "SendToken")
-    return b(
+    return v(
       "Just",
       {
         startT: t.startT,
         endT: t.endT,
-        target: Ue(
+        target: wr(
           "TokenWindow",
           t.event.id,
           t.event.kind._1.edge,
@@ -2192,128 +2485,119 @@ const s_ = function(t) {
       }
     );
   if (t.event.kind.tag === "FillNodeWithoutTransition")
-    return b("Just", { startT: t.startT, endT: t.endT, target: Ue("FillWindow", t.event.id, t.event.kind._1.node, t.event.kind._1.labels) });
+    return v("Just", { startT: t.startT, endT: t.endT, target: wr("FillWindow", t.event.id, t.event.kind._1.node, t.event.kind._1.labels) });
   f();
-}, S_ = (t) => (n) => (e) => vt((r) => {
-  const o = vt((i) => Fc(i)(t.nodes))(Et(
-    Pn.foldr,
+}, Xd = (t) => (n) => (e) => (r) => {
+  const o = jt((i) => Ms(i.path)(n) && (Ke(i.endT - e) < 1e-4 || Ke(i.startT - r) < 1e-4))(t.segments);
+  if (o.tag === "Just")
+    return v("Just", o._1);
+  if (o.tag === "Nothing")
+    return jt((i) => Ms(i.path)(n))(t.segments);
+  f();
+}, Vd = (t) => (n) => (e) => yt((r) => {
+  const o = yt((i) => vo(i)(t.nodes))(Lt(
+    On.foldr,
     (() => {
       if (r.scene.tag === "Structural")
-        return bn(
-          G.compare,
-          Ln,
+        return Cn(
+          C.compare,
+          Sn,
           (() => {
-            const i = wr(r.scene._1.from)(e);
+            const i = lo(r.scene._1.from)(e);
             if (i.tag === "Nothing")
-              return Q;
+              return A;
             if (i.tag === "Just")
               return i._1.nodes;
             f();
           })(),
           (() => {
-            const i = wr(r.scene._1.to)(e);
+            const i = lo(r.scene._1.to)(e);
             if (i.tag === "Nothing")
-              return Q;
+              return A;
             if (i.tag === "Just")
               return i._1.nodes;
             f();
           })()
         );
       if (r.scene.tag === "DataFlow") {
-        const i = wr(r.scene._1.keyframe)(e);
+        const i = lo(r.scene._1.keyframe)(e);
         if (i.tag === "Nothing")
-          return Q;
+          return A;
         if (i.tag === "Just")
           return i._1.nodes;
+        f();
       }
+      if (r.scene.tag === "EnterNode" || r.scene.tag === "ExitNode")
+        return A;
       f();
     })()
   ));
-  return o.length === 0 ? T : b(
+  return o.length === 0 ? J : v(
     "Just",
     {
       startT: r.startT,
       endT: r.endT,
       bbox: (() => {
-        const i = J((s) => (u) => ({ minX: cu(s.minX)(u.x), minY: cu(s.minY)(u.y), maxX: Ne(s.maxX)(u.x + u.w), maxY: Ne(s.maxY)(u.y + u.h) }))(0 < o.length ? { minX: o[0].x, minY: o[0].y, maxX: o[0].x + o[0].w, maxY: o[0].y + o[0].h } : { minX: 0, minY: 0, maxX: 0, maxY: 0 })(Gt(1, o.length, o));
+        const i = x((s) => (u) => ({ minX: $i(s.minX)(u.x), minY: $i(s.minY)(u.y), maxX: xe(s.maxX)(u.x + u.w), maxY: xe(s.maxY)(u.y + u.h) }))(0 < o.length ? { minX: o[0].x, minY: o[0].y, maxX: o[0].x + o[0].w, maxY: o[0].y + o[0].h } : { minX: 0, minY: 0, maxX: 0, maxY: 0 })(bt(1, o.length, o));
         return { x: i.minX, y: i.minY, w: i.maxX - i.minX, h: i.maxY - i.minY };
       })(),
-      priority: 0
+      priority: 0,
+      pathFollow: J
     }
   );
-}), G_ = (t) => (n) => (e) => {
-  const r = zo(e)(t);
+}), Ud = (t) => (n) => (e) => {
+  const r = Do(e)(t);
   if (r.tag === "Nothing")
-    return uu;
+    return Dc;
   if (r.tag === "Just") {
-    const o = au(r._1.target)(n);
-    return au(r._1.source)(n) ? o ? m_ : $_ : uu;
+    const o = Hc(r._1.target)(n);
+    return Hc(r._1.source)(n) ? o ? jf : Id : Dc;
   }
   f();
-}, I_ = (t) => (n) => (e) => (r) => {
-  const o = (() => {
-    if (r.event.when.tag === "First")
+}, Kd = { pre: 0, post: 0 }, Md = (t) => (n) => (e) => (r) => (o) => {
+  const i = e0(o.event.id)(e), s = (() => {
+    if (i.tag === "Nothing")
+      return Kd;
+    if (i.tag === "Just")
+      return i._1;
+    f();
+  })(), u = (() => {
+    if (o.event.when.tag === "First")
       return 0;
-    if (r.event.when.tag === "At")
-      return r.event.when._1;
-    if (r.event.when.tag === "After") {
-      const i = r.event.when._1, s = ln((u) => u.event.id === i)(e);
-      if (s.tag === "Nothing")
+    if (o.event.when.tag === "At")
+      return o.event.when._1;
+    if (o.event.when.tag === "After") {
+      const a = o.event.when._1, g = jt((_) => _.event.id === a)(r);
+      if (g.tag === "Nothing")
         return 0;
-      if (s.tag === "Just")
-        return s._1.endT;
+      if (g.tag === "Just")
+        return g._1.endT;
       f();
     }
-    if (r.event.when.tag === "With") {
-      const i = r.event.when._1, s = ln((u) => u.event.id === i)(e);
-      if (s.tag === "Nothing")
+    if (o.event.when.tag === "With") {
+      const a = o.event.when._1, g = jt((_) => _.event.id === a)(r);
+      if (g.tag === "Nothing")
         return 0;
-      if (s.tag === "Just")
-        return s._1.startT;
+      if (g.tag === "Just")
+        return g._1.startT;
     }
+    f();
+  })(), c = (() => {
+    if (o.event.kind.tag === "SendToken")
+      return zd(t)(n)(s)(o.event.kind._1);
+    if (o.event.kind.tag === "FillNodeWithoutTransition")
+      return { duration: t.plop, holdPre: 0, holdPost: 0 };
     f();
   })();
-  return gn(e)({
-    startT: o,
-    endT: (() => {
-      if (r.event.kind.tag === "SendToken")
-        return o + x_(t)(n)(r.event.kind._1)(r.holdPre)(r.holdPost);
-      if (r.event.kind.tag === "FillNodeWithoutTransition")
-        return o + t.plop;
-      f();
-    })(),
-    event: r.event,
-    holdPre: r.holdPre,
-    holdPost: r.holdPost
-  });
-}, Es = (t) => (n) => {
-  if (n < 0)
-    return Oe("AtKeyframe", t.initialKeyframe);
-  if (n >= t.totalDuration) {
-    const r = t.spans.length - 1 | 0;
-    return r >= 0 && r < t.spans.length ? Oe(
-      "AtKeyframe",
-      (() => {
-        if (t.spans[r].scene.tag === "Structural")
-          return t.spans[r].scene._1.to;
-        if (t.spans[r].scene.tag === "DataFlow")
-          return t.spans[r].scene._1.keyframe;
-        f();
-      })()
-    ) : Oe("AtKeyframe", t.initialKeyframe);
-  }
-  const e = ln((r) => n >= r.startT && n < r.endT)(t.spans);
-  if (e.tag === "Just") {
-    if (e._1.scene.tag === "Structural")
-      return Oe("InTransition", e._1.scene._1.from, e._1.scene._1.to);
-    if (e._1.scene.tag === "DataFlow")
-      return Oe("AtKeyframe", e._1.scene._1.keyframe);
-    f();
-  }
+  return Dt(r)({ startT: u, endT: u + c.duration, event: o.event, holdPre: c.holdPre, holdPost: c.holdPost });
+}, o0 = (t) => (n) => (e) => x(Md(t)(n)(qd(t)(e)))([])(Ft((r) => (o) => ({ event: o }))(e)), jd = (t) => (n) => {
+  const e = vo(n)(t.interiors);
   if (e.tag === "Nothing")
-    return Oe("AtKeyframe", t.initialKeyframe);
+    return t;
+  if (e.tag === "Just")
+    return e._1;
   f();
-}, P_ = (t) => {
+}, Zd = (t) => (n) => ({ ...n, fromCam: Us(t)(n.fromCam), toCam: Us(t)(n.toCam) }), th = (t) => {
   if (t.when.tag === "First")
     return [];
   if (t.when.tag === "At")
@@ -2323,69 +2607,76 @@ const s_ = function(t) {
   if (t.when.tag === "With")
     return [t.when._1];
   f();
-}, fu = { id: "", nodes: Q, edges: Q }, A_ = (t) => (n) => G0((() => {
-  const e = wr(n.from)(t);
+}, Oc = { id: "", nodes: A, edges: A }, nh = (t) => (n) => z1((() => {
+  const e = lo(n.from)(t);
   if (e.tag === "Nothing")
-    return fu;
+    return Oc;
   if (e.tag === "Just")
     return e._1;
   f();
 })())((() => {
-  const e = wr(n.to)(t);
+  const e = lo(n.to)(t);
   if (e.tag === "Nothing")
-    return fu;
+    return Oc;
   if (e.tag === "Just")
     return e._1;
   f();
-})()), ci = (t) => (n) => (e) => (r) => {
-  const o = zo(r)(e.edges);
+})()), eh = (t) => (n) => {
+  const e = vo(n)(t.interiors);
+  if (e.tag === "Nothing")
+    return { layout: t.layout, interiors: A };
+  if (e.tag === "Just")
+    return e._1;
+  f();
+}, vs = (t) => (n) => (e) => (r) => {
+  const o = Do(r)(e.edges);
   if (o.tag === "Just")
-    return t <= 0 ? n : Ne(n)($s(o._1) / t);
+    return t <= 0 ? n : xe(n)(Wo(o._1) / t);
   if (o.tag === "Nothing")
     return n;
   f();
-}, Qc = (t) => (n) => (e) => (r) => (o) => {
-  const i = t.plop, s = A_(e)(o), u = O((_) => ({
+}, i0 = (t) => (n) => (e) => (r) => (o) => {
+  const i = t.plop, s = nh(e)(o), u = z((l) => ({
     startT: 0,
-    endT: 0 + ci(t.edgeSpeed)(t.minEdgeDuration)(n)(_),
-    target: Ue("EdgeWindow", _, Ei("Extend", Ac))
-  }))(ze(s.entering.edges)), c = O((_) => ({ startT: 0, endT: i, target: Ue("NodeWindow", _, Bc) }))(ze(s.entering.nodes)), a = J(Ne)(0)(O((_) => ci(t.edgeSpeed)(t.minEdgeDuration)(n)(_))(ze(s.leaving.edges))), g = (_) => de(
+    endT: 0 + vs(t.edgeSpeed)(t.minEdgeDuration)(n)(l),
+    target: wr("EdgeWindow", l, Ks("Extend", Zu))
+  }))(xr(s.entering.edges)), c = z((l) => ({ startT: 0, endT: i, target: wr("NodeWindow", l, r0) }))(xr(s.entering.nodes)), a = x(xe)(0)(z((l) => vs(t.edgeSpeed)(t.minEdgeDuration)(n)(l))(xr(s.leaving.edges))), g = (l) => qn(
     (h) => {
-      const p = zo(h)(r);
-      if (p.tag === "Just")
-        return p._1.source === _ || p._1.target === _;
-      if (p.tag === "Nothing")
+      const $ = Do(h)(r);
+      if ($.tag === "Just")
+        return $._1.source === l || $._1.target === l;
+      if ($.tag === "Nothing")
         return !1;
       f();
     },
-    ze(s.leaving.edges)
-  ) ? a : 0, l = O((_) => ({ startT: g(_), endT: g(_) + t.plop, target: Ue("NodeWindow", _, b_) }))(ze(s.leaving.nodes)), d = O((_) => ({
+    xr(s.leaving.edges)
+  ) ? a : 0, _ = z((l) => ({ startT: g(l), endT: g(l) + t.plop, target: wr("NodeWindow", l, Dd) }))(xr(s.leaving.nodes)), d = z((l) => ({
     startT: 0,
-    endT: ci(t.edgeSpeed)(t.minEdgeDuration)(n)(_),
-    target: Ue("EdgeWindow", _, Ei("Retract", G_(r)(s.leaving.nodes)(_)))
-  }))(ze(s.leaving.edges));
+    endT: vs(t.edgeSpeed)(t.minEdgeDuration)(n)(l),
+    target: wr("EdgeWindow", l, Ks("Retract", Ud(r)(s.leaving.nodes)(l)))
+  }))(xr(s.leaving.edges));
   return {
     duration: (() => {
-      const _ = Lt(pt.compare)([
-        ...O((p) => p.endT)(d),
-        ...O((p) => p.endT)(l),
-        ...O((p) => p.endT)(c),
-        ...O((p) => p.endT)(u)
-      ]), h = _.length - 1 | 0;
-      return h >= 0 && h < _.length ? _[h] + t.gap : t.gap;
+      const l = kt(ft.compare)([
+        ...z(($) => $.endT)(d),
+        ...z(($) => $.endT)(_),
+        ...z(($) => $.endT)(c),
+        ...z(($) => $.endT)(u)
+      ]), h = l.length - 1 | 0;
+      return h >= 0 && h < l.length ? l[h] + t.gap : t.gap;
     })(),
-    windows: [...d, ...l, ...c, ...u]
+    windows: [...d, ..._, ...c, ...u]
   };
-}, R_ = (t) => (n) => (e) => (r) => (o) => (i) => O((() => {
+}, rh = (t) => (n) => (e) => (r) => (o) => (i) => z((() => {
   const s = o.startT;
   return (u) => ({ ...u, startT: u.startT + s, endT: u.endT + s });
-})())(Qc(t)(n)(e)(r)(i).windows), F_ = (t) => vt((n) => Et(br, n).length > 1 ? b(
+})())(i0(t)(n)(e)(r)(i).windows), oh = (t) => yt((n) => Lt(po, n).length > 1 ? v(
   "Just",
   (() => {
-    const e = Wt(
-      (r) => T,
-      (r) => (o) => b("Just", { head: r, tail: o }),
-      Et(br, n)
+    const e = Rt(
+      (r) => J,
+      (r) => (o) => v("Just", { head: r, tail: o }),
+      Lt(po, n)
     );
     if (e.tag === "Just")
       return e._1.head;
@@ -2393,14 +2684,120 @@ const s_ = function(t) {
       return "";
     f();
   })()
-) : T)(lg(Mi)(Lt(G.compare)(t))), B_ = (t) => {
-  const n = O((r) => r.id)(t), e = v_(n);
+) : J)(m_(Bo)(kt(C.compare)(t))), ih = (t) => {
+  const n = z((r) => r.id)(t), e = Rd(n);
   return [
-    ...O(L_)(F_(n)),
-    ...O(k_)(gt((r) => !xi(r)(e), bt(t)(P_)))
+    ...z(Qd)(oh(n)),
+    ...z(Wd)(lt((r) => !js(r)(e), Jt(t)(th)))
   ];
-}, Q_ = (t) => {
-  const n = T_(O((r) => L(
+}, sh = (t) => (n) => (e) => {
+  const r = xe(t.minZoom)(t.tokenZoomFloor);
+  return yt((o) => {
+    if (o.target.tag === "NodeWindow" || o.target.tag === "EdgeWindow")
+      return J;
+    if (o.target.tag === "TokenWindow")
+      return v(
+        "Just",
+        (() => {
+          const i = { pre: o.target._7, post: o.target._8 };
+          if (t.tokenZoomFloor <= 0)
+            return {
+              startT: o.startT,
+              endT: o.endT,
+              bbox: jr(n)(e)(o.target._2),
+              priority: 1,
+              pathFollow: J
+            };
+          const s = Do(o.target._2)(n.edges);
+          if (s.tag === "Just") {
+            const u = vo(o.target._4)(n.nodes);
+            if (u.tag === "Just") {
+              const c = vo(o.target._5)(n.nodes);
+              if (c.tag === "Just") {
+                const a = c._1;
+                return {
+                  startT: o.startT,
+                  endT: o.endT,
+                  bbox: jr(n)(e)(o.target._2),
+                  priority: 1,
+                  pathFollow: v(
+                    "Just",
+                    {
+                      samples: (() => {
+                        const g = o.startT + i.pre * (o.endT - o.startT), _ = xe(1e-4)(o.endT - i.post * (o.endT - o.startT) - g), d = o.endT - o.startT;
+                        return z((l) => {
+                          const h = g + nt(l) / nt(32) * _;
+                          return {
+                            t: h,
+                            pos: F1(s._1)({ x: u._1.x + u._1.w / 2, y: u._1.y + u._1.h / 2 })({
+                              x: a.x + a.w / 2,
+                              y: a.y + a.h / 2
+                            })(d <= 0 ? 0 : (h - o.startT) / d)(i)
+                          };
+                        })(It(0, 32));
+                      })(),
+                      zoom: r
+                    }
+                  )
+                };
+              }
+              if (c.tag === "Nothing")
+                return {
+                  startT: o.startT,
+                  endT: o.endT,
+                  bbox: jr(n)(e)(o.target._2),
+                  priority: 1,
+                  pathFollow: J
+                };
+              f();
+            }
+            if (u.tag === "Nothing")
+              return {
+                startT: o.startT,
+                endT: o.endT,
+                bbox: jr(n)(e)(o.target._2),
+                priority: 1,
+                pathFollow: J
+              };
+            f();
+          }
+          if (s.tag === "Nothing")
+            return {
+              startT: o.startT,
+              endT: o.endT,
+              bbox: jr(n)(e)(o.target._2),
+              priority: 1,
+              pathFollow: J
+            };
+          f();
+        })()
+      );
+    if (o.target.tag === "FillWindow")
+      return v(
+        "Just",
+        {
+          startT: o.startT,
+          endT: o.endT,
+          bbox: qf(n)(e)(Ot(
+            "Node",
+            1,
+            1,
+            o.target._2,
+            void 0,
+            A,
+            A
+          )),
+          priority: 1,
+          pathFollow: J
+        }
+      );
+    f();
+  });
+}, uh = (t) => (n) => (e) => (r) => (o) => $d(t)(o.layout)(r.endT)([
+  ...Vd(o.layout)(e)(n)(lt((i) => i.startT >= o.startT && i.endT <= o.endT, r.spans)),
+  ...sh(t)(o.layout)(e)(o.windows)
+]), ch = (t) => {
+  const n = n0(z((r) => b(
     r.id,
     (() => {
       if (r.when.tag === "First")
@@ -2414,131 +2811,242 @@ const s_ = function(t) {
       f();
     })()
   ))(t)), e = (r) => (o) => (i) => {
-    if (xi(i)(o))
-      return [Se("ScheduleCycle", [...Et(Pn.foldr, o), i])];
-    if (xi(i)(r))
+    if (js(i)(o))
+      return [ar("ScheduleCycle", [...Lt(On.foldr, o), i])];
+    if (js(i)(r))
       return [];
-    const s = y_(i)(n);
+    const s = e0(i)(n);
     if (s.tag === "Nothing")
       return [];
     if (s.tag === "Just")
-      return bt(s._1)(e(Y(G)(i)()(r))(Y(G)(i)()(o)));
+      return Jt(s._1)(e(U(C)(i)()(r))(U(C)(i)()(o)));
     f();
   };
-  return bt(t)((r) => e(Q)(Q)(r.id));
-}, D_ = {
+  return Jt(t)((r) => e(A)(A)(r.id));
+}, ah = {
   plop: 0.5,
   gap: 0.5,
   edgeSpeed: 350,
   minEdgeDuration: 0.3,
-  tokenSpeed: 100,
-  minTokenDuration: 1.4,
+  tokenSpeed: 250,
+  minTokenDuration: 1.8,
+  tokenHold: 0.5,
+  hatchHold: 0.4,
   tokenReadSecPerChar: 0.06,
-  nodeEasing: _0,
-  edgeEasing: f0,
-  tokenEasing: a0
-}, W_ = (t) => (n) => {
+  nodeEasing: rd,
+  edgeEasing: ed,
+  tokenEasing: hr,
+  diveDur: 1.2,
+  retreatDur: 1.2
+}, fh = (t) => (n) => (e) => (r) => z((() => {
+  const o = e.startT;
+  return (i) => ({ ...i, startT: i.startT + o, endT: i.endT + o });
+})())(yt(Yd)(o0(t)(n)(r.events))), gh = (t) => (n) => (e) => (r) => (o) => {
+  if (o.scene.tag === "Structural")
+    return rh(t)(n)(e)(r)(o)(o.scene._1);
+  if (o.scene.tag === "DataFlow")
+    return fh(t)(n)(o)(o.scene._1);
+  if (o.scene.tag === "EnterNode")
+    return [];
+  if (o.scene.tag === "ExitNode")
+    return [];
+  f();
+}, lh = (t) => (n) => (e) => {
+  const r = o0(t)(n)(e.events);
+  return r.length === 0 ? t.gap : x(xe)(0)(z((o) => o.endT)(r)) + t.gap;
+}, _h = (t) => (n) => (e) => (r) => (o) => {
+  if (o.tag === "Structural")
+    return i0(t)(n)(e)(r)(o._1).duration;
+  if (o.tag === "DataFlow")
+    return lh(t)(n)(o._1);
+  if (o.tag === "EnterNode" || o.tag === "ExitNode")
+    return 0;
+  f();
+}, s0 = (t) => (n) => (e) => (r) => (o) => (i) => {
+  const s = B1(n)(r), u = e.layout, c = Of(z(($) => b($.id, $))(o.keyframes)), a = 0 < o.keyframes.length ? v("Just", o.keyframes[0]) : J, g = (() => {
+    if (a.tag === "Just")
+      return a._1.id;
+    if (a.tag === "Nothing")
+      return "";
+    f();
+  })(), _ = td(o), d = ($) => ({
+    segments: $.runSpans.length === 0 ? $.segments : Dt($.segments)({
+      startT: $.runStart,
+      endT: $.t,
+      path: r,
+      layout: u,
+      placement: s,
+      windows: $.runWindows,
+      spans: $.runSpans,
+      keyframes: c,
+      initialKeyframe: g,
+      edgeEndpoints: _
+    }),
+    spans: $.spans,
+    windows: $.windows,
+    dives: $.dives
+  }), l = x(($) => (p) => {
+    if (p.tag === "EnterNode") {
+      const T = d($), w = $.t + t.diveDur, k = Dt(r)(p._1), L = s0(t)(n)(eh(e)(p._1))(k)(jd(o)(p._1))(w), G = L.endT + t.retreatDur;
+      return {
+        ...$,
+        t: G,
+        runStart: G,
+        runSpans: [],
+        runWindows: [],
+        segments: [...T.segments, ...L.segments],
+        spans: [...T.spans, ...L.spans],
+        windows: [...T.windows, ...L.windows],
+        dives: [
+          ...T.dives,
+          { startT: $.t, endT: w, node: p._1, parentPath: r, childPath: k, direction: Hd },
+          ...L.dives,
+          { startT: L.endT, endT: G, node: p._1, parentPath: r, childPath: k, direction: Od }
+        ]
+      };
+    }
+    if (p.tag === "ExitNode")
+      return $;
+    const m = $.t + _h(t)(u)(c)(_)(p), y = { startT: $.t, endT: m, scene: p }, N = gh(t)(u)(c)(_)(y);
+    return {
+      ...$,
+      t: m,
+      runSpans: Dt($.runSpans)(y),
+      runWindows: [...$.runWindows, ...N],
+      spans: Dt($.spans)(y),
+      windows: [...$.windows, ...N]
+    };
+  })({ t: i, runStart: i, runSpans: [], runWindows: [], segments: [], spans: [], windows: [], dives: [] })(o.scenes), h = d(l);
+  return {
+    endT: l.t,
+    spans: h.spans,
+    windows: kt(($) => (p) => ft.compare($.startT)(p.startT))(h.windows),
+    segments: h.segments,
+    dives: h.dives
+  };
+}, dh = (t) => (n) => (e) => e.endT <= t || e.startT >= n ? J : v("Just", { ...e, startT: xe(t)(e.startT), endT: $i(n)(e.endT) }), tc = (t) => (n) => (e) => {
+  const r = Mn(e.layout), o = {
+    x: r.x * e.placement.scale + e.placement.tx,
+    y: r.y * e.placement.scale + e.placement.ty,
+    w: r.w * e.placement.scale,
+    h: r.h * e.placement.scale
+  };
+  return {
+    center: { x: o.x + o.w / 2, y: o.y + o.h / 2 },
+    zoom: $i(Mu(n)(o)(t.padding * e.placement.scale))(40 / (11 * e.placement.scale))
+  };
+}, hh = (t) => (n) => (e) => e.placement.scale === 1 && e.placement.tx === 0 && e.placement.ty === 0 ? Us(e.placement)(ao(t)(e.layout)(Mn(e.layout))(0)) : tc(t)(n)(e), ph = (t) => (n) => (e) => (r) => yt((o) => {
+  const i = Xd(r)(o.parentPath)(o.startT)(o.endT);
+  if (i.tag === "Just") {
+    const s = o.childPath, u = jt((c) => Ms(c.path)(s))(r.segments);
+    if (u.tag === "Just") {
+      const c = hh(t)(n)(i._1), a = tc(t)(n)(u._1);
+      if (o.direction === "DiveIn")
+        return v(
+          "Just",
+          { startT: o.startT, endT: o.endT, fromCam: c, toCam: a, easing: hr, interp: Bc }
+        );
+      if (o.direction === "DiveOut")
+        return v(
+          "Just",
+          { startT: o.startT, endT: o.endT, fromCam: a, toCam: c, easing: hr, interp: Bc }
+        );
+      f();
+    }
+    if (u.tag === "Nothing")
+      return J;
+    f();
+  }
+  if (i.tag === "Nothing")
+    return J;
+  f();
+})(r.dives), $h = (t) => (n) => {
   if (n.tag === "Structural")
-    return vt((e) => e)([
-      ui(n._1.from)(t) ? T : b("Just", Se("UnknownKeyframe", n._1.from)),
-      ui(n._1.to)(t) ? T : b("Just", Se("UnknownKeyframe", n._1.to))
+    return yt((e) => e)([
+      Ts(n._1.from)(t) ? J : v("Just", ar("UnknownKeyframe", n._1.from)),
+      Ts(n._1.to)(t) ? J : v("Just", ar("UnknownKeyframe", n._1.to))
     ]);
   if (n.tag === "DataFlow")
     return [
-      ...vt((e) => e)([ui(n._1.keyframe)(t) ? T : b("Just", Se("UnknownKeyframe", n._1.keyframe))]),
-      ...B_(n._1.events),
-      ...Q_(n._1.events)
+      ...yt((e) => e)([Ts(n._1.keyframe)(t) ? J : v("Just", ar("UnknownKeyframe", n._1.keyframe))]),
+      ...ih(n._1.events),
+      ...ch(n._1.events)
     ];
+  if (n.tag === "EnterNode")
+    return [];
+  if (n.tag === "ExitNode")
+    return [];
   f();
-}, q_ = (t) => (n) => {
-  const e = bt(n)(W_(t));
-  return e.length === 0 ? kt("Right", void 0) : kt("Left", e);
-}, Dc = (t) => (n) => (e) => J(I_(t)(n))([])(Pt((r) => (o) => ({
-  event: o,
-  holdPre: o.kind.tag === "SendToken" ? (() => {
-    const i = r - 1 | 0;
-    return i >= 0 && i < e.length && e[i].kind.tag === "SendToken" && e[i].kind._1.to === o.kind._1.from;
-  })() ? 0 : 0.18 : 0,
-  holdPost: o.kind.tag === "SendToken" ? (() => {
-    const i = r + 1 | 0;
-    return i >= 0 && i < e.length && e[i].kind.tag === "SendToken" && e[i].kind._1.from === o.kind._1.to;
-  })() ? 0 : 0.18 : 0
-}))(e)), H_ = (t) => (n) => (e) => {
-  const r = Dc(t)(n)(e.events);
-  return r.length === 0 ? t.gap : J(Ne)(0)(O((o) => o.endT)(r)) + t.gap;
-}, O_ = (t) => (n) => (e) => (r) => (o) => {
-  if (o.tag === "Structural")
-    return Qc(t)(n)(e)(r)(o._1).duration;
-  if (o.tag === "DataFlow")
-    return H_(t)(n)(o._1);
-  f();
-}, z_ = (t) => (n) => (e) => (r) => (o) => J((i) => (s) => {
-  const u = O_(t)(n)(e)(r)(s);
-  return { acc: gn(i.acc)({ startT: i.t, endT: i.t + u, scene: s }), t: i.t + u };
-})({ acc: [], t: 0 })(o).acc, V_ = (t) => (n) => (e) => (r) => O((() => {
-  const o = e.startT;
-  return (i) => ({ ...i, startT: i.startT + o, endT: i.endT + o });
-})())(vt(C_)(Dc(t)(n)(r.events))), Y_ = (t) => (n) => (e) => (r) => (o) => {
-  if (o.scene.tag === "Structural")
-    return R_(t)(n)(e)(r)(o)(o.scene._1);
-  if (o.scene.tag === "DataFlow")
-    return V_(t)(n)(o)(o.scene._1);
-  f();
-}, X_ = (t) => (n) => (e) => (r) => {
-  const o = 0 < e.keyframes.length ? b("Just", e.keyframes[0]) : T;
-  if (o.tag === "Nothing")
-    return kt("Left", [w_]);
-  if (o.tag === "Just") {
-    const i = o._1, s = C0(O((a) => L(a.id, a))(e.keyframes)), u = j0(e), c = q_(s)(e.scenes);
+}, mh = (t) => (n) => {
+  const e = Jt(n)($h(t));
+  return e.length === 0 ? Et("Right", void 0) : Et("Left", e);
+}, yh = (t) => (n) => (e) => (r) => kt((o) => (i) => ft.compare(o.startT)(i.startT))(Jt(r.segments)((o) => o.placement.scale === 1 && o.placement.tx === 0 && o.placement.ty === 0 ? yt(dh(o.startT)(o.endT))(z(Zd(o.placement))(uh(t)(e)(o.edgeEndpoints)(r)(o))) : [
+  (() => {
+    const i = tc(t)(n)(o);
+    return { startT: o.startT, endT: o.endT, fromCam: i, toCam: i, easing: hr, interp: co };
+  })()
+])), Nh = (t) => (n) => (e) => (r) => {
+  if (0 < e.keyframes.length) {
+    const o = e.keyframes[0], i = Of(z((u) => b(u.id, u))(e.keyframes)), s = mh(i)(e.scenes);
     return (() => {
-      if (c.tag === "Left") {
-        const a = c._1;
-        return (g) => kt("Left", a);
+      if (s.tag === "Left") {
+        const u = s._1;
+        return (c) => Et("Left", u);
       }
-      if (c.tag === "Right") {
-        const a = c._1;
-        return (g) => g(a);
+      if (s.tag === "Right") {
+        const u = s._1;
+        return (c) => c(u);
       }
       f();
     })()(() => {
-      const a = z_(n)(r)(s)(u)(e.scenes), g = a.length - 1 | 0, l = g >= 0 && g < a.length ? a[g].endT : 0, d = Lt((_) => (h) => pt.compare(_.startT)(h.startT))(bt(a)(Y_(n)(r)(s)(u)));
-      return kt(
+      const u = s0(n)(r)(r)([])(e)(0);
+      return Et(
         "Right",
         {
-          totalDuration: l,
-          windows: d,
-          spans: a,
-          keyframes: s,
-          initialKeyframe: i.id,
+          totalDuration: u.endT,
+          windows: u.windows,
+          spans: u.spans,
+          keyframes: i,
+          initialKeyframe: o.id,
           timing: n,
-          layout: r,
-          cameraSpans: Z0(t)(r)(l)([
-            ...S_(r)(u)(s)(a),
-            ...E_(r)(u)(d)
-          ]),
-          cameraConfig: t
+          layout: r.layout,
+          cameraSpans: [...yh(t)(r.layout)(i)(u), ...ph(t)(r.layout)(i)(u)],
+          cameraConfig: t,
+          levelTree: r,
+          segments: u.segments,
+          dives: u.dives,
+          seed: e.seed
         }
       );
     });
   }
-  f();
-}, Ir = (t) => (n) => {
-  const e = pt.compare(t)(n);
+  return Et("Left", [Bd]);
+}, Zs = (t) => (n) => Math.imul(t, n), Kr = (t) => {
+  const n = t + 1831565813 | 0, e = Zs(n ^ n >>> 15)(n | 1), r = e ^ (e + Zs(e ^ e >>> 7)(e | 61) | 0), o = r ^ r >>> 14;
+  return { prng: o, value: o < 0 ? (nt(o) + 4294967296) / 4294967296 : nt(o) / 4294967296 };
+}, fn = (t) => (n) => (e) => {
+  const r = Kr(e);
+  return { prng: r.prng, value: t + r.value * (n - t) };
+}, tu = (t) => (n) => x((e) => (r) => Zs(e ^ r)(-2048144789))(n)(z(Re)(Ze(t))), nc = (t) => t, oe = (t) => (n) => {
+  const e = ft.compare(t)(n);
   if (e === "LT")
     return n;
   if (e === "EQ" || e === "GT")
     return t;
   f();
-}, Wc = (t) => (e) => {
+}, mi = /* @__PURE__ */ Eu(Bo), xh = /* @__PURE__ */ (() => {
+  const t = te.unfoldr(ke);
+  return (n) => t(Kn("IterNode", n, we));
+})(), u0 = /* @__PURE__ */ nn(C)(Ht), c0 = (t) => (e) => {
   let r = e, o = !0, i;
   for (; o; ) {
     const s = r;
     if (s.tag === "Leaf") {
-      o = !1, i = T;
+      o = !1, i = J;
       continue;
     }
     if (s.tag === "Node") {
-      const u = G.compare(t)(s._3);
+      const u = C.compare(t)(s._3);
       if (u === "LT") {
         r = s._5;
         continue;
@@ -2548,36 +3056,36 @@ const s_ = function(t) {
         continue;
       }
       if (u === "EQ") {
-        o = !1, i = b("Just", s._4);
+        o = !1, i = v("Just", s._4);
         continue;
       }
     }
     f();
   }
   return i;
-}, vo = (t) => (n) => (e) => {
-  const r = pt.compare(t)(e), o = (() => {
+}, zc = Ht.foldMap(h1(C)), qc = (t) => (n) => (e) => {
+  const r = ft.compare(t)(e), o = (() => {
     if (r === "LT")
       return e;
     if (r === "EQ" || r === "GT")
       return t;
     f();
-  })(), i = pt.compare(n)(o);
+  })(), i = ft.compare(n)(o);
   if (i === "LT" || i === "EQ")
     return n;
   if (i === "GT")
     return o;
   f();
-}, U_ = (t) => (e) => {
+}, Jh = (t) => (e) => {
   let r = e, o = !0, i;
   for (; o; ) {
     const s = r;
     if (s.tag === "Leaf") {
-      o = !1, i = T;
+      o = !1, i = J;
       continue;
     }
     if (s.tag === "Node") {
-      const u = G.compare(t)(s._3);
+      const u = C.compare(t)(s._3);
       if (u === "LT") {
         r = s._5;
         continue;
@@ -2587,21 +3095,21 @@ const s_ = function(t) {
         continue;
       }
       if (u === "EQ") {
-        o = !1, i = b("Just", s._4);
+        o = !1, i = v("Just", s._4);
         continue;
       }
     }
     f();
   }
   return i;
-}, M_ = (t) => (n) => {
-  const e = pt.compare(t)(n);
+}, Hr = (t) => (n) => {
+  const e = ft.compare(t)(n);
   if (e === "LT" || e === "EQ")
     return t;
   if (e === "GT")
     return n;
   f();
-}, K_ = (t) => (e) => {
+}, Th = (t) => (e) => {
   let r = e, o = !0, i;
   for (; o; ) {
     const s = r;
@@ -2610,7 +3118,7 @@ const s_ = function(t) {
       continue;
     }
     if (s.tag === "Node") {
-      const u = G.compare(t)(s._3);
+      const u = C.compare(t)(s._3);
       if (u === "LT") {
         r = s._5;
         continue;
@@ -2627,7 +3135,7 @@ const s_ = function(t) {
     f();
   }
   return i;
-}, j_ = /* @__PURE__ */ jt(G)(Bt), Z_ = (t) => (e) => {
+}, vh = /* @__PURE__ */ nn(C)(Ht), wh = (t) => (e) => {
   let r = e, o = !0, i;
   for (; o; ) {
     const s = r;
@@ -2636,7 +3144,7 @@ const s_ = function(t) {
       continue;
     }
     if (s.tag === "Node") {
-      const u = G.compare(t)(s._3);
+      const u = C.compare(t)(s._3);
       if (u === "LT") {
         r = s._5;
         continue;
@@ -2653,8 +3161,11 @@ const s_ = function(t) {
     f();
   }
   return i;
-}, tl = /* @__PURE__ */ jt(G)(Bt), nl = /* @__PURE__ */ jt(G)(Bt), el = (t) => (n) => (e) => (r) => {
-  const o = ye(t), i = o.w / Ir(1e-4)(n.zoom) / 2, s = o.h / Ir(1e-4)(n.zoom) / 2, u = e.y - n.center.y, c = e.x - n.center.x;
+}, kh = /* @__PURE__ */ nn(C)(Ht), bh = /* @__PURE__ */ nc("Backdrop"), Yc = /* @__PURE__ */ nc("FlyThrough"), yi = /* @__PURE__ */ nc("Active"), Xc = (t) => (n) => (e) => {
+  const r = (t + n) / 2, o = e - r, i = o < 0 ? -1 : 1, s = (n - t) / 2, u = s * 0.15, c = s - u, a = o < 0 ? -o : o;
+  return n <= t ? (t + n) / 2 : a <= c ? e : r + i * (s - u * Yi(-(a - c) / u));
+}, Lh = (t) => (n) => (e) => (r) => {
+  const o = Mn(t), i = o.w / oe(1e-4)(n.zoom) / 2, s = o.h / oe(1e-4)(n.zoom) / 2, u = e.y - n.center.y, c = e.x - n.center.x;
   return {
     ...n,
     center: {
@@ -2662,132 +3173,238 @@ const s_ = function(t) {
       y: s <= 1e-4 ? n.center.y + 0 * r * 0.35 : u < 0 ? n.center.y + u / (1 + -u / s) * r * 0.35 : n.center.y + u / (1 + u / s) * r * 0.35
     }
   };
-}, ai = (t) => (n) => {
-  const e = Wc(n)(t.keyframes);
+}, nu = (t) => (n) => (e) => {
+  const r = jt((o) => mi(o.path)(n) && e >= o.startT && e < o.endT)(t.segments);
+  if (r.tag === "Just")
+    return v("Just", r._1);
+  if (r.tag === "Nothing")
+    return jt((o) => mi(o.path)(n))(t.segments);
+  f();
+}, Eh = (t) => ({
+  startT: 0,
+  endT: t.totalDuration,
+  path: [],
+  layout: t.layout,
+  placement: qu,
+  windows: t.windows,
+  spans: t.spans,
+  keyframes: t.keyframes,
+  initialKeyframe: t.initialKeyframe,
+  edgeEndpoints: A
+}), Sh = (t) => z((n) => n < 1 ? [] : bt(0, n, t))(It(0, t.length - 1 | 0)), Ch = (t) => x((n) => (e) => (n * 31 | 0) + Re(e) | 0)(7)(Ze(t)), a0 = (t) => (n) => (e) => ({
+  ...e,
+  state: {
+    ...e.state,
+    nodes: u0(z((r) => b(r._1, t(r._1)(r._2)))(xh(e.state.nodes))),
+    edges: (() => {
+      const r = (o) => {
+        if (o.tag === "Leaf")
+          return A;
+        if (o.tag === "Node")
+          return Ot("Node", o._1, o._2, o._3, n(o._4), r(o._5), r(o._6));
+        f();
+      };
+      return r(e.state.edges);
+    })()
+  }
+}), ws = (t) => (n) => {
+  const e = c0(n)(t.keyframes);
   if (e.tag === "Nothing")
-    return Q;
+    return A;
   if (e.tag === "Just")
     return e._1.nodes;
   f();
-}, fi = (t) => (n) => {
-  const e = Wc(n)(t.keyframes);
+}, ks = (t) => (n) => {
+  const e = c0(n)(t.keyframes);
   if (e.tag === "Nothing")
-    return Q;
+    return A;
   if (e.tag === "Just")
     return e._1.edges;
   f();
-}, rl = (t) => (n) => (e) => de(
-  (r) => r.endT <= n && r.target.tag === "EdgeWindow" && r.target._2.tag === "Retract" && r.target._1 === e,
-  t
-), ol = (t) => (n) => (e) => de((r) => r.endT <= n && r.target.tag === "NodeWindow" && r.target._2 === "PlopOut" && r.target._1 === e, t), il = (t) => (n) => (e) => de((r) => r.startT > n && r.target.tag === "NodeWindow" && r.target._2 === "PlopIn" && r.target._1 === e, t), sl = (t) => (n) => (e) => de(
-  (r) => r.startT > n && r.target.tag === "EdgeWindow" && r.target._2.tag === "Extend" && r.target._1 === e,
-  t
-), ul = (t) => (n) => {
-  const e = Es(t)(n);
-  if (e.tag === "AtKeyframe")
-    return _n(3)(e._1) === "kf-" ? "" : e._1;
-  if (e.tag === "InTransition")
-    return _n(3)(e._2) === "kf-" ? "" : e._2;
-  f();
-}, qc = (t) => (n) => (e) => ln((r) => e(r) && n >= r.startT && n < r.endT)(t), cl = (t) => {
-  const n = vo(0)(1)(t / 0.2), e = vo(0)(1)((1 - t) / 0.2);
-  return n * n * (3 - 2 * n) * e * e * (3 - 2 * e);
-}, al = (t) => (n) => {
-  if (n.tag === "Travelling") {
-    const e = U_(n._1.edge)(t.edges);
-    if (e.tag === "Just") {
-      const r = vc(e._1)(n._1.progress);
-      return r.tag === "Just" ? b("Just", { dot: r._1, weight: cl(n._1.progress) }) : T;
-    }
-    if (e.tag === "Nothing")
-      return T;
+}, ec = (t) => (n) => {
+  if (n < t.startT)
+    return er("AtKeyframe", t.initialKeyframe);
+  const e = jt((r) => n >= r.startT && n < r.endT)(t.spans);
+  if (e.tag === "Just") {
+    if (e._1.scene.tag === "Structural")
+      return er("InTransition", e._1.scene._1.from, e._1.scene._1.to);
+    if (e._1.scene.tag === "DataFlow")
+      return er("AtKeyframe", e._1.scene._1.keyframe);
+    if (e._1.scene.tag === "EnterNode" || e._1.scene.tag === "ExitNode")
+      return er("AtKeyframe", t.initialKeyframe);
     f();
   }
-  return T;
-}, fl = (t) => (n) => {
-  const e = Es(t)(n);
-  if (e.tag === "AtKeyframe")
-    return ai(t)(e._1);
-  if (e.tag === "InTransition")
-    return bn(G.compare, Ln, ai(t)(e._1), ai(t)(e._2));
+  if (e.tag === "Nothing") {
+    const r = t.spans.length - 1 | 0;
+    return r >= 0 && r < t.spans.length ? er(
+      "AtKeyframe",
+      (() => {
+        if (t.spans[r].scene.tag === "Structural")
+          return t.spans[r].scene._1.to;
+        if (t.spans[r].scene.tag === "DataFlow")
+          return t.spans[r].scene._1.keyframe;
+        if (t.spans[r].scene.tag === "EnterNode" || t.spans[r].scene.tag === "ExitNode")
+          return t.initialKeyframe;
+        f();
+      })()
+    ) : er("AtKeyframe", t.initialKeyframe);
+  }
   f();
-}, gl = (t) => (n) => {
-  const e = Es(t)(n);
+}, Ph = /* @__PURE__ */ x((t) => (n) => {
+  const e = zi(t);
+  return e.tag === "Just" && n.startT <= e._1.last.endT + 1e-6 ? Dt(e._1.init)({ ...e._1.last, endT: oe(e._1.last.endT)(n.endT), windows: Dt(e._1.last.windows)(n) }) : Dt(t)({ endT: n.endT, windows: [n] });
+})([]), Gh = (t) => (n) => (e) => zc((r) => zc((o) => o.target.tag === "FillWindow" ? o.startT <= e ? Ot("Node", 1, 1, o.target._2, void 0, A, A) : A : o.target.tag === "TokenWindow" && o.startT + (o.endT - o.startT) * 0.25 <= e ? Ot("Node", 1, 1, o.target._4, void 0, A, A) : A)(r.windows))(lt(
+  (r) => e <= r.endT + t,
+  Ph(kt((r) => (o) => ft.compare(r.startT)(o.startT))(lt(
+    (r) => r.target.tag === "FillWindow" || r.target.tag === "TokenWindow",
+    n
+  )))
+)), Ih = (t) => (n) => (e) => qn(
+  (r) => r.endT <= n && r.target.tag === "EdgeWindow" && r.target._2.tag === "Retract" && r.target._1 === e,
+  t
+), Ah = (t) => (n) => (e) => qn((r) => r.endT <= n && r.target.tag === "NodeWindow" && r.target._2 === "PlopOut" && r.target._1 === e, t), Fh = (t) => (n) => (e) => qn((r) => r.startT > n && r.target.tag === "NodeWindow" && r.target._2 === "PlopIn" && r.target._1 === e, t), Rh = (t) => (n) => (e) => qn(
+  (r) => r.startT > n && r.target.tag === "EdgeWindow" && r.target._2.tag === "Extend" && r.target._1 === e,
+  t
+), Bh = (t) => (n) => {
+  const e = ec(t)(n);
   if (e.tag === "AtKeyframe")
-    return fi(t)(e._1);
+    return mn(3)(e._1) === "kf-" ? "" : e._1;
   if (e.tag === "InTransition")
-    return bn(G.compare, Ln, fi(t)(e._1), fi(t)(e._2));
+    return mn(3)(e._2) === "kf-" ? "" : e._2;
   f();
-}, _l = (t) => (n) => {
-  const e = ye(t), r = e.h / Ir(1e-4)(n.zoom), o = e.w / Ir(1e-4)(n.zoom);
+}, f0 = (t) => (n) => (e) => jt((r) => e(r) && n >= r.startT && n < r.endT)(t), Qh = (t) => {
+  const n = qc(0)(1)(t / 0.2), e = qc(0)(1)((1 - t) / 0.2);
+  return n * n * (3 - 2 * n) * e * e * (3 - 2 * e);
+}, Wh = (t) => (n) => {
+  if (n.tag === "Travelling") {
+    const e = Jh(n._1.edge)(t.edges);
+    if (e.tag === "Just") {
+      const r = Br(e._1)(n._1.progress);
+      return r.tag === "Just" ? v("Just", { dot: r._1, weight: Qh(n._1.progress) }) : J;
+    }
+    if (e.tag === "Nothing")
+      return J;
+    f();
+  }
+  return J;
+}, Dh = {
+  nodes: A,
+  edges: A,
+  tokens: A,
+  camera: { center: { x: 0, y: 0 }, zoom: 1 },
+  frameTitle: "",
+  visited: A,
+  nodeFadeAlpha: A,
+  nodeInvert: A
+}, Hh = { nodes: A, edges: A, chipExtras: A }, Oh = {
+  segment: {
+    startT: 0,
+    endT: 0,
+    path: [],
+    layout: Hh,
+    placement: qu,
+    windows: [],
+    spans: [],
+    keyframes: A,
+    initialKeyframe: "",
+    edgeEndpoints: A
+  },
+  state: Dh,
+  bgAlpha: 1,
+  role: yi
+}, Ni = (t) => {
+  const n = t.levels.length - 1 | 0;
+  return n >= 0 && n < t.levels.length ? t.levels[n] : Oh;
+}, zh = (t) => (n) => {
+  const e = ec(t)(n);
+  if (e.tag === "AtKeyframe")
+    return ws(t)(e._1);
+  if (e.tag === "InTransition")
+    return Cn(C.compare, Sn, ws(t)(e._1), ws(t)(e._2));
+  f();
+}, qh = (t) => (n) => {
+  const e = ec(t)(n);
+  if (e.tag === "AtKeyframe")
+    return ks(t)(e._1);
+  if (e.tag === "InTransition")
+    return Cn(C.compare, Sn, ks(t)(e._1), ks(t)(e._2));
+  f();
+}, Yh = (t) => (n) => {
+  const e = t.w / oe(1e-4)(n.zoom), r = t.h / oe(1e-4)(n.zoom);
   return {
     ...n,
     center: {
-      x: o >= e.w ? e.x + e.w / 2 : vo(e.x + o / 2)(e.x + e.w - o / 2)(n.center.x),
-      y: r >= e.h ? e.y + e.h / 2 : vo(e.y + r / 2)(e.y + e.h - r / 2)(n.center.y)
+      x: e >= t.w ? t.x + t.w / 2 : Xc(t.x + e / 2)(t.x + t.w - e / 2)(n.center.x),
+      y: r >= t.h ? t.y + t.h / 2 : Xc(t.y + r / 2)(t.y + t.h - r / 2)(n.center.y)
     }
   };
-}, To = (t) => (n) => {
+}, Xh = (t) => Yh((() => {
+  const n = Mn(t.layout), e = n.x * t.placement.scale + t.placement.tx, r = n.y * t.placement.scale + t.placement.ty;
+  return { x: e, y: r, w: (n.x + n.w) * t.placement.scale + t.placement.tx - e, h: (n.y + n.h) * t.placement.scale + t.placement.ty - r };
+})()), Vh = (t) => (n) => {
   const e = t.endT - t.startT;
-  return e <= 0 ? 1 : Ir(0)(M_(1)((n - t.startT) / e));
-}, ll = (t) => (n) => (e) => (r) => {
-  const o = qc(t.windows)(n)((i) => i.target.tag === "EdgeWindow" && i.target._1 === r);
-  if (o.tag === "Just") {
-    const i = ps(t.timing.edgeEasing)(To(o._1)(n)), s = o._1.target.tag === "EdgeWindow" ? o._1.target._2 : Ei("Extend", Ac);
-    if (s.tag === "Retract")
-      return mo("Retracting", s._1, i);
-    if (s.tag === "Extend")
-      return mo("Extending", s._1, i);
+  return e <= 0 ? 1 : oe(0)(Hr(1)((n - t.startT) / e));
+}, g0 = (t) => (n) => (e) => oe(0)(Hr(1)((e - fn(0)(0.3)(t + Ch(n) | 0).value) / oe(1e-4)(0.7))), Vc = (t) => (n) => (e) => a0((r) => (o) => o.tag === "Hidden" ? fo : Dr("PloppingOut", r === n ? oe(0)(Hr(1)((e - 0.45) / oe(1e-4)(0.55))) : g0(t)(r)(e)))((r) => r.tag === "Retracted" ? go : Wr("Retracting", jf, e)), Uc = (t) => (n) => a0((e) => (r) => r.tag === "Hidden" ? fo : Dr("PloppingIn", g0(t)(e)(n)))((e) => e.tag === "Retracted" ? go : Wr("Extending", Zu, n)), xi = (t) => (n) => {
+  const e = t.endT - t.startT;
+  return e <= 0 ? 1 : oe(0)(Hr(1)((n - t.startT) / e));
+}, Uh = (t) => (n) => (e) => (r) => (o) => {
+  const i = f0(n)(e)((s) => s.target.tag === "EdgeWindow" && s.target._1 === o);
+  if (i.tag === "Just") {
+    const s = Uu(t.timing.edgeEasing)(xi(i._1)(e)), u = i._1.target.tag === "EdgeWindow" ? i._1.target._2 : Ks("Extend", Zu);
+    if (u.tag === "Retract")
+      return Wr("Retracting", u._1, s);
+    if (u.tag === "Extend")
+      return Wr("Extending", u._1, s);
     f();
   }
-  if (o.tag === "Nothing")
-    return sl(t.windows)(n)(r) || rl(t.windows)(n)(r) ? si : K_(r)(e) ? J_ : si;
+  if (i.tag === "Nothing")
+    return Rh(n)(e)(o) || Ih(n)(e)(o) ? go : Th(o)(r) ? Fd : go;
   f();
-}, dl = (t) => (n) => {
-  const e = gl(t)(n);
-  return j_(O((r) => L(r, ll(t)(n)(e)(r)))((() => {
-    const r = (o) => {
-      if (o.tag === "Leaf")
-        return Q;
-      if (o.tag === "Node")
-        return Dt("Node", o._1, o._2, o._3, void 0, r(o._5), r(o._6));
+}, Kh = (t) => (n) => (e) => {
+  const r = qh(n)(e);
+  return vh(z((o) => b(o, Uh(t)(n.windows)(e)(r)(o)))((() => {
+    const o = (i) => {
+      if (i.tag === "Leaf")
+        return A;
+      if (i.tag === "Node")
+        return Ot("Node", i._1, i._2, i._3, void 0, o(i._5), o(i._6));
       f();
     };
-    return Et(Pn.foldr, r(t.layout.edges));
+    return Lt(On.foldr, o(n.layout.edges));
   })()));
-}, hl = (t) => (n) => (e) => (r) => {
-  const o = qc(t.windows)(n)((i) => i.target.tag === "NodeWindow" && i.target._1 === r);
+}, Mh = (t) => (n) => (e) => (r) => {
+  const o = f0(t)(n)((i) => i.target.tag === "NodeWindow" && i.target._1 === r);
   if (o.tag === "Just") {
-    const i = To(o._1)(n), s = o._1.target.tag === "NodeWindow" ? o._1.target._2 : Bc;
+    const i = xi(o._1)(n), s = o._1.target.tag === "NodeWindow" ? o._1.target._2 : r0;
     if (s === "PlopIn")
-      return No("PloppingIn", i);
+      return Dr("PloppingIn", i);
     if (s === "PlopOut")
-      return No("PloppingOut", i);
+      return Dr("PloppingOut", i);
     f();
   }
   if (o.tag === "Nothing")
-    return il(t.windows)(n)(r) || ol(t.windows)(n)(r) ? ii : Z_(r)(e) ? N_ : ii;
+    return Fh(t)(n)(r) || Ah(t)(n)(r) ? fo : wh(r)(e) ? Ad : fo;
   f();
-}, pl = (t) => (n) => {
-  const e = fl(t)(n);
-  return tl(O((r) => L(r, hl(t)(n)(e)(r)))((() => {
-    const r = (o) => {
-      if (o.tag === "Leaf")
-        return Q;
-      if (o.tag === "Node")
-        return Dt("Node", o._1, o._2, o._3, void 0, r(o._5), r(o._6));
+}, jh = (t) => (n) => (e) => {
+  const r = zh(n)(e);
+  return u0(z((o) => b(o, Mh(n.windows)(e)(r)(o)))((() => {
+    const o = (i) => {
+      if (i.tag === "Leaf")
+        return A;
+      if (i.tag === "Node")
+        return Ot("Node", i._1, i._2, i._3, void 0, o(i._5), o(i._6));
       f();
     };
-    return Et(Pn.foldr, r(t.layout.nodes));
+    return Lt(On.foldr, o(n.layout.nodes));
   })()));
-}, $l = (t) => (n) => (e) => n.target.tag === "TokenWindow" ? L(
+}, Zh = (t) => (n) => (e) => n.target.tag === "TokenWindow" ? b(
   n.target._1,
-  e < n.startT ? oi : e >= n.endT ? su : Jo(
+  e < n.startT ? Js : e >= n.endT ? Wc : pi(
     "Travelling",
     {
       edge: n.target._2,
       direction: n.target._3,
-      progress: ps(t.timing.tokenEasing)(To(n)(e)),
+      progress: Uu(t.timing.tokenEasing)(xi(n)(e)),
       labels: n.target._6,
       source: n.target._4,
       target: n.target._5,
@@ -2795,103 +3412,241 @@ const s_ = function(t) {
       holdPost: n.target._8
     }
   )
-) : n.target.tag === "FillWindow" ? L(
+) : n.target.tag === "FillWindow" ? b(
   n.target._1,
-  e < n.startT ? oi : e >= n.endT ? su : Jo("Filling", { node: n.target._2, progress: To(n)(e), labels: n.target._3 })
-) : L("", oi), ml = (t) => (n) => nl(O((e) => $l(t)(e)(n))(gt(
-  (e) => e.target.tag === "TokenWindow" || e.target.tag === "FillWindow",
-  t.windows
-))), Nl = (t) => (n) => {
-  const e = vt(al(t))((() => {
+  e < n.startT ? Js : e >= n.endT ? Wc : pi("Filling", { node: n.target._2, progress: xi(n)(e), labels: n.target._3 })
+) : b("", Js), tp = (t) => (n) => (e) => kh(z((r) => Zh(t)(r)(e))(lt(
+  (r) => r.target.tag === "TokenWindow" || r.target.tag === "FillWindow",
+  n
+))), kr = (t) => (n) => (e) => ({
+  nodes: jh()(n)(e),
+  edges: Kh(t)(n)(e),
+  tokens: tp(t)(n.windows)(e),
+  camera: Vf(t.cameraConfig)(n.layout)(t.cameraSpans)(e),
+  frameTitle: Bh(n)(e),
+  visited: Gh(t.timing.hatchHold)(n.windows)(e),
+  nodeFadeAlpha: A,
+  nodeInvert: A
+}), np = (t) => (n) => (e) => xf(
+  J,
+  hf,
+  (r) => r.direction === "DiveIn" && mi(r.parentPath)(n.path) && e >= r.startT - 0.7 && e < r.startT ? v("Just", { node: r.node, phase: (e - (r.startT - 0.7)) / 0.7 }) : J,
+  t.dives
+), ep = (t) => (n) => (e) => (r) => {
+  const o = np(t)(n)(e);
+  if (o.tag === "Just") {
+    const i = Un(3.141592653589793 * o._1.phase * 3);
+    return {
+      ...r,
+      state: { ...r.state, nodeInvert: Ot("Node", 1, 1, o._1.node, 1 * i * i, A, A) }
+    };
+  }
+  if (o.tag === "Nothing")
+    return r;
+  f();
+}, l0 = (t) => (n) => yt((e) => {
+  const r = jt((o) => o.direction === "DiveIn" && mi(o.childPath)((() => {
+    const i = e.length + 1 | 0;
+    return i < 1 ? [] : bt(0, i, n);
+  })()))(t.dives);
+  if (r.tag === "Just") {
+    const o = nu(t)(e)(r._1.startT - 1e-4);
+    if (o.tag === "Just")
+      return v(
+        "Just",
+        {
+          bgAlpha: 1,
+          role: bh,
+          segment: o._1,
+          state: {
+            ...kr(t)(o._1)(r._1.startT - 1e-4),
+            nodeFadeAlpha: Ot("Node", 1, 1, r._1.node, 0, A, A)
+          }
+        }
+      );
+    if (o.tag === "Nothing")
+      return J;
+    f();
+  }
+  if (r.tag === "Nothing")
+    return J;
+  f();
+})(Sh(n)), _0 = (t) => (n) => {
+  const e = lt((o) => n >= o.startT && n < o.endT, t.segments), r = e.length - 1 | 0;
+  return r >= 0 && r < e.length ? e[r] : Eh(t);
+}, rp = (t) => (n) => (e) => {
+  const r = Vh(e)(n), o = nu(t)(e.parentPath)((() => {
+    if (e.direction === "DiveIn")
+      return e.startT - 1e-4;
+    if (e.direction === "DiveOut")
+      return e.endT - 1e-4;
+    f();
+  })()), i = nu(t)(e.childPath)((() => {
+    if (e.direction === "DiveIn")
+      return e.endT;
+    if (e.direction === "DiveOut")
+      return e.startT - 1e-4;
+    f();
+  })()), s = oe(0)(Hr(1)(r / 0.6)), u = oe(0)(Hr(1)((r - 0.4) / 0.6)), c = (() => {
+    if (e.direction === "DiveIn")
+      return Vc(t.seed)(e.node)(s);
+    if (e.direction === "DiveOut")
+      return Uc(t.seed)(u);
+    f();
+  })(), a = (() => {
+    if (e.direction === "DiveIn")
+      return Uc(t.seed)(u);
+    if (e.direction === "DiveOut")
+      return Vc(t.seed)(e.node)(s);
+    f();
+  })();
+  return [
+    ...l0(t)(e.parentPath),
+    ...(() => {
+      if (o.tag === "Just") {
+        if (i.tag === "Just")
+          return [
+            c({
+              segment: o._1,
+              state: kr(t)(o._1)((() => {
+                if (e.direction === "DiveIn")
+                  return e.startT - 1e-4;
+                if (e.direction === "DiveOut")
+                  return e.endT - 1e-4;
+                f();
+              })()),
+              bgAlpha: 1,
+              role: Yc
+            }),
+            a({
+              segment: i._1,
+              state: kr(t)(i._1)((() => {
+                if (e.direction === "DiveIn")
+                  return e.endT;
+                if (e.direction === "DiveOut")
+                  return e.startT - 1e-4;
+                f();
+              })()),
+              bgAlpha: 1,
+              role: yi
+            })
+          ];
+        if (i.tag === "Nothing")
+          return [
+            c({
+              segment: o._1,
+              state: kr(t)(o._1)((() => {
+                if (e.direction === "DiveIn")
+                  return e.startT - 1e-4;
+                if (e.direction === "DiveOut")
+                  return e.endT - 1e-4;
+                f();
+              })()),
+              bgAlpha: 1,
+              role: Yc
+            })
+          ];
+        f();
+      }
+      if (o.tag === "Nothing")
+        return [
+          (() => {
+            const g = _0(t)(n);
+            return { segment: g, state: kr(t)(g)(n), bgAlpha: 1, role: yi };
+          })()
+        ];
+      f();
+    })()
+  ];
+}, op = (t) => (n) => {
+  const e = yt(Wh(t))((() => {
     const r = (o, i) => {
       if (o.tag === "Leaf")
         return i;
       if (o.tag === "Node")
-        return r(o._5, qt("Cons", o._4, r(o._6, i)));
+        return r(o._5, zt("Cons", o._4, r(o._6, i)));
       f();
     };
-    return Et(Mt.foldr, r(n.tokens, zt));
+    return Lt(Xt.foldr, r(n.tokens, Yt));
   })());
-  return 0 < e.length ? b("Just", e[0]) : T;
-}, Jl = (t) => (n) => {
-  const e = Nl(t)(n);
+  return 0 < e.length ? v("Just", e[0]) : J;
+}, ip = (t) => (n) => {
+  const e = op(t)(n);
   if (e.tag === "Nothing")
     return n.camera;
   if (e.tag === "Just")
-    return el(t)(n.camera)(e._1.dot)(e._1.weight);
+    return Lh(t)(n.camera)(e._1.dot)(e._1.weight);
   f();
-}, vl = (t) => (n) => {
-  const e = {
-    nodes: pl(t)(n),
-    edges: dl(t)(n),
-    tokens: ml(t)(n),
-    camera: t_(t.cameraConfig)(t.layout)(t.cameraSpans)(n),
-    frameTitle: ul(t)(n)
-  };
-  return { ...e, camera: _l(t.layout)(Jl(t.layout)(e)) };
-}, Hc = (t) => t, Oc = /* @__PURE__ */ Hc("RunText"), Tl = /* @__PURE__ */ Hc("RunCode"), zc = (t) => (n) => (e) => n.length === 0 ? e : gn(e)({ style: t, text: We(n) }), yl = (t) => ({
+}, sp = (t) => (n) => t.placement.scale === 1 && t.placement.tx === 0 && t.placement.ty === 0 ? ip(t.layout)(n) : n.camera, up = (t) => (n) => jt((e) => n >= e.startT && n < e.endT)(t.dives), cp = (t) => (n) => {
+  const e = _0(t)(n), r = kr(t)(e)(n), o = t.dives.length !== 0, i = Vf(t.cameraConfig)(t.layout)(t.cameraSpans)(n), s = Xh(e)(sp(e)({ ...r, camera: i })), u = ep(t)(e)(n)({ bgAlpha: 1, role: yi, segment: e, state: { ...r, camera: s } }), c = l0(t)(e.path), a = up(t)(n);
+  if (a.tag === "Just")
+    return { levels: rp(t)(n)(a._1), camera: i, rootLayout: t.layout, hasDives: o, diving: !0 };
+  if (a.tag === "Nothing")
+    return { levels: Dt(c)(u), camera: s, rootLayout: t.layout, hasDives: o, diving: !1 };
+  f();
+}, d0 = (t) => t, h0 = /* @__PURE__ */ d0("RunText"), ap = /* @__PURE__ */ d0("RunCode"), p0 = (t) => (n) => (e) => n.length === 0 ? e : Dt(e)({ style: t, text: mr(n) }), fp = (t) => ({
   style: (() => {
     if (t.style === "RunText")
-      return Tl;
+      return ap;
     if (t.style === "RunCode")
-      return Oc;
+      return h0;
     f();
   })(),
   buf: [],
-  runs: zc(t.style)(t.buf)(t.runs)
-}), wl = (t) => (n) => 0 < n.length ? { ...t, buf: gn(t.buf)(n[0]) } : { ...t, buf: gn(t.buf)("\\") }, Ll = (t) => (n) => {
+  runs: p0(t.style)(t.buf)(t.runs)
+}), gp = (t) => (n) => 0 < n.length ? { ...t, buf: Dt(t.buf)(n[0]) } : { ...t, buf: Dt(t.buf)("\\") }, lp = (t) => (n) => {
   let e = t, r = n, o = !0, i;
   for (; o; ) {
-    const s = e, c = Wt((a) => T, (a) => (g) => b("Just", { head: a, tail: g }), r);
+    const s = e, c = Rt((a) => J, (a) => (g) => v("Just", { head: a, tail: g }), r);
     if (c.tag === "Nothing") {
       o = !1, i = s;
       continue;
     }
     if (c.tag === "Just") {
       if (c._1.head === "\\") {
-        e = wl(s)(c._1.tail), r = Gt(1, c._1.tail.length, c._1.tail);
+        e = gp(s)(c._1.tail), r = bt(1, c._1.tail.length, c._1.tail);
         continue;
       }
       if (c._1.head === "`") {
-        e = yl(s), r = c._1.tail;
+        e = fp(s), r = c._1.tail;
         continue;
       }
-      e = { ...s, buf: gn(s.buf)(c._1.head) }, r = c._1.tail;
+      e = { ...s, buf: Dt(s.buf)(c._1.head) }, r = c._1.tail;
       continue;
     }
     f();
   }
   return i;
-}, Vc = (t) => {
-  const n = Ll({ style: Oc, buf: [], runs: [] })(ms(t));
-  return zc(n.style)(n.buf)(n.runs);
+}, $0 = (t) => {
+  const n = lp({ style: h0, buf: [], runs: [] })(Ze(t));
+  return p0(n.style)(n.buf)(n.runs);
 };
-let to = null;
-function kl() {
-  return to || (typeof document > "u" ? null : (to = document.createElement("canvas").getContext("2d"), to));
+let Uo = null;
+function _p() {
+  return Uo || (typeof document > "u" ? null : (Uo = document.createElement("canvas").getContext("2d"), Uo));
 }
-const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
-  const o = `${e} ${n}px ${t}|${r}`, i = gu.get(o);
+const Kc = /* @__PURE__ */ new Map(), dp = (t) => (n) => (e) => (r) => () => {
+  const o = `${e} ${n}px ${t}|${r}`, i = Kc.get(o);
   if (i !== void 0) return i;
-  const s = kl();
+  const s = _p();
   if (!s)
     return r.length * n * 0.62;
   s.font = `${e} ${n}px ${t}`;
   const u = s.measureText(r).width;
-  return gu.set(o, u), u;
-}, El = Yr.traverse(Xi), xl = /* @__PURE__ */ J(ur)(0), Pr = /* @__PURE__ */ (() => {
-  const t = $e(`\r
-`)(" "), n = $e(`
+  return Kc.set(o, u), u;
+}, hp = $r.traverse(Oi), pp = /* @__PURE__ */ x(Rr)(0), Or = /* @__PURE__ */ (() => {
+  const t = Oe(`\r
+`)(" "), n = Oe(`
 `)(" "), e = (() => {
-    const r = $e("\r")(" "), o = (() => {
-      const i = $e("	")(" ");
+    const r = Oe("\r")(" "), o = (() => {
+      const i = Oe("	")(" ");
       return (s) => i(r(s));
     })();
     return (i) => o(n(i));
   })();
   return (r) => e(t(r));
-})(), Cl = (t) => (n) => {
-  const e = El((r) => {
+})(), m0 = (t) => (n) => {
+  const e = hp((r) => {
     const o = (() => {
       if (r.style === "RunText")
         return t.text;
@@ -2899,43 +3654,50 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
         return t.code;
       f();
     })();
-    return bl(o.family)(o.size)(o.weight)(Pr(r.text));
-  })(Vc(Pr(n)));
+    return dp(o.family)(o.size)(o.weight)(Or(r.text));
+  })($0(Or(n)));
   return () => {
     const r = e();
-    return xl(r);
+    return pp(r);
   };
-}, Sl = { family: "Ilisarniq, ui-sans-serif, system-ui, sans-serif", size: 11, weight: "500" }, Gl = { family: "'CommitMono', ui-monospace, SFMono-Regular, Menlo, monospace", size: 11, weight: "400" }, Il = { text: Sl, code: Gl }, $r = (t) => (n) => {
-  const e = rt.compare(t)(n);
+}, $p = { family: "Ilisarniq, ui-sans-serif, system-ui, sans-serif", size: 11, weight: "500" }, mp = { family: "'CommitMono', ui-monospace, SFMono-Regular, Menlo, monospace", size: 11, weight: "400" }, y0 = { text: $p, code: mp }, yp = (t) => (n) => {
+  const e = it.compare(t)(n);
   if (e === "LT")
     return n;
   if (e === "EQ" || e === "GT")
     return t;
   f();
-}, Pl = (t) => (n) => {
-  const e = rt.compare(t)(n);
+}, Tr = (t) => (n) => {
+  const e = it.compare(t)(n);
+  if (e === "LT")
+    return n;
+  if (e === "EQ" || e === "GT")
+    return t;
+  f();
+}, Np = (t) => (n) => {
+  const e = it.compare(t)(n);
   if (e === "LT" || e === "EQ")
     return t;
   if (e === "GT")
     return n;
   f();
-}, Al = (t) => (n) => {
-  const e = pt.compare(t)(n);
+}, xp = (t) => (n) => {
+  const e = ft.compare(t)(n);
   if (e === "LT")
     return n;
   if (e === "EQ" || e === "GT")
     return t;
   f();
-}, Rl = (t) => (e) => {
+}, Jp = (t) => (e) => {
   let r = e, o = !0, i;
   for (; o; ) {
     const s = r;
     if (s.tag === "Leaf") {
-      o = !1, i = T;
+      o = !1, i = J;
       continue;
     }
     if (s.tag === "Node") {
-      const u = G.compare(t)(s._3);
+      const u = C.compare(t)(s._3);
       if (u === "LT") {
         r = s._5;
         continue;
@@ -2945,30 +3707,30 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
         continue;
       }
       if (u === "EQ") {
-        o = !1, i = b("Just", s._4);
+        o = !1, i = v("Just", s._4);
         continue;
       }
     }
     f();
   }
   return i;
-}, _u = (t) => We(vn(Ce((n) => n === " ")(vn(Ce((n) => n === " ")(ms(t)).rest)).rest)), Fl = (t) => J((n) => (e) => e._1 > 0 && (e._2 === " " || e._2 === "-" || e._2 === "_" || e._2 === ".") ? b("Just", e._1) : n)(T)(Pt(gr)(t)), Ci = (t) => (n) => {
+}, Mc = (t) => mr(Ln(ur((n) => n === " ")(Ln(ur((n) => n === " ")(Ze(t)).rest)).rest)), Tp = (t) => x((n) => (e) => e._1 > 0 && (e._2 === " " || e._2 === "-" || e._2 === "_" || e._2 === ".") ? v("Just", e._1) : n)(J)(Ft(Xe)(t)), eu = (t) => (n) => {
   if (t <= 0)
     return [n];
-  if (Pe(n) <= t)
+  if (Me(n) <= t)
     return [n];
-  const e = ms(n), r = t < 1 ? [] : Gt(0, t, e), o = Fl(r);
+  const e = Ze(n), r = t < 1 ? [] : bt(0, t, e), o = Tp(r);
   if (o.tag === "Just") {
-    const i = _u(nu(!(o._1 >= 0 && o._1 < r.length) || r[o._1] === " " ? o._1 : o._1 + 1 | 0)(n)), s = _u(Sr(o._1 + 1 | 0)(n));
-    return s === "" ? [i] : [i, ...Ci(t)(s)];
+    const i = Mc(Sc(!(o._1 >= 0 && o._1 < r.length) || r[o._1] === " " ? o._1 : o._1 + 1 | 0)(n)), s = Mc(mo(o._1 + 1 | 0)(n));
+    return s === "" ? [i] : [i, ...eu(t)(s)];
   }
   if (o.tag === "Nothing") {
-    const i = nu(t)(n), s = Sr(t)(n);
-    return s === "" ? [i] : [i, ...Ci(t)(s)];
+    const i = Sc(t)(n), s = mo(t)(n);
+    return s === "" ? [i] : [i, ...eu(t)(s)];
   }
   f();
-}, Bl = { cellW: 7, cellH: 3, maxLineWidth: 20 }, Ql = (t) => (n) => {
-  const e = O((i) => L(
+}, vp = { cellW: 7, cellH: 3, maxLineWidth: 20 }, wp = (t) => (n) => {
+  const e = z((i) => b(
     (() => {
       if (i.label.tag === "Just")
         return i.label._1;
@@ -2977,44 +3739,50 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
       f();
     })(),
     i
-  ))(n.nodes), r = $r(1)(Ke(
-    (Pl(t.maxLineWidth)(J((i) => (s) => $r(i)(Pe(s._1)))(0)(e)) + 2 | 0) + t.cellW | 0,
+  ))(n.nodes), r = Tr(1)(Ce(
+    (Np(t.maxLineWidth)(x((i) => (s) => Tr(i)(Me(s._1)))(0)(e)) + 2 | 0) + t.cellW | 0,
     t.cellW
   )), o = (r * t.cellW | 0) - 1 | 0;
   return {
     ...n,
-    nodes: O((i) => {
+    nodes: z((i) => {
       if (!(i._2.size._1 === 1 && i._2.size._2 === 1))
         return i._2;
-      const s = bt(Ls(`
-`)(i._1))(Ci(o)), u = J((c) => (a) => $r(c)(Pe(a)))(0)(s);
+      const s = Jt(ts(`
+`)(i._1))(eu(o)), u = x((a) => (g) => Tr(a)(Me(g)))(0)(s), c = i._2.shape === "Cylinder" ? Tr(1)(Ce((u + 2 | 0) + t.cellW | 0, t.cellW)) : r;
       return {
         ...i._2,
-        size: L(
-          ct(u > o ? Ke((u + 2 | 0) + t.cellW | 0, t.cellW) : r),
-          ct($r(1)(Ke(s.length + t.cellH | 0, t.cellH)))
+        size: b(
+          nt(u > o ? Ce((u + 2 | 0) + t.cellW | 0, t.cellW) : c),
+          nt(Tr(1)(Ce(s.length + t.cellH | 0, t.cellH)) + (i._2.shape === "Cylinder" ? 1 : 0) | 0)
         )
       };
     })(e)
   };
-}, Dl = (t) => (n) => (e) => ({
+}, kp = (t) => (n) => (e) => ({
   ...e,
-  nodes: O((r) => {
-    const o = Rl(r.id)(n);
+  nodes: z((r) => {
+    const o = Jp(r.id)(n);
     if (o.tag === "Nothing")
       return r;
     if (o.tag === "Just")
-      return { ...r, size: L(Al(r.size._1)(ct($r(1)(ce(ji((o._1 + 32) / t))))), r.size._2) };
+      return {
+        ...r,
+        size: b(
+          xp(r.size._1)(nt(Tr(1)($n(qi(r.shape === "Cylinder" ? (o._1 + 0) / t : (o._1 + 32) / t))))),
+          r.size._2
+        )
+      };
     f();
   })(e.nodes)
-}), Wl = (t) => (n) => {
-  const e = pt.compare(t)(n);
+}), bp = (t) => (n) => {
+  const e = ft.compare(t)(n);
   if (e === "LT")
     return n;
   if (e === "EQ" || e === "GT")
     return t;
   f();
-}, ql = (t) => {
+}, Lp = (t) => {
   const n = t.length;
   return ((r) => (o) => {
     let i = r, s = o, u = !0, c;
@@ -3024,51 +3792,51 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
         u = !1, c = g;
         continue;
       }
-      const l = (d) => (_) => {
-        let h = d, p = _, $ = !0, m;
-        for (; $; ) {
-          const N = h, v = p;
-          if (N >= n) {
-            $ = !1, m = v;
+      const _ = (d) => (l) => {
+        let h = d, $ = l, p = !0, m;
+        for (; p; ) {
+          const y = h, N = $;
+          if (y >= n) {
+            p = !1, m = N;
             continue;
           }
           if (a >= 0 && a < t.length) {
-            if (N >= 0 && N < t.length) {
-              h = N + 1 | 0, p = (() => {
-                const w = t[a].position, y = t[a].size, k = t[N].position, E = t[N].size;
-                return w._1 < k._1 + E._1 && k._1 < w._1 + y._1 && w._2 < k._2 + E._2 && k._2 < w._2 + y._2;
-              })() ? v + 1 | 0 : v;
+            if (y >= 0 && y < t.length) {
+              h = y + 1 | 0, $ = (() => {
+                const T = t[a].position, w = t[a].size, k = t[y].position, L = t[y].size;
+                return T._1 < k._1 + L._1 && k._1 < T._1 + w._1 && T._2 < k._2 + L._2 && k._2 < T._2 + w._2;
+              })() ? N + 1 | 0 : N;
               continue;
             }
-            h = N + 1 | 0, p = v;
+            h = y + 1 | 0, $ = N;
             continue;
           }
-          $ = !1, m = v;
+          p = !1, m = N;
         }
         return m;
       };
-      i = a + 1 | 0, s = l(a + 1 | 0)(g);
+      i = a + 1 | 0, s = _(a + 1 | 0)(g);
     }
     return c;
   })(0)(0);
-}, lu = (t) => J((n) => (e) => n + k0(e.start)(e.end))(0)(t.segments), Hl = (t) => (n) => (e) => ({
-  crossingCount: J((r) => (o) => r + o.jumps.length | 0)(0)(n),
-  bendCount: J((r) => (o) => r + o.bends.length | 0)(0)(n),
-  totalEdgeLength: J((r) => (o) => r + lu(o))(0)(n),
-  maxEdgeLength: J((r) => (o) => Wl(r)(lu(o)))(0)(n),
-  nodeOverlapCount: ql(t),
+}, jc = (t) => x((n) => (e) => n + E1(e.start)(e.end))(0)(t.segments), Ep = (t) => (n) => (e) => ({
+  crossingCount: x((r) => (o) => r + o.jumps.length | 0)(0)(n),
+  bendCount: x((r) => (o) => r + o.bends.length | 0)(0)(n),
+  totalEdgeLength: x((r) => (o) => r + jc(o))(0)(n),
+  maxEdgeLength: x((r) => (o) => bp(r)(jc(o)))(0)(n),
+  nodeOverlapCount: Lp(t),
   constraintViolations: e,
-  jumpCount: J((r) => (o) => r + o.jumps.length | 0)(0)(n)
-}), xs = (t) => t, Ut = (t) => (e) => {
+  jumpCount: x((r) => (o) => r + o.jumps.length | 0)(0)(n)
+}), rc = (t) => t, Kt = (t) => (e) => {
   let r = e, o = !0, i;
   for (; o; ) {
     const s = r;
     if (s.tag === "Leaf") {
-      o = !1, i = T;
+      o = !1, i = J;
       continue;
     }
     if (s.tag === "Node") {
-      const u = rt.compare(t)(s._3);
+      const u = it.compare(t)(s._3);
       if (u === "LT") {
         r = s._5;
         continue;
@@ -3078,39 +3846,39 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
         continue;
       }
       if (u === "EQ") {
-        o = !1, i = b("Just", s._4);
+        o = !1, i = v("Just", s._4);
         continue;
       }
     }
     f();
   }
   return i;
-}, Cs = /* @__PURE__ */ xs("LEFT"), Ol = /* @__PURE__ */ xs("RIGHT"), Yc = /* @__PURE__ */ xs("UNDEFINED"), zl = {
+}, oc = /* @__PURE__ */ rc("LEFT"), Sp = /* @__PURE__ */ rc("RIGHT"), N0 = /* @__PURE__ */ rc("UNDEFINED"), Cp = {
   eq: (t) => (n) => t === "LEFT" ? n === "LEFT" : t === "RIGHT" ? n === "RIGHT" : t === "UP" ? n === "UP" : t === "DOWN" ? n === "DOWN" : t === "UNDEFINED" && n === "UNDEFINED"
-}, Vl = {
+}, Pp = {
   compare: (t) => (n) => {
     if (t === "LEFT")
-      return n === "LEFT" ? yn : dn;
+      return n === "LEFT" ? Gn : yn;
     if (n === "LEFT")
-      return hn;
+      return Nn;
     if (t === "RIGHT")
-      return n === "RIGHT" ? yn : dn;
+      return n === "RIGHT" ? Gn : yn;
     if (n === "RIGHT")
-      return hn;
+      return Nn;
     if (t === "UP")
-      return n === "UP" ? yn : dn;
+      return n === "UP" ? Gn : yn;
     if (n === "UP")
-      return hn;
+      return Nn;
     if (t === "DOWN")
-      return n === "DOWN" ? yn : dn;
+      return n === "DOWN" ? Gn : yn;
     if (n === "DOWN")
-      return hn;
+      return Nn;
     if (t === "UNDEFINED" && n === "UNDEFINED")
-      return yn;
+      return Gn;
     f();
   },
-  Eq0: () => zl
-}, Yl = (t) => (e) => {
+  Eq0: () => Cp
+}, Gp = (t) => (e) => {
   let r = e, o = !0, i;
   for (; o; ) {
     const s = r;
@@ -3175,33 +3943,33 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
     f();
   }
   return i;
-}, Xl = { x: 0, y: 0 }, Hn = (t) => (n) => (e) => {
-  const r = Ut(t)(e.cNodes);
+}, Ip = { x: 0, y: 0 }, jn = (t) => (n) => (e) => {
+  const r = Kt(t)(e.cNodes);
   if (r.tag === "Nothing")
     return e;
   if (r.tag === "Just")
-    return { ...e, cNodes: Y(rt)(t)(n(r._1))(e.cNodes) };
+    return { ...e, cNodes: U(it)(t)(n(r._1))(e.cNodes) };
   f();
-}, Lr = (t) => (n) => (e) => {
-  const r = Ut(t)(e.cGroups);
+}, _o = (t) => (n) => (e) => {
+  const r = Kt(t)(e.cGroups);
   if (r.tag === "Nothing")
     return e;
   if (r.tag === "Just")
-    return { ...e, cGroups: Y(rt)(t)(n(r._1))(e.cGroups) };
+    return { ...e, cGroups: U(it)(t)(n(r._1))(e.cGroups) };
   f();
-}, Ul = (t) => J((n) => (e) => Hn(e)((r) => ({ ...r, hitboxPreCompaction: r.hitbox }))(n))(t)(t.cNodeOrder), Ml = (t) => {
-  const n = J((e) => (r) => {
-    const o = Ut(r)(t.cNodes);
+}, Ap = (t) => x((n) => (e) => jn(e)((r) => ({ ...r, hitboxPreCompaction: r.hitbox }))(n))(t)(t.cNodeOrder), Fp = (t) => {
+  const n = x((e) => (r) => {
+    const o = Kt(r)(t.cNodes);
     if (o.tag === "Nothing")
       return e;
     if (o.tag === "Just")
-      return J((i) => (s) => yt(rt)(fn)(s)([r])(i))(e)(o._1.constraints);
+      return x((i) => (s) => vt(it)(rn)(s)([r])(i))(e)(o._1.constraints);
     f();
-  })(Q)(t.cNodeOrder);
-  return J((e) => (r) => Hn(r)((o) => ({
+  })(A)(t.cNodeOrder);
+  return x((e) => (r) => jn(r)((o) => ({
     ...o,
     constraints: (() => {
-      const i = Ut(r)(n);
+      const i = Kt(r)(n);
       if (i.tag === "Nothing")
         return [];
       if (i.tag === "Just")
@@ -3209,64 +3977,64 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
       f();
     })()
   }))(e))(t)(t.cNodeOrder);
-}, Kl = (t) => (n) => Hn(t)((e) => ({ ...e, ignoreSpacing: { left: e.ignoreSpacing.left || n.left, right: e.ignoreSpacing.right || n.right, up: e.ignoreSpacing.up || n.up, down: e.ignoreSpacing.down || n.down } })), jl = (t) => {
-  const n = J((e) => (r) => Lr(r)((o) => ({ ...o, outDegree: o.outDegreeReal }))(e))(t)(t.cGroupOrder);
-  return J((e) => (r) => Hn(r)((o) => ({ ...o, startPos: -1e308 }))(e))(n)(n.cNodeOrder);
-}, Fn = { left: !1, right: !1, up: !1, down: !1 }, Zl = { horizontalSpacing: (t) => (n) => 0, verticalSpacing: (t) => (n) => 0 }, Ss = (t) => J((n) => (e) => {
-  const r = Ut(e)(n.cGroups);
+}, Rp = (t) => (n) => jn(t)((e) => ({ ...e, ignoreSpacing: { left: e.ignoreSpacing.left || n.left, right: e.ignoreSpacing.right || n.right, up: e.ignoreSpacing.up || n.up, down: e.ignoreSpacing.down || n.down } })), Bp = (t) => {
+  const n = x((e) => (r) => _o(r)((o) => ({ ...o, outDegree: o.outDegreeReal }))(e))(t)(t.cGroupOrder);
+  return x((e) => (r) => jn(r)((o) => ({ ...o, startPos: -1e308 }))(e))(n)(n.cNodeOrder);
+}, ae = { left: !1, right: !1, up: !1, down: !1 }, Qp = { horizontalSpacing: (t) => (n) => 0, verticalSpacing: (t) => (n) => 0 }, ic = (t) => x((n) => (e) => {
+  const r = Kt(e)(n.cGroups);
   if (r.tag === "Nothing")
     return n;
   if (r.tag === "Just") {
-    const o = J((s) => (u) => {
-      const c = Ut(u)(n.cNodes);
+    const o = x((s) => (u) => {
+      const c = Kt(u)(n.cNodes);
       if (c.tag === "Nothing")
         return s;
       if (c.tag === "Just") {
         if (s.tag === "Nothing")
-          return b("Just", u);
+          return v("Just", u);
         if (s.tag === "Just") {
-          const a = Ut(s._1)(n.cNodes);
+          const a = Kt(s._1)(n.cNodes);
           if (a.tag === "Nothing")
-            return b("Just", u);
+            return v("Just", u);
           if (a.tag === "Just")
-            return c._1.hitbox.x < a._1.hitbox.x ? b("Just", u) : b("Just", s._1);
+            return c._1.hitbox.x < a._1.hitbox.x ? v("Just", u) : v("Just", s._1);
         }
       }
       f();
-    })(T)(r._1.cNodes), i = Lr(e)((s) => ({ ...s, reference: o }))(n);
+    })(J)(r._1.cNodes), i = _o(e)((s) => ({ ...s, reference: o }))(n);
     if (o.tag === "Nothing")
       return i;
     if (o.tag === "Just") {
-      const s = Ut(o._1)(i.cNodes);
+      const s = Kt(o._1)(i.cNodes);
       if (s.tag === "Nothing")
         return i;
       if (s.tag === "Just") {
         const u = s._1;
-        return J((c) => (a) => Hn(a)((g) => ({ ...g, cGroupOffset: { x: g.hitbox.x - u.hitbox.x, y: g.hitbox.y - u.hitbox.y } }))(c))(i)(r._1.cNodes);
+        return x((c) => (a) => jn(a)((g) => ({ ...g, cGroupOffset: { x: g.hitbox.x - u.hitbox.x, y: g.hitbox.y - u.hitbox.y } }))(c))(i)(r._1.cNodes);
       }
     }
   }
   f();
-})(t)(t.cGroupOrder), En = (t) => Ss({
+})(t)(t.cGroupOrder), Vn = (t) => ic({
   ...t,
   cNodes: (() => {
     const n = (e) => {
       if (e.tag === "Leaf")
-        return Q;
+        return A;
       if (e.tag === "Node")
-        return Dt("Node", e._1, e._2, e._3, { ...e._4, hitbox: { ...e._4.hitbox, x: -e._4.hitbox.x - e._4.hitbox.width } }, n(e._5), n(e._6));
+        return Ot("Node", e._1, e._2, e._3, { ...e._4, hitbox: { ...e._4.hitbox, x: -e._4.hitbox.x - e._4.hitbox.width } }, n(e._5), n(e._6));
       f();
     };
     return n(t.cNodes);
   })()
-}), Vn = (t) => Ss({
+}), de = (t) => ic({
   ...t,
   cNodes: (() => {
     const n = (e) => {
       if (e.tag === "Leaf")
-        return Q;
+        return A;
       if (e.tag === "Node")
-        return Dt(
+        return Ot(
           "Node",
           e._1,
           e._2,
@@ -3283,10 +4051,10 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
     };
     return n(t.cNodes);
   })()
-}), Xc = (t) => {
-  const n = J((e) => (r) => Lr(r)((o) => ({ ...o, outDegree: 0, outDegreeReal: 0, incomingConstraints: [] }))(e))(t)(t.cGroupOrder);
-  return J((e) => (r) => {
-    const o = Ut(r)(e.cNodes);
+}), x0 = (t) => {
+  const n = x((e) => (r) => _o(r)((o) => ({ ...o, outDegree: 0, outDegreeReal: 0, incomingConstraints: [] }))(e))(t)(t.cGroupOrder);
+  return x((e) => (r) => {
+    const o = Kt(r)(e.cNodes);
     if (o.tag === "Nothing")
       return e;
     if (o.tag === "Just") {
@@ -3294,39 +4062,39 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
         return e;
       if (o._1.cGroup.tag === "Just") {
         const i = o._1.cGroup._1;
-        return J((s) => (u) => {
-          const c = Ut(u)(s.cNodes);
+        return x((s) => (u) => {
+          const c = Kt(u)(s.cNodes);
           if (c.tag === "Nothing")
             return s;
           if (c.tag === "Just")
-            return c._1.cGroup.tag === "Just" && c._1.cGroup._1 !== i ? Lr(c._1.cGroup._1)((a) => ({ ...a, outDegree: a.outDegree + 1 | 0, outDegreeReal: a.outDegreeReal + 1 | 0 }))(Lr(i)((a) => In(Er)(u)(a.incomingConstraints) ? a : { ...a, incomingConstraints: [...a.incomingConstraints, u] })(s)) : s;
+            return c._1.cGroup.tag === "Just" && c._1.cGroup._1 !== i ? _o(c._1.cGroup._1)((a) => ({ ...a, outDegree: a.outDegree + 1 | 0, outDegreeReal: a.outDegreeReal + 1 | 0 }))(_o(i)((a) => Hn(Ir)(u)(a.incomingConstraints) ? a : { ...a, incomingConstraints: [...a.incomingConstraints, u] })(s)) : s;
           f();
         })(e)(o._1.constraints);
       }
     }
     f();
   })(n)(n.cNodeOrder);
-}, no = (t) => {
-  const n = Ml(t.cGraph);
-  return { ...t, cGraph: Xc(J((e) => (r) => Hn(r)((o) => ({ ...o, startPos: -1e308 }))(e))(n)(n.cNodeOrder)) };
-}, t1 = (t) => (n) => J((e) => (r) => {
+}, Ko = (t) => {
+  const n = Fp(t.cGraph);
+  return { ...t, cGraph: x0(x((e) => (r) => jn(r)((o) => ({ ...o, startPos: -1e308 }))(e))(n)(n.cNodeOrder)) };
+}, Wp = (t) => (n) => x((e) => (r) => {
   if (t === "LEFT" || t === "UP") {
     const i = r._2;
-    return Hn(r._1)((s) => ({ ...s, constraints: [...s.constraints, i] }))(e);
+    return jn(r._1)((s) => ({ ...s, constraints: [...s.constraints, i] }))(e);
   }
   const o = r._1;
-  return Hn(r._2)((i) => ({ ...i, constraints: [...i.constraints, o] }))(e);
-})(n)(t === "LEFT" || t === "RIGHT" ? n.predefinedHorizontalConstraints : n.predefinedVerticalConstraints), Rn = (t) => {
+  return jn(r._2)((i) => ({ ...i, constraints: [...i.constraints, o] }))(e);
+})(n)(t === "LEFT" || t === "RIGHT" ? n.predefinedHorizontalConstraints : n.predefinedVerticalConstraints), ce = (t) => {
   const n = {
     ...t,
-    cGraph: t1(t.direction)({
+    cGraph: Wp(t.direction)({
       ...t.cGraph,
       cNodes: (() => {
         const e = (r) => {
           if (r.tag === "Leaf")
-            return Q;
+            return A;
           if (r.tag === "Node")
-            return Dt("Node", r._1, r._2, r._3, { ...r._4, constraints: [] }, e(r._5), e(r._6));
+            return Ot("Node", r._1, r._2, r._3, { ...r._4, constraints: [] }, e(r._5), e(r._6));
           f();
         };
         return e(t.cGraph.cNodes);
@@ -3335,7 +4103,7 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
   };
   return {
     ...n,
-    cGraph: Xc((() => {
+    cGraph: x0((() => {
       if (n.constraintAlgorithm.tag === "Nothing")
         return n.cGraph;
       if (n.constraintAlgorithm.tag === "Just")
@@ -3343,30 +4111,30 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
       f();
     })())
   };
-}, n1 = (t) => (n) => (e) => {
+}, Dp = (t) => (n) => (e) => {
   const r = { ...e, direction: n };
   if (t === "UNDEFINED")
-    return n === "LEFT" ? Rn(r) : n === "RIGHT" ? Rn({ ...r, cGraph: En(r.cGraph) }) : n === "UP" ? Rn({ ...r, cGraph: Vn(r.cGraph) }) : n === "DOWN" ? Rn({ ...r, cGraph: En(Vn(r.cGraph)) }) : r;
+    return n === "LEFT" ? ce(r) : n === "RIGHT" ? ce({ ...r, cGraph: Vn(r.cGraph) }) : n === "UP" ? ce({ ...r, cGraph: de(r.cGraph) }) : n === "DOWN" ? ce({ ...r, cGraph: Vn(de(r.cGraph)) }) : r;
   if (t === "LEFT")
-    return n === "RIGHT" ? no({ ...r, cGraph: En(r.cGraph) }) : n === "UP" ? Rn({ ...r, cGraph: Vn(r.cGraph) }) : n === "DOWN" ? Rn({ ...r, cGraph: En(Vn(r.cGraph)) }) : r;
+    return n === "RIGHT" ? Ko({ ...r, cGraph: Vn(r.cGraph) }) : n === "UP" ? ce({ ...r, cGraph: de(r.cGraph) }) : n === "DOWN" ? ce({ ...r, cGraph: Vn(de(r.cGraph)) }) : r;
   if (t === "RIGHT")
-    return n === "LEFT" ? no({ ...r, cGraph: En(r.cGraph) }) : n === "UP" ? Rn({ ...r, cGraph: Vn(En(r.cGraph)) }) : n === "DOWN" ? Rn({ ...r, cGraph: En(Vn(En(r.cGraph))) }) : r;
+    return n === "LEFT" ? Ko({ ...r, cGraph: Vn(r.cGraph) }) : n === "UP" ? ce({ ...r, cGraph: de(Vn(r.cGraph)) }) : n === "DOWN" ? ce({ ...r, cGraph: Vn(de(Vn(r.cGraph))) }) : r;
   if (t === "UP")
-    return n === "LEFT" ? Rn({ ...r, cGraph: Vn(r.cGraph) }) : n === "RIGHT" ? Rn({ ...r, cGraph: En(Vn(r.cGraph)) }) : n === "DOWN" ? no({ ...r, cGraph: En(r.cGraph) }) : r;
+    return n === "LEFT" ? ce({ ...r, cGraph: de(r.cGraph) }) : n === "RIGHT" ? ce({ ...r, cGraph: Vn(de(r.cGraph)) }) : n === "DOWN" ? Ko({ ...r, cGraph: Vn(r.cGraph) }) : r;
   if (t === "DOWN")
-    return n === "LEFT" ? Rn({ ...r, cGraph: Vn(En(r.cGraph)) }) : n === "RIGHT" ? Rn({ ...r, cGraph: En(Vn(En(r.cGraph))) }) : n === "UP" ? no({ ...r, cGraph: En(r.cGraph) }) : r;
+    return n === "LEFT" ? ce({ ...r, cGraph: de(Vn(r.cGraph)) }) : n === "RIGHT" ? ce({ ...r, cGraph: Vn(de(Vn(r.cGraph))) }) : n === "UP" ? Ko({ ...r, cGraph: Vn(r.cGraph) }) : r;
   f();
-}, Uc = (t) => (n) => n.finished || !Yl(t)(n.cGraph.supportedDirections) || (t === "LEFT" ? n.direction === "LEFT" : t === "RIGHT" ? n.direction === "RIGHT" : t === "UP" ? n.direction === "UP" : t === "DOWN" ? n.direction === "DOWN" : t === "UNDEFINED" && n.direction === "UNDEFINED") ? n : n1(n.direction)(t)(n), e1 = (t) => {
+}, J0 = (t) => (n) => n.finished || !Gp(t)(n.cGraph.supportedDirections) || (t === "LEFT" ? n.direction === "LEFT" : t === "RIGHT" ? n.direction === "RIGHT" : t === "UP" ? n.direction === "UP" : t === "DOWN" ? n.direction === "DOWN" : t === "UNDEFINED" && n.direction === "UNDEFINED") ? n : Dp(n.direction)(t)(n), Hp = (t) => {
   if (t.finished)
     return t;
-  const n = t.direction === "UNDEFINED" ? Uc(Cs)(t) : t, e = { ...n, cGraph: jl(n.cGraph) };
+  const n = t.direction === "UNDEFINED" ? J0(oc)(t) : t, e = { ...n, cGraph: Bp(n.cGraph) };
   if (e.compactionAlgorithm.tag === "Nothing")
     return e;
   if (e.compactionAlgorithm.tag === "Just")
     return e.compactionAlgorithm._1(e);
   f();
-}, Mc = (t) => (n) => (e) => {
-  const r = Ut(t)(e.cNodes), o = Ut(n)(e.cGroups);
+}, T0 = (t) => (n) => (e) => {
+  const r = Kt(t)(e.cNodes), o = Kt(n)(e.cGroups);
   return r.tag === "Just" && o.tag === "Just" ? (() => {
     if (r._1.cGroup.tag === "Nothing")
       return !1;
@@ -3375,45 +4143,45 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
     f();
   })() && (r._1.cGroup.tag === "Nothing" || !(r._1.cGroup.tag === "Just" && r._1.cGroup._1 === n)) ? e : {
     ...e,
-    cNodes: Y(rt)(t)({ ...r._1, cGroup: b("Just", n) })(e.cNodes),
-    cGroups: Y(rt)(n)({
+    cNodes: U(it)(t)({ ...r._1, cGroup: v("Just", n) })(e.cNodes),
+    cGroups: U(it)(n)({
       ...o._1,
-      cNodes: In(Er)(t)(o._1.cNodes) ? o._1.cNodes : [...o._1.cNodes, t],
+      cNodes: Hn(Ir)(t)(o._1.cNodes) ? o._1.cNodes : [...o._1.cNodes, t],
       reference: (() => {
         if (o._1.reference.tag === "Nothing")
-          return b("Just", t);
+          return v("Just", t);
         if (o._1.reference.tag === "Just")
-          return b("Just", o._1.reference._1);
+          return v("Just", o._1.reference._1);
         f();
       })()
     })(e.cGroups)
   } : e;
-}, Kc = (t) => (n) => ({
+}, v0 = (t) => (n) => ({
   id: n.nextCNodeId,
   graph: {
     ...n,
-    cNodes: Y(rt)(n.nextCNodeId)({
+    cNodes: U(it)(n.nextCNodeId)({
       id: n.nextCNodeId,
       origin: t.origin,
       kind: t.kind,
-      cGroup: T,
-      cGroupOffset: Xl,
+      cGroup: J,
+      cGroupOffset: Ip,
       hitbox: t.hitbox,
       hitboxPreCompaction: t.hitbox,
       constraints: [],
       startPos: -1e308,
-      ignoreSpacing: Fn
+      ignoreSpacing: ae
     })(n.cNodes),
     cNodeOrder: [...n.cNodeOrder, n.nextCNodeId],
     nextCNodeId: n.nextCNodeId + 1 | 0
   }
-}), Gs = (t) => (n) => {
+}), sc = (t) => (n) => {
   const e = n.nextCGroupId;
   return {
     id: e,
-    graph: J((r) => (o) => Mc(o)(e)(r))({
+    graph: x((r) => (o) => T0(o)(e)(r))({
       ...n,
-      cGroups: Y(rt)(e)({
+      cGroups: U(it)(e)({
         id: e,
         master: t.master,
         cNodes: [],
@@ -3421,7 +4189,7 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
         incomingConstraints: [],
         outDegree: 0,
         outDegreeReal: 0,
-        reference: T,
+        reference: J,
         delta: 0,
         deltaNormalized: 0
       })(n.cGroups),
@@ -3429,37 +4197,146 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
       nextCGroupId: e + 1 | 0
     })(t.nodes)
   };
-}, r1 = (t) => J((n) => (e) => {
-  const r = Ut(e)(n.cNodes);
-  return r.tag === "Just" && r._1.cGroup.tag === "Nothing" ? Gs({ master: T, nodes: [e] })(n).graph : n;
-})(t)(t.cNodeOrder), o1 = (t) => ({
-  cGraph: Ul(r1(Ss(t))),
-  direction: Yc,
-  compactionAlgorithm: T,
-  constraintAlgorithm: T,
-  spacingsHandler: Zl,
-  lockFun: T,
+}, Op = (t) => x((n) => (e) => {
+  const r = Kt(e)(n.cNodes);
+  return r.tag === "Just" && r._1.cGroup.tag === "Nothing" ? sc({ master: J, nodes: [e] })(n).graph : n;
+})(t)(t.cNodeOrder), zp = (t) => ({
+  cGraph: Ap(Op(ic(t))),
+  direction: N0,
+  compactionAlgorithm: J,
+  constraintAlgorithm: J,
+  spacingsHandler: Qp,
+  lockFun: J,
   finished: !1
-}), yo = (t) => (n) => {
-  const e = pt.compare(t)(n);
-  if (e === "LT" || e === "EQ")
-    return t;
-  if (e === "GT")
-    return n;
-  f();
-}, du = (t) => (n) => {
-  const e = pt.compare(t)(n);
+}), w0 = (t) => (n) => {
+  const e = ft.compare(t)(n);
   if (e === "LT")
     return n;
   if (e === "EQ" || e === "GT")
     return t;
   f();
-}, Is = (t) => (n) => (e) => (r) => (o) => ({
+}, qp = (t) => (n) => {
+  const e = ft.compare(t._1)(n._1);
+  return e === "LT" ? yn : e === "GT" ? Nn : it.compare(t._2)(n._2);
+}, Yp = /* @__PURE__ */ (() => {
+  const t = te.unfoldr(ke);
+  return (n) => t(Kn("IterNode", n, we));
+})(), Zc = (t) => (e) => {
+  let r = e, o = !0, i;
+  for (; o; ) {
+    const s = r;
+    if (s.tag === "Leaf") {
+      o = !1, i = J;
+      continue;
+    }
+    if (s.tag === "Node") {
+      const u = it.compare(t)(s._3);
+      if (u === "LT") {
+        r = s._5;
+        continue;
+      }
+      if (u === "GT") {
+        r = s._6;
+        continue;
+      }
+      if (u === "EQ") {
+        o = !1, i = v("Just", s._4);
+        continue;
+      }
+    }
+    f();
+  }
+  return i;
+}, ta = (t) => t.kind.tag === "Nothing" ? !1 : t.kind.tag === "Just" && t.kind._1 === "vs", na = (t) => t.kind.tag === "Nothing" || !(t.kind.tag === "Just" && t.kind._1 === "vs"), k0 = /* @__PURE__ */ nt(4), ea = w0(0)(k0 / 2 - 0.5), Xp = w0(0)(k0 / 2 - 0.5), os = (t) => (n) => qp(b(t.hitbox.x + t.hitbox.width / 2, t.id))(b(n.hitbox.x + n.hitbox.width / 2, n.id)), Vp = (t) => (n) => {
+  const e = _r(qt, J, (r) => os(t)(r) === "LT", n);
+  if (e.tag === "Just") {
+    const r = Tf(qt, J, e._1, t, n);
+    if (r.tag === "Nothing")
+      return n;
+    if (r.tag === "Just")
+      return r._1;
+    f();
+  }
+  if (e.tag === "Nothing")
+    return Dt(n)(t);
+  f();
+}, b0 = (t) => (n) => {
+  const e = lt((o) => os(o)(t) === "LT", n), r = e.length - 1 | 0;
+  return r >= 0 && r < e.length ? v("Just", e[r]) : J;
+}, Up = (t) => (n) => {
+  const e = Vp(n)(t.intervals), r = jt((i) => os(n)(i) === "LT")(e), o = U(it)(n.id)((() => {
+    const i = b0(n)(e);
+    return i.tag === "Just" ? v("Just", i._1.id) : J;
+  })())(t.cand);
+  return {
+    ...t,
+    intervals: e,
+    cand: (() => {
+      if (r.tag === "Just")
+        return U(it)(r._1.id)(v("Just", n.id))(o);
+      if (r.tag === "Nothing")
+        return o;
+      f();
+    })()
+  };
+}, Kp = (t) => (n) => {
+  const e = ft.compare(t.low ? t.node.hitbox.y : t.node.hitbox.y + t.node.hitbox.height)(n.low ? n.node.hitbox.y : n.node.hitbox.y + n.node.hitbox.height);
+  return e === "EQ" ? t.low ? t.low && !n.low ? Nn : Gn : n.low ? yn : Gn : e;
+}, Mp = (t) => x((n) => (e) => jn(e.id)((r) => ({ ...r, constraints: [] }))(n))(t)(yt((n) => Kt(n)(t.cNodes))(t.cNodeOrder)), jp = (t) => (n) => x((e) => (r) => {
+  const o = Kt(r._1)(e.cNodes);
+  if (o.tag === "Just")
+    return jn(r._1)((i) => ({ ...i, constraints: [...i.constraints, ...r._2] }))(e);
+  if (o.tag === "Nothing")
+    return e;
+  f();
+})(n)(Yp(t)), L0 = (t) => (n) => n.kind.tag !== "Nothing" && n.kind.tag === "Just" && n.kind._1 === "vs" ? n.ignoreSpacing.up ? n.ignoreSpacing.down ? n : { ...n, hitbox: { ...n.hitbox, height: n.hitbox.height + t + 0.01 } } : { ...n, hitbox: { ...n.hitbox, y: n.hitbox.y - t - 0.01, height: n.hitbox.height + t + 0.01 } } : { ...n, hitbox: { ...n.hitbox, y: n.hitbox.y - t, height: n.hitbox.height + 2 * t } }, ra = (t) => (n) => (e) => x((r) => (o) => e(o) ? jn(o.id)(L0(t))(r) : r)(n)(yt((r) => Kt(r)(n.cNodes))(n.cNodeOrder)), Zp = (t) => (n) => {
+  const e = (r, o, i) => {
+    const s = jn(i)(L0(t))(r);
+    return o.length <= 1 ? s : x((u) => (c) => c === i ? u : jn(c)((a) => a.ignoreSpacing.up ? { ...a, hitbox: { ...a.hitbox, y: a.hitbox.y + t + 0.01, height: a.hitbox.height - t - 0.01 } } : a.ignoreSpacing.down ? { ...a, hitbox: { ...a.hitbox, height: a.hitbox.height - t - 0.01 } } : a)(u))(s)(o);
+  };
+  return x((r) => (o) => {
+    if (o.master.tag === "Nothing")
+      return 0 < o.cNodes.length ? e(r, o.cNodes, o.cNodes[0]) : r;
+    if (o.master.tag === "Just")
+      return e(r, o.cNodes, o.master._1);
+    f();
+  })(n)(yt((r) => Kt(r)(n.cGroups))(n.cGroupOrder));
+}, t$ = (t) => (n) => {
+  const e = b0(n)(t.intervals), r = jt((i) => os(n)(i) === "LT")(t.intervals), o = e.tag === "Just" && (() => {
+    const i = Zc(n.id)(t.cand);
+    return (i.tag === "Nothing" ? !1 : i.tag === "Just" && (i._1.tag === "Nothing" ? !1 : i._1.tag === "Just" && i._1._1 === e._1.id)) && e._1.cGroup.tag === "Just" && n.cGroup.tag === "Just" && e._1.cGroup._1 !== n.cGroup._1;
+  })() ? vt(it)(rn)(e._1.id)([n.id])(t.constraints) : t.constraints;
+  return {
+    ...t,
+    constraints: r.tag === "Just" && (() => {
+      const i = Zc(r._1.id)(t.cand);
+      return (i.tag === "Nothing" ? !1 : i.tag === "Just" && (i._1.tag === "Nothing" ? !1 : i._1.tag === "Just" && i._1._1 === n.id)) && n.cGroup.tag === "Just" && r._1.cGroup.tag === "Just" && n.cGroup._1 !== r._1.cGroup._1;
+    })() ? vt(it)(rn)(n.id)([r._1.id])(o) : o,
+    intervals: lt((i) => i.id !== n.id, t.intervals)
+  };
+}, n$ = (t) => (n) => n.low ? Up(t)(n.node) : t$(t)(n.node), bs = (t) => (n) => jp(x(n$)({ intervals: [], cand: A, constraints: A })(kt(Kp)(Jt(lt(
+  t,
+  yt((e) => Kt(e)(n.cNodes))(n.cNodeOrder)
+))((e) => [{ node: e, low: !0 }, { node: e, low: !1 }]))).constraints)(n), e$ = (t) => bs((n) => !0)(Zp(ea)(bs(na)(ra(ea)(bs(ta)(ra(Xp)(t)(ta)))(na)))), r$ = (t) => e$(Mp(t.cGraph)), Ji = (t) => (n) => {
+  const e = ft.compare(t)(n);
+  if (e === "LT" || e === "EQ")
+    return t;
+  if (e === "GT")
+    return n;
+  f();
+}, oa = (t) => (n) => {
+  const e = ft.compare(t)(n);
+  if (e === "LT")
+    return n;
+  if (e === "EQ" || e === "GT")
+    return t;
+  f();
+}, uc = (t) => (n) => (e) => (r) => (o) => ({
   id: t,
   representedEdges: [o],
   affectedBends: [n, e],
-  hitbox: { x: yo(n._1)(e._1), y: yo(n._2)(e._2), width: ir(n._1 - e._1), height: ir(n._2 - e._2) },
-  ignoreSpacing: Fn,
+  hitbox: { x: Ji(n._1)(e._1), y: Ji(n._2)(e._2), width: Ke(n._1 - e._1), height: Ke(n._2 - e._2) },
+  ignoreSpacing: ae,
   potentialGroupParents: (() => {
     if (r.tag === "Nothing")
       return [];
@@ -3467,9 +4344,9 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
       return [r._1];
     f();
   })(),
-  aPort: T
-}), i1 = (t) => (n) => {
-  const e = yo(t.hitbox.x)(n.hitbox.x), r = yo(t.hitbox.y)(n.hitbox.y);
+  aPort: J
+}), o$ = (t) => (n) => {
+  const e = Ji(t.hitbox.x)(n.hitbox.x), r = Ji(t.hitbox.y)(n.hitbox.y);
   return {
     ...t,
     representedEdges: [...t.representedEdges, ...n.representedEdges],
@@ -3478,8 +4355,8 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
     hitbox: {
       x: e,
       y: r,
-      width: du(t.hitbox.x + t.hitbox.width)(n.hitbox.x + n.hitbox.width) - e,
-      height: du(t.hitbox.y + t.hitbox.height)(n.hitbox.y + n.hitbox.height) - r
+      width: oa(t.hitbox.x + t.hitbox.width)(n.hitbox.x + n.hitbox.width) - e,
+      height: oa(t.hitbox.y + t.hitbox.height)(n.hitbox.y + n.hitbox.height) - r
     },
     ignoreSpacing: {
       left: t.ignoreSpacing.left || n.ignoreSpacing.left,
@@ -3495,16 +4372,16 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
       f();
     })()
   };
-}, s1 = (t) => (n) => ir(t.hitbox.x - n.hitbox.x) <= 1e-4 && n.hitbox.y - (t.hitbox.y + t.hitbox.height) <= 1e-4 && t.hitbox.y - (n.hitbox.y + n.hitbox.height) <= 1e-4, u1 = (t) => (n) => ir(t.hitbox.x - n.hitbox.x) <= 1e-4 ? pt.compare(t.hitbox.y)(n.hitbox.y) : t.hitbox.x < n.hitbox.x ? dn : hn, jc = (t, n) => ({ tag: t, _1: n }), Ps = /* @__PURE__ */ jt(G)(Bt), Vo = (t) => (e) => {
+}, i$ = (t) => (n) => Ke(t.hitbox.x - n.hitbox.x) <= 1e-4 && n.hitbox.y - (t.hitbox.y + t.hitbox.height) <= 1e-4 && t.hitbox.y - (n.hitbox.y + n.hitbox.height) <= 1e-4, s$ = (t) => (n) => Ke(t.hitbox.x - n.hitbox.x) <= 1e-4 ? ft.compare(t.hitbox.y)(n.hitbox.y) : t.hitbox.x < n.hitbox.x ? yn : Nn, E0 = (t, n) => ({ tag: t, _1: n }), cc = /* @__PURE__ */ nn(C)(Ht), is = (t) => (e) => {
   let r = e, o = !0, i;
   for (; o; ) {
     const s = r;
     if (s.tag === "Leaf") {
-      o = !1, i = T;
+      o = !1, i = J;
       continue;
     }
     if (s.tag === "Node") {
-      const u = G.compare(t)(s._3);
+      const u = C.compare(t)(s._3);
       if (u === "LT") {
         r = s._5;
         continue;
@@ -3514,42 +4391,42 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
         continue;
       }
       if (u === "EQ") {
-        o = !1, i = b("Just", s._4);
+        o = !1, i = v("Just", s._4);
         continue;
       }
     }
     f();
   }
   return i;
-}, hu = /* @__PURE__ */ (() => {
+}, ia = /* @__PURE__ */ (() => {
   const t = { eq: (e) => (r) => e._1 === r._1 && (e._2.tag === "Nothing" ? r._2.tag === "Nothing" : e._2.tag === "Just" && r._2.tag === "Just" && e._2._1 === r._2._1) }, n = {
     compare: (e) => (r) => {
-      const o = G.compare(e._1)(r._1);
+      const o = C.compare(e._1)(r._1);
       if (o === "LT")
-        return dn;
+        return yn;
       if (o === "GT")
-        return hn;
+        return Nn;
       if (e._2.tag === "Nothing")
-        return r._2.tag === "Nothing" ? yn : dn;
+        return r._2.tag === "Nothing" ? Gn : yn;
       if (r._2.tag === "Nothing")
-        return hn;
+        return Nn;
       if (e._2.tag === "Just" && r._2.tag === "Just")
-        return G.compare(e._2._1)(r._2._1);
+        return C.compare(e._2._1)(r._2._1);
       f();
     },
     Eq0: () => t
   };
-  return J((e) => (r) => Y(n)(r)()(e))(Q);
-})(), ge = (t) => (e) => {
+  return x((e) => (r) => U(n)(r)()(e))(A);
+})(), Be = (t) => (e) => {
   let r = e, o = !0, i;
   for (; o; ) {
     const s = r;
     if (s.tag === "Leaf") {
-      o = !1, i = T;
+      o = !1, i = J;
       continue;
     }
     if (s.tag === "Node") {
-      const u = G.compare(t)(s._3);
+      const u = C.compare(t)(s._3);
       if (u === "LT") {
         r = s._5;
         continue;
@@ -3559,23 +4436,23 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
         continue;
       }
       if (u === "EQ") {
-        o = !1, i = b("Just", s._4);
+        o = !1, i = v("Just", s._4);
         continue;
       }
     }
     f();
   }
   return i;
-}, c1 = /* @__PURE__ */ J((t) => (n) => Y(Vl)(n)()(t))(Q), gi = (t) => (e) => {
+}, u$ = /* @__PURE__ */ x((t) => (n) => U(Pp)(n)()(t))(A), Ls = (t) => (e) => {
   let r = e, o = !0, i;
   for (; o; ) {
     const s = r;
     if (s.tag === "Leaf") {
-      o = !1, i = T;
+      o = !1, i = J;
       continue;
     }
     if (s.tag === "Node") {
-      const u = wc.compare(t)(s._3);
+      const u = Wf.compare(t)(s._3);
       if (u === "LT") {
         r = s._5;
         continue;
@@ -3585,23 +4462,23 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
         continue;
       }
       if (u === "EQ") {
-        o = !1, i = b("Just", s._4);
+        o = !1, i = v("Just", s._4);
         continue;
       }
     }
     f();
   }
   return i;
-}, a1 = (t) => (n) => {
-  const e = Ps(O((i) => L(i.id, i))(t)), r = vt((i) => Vo(i)(e))(n), o = rt.compare((() => {
-    const i = hu(O((s) => L(s.from.node, s.from.port))(r));
+}, c$ = (t) => (n) => {
+  const e = cc(z((i) => b(i.id, i))(t)), r = yt((i) => is(i)(e))(n), o = it.compare((() => {
+    const i = ia(z((s) => b(s.from.node, s.from.port))(r));
     if (i.tag === "Leaf")
       return 0;
     if (i.tag === "Node")
       return i._2;
     f();
   })())((() => {
-    const i = hu(O((s) => L(s.to.node, s.to.port))(r));
+    const i = ia(z((s) => b(s.to.node, s.to.port))(r));
     if (i.tag === "Leaf")
       return 0;
     if (i.tag === "Node")
@@ -3609,50 +4486,50 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
     f();
   })());
   if (o === "LT")
-    return { ...Fn, left: !0, right: !1 };
+    return { ...ae, left: !0, right: !1 };
   if (o === "GT")
-    return { ...Fn, left: !1, right: !0 };
+    return { ...ae, left: !1, right: !0 };
   if (o === "EQ")
-    return Fn;
+    return ae;
   f();
-}, f1 = (t) => vt((n) => {
+}, a$ = (t) => yt((n) => {
   if (n.direction === "V")
-    return b("Just", { start: n.start, end: n.end });
+    return v("Just", { start: n.start, end: n.end });
   if (n.direction === "H")
-    return T;
+    return J;
   f();
-})(t.segments), pu = (t) => (n) => (e) => {
+})(t.segments), Mo = (t) => (n) => (e) => {
   if (e.tag === "Just") {
-    const r = ge(n)(t);
+    const r = Be(n)(t);
     if (r.tag === "Just") {
-      const o = ln((i) => i.id === e._1)(r._1);
+      const o = jt((i) => i.id === e._1)(r._1);
       if (o.tag === "Just")
         return o._1.side;
       if (o.tag === "Nothing")
-        return Kn;
+        return pe;
       f();
     }
     if (r.tag === "Nothing")
-      return Kn;
+      return pe;
     f();
   }
   if (e.tag === "Nothing")
-    return Kn;
+    return pe;
   f();
-}, g1 = (t) => (n) => (e) => {
-  const r = Kc({
-    origin: b("Just", jc("SegmentOrigin", e)),
-    kind: b("Just", "vs"),
+}, f$ = (t) => (n) => (e) => {
+  const r = v0({
+    origin: v("Just", E0("SegmentOrigin", e)),
+    kind: v("Just", "vs"),
     hitbox: e.hitbox
-  })(n.cGraph), o = Kl(r.id)(e.ignoreSpacing)(r.graph);
+  })(n.cGraph), o = Rp(r.id)(e.ignoreSpacing)(r.graph);
   return {
     ...n,
     cGraph: (() => {
       if (0 < e.potentialGroupParents.length) {
-        const i = Ut(e.potentialGroupParents[0])(o.cNodes);
+        const i = Kt(e.potentialGroupParents[0])(o.cNodes);
         if (i.tag === "Just") {
           if (i._1.cGroup.tag === "Just")
-            return Mc(r.id)(i._1.cGroup._1)(o);
+            return T0(r.id)(i._1.cGroup._1)(o);
           if (i._1.cGroup.tag === "Nothing")
             return o;
           f();
@@ -3661,255 +4538,265 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
           return o;
         f();
       }
-      return Gs({ master: b("Just", r.id), nodes: [r.id] })(o).graph;
+      return sc({ master: v("Just", r.id), nodes: [r.id] })(o).graph;
     })(),
-    edgeToCs: J((i) => (s) => yt(G)(fn)(s)([r.id])(i))(n.edgeToCs)(e.representedEdges),
-    lockMap: Y(rt)(r.id)(a1(t)(e.representedEdges))(n.lockMap)
+    edgeToCs: x((i) => (s) => vt(C)(rn)(s)([r.id])(i))(n.edgeToCs)(e.representedEdges),
+    lockMap: U(it)(r.id)(c$(t)(e.representedEdges))(n.lockMap)
   };
-}, _1 = (t) => (n) => (e) => {
-  const r = Wt(
-    (o) => T,
-    (o) => (i) => b("Just", { head: o, tail: i }),
-    Lt(u1)(n)
+}, g$ = (t) => (n) => (e) => {
+  const r = Rt(
+    (o) => J,
+    (o) => (i) => v("Just", { head: o, tail: i }),
+    kt(s$)(n)
   );
   if (r.tag === "Nothing")
     return e;
   if (r.tag === "Just") {
-    const o = J((i) => (s) => s1(i.survivor)(s) ? { ...i, survivor: i1(i.survivor)(s) } : { survivor: s, merged: [...i.merged, i.survivor] })({ survivor: r._1.head, merged: [] })(r._1.tail);
-    return J(g1(t))(e)([...o.merged, o.survivor]);
+    const o = x((i) => (s) => i$(i.survivor)(s) ? { ...i, survivor: o$(i.survivor)(s) } : { survivor: s, merged: [...i.merged, i.survivor] })({ survivor: r._1.head, merged: [] })(r._1.tail);
+    return x(f$(t))(e)([...o.merged, o.survivor]);
   }
   f();
-}, l1 = (t) => ({
+}, l$ = (t) => ({
   cGraph: {
-    cNodes: Q,
+    cNodes: A,
     cNodeOrder: [],
-    cGroups: Q,
+    cGroups: A,
     cGroupOrder: [],
-    supportedDirections: c1([Yc, Cs, Ol]),
+    supportedDirections: u$([N0, oc, Sp]),
     predefinedHorizontalConstraints: [],
     predefinedVerticalConstraints: [],
     nextCNodeId: 0,
     nextCGroupId: 0
   },
-  nodeToC: Q,
-  edgeToCs: Q,
-  lockMap: Q
-}), d1 = (t) => {
-  const n = ct(4);
+  nodeToC: A,
+  edgeToCs: A,
+  lockMap: A
+}), _$ = (t) => {
+  const n = nt(4);
   return { x: t.position._1 * n, y: t.position._2 * n, width: t.size._1 * n, height: t.size._2 * n };
-}, h1 = (t) => (n) => (e) => J((r) => (o) => {
-  const i = Kc({ origin: b("Just", jc("NodeOrigin", o.node)), kind: T, hitbox: d1(o) })(r.cGraph), s = ge(o.node)(t), u = (() => {
+}, d$ = (t) => (n) => (e) => x((r) => (o) => {
+  const i = v0({ origin: v("Just", E0("NodeOrigin", o.node)), kind: J, hitbox: _$(o) })(r.cGraph), s = Be(o.node)(t), u = (() => {
     if (s.tag === "Nothing")
-      return L(0, 0);
+      return b(0, 0);
     if (s.tag === "Just")
       return s._1;
     f();
   })();
   return {
     ...r,
-    cGraph: Gs({ master: b("Just", i.id), nodes: [i.id] })(i.graph).graph,
-    nodeToC: Y(G)(o.node)(i.id)(r.nodeToC),
-    lockMap: Y(rt)(i.id)((() => {
+    cGraph: sc({ master: v("Just", i.id), nodes: [i.id] })(i.graph).graph,
+    nodeToC: U(C)(o.node)(i.id)(r.nodeToC),
+    lockMap: U(it)(i.id)((() => {
       const c = u._1 - u._2 | 0;
-      return c < 0 ? { ...Fn, left: !0 } : c > 0 ? { ...Fn, right: !0 } : Fn;
+      return c < 0 ? { ...ae, left: !0 } : c > 0 ? { ...ae, right: !0 } : ae;
     })())(r.lockMap)
   };
-})(e)(n), p1 = (t) => J((n) => (e) => yt(G)((r) => (o) => L(
+})(e)(n), h$ = (t) => x((n) => (e) => vt(C)((r) => (o) => b(
   r._1 + o._1 | 0,
   r._2 + o._2 | 0
-))(e.to.node)(L(1, 0))(yt(G)((r) => (o) => L(r._1 + o._1 | 0, r._2 + o._2 | 0))(e.from.node)(L(
+))(e.to.node)(b(1, 0))(vt(C)((r) => (o) => b(r._1 + o._1 | 0, r._2 + o._2 | 0))(e.from.node)(b(
   0,
   1
-))(n)))(Q)(t), $1 = (t) => J((n) => (e) => e.origin.tag === "Just" && e.origin._1.tag === "NodeOrigin" ? Y(G)(e.origin._1._1)(e.hitbox.x)(n) : n)(Q)(vt((n) => Ut(n)(t.cNodes))(t.cNodeOrder)), m1 = (t) => J((n) => (e) => e.origin.tag === "Just" && e.origin._1.tag === "NodeOrigin" ? Y(G)(e.origin._1._1)(e.hitbox.x - e.hitboxPreCompaction.x)(n) : n)(Q)(vt((n) => Ut(n)(t.cNodes))(t.cNodeOrder)), N1 = (t) => J((n) => (e) => {
+))(n)))(A)(t), p$ = (t) => x((n) => (e) => e.origin.tag === "Just" && e.origin._1.tag === "NodeOrigin" ? U(C)(e.origin._1._1)(e.hitbox.x)(n) : n)(A)(yt((n) => Kt(n)(t.cNodes))(t.cNodeOrder)), $$ = (t) => x((n) => (e) => e.origin.tag === "Just" && e.origin._1.tag === "NodeOrigin" ? U(C)(e.origin._1._1)(e.hitbox.x - e.hitboxPreCompaction.x)(n) : n)(A)(yt((n) => Kt(n)(t.cNodes))(t.cNodeOrder)), m$ = (t) => x((n) => (e) => {
   if (e.origin.tag === "Just" && e.origin._1.tag === "SegmentOrigin") {
     const r = e.hitbox.x - e.hitboxPreCompaction.x;
-    return J((o) => (i) => Y(wc)(i)(r)(o))(n)(e.origin._1._1.affectedBends);
+    return x((o) => (i) => U(Wf)(i)(r)(o))(n)(e.origin._1._1.affectedBends);
   }
   return n;
-})(Q)(vt((n) => Ut(n)(t.cNodes))(t.cNodeOrder)), Zc = (t) => {
-  const n = Ps(O((e) => L(e.id, e))(t.edges));
-  return vt((e) => {
-    const r = Vo(e.edge)(n);
+})(A)(yt((n) => Kt(n)(t.cNodes))(t.cNodeOrder)), S0 = (t) => {
+  const n = cc(z((e) => b(e.id, e))(t.edges));
+  return yt((e) => {
+    const r = is(e.edge)(n);
     if (r.tag === "Just")
-      return b(
+      return e.reversed ? v(
+        "Just",
+        {
+          edgeId: e.edge,
+          src: r._1.to.node,
+          tgt: r._1.from.node,
+          srcSide: Mo(t.ports)(r._1.to.node)(r._1.to.port),
+          tgtSide: Mo(t.ports)(r._1.from.node)(r._1.from.port),
+          path: e
+        }
+      ) : v(
         "Just",
         {
           edgeId: e.edge,
           src: r._1.from.node,
           tgt: r._1.to.node,
-          srcSide: pu(t.ports)(r._1.from.node)(r._1.from.port),
-          tgtSide: pu(t.ports)(r._1.to.node)(r._1.to.port),
+          srcSide: Mo(t.ports)(r._1.from.node)(r._1.from.port),
+          tgtSide: Mo(t.ports)(r._1.to.node)(r._1.to.port),
           path: e
         }
       );
     if (r.tag === "Nothing")
-      return T;
+      return J;
     f();
   })(t.paths);
-}, J1 = (t) => (n) => {
-  const e = bt(n)((r) => {
+}, y$ = (t) => (n) => {
+  const e = Jt(n)((r) => {
     if (r.src === r.tgt)
       return [];
     if ((r.srcSide === "North" || r.srcSide === "South") && (r.tgtSide === "North" || r.tgtSide === "South"))
       return [];
-    const o = ge(r.tgt)(t.nodeToC), i = (() => {
+    const o = Be(r.tgt)(t.nodeToC), i = (() => {
       if (o.tag === "Just")
-        return Ut(o._1)(t.cGraph.cNodes);
+        return Kt(o._1)(t.cGraph.cNodes);
       if (o.tag === "Nothing")
-        return T;
+        return J;
       f();
-    })(), s = ge(r.src)(t.nodeToC), u = (() => {
+    })(), s = Be(r.src)(t.nodeToC), u = (() => {
       if (s.tag === "Just")
-        return Ut(s._1)(t.cGraph.cNodes);
+        return Kt(s._1)(t.cGraph.cNodes);
       if (s.tag === "Nothing")
-        return T;
+        return J;
       f();
     })(), c = (() => {
       if (u.tag === "Just") {
         if (i.tag === "Just") {
           if (u._1.cGroup.tag === "Just") {
             if (i._1.cGroup.tag === "Just")
-              return b("Just", { srcGroup: u._1.cGroup._1, tgtGroup: i._1.cGroup._1, delta: 0, weight: 100 });
+              return v("Just", { srcGroup: u._1.cGroup._1, tgtGroup: i._1.cGroup._1, delta: 0, weight: 100 });
             if (i._1.cGroup.tag === "Nothing")
-              return T;
+              return J;
             f();
           }
           if (u._1.cGroup.tag === "Nothing")
-            return T;
+            return J;
           f();
         }
         if (i.tag === "Nothing")
-          return T;
+          return J;
         f();
       }
       if (u.tag === "Nothing")
-        return T;
+        return J;
       f();
-    })(), a = (_) => (h) => (p) => {
+    })(), a = (l) => (h) => ($) => {
       if (u.tag === "Just") {
         if (u._1.cGroup.tag === "Just") {
-          if (p.cGroup.tag === "Just")
-            return _(p.hitbox.x) && p.cGroup._1 !== u._1.cGroup._1 ? b("Just", h(p.cGroup._1)(u._1.cGroup._1)) : T;
-          if (p.cGroup.tag === "Nothing")
-            return T;
+          if ($.cGroup.tag === "Just")
+            return l($.hitbox.x) && $.cGroup._1 !== u._1.cGroup._1 ? v("Just", h($.cGroup._1)(u._1.cGroup._1)) : J;
+          if ($.cGroup.tag === "Nothing")
+            return J;
           f();
         }
         if (u._1.cGroup.tag === "Nothing")
-          return T;
+          return J;
         f();
       }
       if (u.tag === "Nothing")
-        return T;
+        return J;
       f();
-    }, g = vt((_) => Ut(_)(t.cGraph.cNodes))((() => {
-      const _ = Vo(r.edgeId)(t.edgeToCs);
-      if (_.tag === "Nothing")
+    }, g = yt((l) => Kt(l)(t.cGraph.cNodes))((() => {
+      const l = is(r.edgeId)(t.edgeToCs);
+      if (l.tag === "Nothing")
         return [];
-      if (_.tag === "Just")
-        return _._1;
+      if (l.tag === "Just")
+        return l._1;
       f();
-    })()), l = (() => {
+    })()), _ = (() => {
       if (u.tag === "Just" && r.srcSide === "West") {
-        const _ = u._1;
-        return vt(a((h) => h < _.hitbox.x)((h) => (p) => ({ srcGroup: h, tgtGroup: p, delta: 1, weight: 100 })))(g);
+        const l = u._1;
+        return yt(a((h) => h < l.hitbox.x)((h) => ($) => ({ srcGroup: h, tgtGroup: $, delta: 1, weight: 100 })))(g);
       }
       return [];
     })(), d = (() => {
       if (u.tag === "Just" && r.tgtSide === "East") {
-        const _ = u._1;
-        return vt(a((h) => h > _.hitbox.x)((h) => (p) => ({ srcGroup: p, tgtGroup: h, delta: 1, weight: 100 })))(g);
+        const l = u._1;
+        return yt(a((h) => h > l.hitbox.x)((h) => ($) => ({ srcGroup: $, tgtGroup: h, delta: 1, weight: 100 })))(g);
       }
       return [];
     })();
     if (c.tag === "Nothing")
       return [];
     if (c.tag === "Just")
-      return [c._1, ...l, ...d];
+      return [c._1, ..._, ...d];
     f();
   });
   return {
     sameEdgeVerticalSegments: (r) => (o) => r.origin.tag === "Just" && r.origin._1.tag === "SegmentOrigin" && o.origin.tag === "Just" && o.origin._1.tag === "SegmentOrigin" && (() => {
       const i = o.origin._1._1;
-      return de((s) => In(te)(s)(i.representedEdges), r.origin._1._1.representedEdges);
+      return qn((s) => Hn(ge)(s)(i.representedEdges), r.origin._1._1.representedEdges);
     })(),
     vsLNodePair: (r) => (o) => r.origin.tag === "Just" && o.origin.tag === "Just" && (r.origin._1.tag === "SegmentOrigin" ? o.origin._1.tag === "NodeOrigin" : r.origin._1.tag === "NodeOrigin" && o.origin._1.tag === "SegmentOrigin"),
     edgeLengthEdges: (r) => e
   };
-}, v1 = (t) => (n) => {
-  const e = ct(4), r = $1(t), o = m1(t), i = Ps(O((u) => L(u.id, L(u.from.node, u.to.node)))(n.edges)), s = N1(t);
+}, N$ = (t) => (n) => {
+  const e = nt(4), r = p$(t), o = $$(t), i = cc(z((u) => b(u.id, b(u.from.node, u.to.node)))(n.edges)), s = m$(t);
   return {
-    nodes: O((u) => {
-      const c = ge(u.node)(r);
+    nodes: z((u) => {
+      const c = Be(u.node)(r);
       if (c.tag === "Just")
-        return { ...u, position: L(c._1 / e, u.position._2) };
+        return { ...u, position: b(c._1 / e, u.position._2) };
       if (c.tag === "Nothing")
         return u;
       f();
     })(n.nodes),
-    edges: O((u) => {
-      const c = Vo(u.edge)(i), a = (() => {
+    edges: z((u) => {
+      const c = is(u.edge)(i), a = (() => {
         if (c.tag === "Nothing")
           return u.segments;
         if (c.tag === "Just") {
-          const g = ge(c._1._1)(o), l = (() => {
+          const g = Be(c._1._1)(o), _ = (() => {
             if (g.tag === "Nothing")
               return 0;
             if (g.tag === "Just")
               return g._1;
             f();
-          })(), d = ge(c._1._2)(o), _ = (() => {
+          })(), d = Be(c._1._2)(o), l = (() => {
             if (d.tag === "Nothing")
               return 0;
             if (d.tag === "Just")
               return d._1;
             f();
           })();
-          return Pt((() => {
-            const h = u.reversed ? _ : l, p = u.reversed ? l : _, $ = u.segments.length;
-            return (m) => (N) => {
-              if (N.direction === "V") {
-                const v = (() => {
+          return Ft((() => {
+            const h = u.reversed ? l : _, $ = u.reversed ? _ : l, p = u.segments.length;
+            return (m) => (y) => {
+              if (y.direction === "V") {
+                const N = (() => {
                   if (m === 0)
                     return h;
-                  if (m === ($ - 1 | 0))
-                    return p;
-                  const w = gi(N.start)(s);
-                  if (w.tag === "Nothing")
+                  if (m === (p - 1 | 0))
+                    return $;
+                  const T = Ls(y.start)(s);
+                  if (T.tag === "Nothing")
                     return 0;
-                  if (w.tag === "Just")
-                    return w._1;
+                  if (T.tag === "Just")
+                    return T._1;
                   f();
                 })();
-                return { ...N, start: L(N.start._1 + v, N.start._2), end: L(N.end._1 + v, N.end._2) };
+                return { ...y, start: b(y.start._1 + N, y.start._2), end: b(y.end._1 + N, y.end._2) };
               }
-              if (N.direction === "H")
+              if (y.direction === "H")
                 return {
-                  ...N,
-                  start: L(
+                  ...y,
+                  start: b(
                     (() => {
                       if (m === 0)
-                        return N.start._1 + h;
-                      const v = gi(N.start)(s);
-                      if (v.tag === "Nothing")
-                        return N.start._1 + 0;
-                      if (v.tag === "Just")
-                        return N.start._1 + v._1;
+                        return y.start._1 + h;
+                      const N = Ls(y.start)(s);
+                      if (N.tag === "Nothing")
+                        return y.start._1 + 0;
+                      if (N.tag === "Just")
+                        return y.start._1 + N._1;
                       f();
                     })(),
-                    N.start._2
+                    y.start._2
                   ),
-                  end: L(
+                  end: b(
                     (() => {
-                      if (m === ($ - 1 | 0))
-                        return N.end._1 + p;
-                      const v = gi(N.end)(s);
-                      if (v.tag === "Nothing")
-                        return N.end._1 + 0;
-                      if (v.tag === "Just")
-                        return N.end._1 + v._1;
+                      if (m === (p - 1 | 0))
+                        return y.end._1 + $;
+                      const N = Ls(y.end)(s);
+                      if (N.tag === "Nothing")
+                        return y.end._1 + 0;
+                      if (N.tag === "Just")
+                        return y.end._1 + N._1;
                       f();
                     })(),
-                    N.end._2
+                    y.end._2
                   )
                 };
               f();
@@ -3918,11 +4805,11 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
         }
         f();
       })();
-      return { ...u, segments: a, bends: $n((g) => (l) => g.end, a, Gt(1, a.length, a)) };
+      return { ...u, segments: a, bends: wn((g) => (_) => g.end, a, bt(1, a.length, a)) };
     })(n.paths)
   };
-}, T1 = (t) => (n) => (e) => (r) => (o) => (i) => {
-  const s = Is(o.nextId)(i._2.start)(i._2.end)(T)(t.edgeId), u = (() => {
+}, x$ = (t) => (n) => (e) => (r) => (o) => (i) => {
+  const s = uc(o.nextId)(i._2.start)(i._2.end)(J)(t.edgeId), u = (() => {
     if (i._1 === 0) {
       if (n.tag === "Nothing")
         return s;
@@ -3954,80 +4841,80 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
       })()
     ]
   };
-}, $u = (t) => (n) => (e) => (r) => (o) => (i) => ({
+}, sa = (t) => (n) => (e) => (r) => (o) => (i) => ({
   nextId: i.nextId + 1 | 0,
   segments: [
     ...i.segments,
     {
-      ...Is(i.nextId)(r.start)(L(r.start._1, o.down ? e.y : e.y + e.height))(b(
+      ...uc(i.nextId)(r.start)(b(r.start._1, o.down ? e.y : e.y + e.height))(v(
         "Just",
         n
       ))(t.edgeId),
-      aPort: b("Just", { node: t.src, side: o.side }),
-      ignoreSpacing: o.down ? { ...Fn, down: !0 } : { ...Fn, up: !0 }
+      aPort: v("Just", { node: t.src, side: o.side }),
+      ignoreSpacing: o.down ? { ...ae, down: !0 } : { ...ae, up: !0 }
     }
   ]
-}), eo = (t) => (n) => (e) => (r) => (o) => (i) => ({
+}), jo = (t) => (n) => (e) => (r) => (o) => (i) => ({
   nextId: i.nextId + 1 | 0,
   segments: [
     ...i.segments,
     {
-      ...Is(i.nextId)(r.end)(L(r.end._1, o.down ? e.y : e.y + e.height))(b(
+      ...uc(i.nextId)(r.end)(b(r.end._1, o.down ? e.y : e.y + e.height))(v(
         "Just",
         n
       ))(t.edgeId),
-      aPort: b("Just", { node: t.tgt, side: o.side }),
-      ignoreSpacing: o.down ? { ...Fn, down: !0 } : { ...Fn, up: !0 }
+      aPort: v("Just", { node: t.tgt, side: o.side }),
+      ignoreSpacing: o.down ? { ...ae, down: !0 } : { ...ae, up: !0 }
     }
   ]
-}), y1 = (t) => (n) => (e) => {
-  const r = ge(e.src)(t.nodeToC), o = ge(e.tgt)(t.nodeToC), i = (() => {
+}), J$ = (t) => (n) => (e) => {
+  const r = Be(e.src)(t.nodeToC), o = Be(e.tgt)(t.nodeToC), i = (() => {
     if (r.tag === "Just") {
-      const g = Ut(r._1)(t.cGraph.cNodes);
-      return g.tag === "Just" ? b("Just", g._1.hitbox) : T;
+      const g = Kt(r._1)(t.cGraph.cNodes);
+      return g.tag === "Just" ? v("Just", g._1.hitbox) : J;
     }
     if (r.tag === "Nothing")
-      return T;
+      return J;
     f();
   })(), s = (() => {
     if (o.tag === "Just") {
-      const g = Ut(o._1)(t.cGraph.cNodes);
-      return g.tag === "Just" ? b("Just", g._1.hitbox) : T;
+      const g = Kt(o._1)(t.cGraph.cNodes);
+      return g.tag === "Just" ? v("Just", g._1.hitbox) : J;
     }
     if (o.tag === "Nothing")
-      return T;
+      return J;
     f();
-  })(), u = f1(e.path), c = J(T1(e)(i)(s)(u.length - 1 | 0))(n)(Pt((g) => (l) => L(
+  })(), u = a$(e.path), c = x(x$(e)(i)(s)(u.length - 1 | 0))(n)(Ft((g) => (_) => b(
     g,
-    l
+    _
   ))(u));
   if (0 < u.length) {
     const g = (() => {
       if (r.tag === "Just" && i.tag === "Just") {
         if (e.srcSide === "North")
-          return $u(e)(r._1)(i._1)(u[0])({ side: un, down: !0 })(c);
+          return sa(e)(r._1)(i._1)(u[0])({ side: dn, down: !0 })(c);
         if (e.srcSide === "South")
-          return $u(e)(r._1)(i._1)(u[0])({ side: cn, down: !1 })(c);
+          return sa(e)(r._1)(i._1)(u[0])({ side: hn, down: !1 })(c);
       }
       return c;
-    })(), l = u.length - 1 | 0;
-    if (l >= 0 && l < u.length && o.tag === "Just" && s.tag === "Just") {
+    })(), _ = u.length - 1 | 0;
+    if (_ >= 0 && _ < u.length && o.tag === "Just" && s.tag === "Just") {
       if (e.tgtSide === "North")
-        return eo(e)(o._1)(s._1)(u[l])({ side: un, down: !0 })(g);
+        return jo(e)(o._1)(s._1)(u[_])({ side: dn, down: !0 })(g);
       if (e.tgtSide === "South")
-        return eo(e)(o._1)(s._1)(u[l])({ side: cn, down: !1 })(g);
+        return jo(e)(o._1)(s._1)(u[_])({ side: hn, down: !1 })(g);
     }
     return g;
   }
   const a = u.length - 1 | 0;
   if (a >= 0 && a < u.length && o.tag === "Just" && s.tag === "Just") {
     if (e.tgtSide === "North")
-      return eo(e)(o._1)(s._1)(u[a])({ side: un, down: !0 })(c);
+      return jo(e)(o._1)(s._1)(u[a])({ side: dn, down: !0 })(c);
     if (e.tgtSide === "South")
-      return eo(e)(o._1)(s._1)(u[a])({ side: cn, down: !1 })(c);
+      return jo(e)(o._1)(s._1)(u[a])({ side: hn, down: !1 })(c);
   }
   return c;
-}, w1 = (t) => (n) => (e) => _1(t)(J(y1(e))({ nextId: 0, segments: [] })(n).segments)(e), L1 = (t) => w1(t.edges)(Zc(t))(h1(p1(t.edges))(t.nodes)(l1())), _e = (t) => (e) => {
+}, T$ = (t) => (n) => (e) => g$(t)(x(J$(e))({ nextId: 0, segments: [] })(n).segments)(e), v$ = (t) => T$(t.edges)(S0(t))(d$(h$(t.edges))(t.nodes)(l$())), Qe = (t) => (e) => {
   let r = e, o = !0, i;
   for (; o; ) {
     const s = r;
@@ -4036,7 +4923,7 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
       continue;
     }
     if (s.tag === "Node") {
-      const u = rt.compare(t)(s._3);
+      const u = it.compare(t)(s._3);
       if (u === "LT") {
         r = s._5;
         continue;
@@ -4053,23 +4940,23 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
     f();
   }
   return i;
-}, Si = (t) => (n) => {
-  const e = rt.compare(t)(n);
+}, ru = (t) => (n) => {
+  const e = it.compare(t)(n);
   if (e === "LT" || e === "EQ")
     return t;
   if (e === "GT")
     return n;
   f();
-}, Gi = (t) => (e) => {
+}, ou = (t) => (e) => {
   let r = e, o = !0, i;
   for (; o; ) {
     const s = r;
     if (s.tag === "Leaf") {
-      o = !1, i = T;
+      o = !1, i = J;
       continue;
     }
     if (s.tag === "Node") {
-      const u = rt.compare(t)(s._3);
+      const u = it.compare(t)(s._3);
       if (u === "LT") {
         r = s._5;
         continue;
@@ -4079,215 +4966,215 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
         continue;
       }
       if (u === "EQ") {
-        o = !1, i = b("Just", s._4);
+        o = !1, i = v("Just", s._4);
         continue;
       }
     }
     f();
   }
   return i;
-}, k1 = (t) => (n) => {
-  const e = rt.compare(t)(n);
+}, w$ = (t) => (n) => {
+  const e = it.compare(t)(n);
   if (e === "LT")
     return n;
   if (e === "EQ" || e === "GT")
     return t;
   f();
-}, b1 = (t) => {
+}, k$ = (t) => {
   const n = t.Eq0();
   return (e) => (r) => {
     const o = (u) => {
       let c = u, a = !0, g;
       for (; a; ) {
-        const l = c, d = Wt((_) => T, (_) => (h) => b("Just", { head: _, tail: h }), l.queue);
+        const _ = c, d = Rt((l) => J, (l) => (h) => v("Just", { head: l, tail: h }), _.queue);
         if (d.tag === "Nothing") {
-          a = !1, g = l;
+          a = !1, g = _;
           continue;
         }
         if (d.tag === "Just") {
-          const _ = d._1.head;
-          if ((($) => {
-            let m = $, N = !0, v;
-            for (; N; ) {
-              const w = m;
-              if (w.tag === "Leaf") {
-                N = !1, v = !1;
+          const l = d._1.head;
+          if (((p) => {
+            let m = p, y = !0, N;
+            for (; y; ) {
+              const T = m;
+              if (T.tag === "Leaf") {
+                y = !1, N = !1;
                 continue;
               }
-              if (w.tag === "Node") {
-                const y = t.compare(_)(w._3);
-                if (y === "LT") {
-                  m = w._5;
+              if (T.tag === "Node") {
+                const w = t.compare(l)(T._3);
+                if (w === "LT") {
+                  m = T._5;
                   continue;
                 }
-                if (y === "GT") {
-                  m = w._6;
+                if (w === "GT") {
+                  m = T._6;
                   continue;
                 }
-                if (y === "EQ") {
-                  N = !1, v = !0;
+                if (w === "EQ") {
+                  y = !1, N = !0;
                   continue;
                 }
               }
               f();
             }
-            return v;
-          })(l.removedNodes)) {
-            c = { ...l, queue: d._1.tail };
+            return N;
+          })(_.removedNodes)) {
+            c = { ..._, queue: d._1.tail };
             continue;
           }
-          const h = ln((p) => !_e(p.eid)(l.removedEdges) && (n.eq(p.src)(_) || n.eq(p.tgt)(_)))(r);
+          const h = jt(($) => !Qe($.eid)(_.removedEdges) && (n.eq($.src)(l) || n.eq($.tgt)(l)))(r);
           if (h.tag === "Nothing") {
-            c = { ...l, queue: d._1.tail };
+            c = { ..._, queue: d._1.tail };
             continue;
           }
           if (h.tag === "Just") {
-            const p = n.eq(h._1.src)(_) ? h._1.tgt : h._1.src, $ = {
-              ...l,
-              degree: Y(t)(p)((() => {
-                const N = ((v) => {
-                  let w = v, y = !0, k;
-                  for (; y; ) {
-                    const E = w;
-                    if (E.tag === "Leaf") {
-                      y = !1, k = T;
+            const $ = n.eq(h._1.src)(l) ? h._1.tgt : h._1.src, p = {
+              ..._,
+              degree: U(t)($)((() => {
+                const y = ((N) => {
+                  let T = N, w = !0, k;
+                  for (; w; ) {
+                    const L = T;
+                    if (L.tag === "Leaf") {
+                      w = !1, k = J;
                       continue;
                     }
-                    if (E.tag === "Node") {
-                      const I = t.compare(p)(E._3);
-                      if (I === "LT") {
-                        w = E._5;
+                    if (L.tag === "Node") {
+                      const G = t.compare($)(L._3);
+                      if (G === "LT") {
+                        T = L._5;
                         continue;
                       }
-                      if (I === "GT") {
-                        w = E._6;
+                      if (G === "GT") {
+                        T = L._6;
                         continue;
                       }
-                      if (I === "EQ") {
-                        y = !1, k = b("Just", E._4);
+                      if (G === "EQ") {
+                        w = !1, k = v("Just", L._4);
                         continue;
                       }
                     }
                     f();
                   }
                   return k;
-                })(l.degree);
-                if (N.tag === "Nothing")
+                })(_.degree);
+                if (y.tag === "Nothing")
                   return -1;
-                if (N.tag === "Just")
-                  return N._1 - 1 | 0;
+                if (y.tag === "Just")
+                  return y._1 - 1 | 0;
                 f();
-              })())(l.degree),
-              removedNodes: Y(t)(_)()(l.removedNodes),
-              removedEdges: Y(rt)(h._1.eid)()(l.removedEdges),
-              record: [...l.record, { node: _, neighbour: p, viaSrc: n.eq(h._1.src)(_) }],
+              })())(_.degree),
+              removedNodes: U(t)(l)()(_.removedNodes),
+              removedEdges: U(it)(h._1.eid)()(_.removedEdges),
+              record: [..._.record, { node: l, neighbour: $, viaSrc: n.eq(h._1.src)(l) }],
               queue: d._1.tail
             };
             if ((() => {
-              const N = ((w) => {
-                let y = w, k = !0, E;
+              const y = ((T) => {
+                let w = T, k = !0, L;
                 for (; k; ) {
-                  const I = y;
-                  if (I.tag === "Leaf") {
-                    k = !1, E = T;
+                  const G = w;
+                  if (G.tag === "Leaf") {
+                    k = !1, L = J;
                     continue;
                   }
-                  if (I.tag === "Node") {
-                    const D = t.compare(p)(I._3);
+                  if (G.tag === "Node") {
+                    const D = t.compare($)(G._3);
                     if (D === "LT") {
-                      y = I._5;
+                      w = G._5;
                       continue;
                     }
                     if (D === "GT") {
-                      y = I._6;
+                      w = G._6;
                       continue;
                     }
                     if (D === "EQ") {
-                      k = !1, E = b("Just", I._4);
+                      k = !1, L = v("Just", G._4);
                       continue;
                     }
                   }
                   f();
                 }
-                return E;
-              })($.degree), v = (w) => {
-                let y = w, k = !0, E;
+                return L;
+              })(p.degree), N = (T) => {
+                let w = T, k = !0, L;
                 for (; k; ) {
-                  const I = y;
-                  if (I.tag === "Leaf") {
-                    k = !1, E = !1;
+                  const G = w;
+                  if (G.tag === "Leaf") {
+                    k = !1, L = !1;
                     continue;
                   }
-                  if (I.tag === "Node") {
-                    const D = t.compare(p)(I._3);
+                  if (G.tag === "Node") {
+                    const D = t.compare($)(G._3);
                     if (D === "LT") {
-                      y = I._5;
+                      w = G._5;
                       continue;
                     }
                     if (D === "GT") {
-                      y = I._6;
+                      w = G._6;
                       continue;
                     }
                     if (D === "EQ") {
-                      k = !1, E = !0;
+                      k = !1, L = !0;
                       continue;
                     }
                   }
                   f();
                 }
-                return E;
+                return L;
               };
               return (() => {
-                if (N.tag === "Nothing")
+                if (y.tag === "Nothing")
                   return !1;
-                if (N.tag === "Just")
-                  return N._1 === 1;
+                if (y.tag === "Just")
+                  return y._1 === 1;
                 f();
-              })() && !v($.removedNodes);
+              })() && !N(p.removedNodes);
             })()) {
-              c = { ...$, queue: [...$.queue, p] };
+              c = { ...p, queue: [...p.queue, $] };
               continue;
             }
-            c = $;
+            c = p;
             continue;
           }
         }
         f();
       }
       return g;
-    }, i = J((u) => (c) => yt(t)(Zt)(c.src)(1)(yt(t)(Zt)(c.tgt)(1)(u)))(Q)(r), s = o({
+    }, i = x((u) => (c) => vt(t)(on)(c.src)(1)(vt(t)(on)(c.tgt)(1)(u)))(A)(r), s = o({
       degree: i,
-      removedNodes: Q,
-      removedEdges: Q,
+      removedNodes: A,
+      removedEdges: A,
       record: [],
-      queue: gt(
+      queue: lt(
         (u) => {
           const a = ((g) => {
-            let l = g, d = !0, _;
+            let _ = g, d = !0, l;
             for (; d; ) {
-              const h = l;
+              const h = _;
               if (h.tag === "Leaf") {
-                d = !1, _ = T;
+                d = !1, l = J;
                 continue;
               }
               if (h.tag === "Node") {
-                const p = t.compare(u)(h._3);
-                if (p === "LT") {
-                  l = h._5;
+                const $ = t.compare(u)(h._3);
+                if ($ === "LT") {
+                  _ = h._5;
                   continue;
                 }
-                if (p === "GT") {
-                  l = h._6;
+                if ($ === "GT") {
+                  _ = h._6;
                   continue;
                 }
-                if (p === "EQ") {
-                  d = !1, _ = b("Just", h._4);
+                if ($ === "EQ") {
+                  d = !1, l = v("Just", h._4);
                   continue;
                 }
               }
               f();
             }
-            return _;
+            return l;
           })(i);
           if (a.tag === "Nothing")
             return !1;
@@ -4299,27 +5186,27 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
       )
     });
     return {
-      coreNodes: gt(
+      coreNodes: lt(
         (u) => !((a) => {
-          let g = a, l = !0, d;
-          for (; l; ) {
-            const _ = g;
-            if (_.tag === "Leaf") {
-              l = !1, d = !1;
+          let g = a, _ = !0, d;
+          for (; _; ) {
+            const l = g;
+            if (l.tag === "Leaf") {
+              _ = !1, d = !1;
               continue;
             }
-            if (_.tag === "Node") {
-              const h = t.compare(u)(_._3);
+            if (l.tag === "Node") {
+              const h = t.compare(u)(l._3);
               if (h === "LT") {
-                g = _._5;
+                g = l._5;
                 continue;
               }
               if (h === "GT") {
-                g = _._6;
+                g = l._6;
                 continue;
               }
               if (h === "EQ") {
-                l = !1, d = !0;
+                _ = !1, d = !0;
                 continue;
               }
             }
@@ -4329,32 +5216,32 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
         })(s.removedNodes),
         e
       ),
-      coreEdges: gt((u) => !_e(u.eid)(s.removedEdges), r),
+      coreEdges: lt((u) => !Qe(u.eid)(s.removedEdges), r),
       removed: s.record
     };
   };
-}, E1 = (t) => (n) => (e) => J((r) => (o) => {
+}, b$ = (t) => (n) => (e) => x((r) => (o) => {
   const i = o.neighbour, s = (() => {
     const u = ((a) => {
-      let g = a, l = !0, d;
-      for (; l; ) {
-        const _ = g;
-        if (_.tag === "Leaf") {
-          l = !1, d = T;
+      let g = a, _ = !0, d;
+      for (; _; ) {
+        const l = g;
+        if (l.tag === "Leaf") {
+          _ = !1, d = J;
           continue;
         }
-        if (_.tag === "Node") {
-          const h = t.compare(i)(_._3);
+        if (l.tag === "Node") {
+          const h = t.compare(i)(l._3);
           if (h === "LT") {
-            g = _._5;
+            g = l._5;
             continue;
           }
           if (h === "GT") {
-            g = _._6;
+            g = l._6;
             continue;
           }
           if (h === "EQ") {
-            l = !1, d = b("Just", _._4);
+            _ = !1, d = v("Just", l._4);
             continue;
           }
         }
@@ -4368,62 +5255,62 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
       return u._1;
     f();
   })();
-  return Y(t)(o.node)(o.viaSrc ? s - 1 | 0 : s + 1 | 0)(r);
-})(e)(vn(n)), Ii = (t) => {
+  return U(t)(o.node)(o.viaSrc ? s - 1 | 0 : s + 1 | 0)(r);
+})(e)(Ln(n)), iu = (t) => {
   const n = t.Eq0();
   return (e) => (r) => (o) => {
-    const i = { ...o, treeNode: Y(t)(r)()(o.treeNode) };
-    return J((s) => (u) => {
-      if (_e(u.eid)(s.st.edgeVisited))
+    const i = { ...o, treeNode: U(t)(r)()(o.treeNode) };
+    return x((s) => (u) => {
+      if (Qe(u.eid)(s.st.edgeVisited))
         return s;
-      const c = { ...s.st, edgeVisited: Y(rt)(u.eid)()(s.st.edgeVisited) }, a = n.eq(u.src)((() => {
-        const g = u.src, l = (_) => {
-          let h = _, p = !0, $;
-          for (; p; ) {
+      const c = { ...s.st, edgeVisited: U(it)(u.eid)()(s.st.edgeVisited) }, a = n.eq(u.src)((() => {
+        const g = u.src, _ = (l) => {
+          let h = l, $ = !0, p;
+          for (; $; ) {
             const m = h;
             if (m.tag === "Leaf") {
-              p = !1, $ = !1;
+              $ = !1, p = !1;
               continue;
             }
             if (m.tag === "Node") {
-              const N = t.compare(g)(m._3);
-              if (N === "LT") {
+              const y = t.compare(g)(m._3);
+              if (y === "LT") {
                 h = m._5;
                 continue;
               }
-              if (N === "GT") {
+              if (y === "GT") {
                 h = m._6;
                 continue;
               }
-              if (N === "EQ") {
-                p = !1, $ = !0;
+              if (y === "EQ") {
+                $ = !1, p = !0;
                 continue;
               }
             }
             f();
           }
-          return $;
+          return p;
         }, d = u.tgt;
-        return l(c.treeNode) && !((h) => {
-          let p = h, $ = !0, m;
-          for (; $; ) {
-            const N = p;
-            if (N.tag === "Leaf") {
-              $ = !1, m = !1;
+        return _(c.treeNode) && !((h) => {
+          let $ = h, p = !0, m;
+          for (; p; ) {
+            const y = $;
+            if (y.tag === "Leaf") {
+              p = !1, m = !1;
               continue;
             }
-            if (N.tag === "Node") {
-              const v = t.compare(d)(N._3);
-              if (v === "LT") {
-                p = N._5;
+            if (y.tag === "Node") {
+              const N = t.compare(d)(y._3);
+              if (N === "LT") {
+                $ = y._5;
                 continue;
               }
-              if (v === "GT") {
-                p = N._6;
+              if (N === "GT") {
+                $ = y._6;
                 continue;
               }
-              if (v === "EQ") {
-                $ = !1, m = !0;
+              if (N === "EQ") {
+                p = !1, m = !0;
                 continue;
               }
             }
@@ -4432,53 +5319,53 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
           return m;
         })(c.treeNode);
       })() ? u.src : (() => {
-        const g = u.tgt, l = (_) => {
-          let h = _, p = !0, $;
-          for (; p; ) {
+        const g = u.tgt, _ = (l) => {
+          let h = l, $ = !0, p;
+          for (; $; ) {
             const m = h;
             if (m.tag === "Leaf") {
-              p = !1, $ = !1;
+              $ = !1, p = !1;
               continue;
             }
             if (m.tag === "Node") {
-              const N = t.compare(g)(m._3);
-              if (N === "LT") {
+              const y = t.compare(g)(m._3);
+              if (y === "LT") {
                 h = m._5;
                 continue;
               }
-              if (N === "GT") {
+              if (y === "GT") {
                 h = m._6;
                 continue;
               }
-              if (N === "EQ") {
-                p = !1, $ = !0;
+              if (y === "EQ") {
+                $ = !1, p = !0;
                 continue;
               }
             }
             f();
           }
-          return $;
+          return p;
         }, d = u.src;
-        return l(c.treeNode) && !((h) => {
-          let p = h, $ = !0, m;
-          for (; $; ) {
-            const N = p;
-            if (N.tag === "Leaf") {
-              $ = !1, m = !1;
+        return _(c.treeNode) && !((h) => {
+          let $ = h, p = !0, m;
+          for (; p; ) {
+            const y = $;
+            if (y.tag === "Leaf") {
+              p = !1, m = !1;
               continue;
             }
-            if (N.tag === "Node") {
-              const v = t.compare(d)(N._3);
-              if (v === "LT") {
-                p = N._5;
+            if (y.tag === "Node") {
+              const N = t.compare(d)(y._3);
+              if (N === "LT") {
+                $ = y._5;
                 continue;
               }
-              if (v === "GT") {
-                p = N._6;
+              if (N === "GT") {
+                $ = y._6;
                 continue;
               }
-              if (v === "EQ") {
-                $ = !1, m = !0;
+              if (N === "EQ") {
+                p = !1, m = !0;
                 continue;
               }
             }
@@ -4487,267 +5374,267 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
           return m;
         })(c.treeNode);
       })() ? u.tgt : u.src) ? u.tgt : u.src;
-      if (_e(u.eid)(c.treeEdge)) {
+      if (Qe(u.eid)(c.treeEdge)) {
         if (((d) => {
-          let _ = d, h = !0, p;
+          let l = d, h = !0, $;
           for (; h; ) {
-            const $ = _;
-            if ($.tag === "Leaf") {
-              h = !1, p = !1;
+            const p = l;
+            if (p.tag === "Leaf") {
+              h = !1, $ = !1;
               continue;
             }
-            if ($.tag === "Node") {
-              const m = t.compare(a)($._3);
+            if (p.tag === "Node") {
+              const m = t.compare(a)(p._3);
               if (m === "LT") {
-                _ = $._5;
+                l = p._5;
                 continue;
               }
               if (m === "GT") {
-                _ = $._6;
+                l = p._6;
                 continue;
               }
               if (m === "EQ") {
-                h = !1, p = !0;
+                h = !1, $ = !0;
                 continue;
               }
             }
             f();
           }
-          return p;
+          return $;
         })(c.treeNode))
           return { ...s, st: c };
-        const g = Ii(t)(e)(a)(c);
+        const g = iu(t)(e)(a)(c);
         return { count: s.count + g.count | 0, st: g.st };
       }
       if ((() => {
         const g = (d) => {
-          let _ = d, h = !0, p;
+          let l = d, h = !0, $;
           for (; h; ) {
-            const $ = _;
-            if ($.tag === "Leaf") {
-              h = !1, p = !1;
+            const p = l;
+            if (p.tag === "Leaf") {
+              h = !1, $ = !1;
               continue;
             }
-            if ($.tag === "Node") {
-              const m = t.compare(a)($._3);
+            if (p.tag === "Node") {
+              const m = t.compare(a)(p._3);
               if (m === "LT") {
-                _ = $._5;
+                l = p._5;
                 continue;
               }
               if (m === "GT") {
-                _ = $._6;
+                l = p._6;
                 continue;
               }
               if (m === "EQ") {
-                h = !1, p = !0;
+                h = !1, $ = !0;
                 continue;
               }
             }
             f();
           }
-          return p;
-        }, l = u.tgt;
+          return $;
+        }, _ = u.tgt;
         return !g(c.treeNode) && (() => {
-          const _ = ((m) => {
-            let N = m, v = !0, w;
-            for (; v; ) {
-              const y = N;
-              if (y.tag === "Leaf") {
-                v = !1, w = T;
+          const l = ((m) => {
+            let y = m, N = !0, T;
+            for (; N; ) {
+              const w = y;
+              if (w.tag === "Leaf") {
+                N = !1, T = J;
                 continue;
               }
-              if (y.tag === "Node") {
-                const k = t.compare(l)(y._3);
+              if (w.tag === "Node") {
+                const k = t.compare(_)(w._3);
                 if (k === "LT") {
-                  N = y._5;
+                  y = w._5;
                   continue;
                 }
                 if (k === "GT") {
-                  N = y._6;
+                  y = w._6;
                   continue;
                 }
                 if (k === "EQ") {
-                  v = !1, w = b("Just", y._4);
+                  N = !1, T = v("Just", w._4);
                   continue;
                 }
               }
               f();
             }
-            return w;
-          })(c.layer), h = u.src, $ = ((m) => {
-            let N = m, v = !0, w;
-            for (; v; ) {
-              const y = N;
-              if (y.tag === "Leaf") {
-                v = !1, w = T;
+            return T;
+          })(c.layer), h = u.src, p = ((m) => {
+            let y = m, N = !0, T;
+            for (; N; ) {
+              const w = y;
+              if (w.tag === "Leaf") {
+                N = !1, T = J;
                 continue;
               }
-              if (y.tag === "Node") {
-                const k = t.compare(h)(y._3);
+              if (w.tag === "Node") {
+                const k = t.compare(h)(w._3);
                 if (k === "LT") {
-                  N = y._5;
+                  y = w._5;
                   continue;
                 }
                 if (k === "GT") {
-                  N = y._6;
+                  y = w._6;
                   continue;
                 }
                 if (k === "EQ") {
-                  v = !1, w = b("Just", y._4);
+                  N = !1, T = v("Just", w._4);
                   continue;
                 }
               }
               f();
             }
-            return w;
+            return T;
           })(c.layer);
-          if (_.tag === "Nothing") {
-            if ($.tag === "Nothing")
+          if (l.tag === "Nothing") {
+            if (p.tag === "Nothing")
               return u.delta === 0;
-            if ($.tag === "Just")
-              return u.delta === -$._1;
+            if (p.tag === "Just")
+              return u.delta === -p._1;
             f();
           }
-          if (_.tag === "Just") {
-            if ($.tag === "Nothing")
-              return u.delta === (_._1 - 0 | 0);
-            if ($.tag === "Just")
-              return u.delta === (_._1 - $._1 | 0);
+          if (l.tag === "Just") {
+            if (p.tag === "Nothing")
+              return u.delta === (l._1 - 0 | 0);
+            if (p.tag === "Just")
+              return u.delta === (l._1 - p._1 | 0);
           }
           f();
         })();
       })()) {
-        const g = Ii(t)(e)(a)({ ...c, treeEdge: Y(rt)(u.eid)()(c.treeEdge) });
+        const g = iu(t)(e)(a)({ ...c, treeEdge: U(it)(u.eid)()(c.treeEdge) });
         return { count: s.count + g.count | 0, st: g.st };
       }
       return { ...s, st: c };
-    })({ count: 1, st: i })(gt((s) => (n.eq(s.src)(r) || n.eq(s.tgt)(r)) && !_e(s.eid)(i.edgeVisited), e));
+    })({ count: 1, st: i })(lt((s) => (n.eq(s.src)(r) || n.eq(s.tgt)(r)) && !Qe(s.eid)(i.edgeVisited), e));
   };
-}, wo = (t) => (n) => (e) => (r) => {
-  const o = r.src, s = ((p) => {
-    let $ = p, m = !0, N;
+}, Ti = (t) => (n) => (e) => (r) => {
+  const o = r.src, s = (($) => {
+    let p = $, m = !0, y;
     for (; m; ) {
-      const v = $;
-      if (v.tag === "Leaf") {
-        m = !1, N = T;
+      const N = p;
+      if (N.tag === "Leaf") {
+        m = !1, y = J;
         continue;
       }
-      if (v.tag === "Node") {
-        const w = t.compare(o)(v._3);
-        if (w === "LT") {
-          $ = v._5;
+      if (N.tag === "Node") {
+        const T = t.compare(o)(N._3);
+        if (T === "LT") {
+          p = N._5;
           continue;
         }
-        if (w === "GT") {
-          $ = v._6;
+        if (T === "GT") {
+          p = N._6;
           continue;
         }
-        if (w === "EQ") {
-          m = !1, N = b("Just", v._4);
+        if (T === "EQ") {
+          m = !1, y = v("Just", N._4);
           continue;
         }
       }
       f();
     }
-    return N;
+    return y;
   })(n.poID), u = (() => {
     if (s.tag === "Nothing")
       return 0;
     if (s.tag === "Just")
       return s._1;
     f();
-  })(), c = r.tgt, g = ((p) => {
-    let $ = p, m = !0, N;
+  })(), c = r.tgt, g = (($) => {
+    let p = $, m = !0, y;
     for (; m; ) {
-      const v = $;
-      if (v.tag === "Leaf") {
-        m = !1, N = T;
+      const N = p;
+      if (N.tag === "Leaf") {
+        m = !1, y = J;
         continue;
       }
-      if (v.tag === "Node") {
-        const w = t.compare(c)(v._3);
-        if (w === "LT") {
-          $ = v._5;
+      if (N.tag === "Node") {
+        const T = t.compare(c)(N._3);
+        if (T === "LT") {
+          p = N._5;
           continue;
         }
-        if (w === "GT") {
-          $ = v._6;
+        if (T === "GT") {
+          p = N._6;
           continue;
         }
-        if (w === "EQ") {
-          m = !1, N = b("Just", v._4);
+        if (T === "EQ") {
+          m = !1, y = v("Just", N._4);
           continue;
         }
       }
       f();
     }
-    return N;
-  })(n.poID), l = (() => {
+    return y;
+  })(n.poID), _ = (() => {
     if (g.tag === "Nothing")
       return 0;
     if (g.tag === "Just")
       return g._1;
     f();
-  })(), _ = ((p) => {
-    let $ = p, m = !0, N;
+  })(), l = (($) => {
+    let p = $, m = !0, y;
     for (; m; ) {
-      const v = $;
-      if (v.tag === "Leaf") {
-        m = !1, N = T;
+      const N = p;
+      if (N.tag === "Leaf") {
+        m = !1, y = J;
         continue;
       }
-      if (v.tag === "Node") {
-        const w = t.compare(e)(v._3);
-        if (w === "LT") {
-          $ = v._5;
+      if (N.tag === "Node") {
+        const T = t.compare(e)(N._3);
+        if (T === "LT") {
+          p = N._5;
           continue;
         }
-        if (w === "GT") {
-          $ = v._6;
+        if (T === "GT") {
+          p = N._6;
           continue;
         }
-        if (w === "EQ") {
-          m = !1, N = b("Just", v._4);
+        if (T === "EQ") {
+          m = !1, y = v("Just", N._4);
           continue;
         }
       }
       f();
     }
-    return N;
+    return y;
   })(n.poID), h = (() => {
-    if (_.tag === "Nothing")
+    if (l.tag === "Nothing")
       return 0;
-    if (_.tag === "Just")
-      return _._1;
+    if (l.tag === "Just")
+      return l._1;
     f();
   })();
   return (() => {
-    const p = r.src, m = ((N) => {
-      let v = N, w = !0, y;
-      for (; w; ) {
-        const k = v;
+    const $ = r.src, m = ((y) => {
+      let N = y, T = !0, w;
+      for (; T; ) {
+        const k = N;
         if (k.tag === "Leaf") {
-          w = !1, y = T;
+          T = !1, w = J;
           continue;
         }
         if (k.tag === "Node") {
-          const E = t.compare(p)(k._3);
-          if (E === "LT") {
-            v = k._5;
+          const L = t.compare($)(k._3);
+          if (L === "LT") {
+            N = k._5;
             continue;
           }
-          if (E === "GT") {
-            v = k._6;
+          if (L === "GT") {
+            N = k._6;
             continue;
           }
-          if (E === "EQ") {
-            w = !1, y = b("Just", k._4);
+          if (L === "EQ") {
+            T = !1, w = v("Just", k._4);
             continue;
           }
         }
         f();
       }
-      return y;
+      return w;
     })(n.lowestPoID);
     return (() => {
       if (m.tag === "Nothing")
@@ -4756,168 +5643,168 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
         return m._1 <= h;
       f();
     })() && (() => {
-      const N = r.tgt;
+      const y = r.tgt;
       return h <= u && (() => {
-        const w = ((y) => {
-          let k = y, E = !0, I;
-          for (; E; ) {
+        const T = ((w) => {
+          let k = w, L = !0, G;
+          for (; L; ) {
             const D = k;
             if (D.tag === "Leaf") {
-              E = !1, I = T;
+              L = !1, G = J;
               continue;
             }
             if (D.tag === "Node") {
-              const z = t.compare(N)(D._3);
-              if (z === "LT") {
+              const Y = t.compare(y)(D._3);
+              if (Y === "LT") {
                 k = D._5;
                 continue;
               }
-              if (z === "GT") {
+              if (Y === "GT") {
                 k = D._6;
                 continue;
               }
-              if (z === "EQ") {
-                E = !1, I = b("Just", D._4);
+              if (Y === "EQ") {
+                L = !1, G = v("Just", D._4);
                 continue;
               }
             }
             f();
           }
-          return I;
+          return G;
         })(n.lowestPoID);
         return (() => {
-          if (w.tag === "Nothing")
+          if (T.tag === "Nothing")
             return 0 <= h;
-          if (w.tag === "Just")
-            return w._1 <= h;
+          if (T.tag === "Just")
+            return T._1 <= h;
           f();
-        })() && h <= l;
+        })() && h <= _;
       })();
     })();
-  })() ? u >= l : u < l;
-}, x1 = (t) => {
-  const n = jt(t)(Bt);
+  })() ? u >= _ : u < _;
+}, L$ = (t) => {
+  const n = nn(t)(Ht);
   return (e) => ({
-    layer: n(O((r) => L(r, 0))(e)),
-    treeNode: Q,
-    treeEdge: Q,
-    poID: Q,
-    lowestPoID: Q,
-    cutvalue: Q,
+    layer: n(z((r) => b(r, 0))(e)),
+    treeNode: A,
+    treeEdge: A,
+    poID: A,
+    lowestPoID: A,
+    cutvalue: A,
     postOrder: 1,
-    edgeVisited: Q
+    edgeVisited: A
   });
-}, C1 = (t) => (n) => (e) => J((r) => (o) => {
+}, E$ = (t) => (n) => (e) => x((r) => (o) => {
   if ((() => {
-    const d = o.src, _ = ($) => {
-      let m = $, N = !0, v;
-      for (; N; ) {
-        const w = m;
-        if (w.tag === "Leaf") {
-          N = !1, v = !1;
+    const d = o.src, l = (p) => {
+      let m = p, y = !0, N;
+      for (; y; ) {
+        const T = m;
+        if (T.tag === "Leaf") {
+          y = !1, N = !1;
           continue;
         }
-        if (w.tag === "Node") {
-          const y = t.compare(d)(w._3);
-          if (y === "LT") {
-            m = w._5;
+        if (T.tag === "Node") {
+          const w = t.compare(d)(T._3);
+          if (w === "LT") {
+            m = T._5;
             continue;
           }
-          if (y === "GT") {
-            m = w._6;
+          if (w === "GT") {
+            m = T._6;
             continue;
           }
-          if (y === "EQ") {
-            N = !1, v = !0;
+          if (w === "EQ") {
+            y = !1, N = !0;
             continue;
           }
         }
         f();
       }
-      return v;
-    }, h = o.tgt, p = ($) => {
-      let m = $, N = !0, v;
-      for (; N; ) {
-        const w = m;
-        if (w.tag === "Leaf") {
-          N = !1, v = !1;
+      return N;
+    }, h = o.tgt, $ = (p) => {
+      let m = p, y = !0, N;
+      for (; y; ) {
+        const T = m;
+        if (T.tag === "Leaf") {
+          y = !1, N = !1;
           continue;
         }
-        if (w.tag === "Node") {
-          const y = t.compare(h)(w._3);
-          if (y === "LT") {
-            m = w._5;
+        if (T.tag === "Node") {
+          const w = t.compare(h)(T._3);
+          if (w === "LT") {
+            m = T._5;
             continue;
           }
-          if (y === "GT") {
-            m = w._6;
+          if (w === "GT") {
+            m = T._6;
             continue;
           }
-          if (y === "EQ") {
-            N = !1, v = !0;
+          if (w === "EQ") {
+            y = !1, N = !0;
             continue;
           }
         }
         f();
       }
-      return v;
+      return N;
     };
-    return _(e.treeNode) === p(e.treeNode);
+    return l(e.treeNode) === $(e.treeNode);
   })())
     return r;
   const i = o.tgt, u = ((d) => {
-    let _ = d, h = !0, p;
+    let l = d, h = !0, $;
     for (; h; ) {
-      const $ = _;
-      if ($.tag === "Leaf") {
-        h = !1, p = T;
+      const p = l;
+      if (p.tag === "Leaf") {
+        h = !1, $ = J;
         continue;
       }
-      if ($.tag === "Node") {
-        const m = t.compare(i)($._3);
+      if (p.tag === "Node") {
+        const m = t.compare(i)(p._3);
         if (m === "LT") {
-          _ = $._5;
+          l = p._5;
           continue;
         }
         if (m === "GT") {
-          _ = $._6;
+          l = p._6;
           continue;
         }
         if (m === "EQ") {
-          h = !1, p = b("Just", $._4);
+          h = !1, $ = v("Just", p._4);
           continue;
         }
       }
       f();
     }
-    return p;
+    return $;
   })(e.layer), c = o.src, g = ((d) => {
-    let _ = d, h = !0, p;
+    let l = d, h = !0, $;
     for (; h; ) {
-      const $ = _;
-      if ($.tag === "Leaf") {
-        h = !1, p = T;
+      const p = l;
+      if (p.tag === "Leaf") {
+        h = !1, $ = J;
         continue;
       }
-      if ($.tag === "Node") {
-        const m = t.compare(c)($._3);
+      if (p.tag === "Node") {
+        const m = t.compare(c)(p._3);
         if (m === "LT") {
-          _ = $._5;
+          l = p._5;
           continue;
         }
         if (m === "GT") {
-          _ = $._6;
+          l = p._6;
           continue;
         }
         if (m === "EQ") {
-          h = !1, p = b("Just", $._4);
+          h = !1, $ = v("Just", p._4);
           continue;
         }
       }
       f();
     }
-    return p;
-  })(e.layer), l = (() => {
+    return $;
+  })(e.layer), _ = (() => {
     if (u.tag === "Nothing") {
       if (g.tag === "Nothing")
         return -o.delta;
@@ -4933,31 +5820,31 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
     }
     f();
   })();
-  return l < r.slack ? { edge: b("Just", o), slack: l } : r;
-})({ edge: T, slack: 1e9 })(n).edge, S1 = (t) => {
-  const n = jt(t)(Bt);
+  return _ < r.slack ? { edge: v("Just", o), slack: _ } : r;
+})({ edge: J, slack: 1e9 })(n).edge, S$ = (t) => {
+  const n = nn(t)(Ht);
   return (e) => (r) => {
-    const o = J((i) => (s) => Si(i)((() => {
+    const o = x((i) => (s) => ru(i)((() => {
       const c = ((a) => {
-        let g = a, l = !0, d;
-        for (; l; ) {
-          const _ = g;
-          if (_.tag === "Leaf") {
-            l = !1, d = T;
+        let g = a, _ = !0, d;
+        for (; _; ) {
+          const l = g;
+          if (l.tag === "Leaf") {
+            _ = !1, d = J;
             continue;
           }
-          if (_.tag === "Node") {
-            const h = t.compare(s)(_._3);
+          if (l.tag === "Node") {
+            const h = t.compare(s)(l._3);
             if (h === "LT") {
-              g = _._5;
+              g = l._5;
               continue;
             }
             if (h === "GT") {
-              g = _._6;
+              g = l._6;
               continue;
             }
             if (h === "EQ") {
-              l = !1, d = b("Just", _._4);
+              _ = !1, d = v("Just", l._4);
               continue;
             }
           }
@@ -4971,35 +5858,35 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
         return c._1;
       f();
     })()))(1e9)(e);
-    return n(O((i) => L(
+    return n(z((i) => b(
       i,
       (() => {
         const u = ((c) => {
-          let a = c, g = !0, l;
+          let a = c, g = !0, _;
           for (; g; ) {
             const d = a;
             if (d.tag === "Leaf") {
-              g = !1, l = T;
+              g = !1, _ = J;
               continue;
             }
             if (d.tag === "Node") {
-              const _ = t.compare(i)(d._3);
-              if (_ === "LT") {
+              const l = t.compare(i)(d._3);
+              if (l === "LT") {
                 a = d._5;
                 continue;
               }
-              if (_ === "GT") {
+              if (l === "GT") {
                 a = d._6;
                 continue;
               }
-              if (_ === "EQ") {
-                g = !1, l = b("Just", d._4);
+              if (l === "EQ") {
+                g = !1, _ = v("Just", d._4);
                 continue;
               }
             }
             f();
           }
-          return l;
+          return _;
         })(r);
         if (u.tag === "Nothing")
           return -o;
@@ -5009,605 +5896,605 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
       })()
     ))(e));
   };
-}, ta = (t) => {
+}, C0 = (t) => {
   const n = t.Eq0();
   return (e) => (r) => (o) => {
-    const i = J((u) => (c) => {
-      const a = ta(t)(e)(n.eq(c.src)(r) ? c.tgt : c.src)({ ...u.st, edgeVisited: Y(rt)(c.eid)()(u.st.edgeVisited) });
-      return { lowest: Si(u.lowest)(a.lowest), st: a.st };
-    })({ lowest: 1e9, st: o })(gt(
-      (u) => _e(u.eid)(o.treeEdge) && (n.eq(u.src)(r) || n.eq(u.tgt)(r)) && !_e(u.eid)(o.edgeVisited),
+    const i = x((u) => (c) => {
+      const a = C0(t)(e)(n.eq(c.src)(r) ? c.tgt : c.src)({ ...u.st, edgeVisited: U(it)(c.eid)()(u.st.edgeVisited) });
+      return { lowest: ru(u.lowest)(a.lowest), st: a.st };
+    })({ lowest: 1e9, st: o })(lt(
+      (u) => Qe(u.eid)(o.treeEdge) && (n.eq(u.src)(r) || n.eq(u.tgt)(r)) && !Qe(u.eid)(o.edgeVisited),
       e
-    )), s = Si(i.lowest)(i.st.postOrder);
+    )), s = ru(i.lowest)(i.st.postOrder);
     return {
       lowest: s,
       st: {
         ...i.st,
-        poID: Y(t)(r)(i.st.postOrder)(i.st.poID),
-        lowestPoID: Y(t)(r)(s)(i.st.lowestPoID),
+        poID: U(t)(r)(i.st.postOrder)(i.st.poID),
+        lowestPoID: U(t)(r)(s)(i.st.lowestPoID),
         postOrder: i.st.postOrder + 1 | 0
       }
     };
   };
-}, na = (t) => {
-  const n = ta(t);
-  return (e) => (r) => (o) => 0 < e.length ? n(r)(e[0])({ ...o, edgeVisited: Q, postOrder: 1, poID: Q, lowestPoID: Q }).st : o;
-}, G1 = (t) => {
+}, P0 = (t) => {
+  const n = C0(t);
+  return (e) => (r) => (o) => 0 < e.length ? n(r)(e[0])({ ...o, edgeVisited: A, postOrder: 1, poID: A, lowestPoID: A }).st : o;
+}, C$ = (t) => {
   const n = t.Eq0();
-  return (e) => (r) => (o) => gt((i) => _e(i.eid)(r.treeEdge) && (n.eq(i.src)(o) || n.eq(i.tgt)(o)), e);
-}, I1 = (t) => (n) => ln((e) => {
-  const r = Gi(e.eid)(n.cutvalue);
-  return _e(e.eid)(n.treeEdge) && (() => {
+  return (e) => (r) => (o) => lt((i) => Qe(i.eid)(r.treeEdge) && (n.eq(i.src)(o) || n.eq(i.tgt)(o)), e);
+}, P$ = (t) => (n) => jt((e) => {
+  const r = ou(e.eid)(n.cutvalue);
+  return Qe(e.eid)(n.treeEdge) && (() => {
     if (r.tag === "Nothing")
       return !1;
     if (r.tag === "Just")
       return r._1 < -1e-10;
     f();
   })();
-})(t), ea = (t) => {
-  const n = Ii(t);
+})(t), G0 = (t) => {
+  const n = iu(t);
   return (e) => (r) => (o) => {
-    const i = 0 < e.length ? b("Just", e[0]) : T;
+    const i = 0 < e.length ? v("Just", e[0]) : J;
     if (i.tag === "Nothing")
       return o;
     if (i.tag === "Just") {
-      const s = n(r)(i._1)({ ...o, edgeVisited: Q, treeNode: Q, treeEdge: Q });
+      const s = n(r)(i._1)({ ...o, edgeVisited: A, treeNode: A, treeEdge: A });
       if (s.count >= e.length)
         return s.st;
-      const u = C1(t)(r)(s.st);
+      const u = E$(t)(r)(s.st);
       if (u.tag === "Nothing")
         return s.st;
       if (u.tag === "Just") {
-        const c = u._1.tgt, g = (($) => {
-          let m = $, N = !0, v;
-          for (; N; ) {
-            const w = m;
-            if (w.tag === "Leaf") {
-              N = !1, v = T;
+        const c = u._1.tgt, g = ((p) => {
+          let m = p, y = !0, N;
+          for (; y; ) {
+            const T = m;
+            if (T.tag === "Leaf") {
+              y = !1, N = J;
               continue;
             }
-            if (w.tag === "Node") {
-              const y = t.compare(c)(w._3);
-              if (y === "LT") {
-                m = w._5;
+            if (T.tag === "Node") {
+              const w = t.compare(c)(T._3);
+              if (w === "LT") {
+                m = T._5;
                 continue;
               }
-              if (y === "GT") {
-                m = w._6;
+              if (w === "GT") {
+                m = T._6;
                 continue;
               }
-              if (y === "EQ") {
-                N = !1, v = b("Just", w._4);
+              if (w === "EQ") {
+                y = !1, N = v("Just", T._4);
                 continue;
               }
             }
             f();
           }
-          return v;
-        })(s.st.layer), l = u._1.src, _ = (($) => {
-          let m = $, N = !0, v;
-          for (; N; ) {
-            const w = m;
-            if (w.tag === "Leaf") {
-              N = !1, v = T;
+          return N;
+        })(s.st.layer), _ = u._1.src, l = ((p) => {
+          let m = p, y = !0, N;
+          for (; y; ) {
+            const T = m;
+            if (T.tag === "Leaf") {
+              y = !1, N = J;
               continue;
             }
-            if (w.tag === "Node") {
-              const y = t.compare(l)(w._3);
-              if (y === "LT") {
-                m = w._5;
+            if (T.tag === "Node") {
+              const w = t.compare(_)(T._3);
+              if (w === "LT") {
+                m = T._5;
                 continue;
               }
-              if (y === "GT") {
-                m = w._6;
+              if (w === "GT") {
+                m = T._6;
                 continue;
               }
-              if (y === "EQ") {
-                N = !1, v = b("Just", w._4);
+              if (w === "EQ") {
+                y = !1, N = v("Just", T._4);
                 continue;
               }
             }
             f();
           }
-          return v;
+          return N;
         })(s.st.layer), h = (() => {
           if (g.tag === "Nothing") {
-            if (_.tag === "Nothing")
+            if (l.tag === "Nothing")
               return -u._1.delta;
-            if (_.tag === "Just")
-              return -_._1 - u._1.delta | 0;
+            if (l.tag === "Just")
+              return -l._1 - u._1.delta | 0;
             f();
           }
           if (g.tag === "Just") {
-            if (_.tag === "Nothing")
+            if (l.tag === "Nothing")
               return (g._1 - 0 | 0) - u._1.delta | 0;
-            if (_.tag === "Just")
-              return (g._1 - _._1 | 0) - u._1.delta | 0;
+            if (l.tag === "Just")
+              return (g._1 - l._1 | 0) - u._1.delta | 0;
           }
           f();
-        })(), p = (() => {
-          const $ = u._1.tgt;
-          return ((N) => {
-            let v = N, w = !0, y;
-            for (; w; ) {
-              const k = v;
+        })(), $ = (() => {
+          const p = u._1.tgt;
+          return ((y) => {
+            let N = y, T = !0, w;
+            for (; T; ) {
+              const k = N;
               if (k.tag === "Leaf") {
-                w = !1, y = !1;
+                T = !1, w = !1;
                 continue;
               }
               if (k.tag === "Node") {
-                const E = t.compare($)(k._3);
-                if (E === "LT") {
-                  v = k._5;
+                const L = t.compare(p)(k._3);
+                if (L === "LT") {
+                  N = k._5;
                   continue;
                 }
-                if (E === "GT") {
-                  v = k._6;
+                if (L === "GT") {
+                  N = k._6;
                   continue;
                 }
-                if (E === "EQ") {
-                  w = !1, y = !0;
+                if (L === "EQ") {
+                  T = !1, w = !0;
                   continue;
                 }
               }
               f();
             }
-            return y;
+            return w;
           })(s.st.treeNode);
         })() ? -h : h;
-        return ea(t)(e)(r)({
+        return G0(t)(e)(r)({
           ...s.st,
-          layer: J(($) => (m) => ((v) => {
-            let w = v, y = !0, k;
-            for (; y; ) {
-              const E = w;
-              if (E.tag === "Leaf") {
-                y = !1, k = !1;
+          layer: x((p) => (m) => ((N) => {
+            let T = N, w = !0, k;
+            for (; w; ) {
+              const L = T;
+              if (L.tag === "Leaf") {
+                w = !1, k = !1;
                 continue;
               }
-              if (E.tag === "Node") {
-                const I = t.compare(m)(E._3);
-                if (I === "LT") {
-                  w = E._5;
+              if (L.tag === "Node") {
+                const G = t.compare(m)(L._3);
+                if (G === "LT") {
+                  T = L._5;
                   continue;
                 }
-                if (I === "GT") {
-                  w = E._6;
+                if (G === "GT") {
+                  T = L._6;
                   continue;
                 }
-                if (I === "EQ") {
-                  y = !1, k = !0;
+                if (G === "EQ") {
+                  w = !1, k = !0;
                   continue;
                 }
               }
               f();
             }
             return k;
-          })(s.st.treeNode) ? Y(t)(m)((() => {
-            const v = ((w) => {
-              let y = w, k = !0, E;
+          })(s.st.treeNode) ? U(t)(m)((() => {
+            const N = ((T) => {
+              let w = T, k = !0, L;
               for (; k; ) {
-                const I = y;
-                if (I.tag === "Leaf") {
-                  k = !1, E = T;
+                const G = w;
+                if (G.tag === "Leaf") {
+                  k = !1, L = J;
                   continue;
                 }
-                if (I.tag === "Node") {
-                  const D = t.compare(m)(I._3);
+                if (G.tag === "Node") {
+                  const D = t.compare(m)(G._3);
                   if (D === "LT") {
-                    y = I._5;
+                    w = G._5;
                     continue;
                   }
                   if (D === "GT") {
-                    y = I._6;
+                    w = G._6;
                     continue;
                   }
                   if (D === "EQ") {
-                    k = !1, E = b("Just", I._4);
+                    k = !1, L = v("Just", G._4);
                     continue;
                   }
                 }
                 f();
               }
-              return E;
+              return L;
             })(s.st.layer);
-            if (v.tag === "Nothing")
-              return 0 + p | 0;
-            if (v.tag === "Just")
-              return v._1 + p | 0;
+            if (N.tag === "Nothing")
+              return 0 + $ | 0;
+            if (N.tag === "Just")
+              return N._1 + $ | 0;
             f();
-          })())($) : $)(s.st.layer)(e)
+          })())(p) : p)(s.st.layer)(e)
         });
       }
     }
     f();
   };
-}, P1 = (t) => (n) => (e) => (r) => J((o) => (i) => {
-  if (wo(t)(r)(i.src)(e) && !wo(t)(r)(i.tgt)(e)) {
-    const s = i.tgt, c = ((_) => {
-      let h = _, p = !0, $;
-      for (; p; ) {
+}, G$ = (t) => (n) => (e) => (r) => x((o) => (i) => {
+  if (Ti(t)(r)(i.src)(e) && !Ti(t)(r)(i.tgt)(e)) {
+    const s = i.tgt, c = ((l) => {
+      let h = l, $ = !0, p;
+      for (; $; ) {
         const m = h;
         if (m.tag === "Leaf") {
-          p = !1, $ = T;
+          $ = !1, p = J;
           continue;
         }
         if (m.tag === "Node") {
-          const N = t.compare(s)(m._3);
-          if (N === "LT") {
+          const y = t.compare(s)(m._3);
+          if (y === "LT") {
             h = m._5;
             continue;
           }
-          if (N === "GT") {
+          if (y === "GT") {
             h = m._6;
             continue;
           }
-          if (N === "EQ") {
-            p = !1, $ = b("Just", m._4);
+          if (y === "EQ") {
+            $ = !1, p = v("Just", m._4);
             continue;
           }
         }
         f();
       }
-      return $;
-    })(r.layer), a = i.src, l = ((_) => {
-      let h = _, p = !0, $;
-      for (; p; ) {
+      return p;
+    })(r.layer), a = i.src, _ = ((l) => {
+      let h = l, $ = !0, p;
+      for (; $; ) {
         const m = h;
         if (m.tag === "Leaf") {
-          p = !1, $ = T;
+          $ = !1, p = J;
           continue;
         }
         if (m.tag === "Node") {
-          const N = t.compare(a)(m._3);
-          if (N === "LT") {
+          const y = t.compare(a)(m._3);
+          if (y === "LT") {
             h = m._5;
             continue;
           }
-          if (N === "GT") {
+          if (y === "GT") {
             h = m._6;
             continue;
           }
-          if (N === "EQ") {
-            p = !1, $ = b("Just", m._4);
+          if (y === "EQ") {
+            $ = !1, p = v("Just", m._4);
             continue;
           }
         }
         f();
       }
-      return $;
+      return p;
     })(r.layer), d = (() => {
       if (c.tag === "Nothing") {
-        if (l.tag === "Nothing")
+        if (_.tag === "Nothing")
           return -i.delta;
-        if (l.tag === "Just")
-          return -l._1 - i.delta | 0;
+        if (_.tag === "Just")
+          return -_._1 - i.delta | 0;
         f();
       }
       if (c.tag === "Just") {
-        if (l.tag === "Nothing")
+        if (_.tag === "Nothing")
           return (c._1 - 0 | 0) - i.delta | 0;
-        if (l.tag === "Just")
-          return (c._1 - l._1 | 0) - i.delta | 0;
+        if (_.tag === "Just")
+          return (c._1 - _._1 | 0) - i.delta | 0;
       }
       f();
     })();
     if (d < o.slack)
-      return { edge: b("Just", i), slack: d };
+      return { edge: v("Just", i), slack: d };
   }
   return o;
-})({ edge: T, slack: 1e9 })(n).edge, A1 = (t) => {
+})({ edge: J, slack: 1e9 })(n).edge, I$ = (t) => {
   const n = t.Eq0();
   return (e) => (r) => (o) => (i) => {
     const s = i.tgt, u = i.src;
-    return J((c) => (a) => {
+    return x((c) => (a) => {
       if ((() => {
-        const g = Gi(a.eid)(r.cutvalue);
+        const g = ou(a.eid)(r.cutvalue);
         if (g.tag === "Just")
           return !0;
         if (g.tag === "Nothing")
           return !1;
         f();
       })()) {
-        const g = Gi(a.eid)(r.cutvalue), l = (() => {
+        const g = ou(a.eid)(r.cutvalue), _ = (() => {
           if (g.tag === "Nothing")
             return 0;
           if (g.tag === "Just")
             return g._1;
           f();
         })();
-        return n.eq(u)(a.src) || n.eq(s)(a.tgt) ? c - (l - a.weight) : c + (l - a.weight);
+        return n.eq(u)(a.src) || n.eq(s)(a.tgt) ? c - (_ - a.weight) : c + (_ - a.weight);
       }
       return n.eq(o)(u) ? n.eq(a.src)(o) ? c + a.weight : c - a.weight : n.eq(a.src)(o) ? c - a.weight : c + a.weight;
-    })(i.weight)(gt((c) => c.eid !== i.eid && (n.eq(c.src)(o) || n.eq(c.tgt)(o)), e));
+    })(i.weight)(lt((c) => c.eid !== i.eid && (n.eq(c.src)(o) || n.eq(c.tgt)(o)), e));
   };
-}, R1 = (t) => {
-  const n = A1(t);
+}, A$ = (t) => {
+  const n = I$(t);
   return (e) => (r) => (o) => {
     const i = (u, c, a) => {
-      const l = ((d) => {
-        let _ = d, h = !0, p;
+      const _ = ((d) => {
+        let l = d, h = !0, $;
         for (; h; ) {
-          const $ = _;
-          if ($.tag === "Leaf") {
-            h = !1, p = T;
+          const p = l;
+          if (p.tag === "Leaf") {
+            h = !1, $ = J;
             continue;
           }
-          if ($.tag === "Node") {
-            const m = t.compare(u)($._3);
+          if (p.tag === "Node") {
+            const m = t.compare(u)(p._3);
             if (m === "LT") {
-              _ = $._5;
+              l = p._5;
               continue;
             }
             if (m === "GT") {
-              _ = $._6;
+              l = p._6;
               continue;
             }
             if (m === "EQ") {
-              h = !1, p = b("Just", $._4);
+              h = !1, $ = v("Just", p._4);
               continue;
             }
           }
           f();
         }
-        return p;
+        return $;
       })(a);
-      if (l.tag === "Just")
-        return Y(t)(u)(gt((d) => d.eid !== c.eid, l._1))(a);
-      if (l.tag === "Nothing")
+      if (_.tag === "Just")
+        return U(t)(u)(lt((d) => d.eid !== c.eid, _._1))(a);
+      if (_.tag === "Nothing")
         return a;
       f();
     };
     return ((u) => (c) => {
-      let a = u, g = c, l = !0, d;
-      for (; l; ) {
-        const _ = a, h = g, $ = ((N) => {
-          let v = N, w = !0, y;
-          for (; w; ) {
-            const k = v;
+      let a = u, g = c, _ = !0, d;
+      for (; _; ) {
+        const l = a, h = g, p = ((y) => {
+          let N = y, T = !0, w;
+          for (; T; ) {
+            const k = N;
             if (k.tag === "Leaf") {
-              w = !1, y = T;
+              T = !1, w = J;
               continue;
             }
             if (k.tag === "Node") {
-              const E = t.compare(h)(k._3);
-              if (E === "LT") {
-                v = k._5;
+              const L = t.compare(h)(k._3);
+              if (L === "LT") {
+                N = k._5;
                 continue;
               }
-              if (E === "GT") {
-                v = k._6;
+              if (L === "GT") {
+                N = k._6;
                 continue;
               }
-              if (E === "EQ") {
-                w = !1, y = b("Just", k._4);
+              if (L === "EQ") {
+                T = !1, w = v("Just", k._4);
                 continue;
               }
             }
             f();
           }
-          return y;
-        })(_.unknown), m = (() => {
-          if ($.tag === "Nothing")
+          return w;
+        })(l.unknown), m = (() => {
+          if (p.tag === "Nothing")
             return [];
-          if ($.tag === "Just")
-            return $._1;
+          if (p.tag === "Just")
+            return p._1;
           f();
         })();
         if (m.length === 1) {
-          const N = t.Eq0().eq(m[0].src)(h) ? m[0].tgt : m[0].src;
+          const y = t.Eq0().eq(m[0].src)(h) ? m[0].tgt : m[0].src;
           a = {
-            unknown: i(h, m[0], i(N, m[0], _.unknown)),
-            cutvalue: Y(rt)(m[0].eid)(n(e)(_)(h)(m[0]))(_.cutvalue)
-          }, g = N;
+            unknown: i(h, m[0], i(y, m[0], l.unknown)),
+            cutvalue: U(it)(m[0].eid)(n(e)(l)(h)(m[0]))(l.cutvalue)
+          }, g = y;
           continue;
         }
-        l = !1, d = _;
+        _ = !1, d = l;
       }
       return d;
     })(r)(o);
   };
-}, ra = (t) => {
+}, I0 = (t) => {
   const n = t.Eq0(), e = t.Eq0(), r = { eq: (a) => (g) => a.delta === g.delta && a.eid === g.eid && e.eq(a.src)(g.src) && n.eq(a.tgt)(g.tgt) && a.weight === g.weight }, o = {
     compare: (a) => (g) => {
-      const l = rt.compare(a.delta)(g.delta);
-      if (l === "LT" || l === "GT" || l !== "EQ")
-        return l;
-      const d = rt.compare(a.eid)(g.eid);
-      if (d === "LT" || d === "GT" || d !== "EQ")
-        return d;
-      const _ = t.compare(a.src)(g.src);
+      const _ = it.compare(a.delta)(g.delta);
       if (_ === "LT" || _ === "GT" || _ !== "EQ")
         return _;
+      const d = it.compare(a.eid)(g.eid);
+      if (d === "LT" || d === "GT" || d !== "EQ")
+        return d;
+      const l = t.compare(a.src)(g.src);
+      if (l === "LT" || l === "GT" || l !== "EQ")
+        return l;
       const h = t.compare(a.tgt)(g.tgt);
       if (h === "LT" || h === "GT" || h !== "EQ")
         return h;
-      const p = pt.compare(a.weight)(g.weight);
-      return p === "LT" || p === "GT" || p !== "EQ" ? p : yn;
+      const $ = ft.compare(a.weight)(g.weight);
+      return $ === "LT" || $ === "GT" || $ !== "EQ" ? $ : Gn;
     },
     Eq0: () => r
-  }, i = J((a) => (g) => Y(o)(g)()(a))(Q), s = G1(t), u = jt(t)(Bt), c = R1(t);
-  return (a) => (g) => (l) => {
+  }, i = x((a) => (g) => U(o)(g)()(a))(A), s = C$(t), u = nn(t)(Ht), c = A$(t);
+  return (a) => (g) => (_) => {
     const d = {
-      unknown: u(O((_) => L(
-        _,
-        Et(Pn.foldr, i(s(g)(l)(_)))
+      unknown: u(z((l) => b(
+        l,
+        Lt(On.foldr, i(s(g)(_)(l)))
       ))(a)),
-      cutvalue: Q
+      cutvalue: A
     };
     return {
-      ...l,
-      cutvalue: J(c(g))(d)(gt(
-        (_) => {
-          const p = (($) => {
-            let m = $, N = !0, v;
-            for (; N; ) {
-              const w = m;
-              if (w.tag === "Leaf") {
-                N = !1, v = T;
+      ..._,
+      cutvalue: x(c(g))(d)(lt(
+        (l) => {
+          const $ = ((p) => {
+            let m = p, y = !0, N;
+            for (; y; ) {
+              const T = m;
+              if (T.tag === "Leaf") {
+                y = !1, N = J;
                 continue;
               }
-              if (w.tag === "Node") {
-                const y = t.compare(_)(w._3);
-                if (y === "LT") {
-                  m = w._5;
+              if (T.tag === "Node") {
+                const w = t.compare(l)(T._3);
+                if (w === "LT") {
+                  m = T._5;
                   continue;
                 }
-                if (y === "GT") {
-                  m = w._6;
+                if (w === "GT") {
+                  m = T._6;
                   continue;
                 }
-                if (y === "EQ") {
-                  N = !1, v = b("Just", w._4);
+                if (w === "EQ") {
+                  y = !1, N = v("Just", T._4);
                   continue;
                 }
               }
               f();
             }
-            return v;
+            return N;
           })(d.unknown);
-          if (p.tag === "Nothing")
+          if ($.tag === "Nothing")
             return !1;
-          if (p.tag === "Just")
-            return p._1.length === 1;
+          if ($.tag === "Just")
+            return $._1.length === 1;
           f();
         },
         a
       )).cutvalue
     };
   };
-}, F1 = (t) => {
-  const n = na(t), e = ra(t);
+}, F$ = (t) => {
+  const n = P0(t), e = I0(t);
   return (r) => (o) => (i) => (s) => (u) => {
-    const c = { ...u, treeEdge: Y(rt)(s.eid)()(xr(rt)(i.eid)(u.treeEdge)) }, a = s.tgt, l = ((m) => {
-      let N = m, v = !0, w;
-      for (; v; ) {
-        const y = N;
-        if (y.tag === "Leaf") {
-          v = !1, w = T;
+    const c = { ...u, treeEdge: U(it)(s.eid)()($o(it)(i.eid)(u.treeEdge)) }, a = s.tgt, _ = ((m) => {
+      let y = m, N = !0, T;
+      for (; N; ) {
+        const w = y;
+        if (w.tag === "Leaf") {
+          N = !1, T = J;
           continue;
         }
-        if (y.tag === "Node") {
-          const k = t.compare(a)(y._3);
+        if (w.tag === "Node") {
+          const k = t.compare(a)(w._3);
           if (k === "LT") {
-            N = y._5;
+            y = w._5;
             continue;
           }
           if (k === "GT") {
-            N = y._6;
+            y = w._6;
             continue;
           }
           if (k === "EQ") {
-            v = !1, w = b("Just", y._4);
+            N = !1, T = v("Just", w._4);
             continue;
           }
         }
         f();
       }
-      return w;
+      return T;
     })(c.layer), d = s.src, h = ((m) => {
-      let N = m, v = !0, w;
-      for (; v; ) {
-        const y = N;
-        if (y.tag === "Leaf") {
-          v = !1, w = T;
+      let y = m, N = !0, T;
+      for (; N; ) {
+        const w = y;
+        if (w.tag === "Leaf") {
+          N = !1, T = J;
           continue;
         }
-        if (y.tag === "Node") {
-          const k = t.compare(d)(y._3);
+        if (w.tag === "Node") {
+          const k = t.compare(d)(w._3);
           if (k === "LT") {
-            N = y._5;
+            y = w._5;
             continue;
           }
           if (k === "GT") {
-            N = y._6;
+            y = w._6;
             continue;
           }
           if (k === "EQ") {
-            v = !1, w = b("Just", y._4);
+            N = !1, T = v("Just", w._4);
             continue;
           }
         }
         f();
       }
-      return w;
-    })(c.layer), p = (() => {
-      if (l.tag === "Nothing") {
+      return T;
+    })(c.layer), $ = (() => {
+      if (_.tag === "Nothing") {
         if (h.tag === "Nothing")
           return -s.delta;
         if (h.tag === "Just")
           return -h._1 - s.delta | 0;
         f();
       }
-      if (l.tag === "Just") {
+      if (_.tag === "Just") {
         if (h.tag === "Nothing")
-          return (l._1 - 0 | 0) - s.delta | 0;
+          return (_._1 - 0 | 0) - s.delta | 0;
         if (h.tag === "Just")
-          return (l._1 - h._1 | 0) - s.delta | 0;
+          return (_._1 - h._1 | 0) - s.delta | 0;
       }
       f();
-    })(), $ = wo(t)(c)(s.tgt)(i) ? -p : p;
+    })(), p = Ti(t)(c)(s.tgt)(i) ? $ : -$;
     return e(r)(o)(n(r)(o)({
       ...c,
-      layer: J((m) => (N) => wo(t)(c)(N)(i) ? m : Y(t)(N)((() => {
-        const w = ((y) => {
-          let k = y, E = !0, I;
-          for (; E; ) {
+      layer: x((m) => (y) => Ti(t)(c)(y)(i) ? m : U(t)(y)((() => {
+        const T = ((w) => {
+          let k = w, L = !0, G;
+          for (; L; ) {
             const D = k;
             if (D.tag === "Leaf") {
-              E = !1, I = T;
+              L = !1, G = J;
               continue;
             }
             if (D.tag === "Node") {
-              const z = t.compare(N)(D._3);
-              if (z === "LT") {
+              const Y = t.compare(y)(D._3);
+              if (Y === "LT") {
                 k = D._5;
                 continue;
               }
-              if (z === "GT") {
+              if (Y === "GT") {
                 k = D._6;
                 continue;
               }
-              if (z === "EQ") {
-                E = !1, I = b("Just", D._4);
+              if (Y === "EQ") {
+                L = !1, G = v("Just", D._4);
                 continue;
               }
             }
             f();
           }
-          return I;
+          return G;
         })(c.layer);
-        if (w.tag === "Nothing")
-          return 0 + $ | 0;
-        if (w.tag === "Just")
-          return w._1 + $ | 0;
+        if (T.tag === "Nothing")
+          return 0 + p | 0;
+        if (T.tag === "Just")
+          return T._1 + p | 0;
         f();
       })())(m))(c.layer)(r)
     }));
   };
-}, B1 = (t) => {
-  const n = F1(t);
+}, R$ = (t) => {
+  const n = F$(t);
   return (e) => (r) => (o) => (i) => ((u) => (c) => {
-    let a = u, g = c, l = !0, d;
-    for (; l; ) {
-      const _ = a, h = g;
-      if (_ === 0) {
-        l = !1, d = h;
+    let a = u, g = c, _ = !0, d;
+    for (; _; ) {
+      const l = a, h = g;
+      if (l === 0) {
+        _ = !1, d = h;
         continue;
       }
-      const p = I1(o)(h);
-      if (p.tag === "Nothing") {
-        l = !1, d = h;
+      const $ = P$(o)(h);
+      if ($.tag === "Nothing") {
+        _ = !1, d = h;
         continue;
       }
-      if (p.tag === "Just") {
-        const $ = P1(t)(o)(p._1)(h);
-        if ($.tag === "Nothing") {
-          l = !1, d = h;
+      if ($.tag === "Just") {
+        const p = G$(t)(o)($._1)(h);
+        if (p.tag === "Nothing") {
+          _ = !1, d = h;
           continue;
         }
-        if ($.tag === "Just") {
-          a = _ - 1 | 0, g = n(r)(o)(p._1)($._1)(h);
+        if (p.tag === "Just") {
+          a = l - 1 | 0, g = n(r)(o)($._1)(p._1)(h);
           continue;
         }
       }
@@ -5615,191 +6502,191 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
     }
     return d;
   })(e)(i);
-}, Q1 = (t) => {
-  const n = ra(t), e = na(t), r = ea(t);
+}, B$ = (t) => {
+  const n = I0(t), e = P0(t), r = G0(t);
   return (o) => (i) => (s) => n(o)(i)(e(o)(i)(r(o)(i)(s)));
-}, mu = (t) => (n) => J((e) => (r) => yt(t)(fn)(n(r))([r])(e))(Q), D1 = (t) => {
-  const n = jt(t)(Bt);
+}, ua = (t) => (n) => x((e) => (r) => vt(t)(rn)(n(r))([r])(e))(A), Q$ = (t) => {
+  const n = nn(t)(Ht);
   return (e) => (r) => (o) => {
-    const i = (c) => (a) => (g) => (l) => {
-      let d = c, _ = a, h = g, p = l, $ = !0, m;
-      for (; $; ) {
-        const N = d, v = _, w = h, y = p, k = Wt((E) => T, (E) => (I) => b("Just", { head: E, tail: I }), w);
+    const i = (c) => (a) => (g) => (_) => {
+      let d = c, l = a, h = g, $ = _, p = !0, m;
+      for (; p; ) {
+        const y = d, N = l, T = h, w = $, k = Rt((L) => J, (L) => (G) => v("Just", { head: L, tail: G }), T);
         if (k.tag === "Nothing") {
-          $ = !1, m = y;
+          p = !1, m = w;
           continue;
         }
         if (k.tag === "Just") {
-          const E = k._1.head, D = ((P) => {
-            let R = P, j = !0, et;
-            for (; j; ) {
-              const X = R;
-              if (X.tag === "Leaf") {
-                j = !1, et = T;
+          const L = k._1.head, D = ((P) => {
+            let B = P, tt = !0, ct;
+            for (; tt; ) {
+              const q = B;
+              if (q.tag === "Leaf") {
+                tt = !1, ct = J;
                 continue;
               }
-              if (X.tag === "Node") {
-                const A = t.compare(E)(X._3);
-                if (A === "LT") {
-                  R = X._5;
+              if (q.tag === "Node") {
+                const R = t.compare(L)(q._3);
+                if (R === "LT") {
+                  B = q._5;
                   continue;
                 }
-                if (A === "GT") {
-                  R = X._6;
+                if (R === "GT") {
+                  B = q._6;
                   continue;
                 }
-                if (A === "EQ") {
-                  j = !1, et = b("Just", X._4);
+                if (R === "EQ") {
+                  tt = !1, ct = v("Just", q._4);
                   continue;
                 }
               }
               f();
             }
-            return et;
-          })(y.layer), z = (() => {
+            return ct;
+          })(w.layer), Y = (() => {
             if (D.tag === "Nothing")
               return 0;
             if (D.tag === "Just")
               return D._1;
             f();
-          })(), U = J((P) => (R) => {
-            const j = R.tgt, X = ((x) => {
-              let C = x, q = !0, S;
-              for (; q; ) {
-                const F = C;
-                if (F.tag === "Leaf") {
-                  q = !1, S = T;
+          })(), X = x((P) => (B) => {
+            const tt = B.tgt, q = ((E) => {
+              let S = E, O = !0, I;
+              for (; O; ) {
+                const W = S;
+                if (W.tag === "Leaf") {
+                  O = !1, I = J;
                   continue;
                 }
-                if (F.tag === "Node") {
-                  const W = t.compare(j)(F._3);
-                  if (W === "LT") {
-                    C = F._5;
+                if (W.tag === "Node") {
+                  const Q = t.compare(tt)(W._3);
+                  if (Q === "LT") {
+                    S = W._5;
                     continue;
                   }
-                  if (W === "GT") {
-                    C = F._6;
+                  if (Q === "GT") {
+                    S = W._6;
                     continue;
                   }
-                  if (W === "EQ") {
-                    q = !1, S = b("Just", F._4);
+                  if (Q === "EQ") {
+                    O = !1, I = v("Just", W._4);
                     continue;
                   }
                 }
                 f();
               }
-              return S;
-            })(P.incident), A = (() => {
-              if (X.tag === "Nothing")
+              return I;
+            })(P.incident), R = (() => {
+              if (q.tag === "Nothing")
                 return -1;
-              if (X.tag === "Just")
-                return X._1 - 1 | 0;
+              if (q.tag === "Just")
+                return q._1 - 1 | 0;
               f();
             })();
             return {
               st: {
                 ...P.st,
-                layer: Y(t)(R.tgt)(k1((() => {
-                  const x = R.tgt, q = ((S) => {
-                    let F = S, W = !0, K;
-                    for (; W; ) {
-                      const V = F;
+                layer: U(t)(B.tgt)(w$((() => {
+                  const E = B.tgt, O = ((I) => {
+                    let W = I, Q = !0, M;
+                    for (; Q; ) {
+                      const V = W;
                       if (V.tag === "Leaf") {
-                        W = !1, K = T;
+                        Q = !1, M = J;
                         continue;
                       }
                       if (V.tag === "Node") {
-                        const B = t.compare(x)(V._3);
-                        if (B === "LT") {
-                          F = V._5;
+                        const H = t.compare(E)(V._3);
+                        if (H === "LT") {
+                          W = V._5;
                           continue;
                         }
-                        if (B === "GT") {
-                          F = V._6;
+                        if (H === "GT") {
+                          W = V._6;
                           continue;
                         }
-                        if (B === "EQ") {
-                          W = !1, K = b("Just", V._4);
+                        if (H === "EQ") {
+                          Q = !1, M = v("Just", V._4);
                           continue;
                         }
                       }
                       f();
                     }
-                    return K;
+                    return M;
                   })(P.st.layer);
-                  if (q.tag === "Nothing")
+                  if (O.tag === "Nothing")
                     return 0;
-                  if (q.tag === "Just")
-                    return q._1;
+                  if (O.tag === "Just")
+                    return O._1;
                   f();
-                })())(z + R.delta | 0))(P.st.layer)
+                })())(Y + B.delta | 0))(P.st.layer)
               },
-              incident: Y(t)(R.tgt)(A)(P.incident),
-              queue: A === 0 ? [...P.queue, R.tgt] : P.queue
+              incident: U(t)(B.tgt)(R)(P.incident),
+              queue: R === 0 ? [...P.queue, B.tgt] : P.queue
             };
-          })({ st: y, incident: v, queue: k._1.tail })((() => {
-            const R = ((j) => {
-              let et = j, X = !0, A;
-              for (; X; ) {
-                const x = et;
-                if (x.tag === "Leaf") {
-                  X = !1, A = T;
+          })({ st: w, incident: N, queue: k._1.tail })((() => {
+            const B = ((tt) => {
+              let ct = tt, q = !0, R;
+              for (; q; ) {
+                const E = ct;
+                if (E.tag === "Leaf") {
+                  q = !1, R = J;
                   continue;
                 }
-                if (x.tag === "Node") {
-                  const C = t.compare(E)(x._3);
-                  if (C === "LT") {
-                    et = x._5;
+                if (E.tag === "Node") {
+                  const S = t.compare(L)(E._3);
+                  if (S === "LT") {
+                    ct = E._5;
                     continue;
                   }
-                  if (C === "GT") {
-                    et = x._6;
+                  if (S === "GT") {
+                    ct = E._6;
                     continue;
                   }
-                  if (C === "EQ") {
-                    X = !1, A = b("Just", x._4);
+                  if (S === "EQ") {
+                    q = !1, R = v("Just", E._4);
                     continue;
                   }
                 }
                 f();
               }
-              return A;
-            })(N);
-            if (R.tag === "Nothing")
+              return R;
+            })(y);
+            if (B.tag === "Nothing")
               return [];
-            if (R.tag === "Just")
-              return R._1;
+            if (B.tag === "Just")
+              return B._1;
             f();
           })());
-          d = N, _ = U.incident, h = U.queue, p = U.st;
+          d = y, l = X.incident, h = X.queue, $ = X.st;
           continue;
         }
         f();
       }
       return m;
-    }, s = mu(t)((c) => c.tgt)(r), u = n(O((c) => L(
+    }, s = ua(t)((c) => c.tgt)(r), u = n(z((c) => b(
       c,
       (() => {
-        const g = ((l) => {
-          let d = l, _ = !0, h;
-          for (; _; ) {
-            const p = d;
-            if (p.tag === "Leaf") {
-              _ = !1, h = T;
+        const g = ((_) => {
+          let d = _, l = !0, h;
+          for (; l; ) {
+            const $ = d;
+            if ($.tag === "Leaf") {
+              l = !1, h = J;
               continue;
             }
-            if (p.tag === "Node") {
-              const $ = t.compare(c)(p._3);
-              if ($ === "LT") {
-                d = p._5;
+            if ($.tag === "Node") {
+              const p = t.compare(c)($._3);
+              if (p === "LT") {
+                d = $._5;
                 continue;
               }
-              if ($ === "GT") {
-                d = p._6;
+              if (p === "GT") {
+                d = $._6;
                 continue;
               }
-              if ($ === "EQ") {
-                _ = !1, h = b("Just", p._4);
+              if (p === "EQ") {
+                l = !1, h = v("Just", $._4);
                 continue;
               }
             }
@@ -5814,28 +6701,28 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
         f();
       })()
     ))(e));
-    return i(mu(t)((c) => c.src)(r))(u)(gt(
+    return i(ua(t)((c) => c.src)(r))(u)(lt(
       (c) => {
-        const g = ((l) => {
-          let d = l, _ = !0, h;
-          for (; _; ) {
-            const p = d;
-            if (p.tag === "Leaf") {
-              _ = !1, h = T;
+        const g = ((_) => {
+          let d = _, l = !0, h;
+          for (; l; ) {
+            const $ = d;
+            if ($.tag === "Leaf") {
+              l = !1, h = J;
               continue;
             }
-            if (p.tag === "Node") {
-              const $ = t.compare(c)(p._3);
-              if ($ === "LT") {
-                d = p._5;
+            if ($.tag === "Node") {
+              const p = t.compare(c)($._3);
+              if (p === "LT") {
+                d = $._5;
                 continue;
               }
-              if ($ === "GT") {
-                d = p._6;
+              if (p === "GT") {
+                d = $._6;
                 continue;
               }
-              if ($ === "EQ") {
-                _ = !1, h = b("Just", p._4);
+              if (p === "EQ") {
+                l = !1, h = v("Just", $._4);
                 continue;
               }
             }
@@ -5852,32 +6739,32 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
       e
     ))(o);
   };
-}, W1 = (t) => {
-  const n = x1(t), e = D1(t), r = Q1(t), o = B1(t);
+}, W$ = (t) => {
+  const n = L$(t), e = Q$(t), r = B$(t), o = R$(t);
   return (i) => (s) => {
     const u = e(i)(s)(n(i));
     return s.length === 0 ? u.layer : o(4 * i.length | 0)(i)(s)(r(i)(s)(u)).layer;
   };
-}, oa = (t) => {
-  const n = S1(t), e = W1(t), r = b1(t);
+}, A0 = (t) => {
+  const n = S$(t), e = W$(t), r = k$(t);
   return (o) => (i) => {
     if (o.length === 0)
-      return Q;
+      return A;
     if (o.length < 40)
       return n(o)(e(o)(i));
     const s = r(o)(i);
-    return n(o)(E1(t)(s.removed)(e(s.coreNodes)(s.coreEdges)));
+    return n(o)(b$(t)(s.removed)(e(s.coreNodes)(s.coreEdges)));
   };
-}, ia = (t) => (e) => {
+}, F0 = (t) => (e) => {
   let r = e, o = !0, i;
   for (; o; ) {
     const s = r;
     if (s.tag === "Leaf") {
-      o = !1, i = T;
+      o = !1, i = J;
       continue;
     }
     if (s.tag === "Node") {
-      const u = rt.compare(t)(s._3);
+      const u = it.compare(t)(s._3);
       if (u === "LT") {
         r = s._5;
         continue;
@@ -5887,62 +6774,62 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
         continue;
       }
       if (u === "EQ") {
-        o = !1, i = b("Just", s._4);
+        o = !1, i = v("Just", s._4);
         continue;
       }
     }
     f();
   }
   return i;
-}, Pi = (t) => (n) => {
-  const e = rt.compare(t)(n);
+}, su = (t) => (n) => {
+  const e = it.compare(t)(n);
   if (e === "LT")
     return n;
   if (e === "EQ" || e === "GT")
     return t;
   f();
-}, q1 = /* @__PURE__ */ oa(rt), Ar = (t) => (n) => ({ ...n, edges: [...n.edges, { src: t.src, tgt: t.tgt, delta: t.delta, weight: t.weight, eid: n.nextEid }], nextEid: n.nextEid + 1 | 0 }), H1 = (t) => (n) => (e) => {
+}, D$ = /* @__PURE__ */ A0(it), wo = (t) => (n) => ({ ...n, edges: [...n.edges, { src: t.src, tgt: t.tgt, delta: t.delta, weight: t.weight, eid: n.nextEid }], nextEid: n.nextEid + 1 | 0 }), H$ = (t) => (n) => (e) => {
   if (e.cGroup.tag === "Nothing")
     return n;
   if (e.cGroup.tag === "Just") {
-    const r = ct((() => {
-      const o = ia(e.cGroup._1)(t);
+    const r = nt((() => {
+      const o = F0(e.cGroup._1)(t);
       if (o.tag === "Nothing")
         return 0;
       if (o.tag === "Just")
         return o._1;
       f();
     })());
-    return Hn(e.id)((o) => ({ ...o, hitbox: { ...o.hitbox, x: r + o.cGroupOffset.x } }))(n);
+    return jn(e.id)((o) => ({ ...o, hitbox: { ...o.hitbox, x: r + o.cGroupOffset.x } }))(n);
   }
   f();
-}, O1 = (t) => (n) => ({
+}, O$ = (t) => (n) => ({
   ...n,
-  cGraph: J(H1(t))(n.cGraph)((() => {
+  cGraph: x(H$(t))(n.cGraph)((() => {
     const e = n.cGraph;
-    return vt((r) => Ut(r)(e.cNodes))(e.cNodeOrder);
+    return yt((r) => Kt(r)(e.cNodes))(e.cNodeOrder);
   })())
-}), z1 = (t) => (n) => (e) => (r) => (o) => {
-  const i = ce(ji(n.cGroupOffset.x - t.cGroupOffset.x));
-  return Ar({ src: o.nextNodeId, tgt: r, delta: Pi(0)(-i), weight: 1 })(Ar({ src: o.nextNodeId, tgt: e, delta: Pi(0)(i), weight: 1 })({
+}), z$ = (t) => (n) => (e) => (r) => (o) => {
+  const i = $n(qi(n.cGroupOffset.x - t.cGroupOffset.x));
+  return wo({ src: o.nextNodeId, tgt: r, delta: su(0)(-i), weight: 1 })(wo({ src: o.nextNodeId, tgt: e, delta: su(0)(i), weight: 1 })({
     ...o,
     nodes: [...o.nodes, o.nextNodeId],
     nextNodeId: o.nextNodeId + 1 | 0
   }));
-}, V1 = (t) => (n) => (e) => (r) => (o) => (i) => (s) => {
-  const u = Pi(0)(ce(ji(e.cGroupOffset.x + e.hitbox.width + (n.direction === "LEFT" || n.direction === "RIGHT" ? n.spacingsHandler.horizontalSpacing(e)(r) : n.spacingsHandler.verticalSpacing(e)(r)) - r.cGroupOffset.x)));
-  return t.sameEdgeVerticalSegments(e)(r) ? z1(e)(r)(o)(i)(s) : Ar({ src: o, tgt: i, delta: u, weight: t.vsLNodePair(e)(r) ? 2 : 1 })(s);
-}, Y1 = (t) => (n) => (e) => (r) => (o) => {
-  const i = Ut(o)(n.cGraph.cNodes);
+}, q$ = (t) => (n) => (e) => (r) => (o) => (i) => (s) => {
+  const u = su(0)($n(qi(e.cGroupOffset.x + e.hitbox.width + (n.direction === "LEFT" || n.direction === "RIGHT" ? n.spacingsHandler.horizontalSpacing(e)(r) : n.spacingsHandler.verticalSpacing(e)(r)) - r.cGroupOffset.x)));
+  return t.sameEdgeVerticalSegments(e)(r) ? z$(e)(r)(o)(i)(s) : wo({ src: o, tgt: i, delta: u, weight: t.vsLNodePair(e)(r) ? 2 : 1 })(s);
+}, Y$ = (t) => (n) => (e) => (r) => (o) => {
+  const i = Kt(o)(n.cGraph.cNodes);
   if (i.tag === "Nothing")
     return r;
   if (i.tag === "Just")
-    return (e.cGroup.tag === "Nothing" ? i._1.cGroup.tag === "Nothing" : e.cGroup.tag === "Just" && i._1.cGroup.tag === "Just" && e.cGroup._1 === i._1.cGroup._1) ? r : e.cGroup.tag === "Just" && i._1.cGroup.tag === "Just" ? V1(t)(n)(e)(i._1)(e.cGroup._1)(i._1.cGroup._1)(r) : r;
+    return (e.cGroup.tag === "Nothing" ? i._1.cGroup.tag === "Nothing" : e.cGroup.tag === "Just" && i._1.cGroup.tag === "Just" && e.cGroup._1 === i._1.cGroup._1) ? r : e.cGroup.tag === "Just" && i._1.cGroup.tag === "Just" ? q$(t)(n)(e)(i._1)(e.cGroup._1)(i._1.cGroup._1)(r) : r;
   f();
-}, X1 = (t) => (n) => (e) => (r) => J(Y1(t)(n)(r))(e)(r.constraints), U1 = (t) => (n) => Ar({ src: n.srcGroup, tgt: n.tgtGroup, delta: n.delta, weight: n.weight })(t), M1 = (t) => {
-  const n = J((o) => (i) => yt(rt)(Zt)(i.tgt)(1)(o))(Q)(t.edges), e = gt(
+}, X$ = (t) => (n) => (e) => (r) => x(Y$(t)(n)(r))(e)(r.constraints), V$ = (t) => (n) => wo({ src: n.srcGroup, tgt: n.tgtGroup, delta: n.delta, weight: n.weight })(t), U$ = (t) => {
+  const n = x((o) => (i) => vt(it)(on)(i.tgt)(1)(o))(A)(t.edges), e = lt(
     (o) => {
-      const i = ia(o)(n);
+      const i = F0(o)(n);
       if (i.tag === "Nothing")
         return !0;
       if (i.tag === "Just")
@@ -5954,64 +6841,64 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
   if (e.length <= 1)
     return t;
   const r = t.nextNodeId;
-  return J((o) => (i) => Ar({ src: r, tgt: i, delta: 1, weight: 0 })(o))({ ...t, nodes: [...t.nodes, r], nextNodeId: r + 1 | 0 })(e);
-}, K1 = (t) => (n) => {
-  const e = M1(J(U1)(J(X1(t)(n))({
+  return x((o) => (i) => wo({ src: r, tgt: i, delta: 1, weight: 0 })(o))({ ...t, nodes: [...t.nodes, r], nextNodeId: r + 1 | 0 })(e);
+}, K$ = (t) => (n) => {
+  const e = U$(x(V$)(x(X$(t)(n))({
     nodes: n.cGraph.cGroupOrder,
     edges: [],
     nextNodeId: n.cGraph.nextCGroupId,
     nextEid: 0
   })((() => {
     const r = n.cGraph;
-    return vt((o) => Ut(o)(r.cNodes))(r.cNodeOrder);
+    return yt((o) => Kt(o)(r.cNodes))(r.cNodeOrder);
   })()))(t.edgeLengthEdges(n.cGraph)));
   return { nodes: e.nodes, edges: e.edges };
-}, j1 = (t) => (n) => {
-  const e = K1(t)(n);
-  return O1(q1(e.nodes)(e.edges))(n);
-}, Z1 = (t) => (n) => (e) => (t.direction === "LEFT" || t.direction === "RIGHT" ? n.hitbox.y <= e.hitbox.y ? n.ignoreSpacing.down || e.ignoreSpacing.up : n.ignoreSpacing.up || e.ignoreSpacing.down : n.hitbox.x <= e.hitbox.x ? n.ignoreSpacing.right || e.ignoreSpacing.left : n.ignoreSpacing.left || e.ignoreSpacing.right) ? 0 : t.direction === "LEFT" || t.direction === "RIGHT" ? t.spacingsHandler.verticalSpacing(n)(e) : t.spacingsHandler.horizontalSpacing(n)(e), td = (t) => (n) => (e) => {
-  const r = Z1(t)(n)(e);
-  return e.hitbox.y + e.hitbox.height + r - n.hitbox.y > 1e-4 && n.hitbox.y + n.hitbox.height + r - e.hitbox.y > 1e-4;
-}, nd = (t) => (n) => (e) => (r) => n.id === r.id || n.cGroup.tag === "Just" && r.cGroup.tag === "Just" && n.cGroup._1 === r.cGroup._1 || !(r.hitbox.x > n.hitbox.x || n.hitbox.x === r.hitbox.x && n.hitbox.width < r.hitbox.width) || !td(t)(n)(r) ? e : Hn(n.id)((o) => ({ ...o, constraints: [...o.constraints, r.id] }))(e), ed = (t) => (n) => (e) => (r) => J(nd(t)(r))(e)(n), rd = (t) => {
-  const n = J((r) => (o) => Hn(o.id)((i) => ({ ...i, constraints: [] }))(r))(t.cGraph)((() => {
-    const r = t.cGraph;
-    return vt((o) => Ut(o)(r.cNodes))(r.cNodeOrder);
-  })()), e = vt((r) => Ut(r)(n.cNodes))(n.cNodeOrder);
-  return J(ed(t)(e))(n)(e);
-}, sa = (t) => t, Ht = /* @__PURE__ */ sa("H"), Ot = /* @__PURE__ */ sa("V"), od = (t) => L(t._2, t._1), ua = (t) => ({ ...t, position: L(t.position._2, t.position._1), size: L(t.size._2, t.size._1) }), id = (t) => ({
-  start: L(t.start._2, t.start._1),
-  end: L(t.end._2, t.end._1),
+}, M$ = (t) => (n) => {
+  const e = K$(t)(n);
+  return O$(D$(e.nodes)(e.edges))(n);
+}, R0 = (t) => t, Zt = /* @__PURE__ */ R0("H"), tn = /* @__PURE__ */ R0("V"), j$ = (t) => b(t._2, t._1), B0 = (t) => ({ ...t, position: b(t.position._2, t.position._1), size: b(t.size._2, t.size._1) }), Z$ = (t) => ({
+  start: b(t.start._2, t.start._1),
+  end: b(t.end._2, t.end._1),
   direction: (() => {
     if (t.direction === "H")
-      return Ot;
+      return tn;
     if (t.direction === "V")
-      return Ht;
+      return Zt;
     f();
   })()
-}), ca = (t) => ({ ...t, segments: O(id)(t.segments), bends: O(od)(t.bends) }), sd = (t) => ({ nodes: O(ua)(t.nodes), edges: t.edges, paths: O(ca)(t.paths), ports: t.ports }), ud = (t) => {
-  const n = ct(4);
-  return {
-    horizontalSpacing: (e) => (r) => t.sameEdgeVerticalSegments(e)(r) || e.ignoreSpacing.right || r.ignoreSpacing.left ? 0 : n,
-    verticalSpacing: (e) => (r) => t.sameEdgeVerticalSegments(e)(r) ? 1 : (e.hitbox.y <= r.hitbox.y ? e.ignoreSpacing.down || r.ignoreSpacing.up : e.ignoreSpacing.up || r.ignoreSpacing.down) ? 0 : n
-  };
-}, cd = (t) => (n) => j1(n), ad = (t) => (n) => {
-  const e = sd(n), r = L1(e), o = J1(r)(Zc(e)), i = v1(Uc(Cs)(e1({
-    ...o1(r.cGraph),
-    compactionAlgorithm: b("Just", cd()(o)),
-    constraintAlgorithm: b("Just", rd),
-    spacingsHandler: ud(o)
+}), Q0 = (t) => ({ ...t, segments: z(Z$)(t.segments), bends: z(j$)(t.bends) }), tm = (t) => ({ nodes: z(B0)(t.nodes), edges: t.edges, paths: z(Q0)(t.paths), ports: t.ports }), nm = (t) => ({
+  horizontalSpacing: (n) => (e) => {
+    if (t.sameEdgeVerticalSegments(n)(e) || n.ignoreSpacing.right || e.ignoreSpacing.left)
+      return 0;
+    const r = e.kind.tag === "Nothing" ? !1 : e.kind.tag === "Just" && e.kind._1 === "vs";
+    return n.kind.tag !== "Nothing" && n.kind.tag === "Just" && n.kind._1 === "vs" ? r ? 10 : 4 : r ? 4 : 8;
+  },
+  verticalSpacing: (n) => (e) => {
+    if (t.sameEdgeVerticalSegments(n)(e))
+      return 1;
+    if (n.hitbox.y <= e.hitbox.y ? n.ignoreSpacing.down || e.ignoreSpacing.up : n.ignoreSpacing.up || e.ignoreSpacing.down)
+      return 0;
+    const r = e.kind.tag === "Nothing" ? !1 : e.kind.tag === "Just" && e.kind._1 === "vs";
+    return n.kind.tag !== "Nothing" && n.kind.tag === "Just" && n.kind._1 === "vs" ? r ? 10 : 4 : r ? 4 : 8;
+  }
+}), em = (t) => (n) => M$(n), rm = (t) => (n) => {
+  const e = tm(n), r = v$(e), o = y$(r)(S0(e)), i = N$(J0(oc)(Hp({
+    ...zp(r.cGraph),
+    compactionAlgorithm: v("Just", em()(o)),
+    constraintAlgorithm: v("Just", r$),
+    spacingsHandler: nm(o)
   })).cGraph)({ nodes: e.nodes, edges: e.edges, paths: e.paths });
-  return { nodes: O(ua)(i.nodes), edges: O(ca)(i.edges) };
-}, aa = (t) => t, Ve = /* @__PURE__ */ jt(rt)(Bt), wt = (t) => (e) => {
+  return { nodes: z(B0)(i.nodes), edges: z(Q0)(i.edges) };
+}, W0 = (t) => t, Jr = /* @__PURE__ */ nn(it)(Ht), Gt = (t) => (e) => {
   let r = e, o = !0, i;
   for (; o; ) {
     const s = r;
     if (s.tag === "Leaf") {
-      o = !1, i = T;
+      o = !1, i = J;
       continue;
     }
     if (s.tag === "Node") {
-      const u = rt.compare(t)(s._3);
+      const u = it.compare(t)(s._3);
       if (u === "LT") {
         r = s._5;
         continue;
@@ -6021,44 +6908,44 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
         continue;
       }
       if (u === "EQ") {
-        o = !1, i = b("Just", s._4);
+        o = !1, i = v("Just", s._4);
         continue;
       }
     }
     f();
   }
   return i;
-}, Nu = (t) => (n) => {
-  const e = rt.compare(t)(n);
+}, ca = (t) => (n) => {
+  const e = it.compare(t)(n);
   if (e === "LT")
     return n;
   if (e === "EQ" || e === "GT")
     return t;
   f();
-}, at = (t) => (n) => {
-  const e = pt.compare(t)(n);
+}, ht = (t) => (n) => {
+  const e = ft.compare(t)(n);
   if (e === "LT" || e === "EQ")
     return t;
   if (e === "GT")
     return n;
   f();
-}, ft = (t) => (n) => {
-  const e = pt.compare(t)(n);
+}, pt = (t) => (n) => {
+  const e = ft.compare(t)(n);
   if (e === "LT")
     return n;
   if (e === "EQ" || e === "GT")
     return t;
   f();
-}, Me = (t) => (e) => {
+}, br = (t) => (e) => {
   let r = e, o = !0, i;
   for (; o; ) {
     const s = r;
     if (s.tag === "Leaf") {
-      o = !1, i = T;
+      o = !1, i = J;
       continue;
     }
     if (s.tag === "Node") {
-      const u = G.compare(t)(s._3);
+      const u = C.compare(t)(s._3);
       if (u === "LT") {
         r = s._5;
         continue;
@@ -6068,36 +6955,36 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
         continue;
       }
       if (u === "EQ") {
-        o = !1, i = b("Just", s._4);
+        o = !1, i = v("Just", s._4);
         continue;
       }
     }
     f();
   }
   return i;
-}, fd = (t) => (n) => {
-  const e = rt.compare(t._1)(n._1);
-  return e === "LT" ? dn : e === "GT" ? hn : rt.compare(t._2)(n._2);
-}, Xe = (t) => (n) => {
-  const e = rt.compare(t)(n);
+}, om = (t) => (n) => {
+  const e = it.compare(t._1)(n._1);
+  return e === "LT" ? yn : e === "GT" ? Nn : it.compare(t._2)(n._2);
+}, vr = (t) => (n) => {
+  const e = it.compare(t)(n);
   if (e === "LT" || e === "EQ")
     return t;
   if (e === "GT")
     return n;
   f();
-}, gd = /* @__PURE__ */ (() => {
-  const t = On.unfoldr(De);
-  return (n) => t(Wn("IterNode", n, Qe));
-})(), _d = (t) => t, Ju = (t) => (e) => {
+}, im = /* @__PURE__ */ (() => {
+  const t = te.unfoldr(ke);
+  return (n) => t(Kn("IterNode", n, we));
+})(), sm = (t) => t, aa = (t) => (e) => {
   let r = e, o = !0, i;
   for (; o; ) {
     const s = r;
     if (s.tag === "Leaf") {
-      o = !1, i = T;
+      o = !1, i = J;
       continue;
     }
     if (s.tag === "Node") {
-      const u = G.compare(t)(s._3);
+      const u = C.compare(t)(s._3);
       if (u === "LT") {
         r = s._5;
         continue;
@@ -6107,23 +6994,23 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
         continue;
       }
       if (u === "EQ") {
-        o = !1, i = b("Just", s._4);
+        o = !1, i = v("Just", s._4);
         continue;
       }
     }
     f();
   }
   return i;
-}, ld = (t) => (e) => {
+}, um = (t) => (e) => {
   let r = e, o = !0, i;
   for (; o; ) {
     const s = r;
     if (s.tag === "Leaf") {
-      o = !1, i = T;
+      o = !1, i = J;
       continue;
     }
     if (s.tag === "Node") {
-      const u = G.compare(t)(s._3);
+      const u = C.compare(t)(s._3);
       if (u === "LT") {
         r = s._5;
         continue;
@@ -6133,104 +7020,104 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
         continue;
       }
       if (u === "EQ") {
-        o = !1, i = b("Just", s._4);
+        o = !1, i = v("Just", s._4);
         continue;
       }
     }
     f();
   }
   return i;
-}, ro = /* @__PURE__ */ aa("Regular"), oo = /* @__PURE__ */ aa("Critical"), fa = (t) => (n) => {
-  const e = J((s) => (u) => Y(G)(u.node)(u)(s))(Q)(n), r = 1.25 * ct(4), o = (s, u, c) => ((g) => (l) => (d) => {
-    let _ = g, h = l, p = d, $ = !0, m;
-    for (; $; ) {
-      const N = _, v = h, w = p;
-      if (w.critical) {
-        $ = !1, m = w;
+}, Zo = /* @__PURE__ */ W0("Regular"), ti = /* @__PURE__ */ W0("Critical"), D0 = (t) => (n) => {
+  const e = x((s) => (u) => U(C)(u.node)(u)(s))(A)(n), r = 1.25 * nt(4), o = (s, u, c) => ((g) => (_) => (d) => {
+    let l = g, h = _, $ = d, p = !0, m;
+    for (; p; ) {
+      const y = l, N = h, T = $;
+      if (T.critical) {
+        p = !1, m = T;
         continue;
       }
-      const y = Wt((E) => T, (E) => (I) => b("Just", { head: E, tail: I }), N), k = Wt((E) => T, (E) => (I) => b("Just", { head: E, tail: I }), v);
-      if (y.tag === "Just" && k.tag === "Just") {
-        const E = y._1.head > k._1.head - s && y._1.head < k._1.head + s ? { ...w, critical: !0 } : y._1.head > k._1.head - r && y._1.head < k._1.head + r ? { ...w, conflicts: w.conflicts + 1 | 0 } : w;
-        if (E.critical) {
-          $ = !1, m = E;
+      const w = Rt((L) => J, (L) => (G) => v("Just", { head: L, tail: G }), y), k = Rt((L) => J, (L) => (G) => v("Just", { head: L, tail: G }), N);
+      if (w.tag === "Just" && k.tag === "Just") {
+        const L = w._1.head > k._1.head - s && w._1.head < k._1.head + s ? { ...T, critical: !0 } : w._1.head > k._1.head - r && w._1.head < k._1.head + r ? { ...T, conflicts: T.conflicts + 1 | 0 } : T;
+        if (L.critical) {
+          p = !1, m = L;
           continue;
         }
-        if (y._1.head <= k._1.head) {
-          _ = y._1.tail, h = v, p = E;
+        if (w._1.head <= k._1.head) {
+          l = w._1.tail, h = N, $ = L;
           continue;
         }
-        _ = N, h = k._1.tail, p = E;
+        l = y, h = k._1.tail, $ = L;
         continue;
       }
-      $ = !1, m = w;
+      p = !1, m = T;
     }
     return m;
   })(u)(c)({ conflicts: 0, critical: !1 }), i = (s, u, c) => {
-    if (ft(J(ft)(-1e18)(u.incoming))(J(ft)(-1e18)(u.outgoing)) - at(J(at)(1e18)(u.incoming))(J(at)(1e18)(u.outgoing)) < 1e-3 || ft(J(ft)(-1e18)(c.incoming))(J(ft)(-1e18)(c.outgoing)) - at(J(at)(1e18)(c.incoming))(J(at)(1e18)(c.outgoing)) < 1e-3)
+    if (pt(x(pt)(-1e18)(u.incoming))(x(pt)(-1e18)(u.outgoing)) - ht(x(ht)(1e18)(u.incoming))(x(ht)(1e18)(u.outgoing)) < 1e-3 || pt(x(pt)(-1e18)(c.incoming))(x(pt)(-1e18)(c.outgoing)) - ht(x(ht)(1e18)(c.incoming))(x(ht)(1e18)(c.outgoing)) < 1e-3)
       return [];
     const a = o(s, u.outgoing, c.incoming), g = o(s, c.outgoing, u.incoming);
     if (a.critical || g.critical)
-      return [...a.critical ? [{ src: c.id, tgt: u.id, weight: 1, kind: oo }] : [], ...g.critical ? [{ src: u.id, tgt: c.id, weight: 1, kind: oo }] : []];
-    const l = at(J(at)(1e18)(u.incoming))(J(at)(1e18)(u.outgoing)), d = ft(J(ft)(-1e18)(u.incoming))(J(ft)(-1e18)(u.outgoing)), _ = at(J(at)(1e18)(c.incoming))(J(at)(1e18)(c.outgoing)), h = ft(J(ft)(-1e18)(c.incoming))(J(ft)(-1e18)(c.outgoing)), p = (1 * a.conflicts | 0) + (16 * (J((m) => (N) => N > h ? m : N >= _ ? m + 1 | 0 : m)(0)(u.outgoing) + J((m) => (N) => N > d ? m : N >= l ? m + 1 | 0 : m)(0)(c.incoming) | 0) | 0) | 0, $ = (1 * g.conflicts | 0) + (16 * (J((m) => (N) => N > d ? m : N >= l ? m + 1 | 0 : m)(0)(c.outgoing) + J((m) => (N) => N > h ? m : N >= _ ? m + 1 | 0 : m)(0)(u.incoming) | 0) | 0) | 0;
-    return p < $ ? [{ src: u.id, tgt: c.id, weight: $ - p | 0, kind: ro }] : p > $ ? [{ src: c.id, tgt: u.id, weight: p - $ | 0, kind: ro }] : p > 0 ? [{ src: u.id, tgt: c.id, weight: 0, kind: ro }, { src: c.id, tgt: u.id, weight: 0, kind: ro }] : [];
+      return [...a.critical ? [{ src: c.id, tgt: u.id, weight: 1, kind: ti }] : [], ...g.critical ? [{ src: u.id, tgt: c.id, weight: 1, kind: ti }] : []];
+    const _ = ht(x(ht)(1e18)(u.incoming))(x(ht)(1e18)(u.outgoing)), d = pt(x(pt)(-1e18)(u.incoming))(x(pt)(-1e18)(u.outgoing)), l = ht(x(ht)(1e18)(c.incoming))(x(ht)(1e18)(c.outgoing)), h = pt(x(pt)(-1e18)(c.incoming))(x(pt)(-1e18)(c.outgoing)), $ = (1 * a.conflicts | 0) + (16 * (x((m) => (y) => y > h ? m : y >= l ? m + 1 | 0 : m)(0)(u.outgoing) + x((m) => (y) => y > d ? m : y >= _ ? m + 1 | 0 : m)(0)(c.incoming) | 0) | 0) | 0, p = (1 * g.conflicts | 0) + (16 * (x((m) => (y) => y > d ? m : y >= _ ? m + 1 | 0 : m)(0)(c.outgoing) + x((m) => (y) => y > h ? m : y >= l ? m + 1 | 0 : m)(0)(u.incoming) | 0) | 0) | 0;
+    return $ < p ? [{ src: u.id, tgt: c.id, weight: p - $ | 0, kind: Zo }] : $ > p ? [{ src: c.id, tgt: u.id, weight: $ - p | 0, kind: Zo }] : $ > 0 ? [{ src: u.id, tgt: c.id, weight: 0, kind: Zo }, { src: c.id, tgt: u.id, weight: 0, kind: Zo }] : [];
   };
-  return J((s) => (u) => J((c) => (a) => Y(G)(a._1)(a._2)(c))(s)((() => {
-    const c = J((P) => (R) => {
-      const j = R.edge.from.node + "|" + (() => {
-        if (R.edge.from.port.tag === "Just")
-          return R.edge.from.port._1;
-        if (R.edge.from.port.tag === "Nothing")
-          return "_auto_" + R.edge.id;
+  return x((s) => (u) => x((c) => (a) => U(C)(a._1)(a._2)(c))(s)((() => {
+    const c = x((P) => (B) => {
+      const tt = B.edge.from.node + "|" + (() => {
+        if (B.edge.from.port.tag === "Just")
+          return B.edge.from.port._1;
+        if (B.edge.from.port.tag === "Nothing")
+          return "_auto_" + B.edge.id;
         f();
-      })(), et = Ju(j)(P.entries);
-      if (et.tag === "Nothing")
+      })(), ct = aa(tt)(P.entries);
+      if (ct.tag === "Nothing")
         return {
           ...P,
-          entries: Y(G)(j)({
+          entries: U(C)(tt)({
             id: 0,
-            members: [R.edge.id],
-            incoming: [R.fromPos._1],
-            outgoing: [R.toPos._1],
+            members: [B.edge.id],
+            incoming: [B.fromPos._1],
+            outgoing: [B.toPos._1],
             slot: 0,
             mark: 0,
-            splitBy: T,
-            splitPartner: T
+            splitBy: J,
+            splitPartner: J
           })(P.entries),
-          order: [...P.order, j]
+          order: [...P.order, tt]
         };
-      if (et.tag === "Just")
+      if (ct.tag === "Just")
         return {
           ...P,
-          entries: Y(G)(j)({
-            ...et._1,
-            members: [...et._1.members, R.edge.id],
-            incoming: [...Ce((X) => X < R.fromPos._1)(et._1.incoming).init, R.fromPos._1, ...Ce((X) => X <= R.fromPos._1)(et._1.incoming).rest],
-            outgoing: [...Ce((X) => X < R.toPos._1)(et._1.outgoing).init, R.toPos._1, ...Ce((X) => X <= R.toPos._1)(et._1.outgoing).rest]
+          entries: U(C)(tt)({
+            ...ct._1,
+            members: [...ct._1.members, B.edge.id],
+            incoming: [...ur((q) => q < B.fromPos._1)(ct._1.incoming).init, B.fromPos._1, ...ur((q) => q <= B.fromPos._1)(ct._1.incoming).rest],
+            outgoing: [...ur((q) => q < B.toPos._1)(ct._1.outgoing).init, B.toPos._1, ...ur((q) => q <= B.toPos._1)(ct._1.outgoing).rest]
           })(P.entries)
         };
       f();
-    })({ entries: Q, order: [] })(u._2), a = Pt((P) => (R) => ({ ...R, id: P }))(vt((P) => Ju(P)(c.entries))(c.order));
+    })({ entries: A, order: [] })(u._2), a = Ft((P) => (B) => ({ ...B, id: P }))(yt((P) => aa(P)(c.entries))(c.order));
     if (a.length === 0)
       return [];
-    const g = J((P) => (R) => P.prev.tag === "Just" && R - P.prev._1 < 1e-9 ? P : { prev: b("Just", R), out: [...P.out, R] })({ prev: T, out: [] })(Lt(pt.compare)([
-      ...bt(a)((P) => P.incoming),
-      ...bt(a)((P) => P.outgoing)
-    ])).out, l = g.length < 2 ? 0.2 * r : 0.2 * J((P) => (R) => {
+    const g = x((P) => (B) => P.prev.tag === "Just" && B - P.prev._1 < 1e-9 ? P : { prev: v("Just", B), out: [...P.out, B] })({ prev: J, out: [] })(kt(ft.compare)([
+      ...Jt(a)((P) => P.incoming),
+      ...Jt(a)((P) => P.outgoing)
+    ])).out, _ = g.length < 2 ? 0.2 * r : 0.2 * x((P) => (B) => {
       if (P.prev.tag === "Nothing")
-        return { prev: b("Just", R), mn: P.mn };
+        return { prev: v("Just", B), mn: P.mn };
       if (P.prev.tag === "Just")
-        return { prev: b("Just", R), mn: at(P.mn)(R - P.prev._1) };
+        return { prev: v("Just", B), mn: ht(P.mn)(B - P.prev._1) };
       f();
-    })({ prev: T, mn: 1e18 })(g).mn, d = {
+    })({ prev: J, mn: 1e18 })(g).mn, d = {
       segments: a,
       deps: (() => {
         const P = a.length;
-        return bt(bt(Xt(0, P - 2 | 0))((R) => bt(Xt(R + 1 | 0, P - 1 | 0))((j) => [
-          L(R, j)
-        ])))((R) => R._1 >= 0 && R._1 < a.length ? R._2 >= 0 && R._2 < a.length ? i(l, a[R._1], a[R._2]) : [] : []);
+        return Jt(Jt(It(0, P - 2 | 0))((B) => Jt(It(B + 1 | 0, P - 1 | 0))((tt) => [
+          b(B, tt)
+        ])))((B) => B._1 >= 0 && B._1 < a.length ? B._2 >= 0 && B._2 < a.length ? i(_, a[B._1], a[B._2]) : [] : []);
       })()
-    }, _ = gt(
+    }, l = lt(
       (P) => {
         if (P.kind === "Critical")
           return !0;
@@ -6240,93 +7127,93 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
       },
       d.deps
     ), h = (() => {
-      if (_.length < 2)
+      if (l.length < 2)
         return d;
-      const P = Ve((() => {
-        const A = d.segments;
-        return O((x) => L(x.id, x.mark))((() => {
-          const x = A.length, C = (F) => {
-            let W = F, K = !0, V;
-            for (; K; ) {
-              const B = W, nt = ln((M) => {
-                const tt = wt(M)(B.inWeight);
-                if (tt.tag === "Nothing")
+      const P = Jr((() => {
+        const R = d.segments;
+        return z((E) => b(E.id, E.mark))((() => {
+          const E = R.length, S = (W) => {
+            let Q = W, M = !0, V;
+            for (; M; ) {
+              const H = Q, et = jt((j) => {
+                const ot = Gt(j)(H.inWeight);
+                if (ot.tag === "Nothing")
                   return !0;
-                if (tt.tag === "Just")
-                  return tt._1 === 0;
+                if (ot.tag === "Just")
+                  return ot._1 === 0;
                 f();
-              })(B.remaining);
-              if (nt.tag === "Nothing") {
-                K = !1, V = B;
+              })(H.remaining);
+              if (et.tag === "Nothing") {
+                M = !1, V = H;
                 continue;
               }
-              if (nt.tag === "Just") {
-                const M = nt._1;
-                W = {
-                  ...B,
-                  inWeight: J((tt) => (ot) => yt(rt)(Zt)(ot.tgt)(-ot.weight)(tt))(B.inWeight)((() => {
-                    const tt = wt(M)(B.depsBySrc);
-                    if (tt.tag === "Nothing")
+              if (et.tag === "Just") {
+                const j = et._1;
+                Q = {
+                  ...H,
+                  inWeight: x((ot) => (Z) => vt(it)(on)(Z.tgt)(-Z.weight)(ot))(H.inWeight)((() => {
+                    const ot = Gt(j)(H.depsBySrc);
+                    if (ot.tag === "Nothing")
                       return [];
-                    if (tt.tag === "Just")
-                      return tt._1;
+                    if (ot.tag === "Just")
+                      return ot._1;
                     f();
                   })()),
-                  marks: Y(rt)(M)(B.nextSource)(B.marks),
-                  nextSource: B.nextSource + 1 | 0,
-                  outWeight: J((tt) => (ot) => yt(rt)(Zt)(ot.src)(-ot.weight)(tt))(B.outWeight)((() => {
-                    const tt = wt(M)(B.depsByTgt);
-                    if (tt.tag === "Nothing")
+                  marks: U(it)(j)(H.nextSource)(H.marks),
+                  nextSource: H.nextSource + 1 | 0,
+                  outWeight: x((ot) => (Z) => vt(it)(on)(Z.src)(-Z.weight)(ot))(H.outWeight)((() => {
+                    const ot = Gt(j)(H.depsByTgt);
+                    if (ot.tag === "Nothing")
                       return [];
-                    if (tt.tag === "Just")
-                      return tt._1;
+                    if (ot.tag === "Just")
+                      return ot._1;
                     f();
                   })()),
-                  remaining: gt((tt) => tt !== M, B.remaining)
+                  remaining: lt((ot) => ot !== j, H.remaining)
                 };
                 continue;
               }
               f();
             }
             return V;
-          }, q = (F) => {
-            let W = F, K = !0, V;
-            for (; K; ) {
-              const B = W, nt = ln((M) => {
-                const tt = wt(M)(B.outWeight);
-                if (tt.tag === "Nothing")
+          }, O = (W) => {
+            let Q = W, M = !0, V;
+            for (; M; ) {
+              const H = Q, et = jt((j) => {
+                const ot = Gt(j)(H.outWeight);
+                if (ot.tag === "Nothing")
                   return !0;
-                if (tt.tag === "Just")
-                  return tt._1 === 0;
+                if (ot.tag === "Just")
+                  return ot._1 === 0;
                 f();
-              })(B.remaining);
-              if (nt.tag === "Nothing") {
-                K = !1, V = B;
+              })(H.remaining);
+              if (et.tag === "Nothing") {
+                M = !1, V = H;
                 continue;
               }
-              if (nt.tag === "Just") {
-                const M = nt._1;
-                W = {
-                  ...B,
-                  inWeight: J((tt) => (ot) => yt(rt)(Zt)(ot.tgt)(-ot.weight)(tt))(B.inWeight)((() => {
-                    const tt = wt(M)(B.depsBySrc);
-                    if (tt.tag === "Nothing")
+              if (et.tag === "Just") {
+                const j = et._1;
+                Q = {
+                  ...H,
+                  inWeight: x((ot) => (Z) => vt(it)(on)(Z.tgt)(-Z.weight)(ot))(H.inWeight)((() => {
+                    const ot = Gt(j)(H.depsBySrc);
+                    if (ot.tag === "Nothing")
                       return [];
-                    if (tt.tag === "Just")
-                      return tt._1;
+                    if (ot.tag === "Just")
+                      return ot._1;
                     f();
                   })()),
-                  marks: Y(rt)(M)(B.nextSink)(B.marks),
-                  nextSink: B.nextSink - 1 | 0,
-                  outWeight: J((tt) => (ot) => yt(rt)(Zt)(ot.src)(-ot.weight)(tt))(B.outWeight)((() => {
-                    const tt = wt(M)(B.depsByTgt);
-                    if (tt.tag === "Nothing")
+                  marks: U(it)(j)(H.nextSink)(H.marks),
+                  nextSink: H.nextSink - 1 | 0,
+                  outWeight: x((ot) => (Z) => vt(it)(on)(Z.src)(-Z.weight)(ot))(H.outWeight)((() => {
+                    const ot = Gt(j)(H.depsByTgt);
+                    if (ot.tag === "Nothing")
                       return [];
-                    if (tt.tag === "Just")
-                      return tt._1;
+                    if (ot.tag === "Just")
+                      return ot._1;
                     f();
                   })()),
-                  remaining: gt((tt) => tt !== M, B.remaining)
+                  remaining: lt((ot) => ot !== j, H.remaining)
                 };
                 continue;
               }
@@ -6334,31 +7221,31 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
             }
             return V;
           };
-          return ((F) => {
-            let W = F, K = !0, V;
-            for (; K; ) {
-              const nt = C(q(W));
-              if (nt.remaining.length === 0) {
-                K = !1, V = O((M) => {
-                  const tt = wt(M.id)(nt.marks), ot = (() => {
-                    if (tt.tag === "Nothing")
-                      return M.id;
-                    if (tt.tag === "Just")
-                      return tt._1;
+          return ((W) => {
+            let Q = W, M = !0, V;
+            for (; M; ) {
+              const et = S(O(Q));
+              if (et.remaining.length === 0) {
+                M = !1, V = z((j) => {
+                  const ot = Gt(j.id)(et.marks), Z = (() => {
+                    if (ot.tag === "Nothing")
+                      return j.id;
+                    if (ot.tag === "Just")
+                      return ot._1;
                     f();
                   })();
-                  return { ...M, mark: ot < x ? (ot + x | 0) + 1 | 0 : ot };
-                })(A);
+                  return { ...j, mark: Z < E ? (Z + E | 0) + 1 | 0 : Z };
+                })(R);
                 continue;
               }
-              W = (() => {
-                const M = (ot) => {
-                  const st = wt(ot)(nt.outWeight), _t = wt(ot)(nt.inWeight);
+              Q = (() => {
+                const j = (Z) => {
+                  const at = Gt(Z)(et.outWeight), _t = Gt(Z)(et.inWeight);
                   return (() => {
-                    if (st.tag === "Nothing")
+                    if (at.tag === "Nothing")
                       return 0;
-                    if (st.tag === "Just")
-                      return st._1;
+                    if (at.tag === "Just")
+                      return at._1;
                     f();
                   })() - (() => {
                     if (_t.tag === "Nothing")
@@ -6367,609 +7254,609 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
                       return _t._1;
                     f();
                   })() | 0;
-                }, tt = Lt((ot) => (st) => rt.compare(M(st))(M(ot)))(nt.remaining);
-                if (0 < tt.length) {
-                  const ot = tt[0];
+                }, ot = kt((Z) => (at) => it.compare(j(at))(j(Z)))(et.remaining);
+                if (0 < ot.length) {
+                  const Z = ot[0];
                   return {
-                    ...nt,
-                    inWeight: J((st) => (_t) => yt(rt)(Zt)(_t.tgt)(-_t.weight)(st))(nt.inWeight)((() => {
-                      const st = wt(ot)(nt.depsBySrc);
-                      if (st.tag === "Nothing")
+                    ...et,
+                    inWeight: x((at) => (_t) => vt(it)(on)(_t.tgt)(-_t.weight)(at))(et.inWeight)((() => {
+                      const at = Gt(Z)(et.depsBySrc);
+                      if (at.tag === "Nothing")
                         return [];
-                      if (st.tag === "Just")
-                        return st._1;
+                      if (at.tag === "Just")
+                        return at._1;
                       f();
                     })()),
-                    marks: Y(rt)(ot)(nt.nextSource)(nt.marks),
-                    nextSource: nt.nextSource + 1 | 0,
-                    outWeight: J((st) => (_t) => yt(rt)(Zt)(_t.src)(-_t.weight)(st))(nt.outWeight)((() => {
-                      const st = wt(ot)(nt.depsByTgt);
-                      if (st.tag === "Nothing")
+                    marks: U(it)(Z)(et.nextSource)(et.marks),
+                    nextSource: et.nextSource + 1 | 0,
+                    outWeight: x((at) => (_t) => vt(it)(on)(_t.src)(-_t.weight)(at))(et.outWeight)((() => {
+                      const at = Gt(Z)(et.depsByTgt);
+                      if (at.tag === "Nothing")
                         return [];
-                      if (st.tag === "Just")
-                        return st._1;
+                      if (at.tag === "Just")
+                        return at._1;
                       f();
                     })()),
-                    remaining: gt((st) => st !== ot, nt.remaining)
+                    remaining: lt((at) => at !== Z, et.remaining)
                   };
                 }
-                return nt;
+                return et;
               })();
             }
             return V;
           })({
-            remaining: O((F) => F.id)(A),
-            marks: Q,
-            inWeight: J((F) => (W) => yt(rt)(Zt)(W.tgt)(W.weight)(F))(Q)(_),
-            outWeight: J((F) => (W) => yt(rt)(Zt)(W.src)(W.weight)(F))(Q)(_),
-            depsBySrc: J((F) => (W) => yt(rt)(fn)(W.src)([W])(F))(Q)(_),
-            depsByTgt: J((F) => (W) => yt(rt)(fn)(W.tgt)([W])(F))(Q)(_),
-            nextSink: x - 1 | 0,
-            nextSource: x + 1 | 0
+            remaining: z((W) => W.id)(R),
+            marks: A,
+            inWeight: x((W) => (Q) => vt(it)(on)(Q.tgt)(Q.weight)(W))(A)(l),
+            outWeight: x((W) => (Q) => vt(it)(on)(Q.src)(Q.weight)(W))(A)(l),
+            depsBySrc: x((W) => (Q) => vt(it)(rn)(Q.src)([Q])(W))(A)(l),
+            depsByTgt: x((W) => (Q) => vt(it)(rn)(Q.tgt)([Q])(W))(A)(l),
+            nextSink: E - 1 | 0,
+            nextSource: E + 1 | 0
           });
         })());
-      })()), R = gt(
-        (A) => {
-          const x = wt(A.src)(P), C = wt(A.tgt)(P);
+      })()), B = lt(
+        (R) => {
+          const E = Gt(R.src)(P), S = Gt(R.tgt)(P);
           return (() => {
-            if (x.tag === "Nothing")
+            if (E.tag === "Nothing")
               return 0;
-            if (x.tag === "Just")
-              return x._1;
+            if (E.tag === "Just")
+              return E._1;
             f();
           })() > (() => {
-            if (C.tag === "Nothing")
+            if (S.tag === "Nothing")
               return 0;
-            if (C.tag === "Just")
-              return C._1;
+            if (S.tag === "Just")
+              return S._1;
             f();
           })();
         },
-        _
+        l
       );
-      if (R.length === 0)
+      if (B.length === 0)
         return d;
-      const j = J((A) => (x) => {
-        if (In(Er)(x.src)(A.decisions) || In(Er)(x.tgt)(A.decisions))
-          return A;
-        const C = wt(x.src)(A.segMap), q = wt(x.tgt)(A.segMap);
-        if (C.tag === "Just" && q.tag === "Just") {
-          const S = (C._1.incoming.length + C._1.outgoing.length | 0) > 2 && (q._1.incoming.length + q._1.outgoing.length | 0) <= 2, F = S ? q._1 : C._1;
+      const tt = x((R) => (E) => {
+        if (Hn(Ir)(E.src)(R.decisions) || Hn(Ir)(E.tgt)(R.decisions))
+          return R;
+        const S = Gt(E.src)(R.segMap), O = Gt(E.tgt)(R.segMap);
+        if (S.tag === "Just" && O.tag === "Just") {
+          const I = (S._1.incoming.length + S._1.outgoing.length | 0) > 2 && (O._1.incoming.length + O._1.outgoing.length | 0) <= 2, W = I ? O._1 : S._1;
           return {
-            decisions: [...A.decisions, F.id],
-            segMap: Y(rt)(F.id)({ ...F, splitBy: b("Just", S ? C._1.id : q._1.id) })(A.segMap)
+            decisions: [...R.decisions, W.id],
+            segMap: U(it)(W.id)({ ...W, splitBy: v("Just", I ? S._1.id : O._1.id) })(R.segMap)
           };
         }
-        return A;
-      })({ decisions: [], segMap: Ve(O((A) => L(A.id, A))(d.segments)) })(R), et = j.segMap, X = J((A) => (x) => {
-        const C = at(J(at)(1e18)(x.incoming))(J(at)(1e18)(x.outgoing)), q = ft(J(ft)(-1e18)(x.incoming))(J(ft)(-1e18)(x.outgoing)), S = gt(
-          (B) => B.a.startPosition <= q && B.a.endPosition >= C,
-          Pt((B) => (nt) => ({ i: B, a: nt }))(A.freeAreas)
+        return R;
+      })({ decisions: [], segMap: Jr(z((R) => b(R.id, R))(d.segments)) })(B), ct = tt.segMap, q = x((R) => (E) => {
+        const S = ht(x(ht)(1e18)(E.incoming))(x(ht)(1e18)(E.outgoing)), O = pt(x(pt)(-1e18)(E.incoming))(x(pt)(-1e18)(E.outgoing)), I = lt(
+          (H) => H.a.startPosition <= O && H.a.endPosition >= S,
+          Ft((H) => (et) => ({ i: H, a: et }))(R.freeAreas)
         );
-        if (S.length === 0) {
-          const B = {
-            ...x,
-            incoming: Lt(pt.compare)(x.incoming),
-            outgoing: Lt(pt.compare)([(C + q) / 2]),
-            splitPartner: b("Just", A.nextId)
-          }, nt = {
-            id: A.nextId,
-            incoming: Lt(pt.compare)([(C + q) / 2]),
+        if (I.length === 0) {
+          const H = {
+            ...E,
+            incoming: kt(ft.compare)(E.incoming),
+            outgoing: kt(ft.compare)([(S + O) / 2]),
+            splitPartner: v("Just", R.nextId)
+          }, et = {
+            id: R.nextId,
+            incoming: kt(ft.compare)([(S + O) / 2]),
             mark: 0,
-            members: x.members,
-            outgoing: Lt(pt.compare)(x.outgoing),
+            members: E.members,
+            outgoing: kt(ft.compare)(E.outgoing),
             slot: 0,
-            splitBy: T,
-            splitPartner: b("Just", x.id)
+            splitBy: J,
+            splitPartner: v("Just", E.id)
           };
           return {
-            segMap: Y(rt)(nt.id)(nt)(Y(rt)(B.id)(B)(A.segMap)),
-            freeAreas: A.freeAreas,
-            nextId: A.nextId + 1 | 0
+            segMap: U(it)(et.id)(et)(U(it)(H.id)(H)(R.segMap)),
+            freeAreas: R.freeAreas,
+            nextId: R.nextId + 1 | 0
           };
         }
-        const F = 0 < S.length ? b("Just", S[0]) : T, W = (() => {
-          if (F.tag === "Nothing")
+        const W = 0 < I.length ? v("Just", I[0]) : J, Q = (() => {
+          if (W.tag === "Nothing")
             return { i: 0, a: { startPosition: 0, endPosition: 0, size: 0 } };
-          if (F.tag === "Just") {
-            if (S.length === 1)
-              return F._1;
-            const B = O((nt) => ({
-              c: nt,
+          if (W.tag === "Just") {
+            if (I.length === 1)
+              return W._1;
+            const H = z((et) => ({
+              c: et,
               rating: (() => {
-                const M = (nt.a.startPosition + nt.a.endPosition) / 2, tt = [M], ot = [M], st = J((() => {
-                  const At = A.segMap;
-                  return (Tt) => (Vt) => {
-                    const ht = wt(Vt.tgt)(At);
-                    if (ht.tag === "Nothing")
+                const j = (et.a.startPosition + et.a.endPosition) / 2, ot = [j], Z = [j], at = x((() => {
+                  const Qt = R.segMap;
+                  return (Tt) => (Bt) => {
+                    const $t = Gt(Bt.tgt)(Qt);
+                    if ($t.tag === "Nothing")
                       return Tt;
-                    if (ht.tag === "Just") {
-                      const mt = at(J(at)(1e18)(ht._1.incoming))(J(at)(1e18)(ht._1.outgoing)), lt = ft(J(ft)(-1e18)(ht._1.incoming))(J(ft)(-1e18)(ht._1.outgoing)), dt = at(J(at)(1e18)(x.incoming))(J(at)(1e18)(tt)), it = (() => {
-                        const Ct = ft(J(ft)(-1e18)(x.incoming))(J(ft)(-1e18)(tt)), St = J((Ft) => (nn) => nn > lt ? Ft : nn >= mt ? Ft + 1 | 0 : Ft)(0)(tt) + J((Ft) => (nn) => nn > Ct ? Ft : nn >= dt ? Ft + 1 | 0 : Ft)(0)(ht._1.incoming) | 0, be = at(J(at)(1e18)(x.incoming))(J(at)(1e18)(tt)), Ee = ft(J(ft)(-1e18)(x.incoming))(J(ft)(-1e18)(tt)), He = at(J(at)(1e18)(ht._1.incoming))(J(at)(1e18)(ht._1.outgoing)), ie = ft(J(ft)(-1e18)(ht._1.incoming))(J(ft)(-1e18)(ht._1.outgoing)), dr = J((Ft) => (nn) => nn > Ee ? Ft : nn >= be ? Ft + 1 | 0 : Ft)(0)(ht._1.outgoing) + J((Ft) => (nn) => nn > ie ? Ft : nn >= He ? Ft + 1 | 0 : Ft)(0)(x.incoming) | 0;
-                        return St === dr ? St > 0 ? { ...Tt, deps: Tt.deps + 2 | 0, crossings: Tt.crossings + St | 0 } : Tt : { ...Tt, deps: Tt.deps + 1 | 0, crossings: Tt.crossings + Xe(St)(dr) | 0 };
-                      })(), ut = at(J(at)(1e18)(ht._1.incoming))(J(at)(1e18)(ht._1.outgoing)), $t = ft(J(ft)(-1e18)(ht._1.incoming))(J(ft)(-1e18)(ht._1.outgoing)), Nt = at(J(at)(1e18)(ot))(J(at)(1e18)(x.outgoing)), Rt = ft(J(ft)(-1e18)(ot))(J(ft)(-1e18)(x.outgoing)), It = J((Ct) => (St) => St > $t ? Ct : St >= ut ? Ct + 1 | 0 : Ct)(0)(x.outgoing) + J((Ct) => (St) => St > Rt ? Ct : St >= Nt ? Ct + 1 | 0 : Ct)(0)(ht._1.incoming) | 0, tn = at(J(at)(1e18)(ot))(J(at)(1e18)(x.outgoing)), zn = ft(J(ft)(-1e18)(ot))(J(ft)(-1e18)(x.outgoing)), qe = at(J(at)(1e18)(ht._1.incoming))(J(at)(1e18)(ht._1.outgoing)), ke = ft(J(ft)(-1e18)(ht._1.incoming))(J(ft)(-1e18)(ht._1.outgoing)), oe = J((Ct) => (St) => St > zn ? Ct : St >= tn ? Ct + 1 | 0 : Ct)(0)(ht._1.outgoing) + J((Ct) => (St) => St > ke ? Ct : St >= qe ? Ct + 1 | 0 : Ct)(0)(ot) | 0;
-                      return It === oe ? It > 0 ? { ...it, deps: it.deps + 2 | 0, crossings: it.crossings + It | 0 } : it : { ...it, deps: it.deps + 1 | 0, crossings: it.crossings + Xe(It)(oe) | 0 };
+                    if ($t.tag === "Just") {
+                      const xt = ht(x(ht)(1e18)($t._1.incoming))(x(ht)(1e18)($t._1.outgoing)), mt = pt(x(pt)(-1e18)($t._1.incoming))(x(pt)(-1e18)($t._1.outgoing)), rt = ht(x(ht)(1e18)(E.incoming))(x(ht)(1e18)(ot)), K = (() => {
+                        const St = pt(x(pt)(-1e18)(E.incoming))(x(pt)(-1e18)(ot)), Pt = x((Ut) => (cn) => cn > mt ? Ut : cn >= xt ? Ut + 1 | 0 : Ut)(0)(ot) + x((Ut) => (cn) => cn > St ? Ut : cn >= rt ? Ut + 1 | 0 : Ut)(0)($t._1.incoming) | 0, Xn = ht(x(ht)(1e18)(E.incoming))(x(ht)(1e18)(ot)), _e = pt(x(pt)(-1e18)(E.incoming))(x(pt)(-1e18)(ot)), Nr = ht(x(ht)(1e18)($t._1.incoming))(x(ht)(1e18)($t._1.outgoing)), be = pt(x(pt)(-1e18)($t._1.incoming))(x(pt)(-1e18)($t._1.outgoing)), Mr = x((Ut) => (cn) => cn > _e ? Ut : cn >= Xn ? Ut + 1 | 0 : Ut)(0)($t._1.outgoing) + x((Ut) => (cn) => cn > be ? Ut : cn >= Nr ? Ut + 1 | 0 : Ut)(0)(E.incoming) | 0;
+                        return Pt === Mr ? Pt > 0 ? { ...Tt, deps: Tt.deps + 2 | 0, crossings: Tt.crossings + Pt | 0 } : Tt : { ...Tt, deps: Tt.deps + 1 | 0, crossings: Tt.crossings + vr(Pt)(Mr) | 0 };
+                      })(), st = ht(x(ht)(1e18)($t._1.incoming))(x(ht)(1e18)($t._1.outgoing)), gt = pt(x(pt)(-1e18)($t._1.incoming))(x(pt)(-1e18)($t._1.outgoing)), dt = ht(x(ht)(1e18)(Z))(x(ht)(1e18)(E.outgoing)), Nt = pt(x(pt)(-1e18)(Z))(x(pt)(-1e18)(E.outgoing)), At = x((St) => (Pt) => Pt > gt ? St : Pt >= st ? St + 1 | 0 : St)(0)(E.outgoing) + x((St) => (Pt) => Pt > Nt ? St : Pt >= dt ? St + 1 | 0 : St)(0)($t._1.incoming) | 0, Vt = ht(x(ht)(1e18)(Z))(x(ht)(1e18)(E.outgoing)), Pn = pt(x(pt)(-1e18)(Z))(x(pt)(-1e18)(E.outgoing)), ne = ht(x(ht)(1e18)($t._1.incoming))(x(ht)(1e18)($t._1.outgoing)), kn = pt(x(pt)(-1e18)($t._1.incoming))(x(pt)(-1e18)($t._1.outgoing)), Qn = x((St) => (Pt) => Pt > Pn ? St : Pt >= Vt ? St + 1 | 0 : St)(0)($t._1.outgoing) + x((St) => (Pt) => Pt > kn ? St : Pt >= ne ? St + 1 | 0 : St)(0)(Z) | 0;
+                      return At === Qn ? At > 0 ? { ...K, deps: K.deps + 2 | 0, crossings: K.crossings + At | 0 } : K : { ...K, deps: K.deps + 1 | 0, crossings: K.crossings + vr(At)(Qn) | 0 };
                     }
                     f();
                   };
-                })())(J((() => {
-                  const At = A.segMap;
-                  return (Tt) => (Vt) => {
-                    const ht = wt(Vt.src)(At);
-                    if (ht.tag === "Nothing")
+                })())(x((() => {
+                  const Qt = R.segMap;
+                  return (Tt) => (Bt) => {
+                    const $t = Gt(Bt.src)(Qt);
+                    if ($t.tag === "Nothing")
                       return Tt;
-                    if (ht.tag === "Just") {
-                      const mt = at(J(at)(1e18)(ht._1.incoming))(J(at)(1e18)(ht._1.outgoing)), lt = ft(J(ft)(-1e18)(ht._1.incoming))(J(ft)(-1e18)(ht._1.outgoing)), dt = at(J(at)(1e18)(x.incoming))(J(at)(1e18)(tt)), it = (() => {
-                        const Ct = ft(J(ft)(-1e18)(x.incoming))(J(ft)(-1e18)(tt)), St = J((Ft) => (nn) => nn > lt ? Ft : nn >= mt ? Ft + 1 | 0 : Ft)(0)(tt) + J((Ft) => (nn) => nn > Ct ? Ft : nn >= dt ? Ft + 1 | 0 : Ft)(0)(ht._1.incoming) | 0, be = at(J(at)(1e18)(x.incoming))(J(at)(1e18)(tt)), Ee = ft(J(ft)(-1e18)(x.incoming))(J(ft)(-1e18)(tt)), He = at(J(at)(1e18)(ht._1.incoming))(J(at)(1e18)(ht._1.outgoing)), ie = ft(J(ft)(-1e18)(ht._1.incoming))(J(ft)(-1e18)(ht._1.outgoing)), dr = J((Ft) => (nn) => nn > Ee ? Ft : nn >= be ? Ft + 1 | 0 : Ft)(0)(ht._1.outgoing) + J((Ft) => (nn) => nn > ie ? Ft : nn >= He ? Ft + 1 | 0 : Ft)(0)(x.incoming) | 0;
-                        return St === dr ? St > 0 ? { ...Tt, deps: Tt.deps + 2 | 0, crossings: Tt.crossings + St | 0 } : Tt : { ...Tt, deps: Tt.deps + 1 | 0, crossings: Tt.crossings + Xe(St)(dr) | 0 };
-                      })(), ut = at(J(at)(1e18)(ht._1.incoming))(J(at)(1e18)(ht._1.outgoing)), $t = ft(J(ft)(-1e18)(ht._1.incoming))(J(ft)(-1e18)(ht._1.outgoing)), Nt = at(J(at)(1e18)(ot))(J(at)(1e18)(x.outgoing)), Rt = ft(J(ft)(-1e18)(ot))(J(ft)(-1e18)(x.outgoing)), It = J((Ct) => (St) => St > $t ? Ct : St >= ut ? Ct + 1 | 0 : Ct)(0)(x.outgoing) + J((Ct) => (St) => St > Rt ? Ct : St >= Nt ? Ct + 1 | 0 : Ct)(0)(ht._1.incoming) | 0, tn = at(J(at)(1e18)(ot))(J(at)(1e18)(x.outgoing)), zn = ft(J(ft)(-1e18)(ot))(J(ft)(-1e18)(x.outgoing)), qe = at(J(at)(1e18)(ht._1.incoming))(J(at)(1e18)(ht._1.outgoing)), ke = ft(J(ft)(-1e18)(ht._1.incoming))(J(ft)(-1e18)(ht._1.outgoing)), oe = J((Ct) => (St) => St > zn ? Ct : St >= tn ? Ct + 1 | 0 : Ct)(0)(ht._1.outgoing) + J((Ct) => (St) => St > ke ? Ct : St >= qe ? Ct + 1 | 0 : Ct)(0)(ot) | 0;
-                      return It === oe ? It > 0 ? { ...it, deps: it.deps + 2 | 0, crossings: it.crossings + It | 0 } : it : { ...it, deps: it.deps + 1 | 0, crossings: it.crossings + Xe(It)(oe) | 0 };
+                    if ($t.tag === "Just") {
+                      const xt = ht(x(ht)(1e18)($t._1.incoming))(x(ht)(1e18)($t._1.outgoing)), mt = pt(x(pt)(-1e18)($t._1.incoming))(x(pt)(-1e18)($t._1.outgoing)), rt = ht(x(ht)(1e18)(E.incoming))(x(ht)(1e18)(ot)), K = (() => {
+                        const St = pt(x(pt)(-1e18)(E.incoming))(x(pt)(-1e18)(ot)), Pt = x((Ut) => (cn) => cn > mt ? Ut : cn >= xt ? Ut + 1 | 0 : Ut)(0)(ot) + x((Ut) => (cn) => cn > St ? Ut : cn >= rt ? Ut + 1 | 0 : Ut)(0)($t._1.incoming) | 0, Xn = ht(x(ht)(1e18)(E.incoming))(x(ht)(1e18)(ot)), _e = pt(x(pt)(-1e18)(E.incoming))(x(pt)(-1e18)(ot)), Nr = ht(x(ht)(1e18)($t._1.incoming))(x(ht)(1e18)($t._1.outgoing)), be = pt(x(pt)(-1e18)($t._1.incoming))(x(pt)(-1e18)($t._1.outgoing)), Mr = x((Ut) => (cn) => cn > _e ? Ut : cn >= Xn ? Ut + 1 | 0 : Ut)(0)($t._1.outgoing) + x((Ut) => (cn) => cn > be ? Ut : cn >= Nr ? Ut + 1 | 0 : Ut)(0)(E.incoming) | 0;
+                        return Pt === Mr ? Pt > 0 ? { ...Tt, deps: Tt.deps + 2 | 0, crossings: Tt.crossings + Pt | 0 } : Tt : { ...Tt, deps: Tt.deps + 1 | 0, crossings: Tt.crossings + vr(Pt)(Mr) | 0 };
+                      })(), st = ht(x(ht)(1e18)($t._1.incoming))(x(ht)(1e18)($t._1.outgoing)), gt = pt(x(pt)(-1e18)($t._1.incoming))(x(pt)(-1e18)($t._1.outgoing)), dt = ht(x(ht)(1e18)(Z))(x(ht)(1e18)(E.outgoing)), Nt = pt(x(pt)(-1e18)(Z))(x(pt)(-1e18)(E.outgoing)), At = x((St) => (Pt) => Pt > gt ? St : Pt >= st ? St + 1 | 0 : St)(0)(E.outgoing) + x((St) => (Pt) => Pt > Nt ? St : Pt >= dt ? St + 1 | 0 : St)(0)($t._1.incoming) | 0, Vt = ht(x(ht)(1e18)(Z))(x(ht)(1e18)(E.outgoing)), Pn = pt(x(pt)(-1e18)(Z))(x(pt)(-1e18)(E.outgoing)), ne = ht(x(ht)(1e18)($t._1.incoming))(x(ht)(1e18)($t._1.outgoing)), kn = pt(x(pt)(-1e18)($t._1.incoming))(x(pt)(-1e18)($t._1.outgoing)), Qn = x((St) => (Pt) => Pt > Pn ? St : Pt >= Vt ? St + 1 | 0 : St)(0)($t._1.outgoing) + x((St) => (Pt) => Pt > kn ? St : Pt >= ne ? St + 1 | 0 : St)(0)(Z) | 0;
+                      return At === Qn ? At > 0 ? { ...K, deps: K.deps + 2 | 0, crossings: K.crossings + At | 0 } : K : { ...K, deps: K.deps + 1 | 0, crossings: K.crossings + vr(At)(Qn) | 0 };
                     }
                     f();
                   };
-                })())({ crossings: 0, deps: 0 })(gt((At) => At.tgt === x.id, d.deps)))(gt((At) => At.src === x.id, d.deps)), _t = (() => {
-                  if (x.splitBy.tag === "Just")
-                    return wt(x.splitBy._1)(A.segMap);
-                  if (x.splitBy.tag === "Nothing")
-                    return T;
+                })())({ crossings: 0, deps: 0 })(lt((Qt) => Qt.tgt === E.id, d.deps)))(lt((Qt) => Qt.src === E.id, d.deps)), _t = (() => {
+                  if (E.splitBy.tag === "Just")
+                    return Gt(E.splitBy._1)(R.segMap);
+                  if (E.splitBy.tag === "Nothing")
+                    return J;
                   f();
                 })();
                 if (_t.tag === "Just")
                   return {
-                    ...st,
-                    deps: st.deps + 2 | 0,
+                    ...at,
+                    deps: at.deps + 2 | 0,
                     crossings: (() => {
-                      const At = at(J(at)(1e18)(_t._1.incoming))(J(at)(1e18)(_t._1.outgoing)), Tt = at(J(at)(1e18)(ot))(J(at)(1e18)(x.outgoing)), Vt = ft(J(ft)(-1e18)(_t._1.incoming))(J(ft)(-1e18)(_t._1.outgoing)), ht = ft(J(ft)(-1e18)(ot))(J(ft)(-1e18)(x.outgoing)), mt = at(J(at)(1e18)(x.incoming))(J(at)(1e18)(tt));
-                      return st.crossings + (() => {
-                        const lt = at(J(at)(1e18)(_t._1.incoming))(J(at)(1e18)(_t._1.outgoing)), dt = ft(J(ft)(-1e18)(x.incoming))(J(ft)(-1e18)(tt)), it = ft(J(ft)(-1e18)(_t._1.incoming))(J(ft)(-1e18)(_t._1.outgoing));
-                        return ((J((ut) => ($t) => $t > Vt ? ut : $t >= At ? ut + 1 | 0 : ut)(0)(tt) + J((ut) => ($t) => $t > dt ? ut : $t >= mt ? ut + 1 | 0 : ut)(0)(_t._1.incoming) | 0) + J((ut) => ($t) => $t > ht ? ut : $t >= Tt ? ut + 1 | 0 : ut)(0)(_t._1.outgoing) | 0) + J((ut) => ($t) => $t > it ? ut : $t >= lt ? ut + 1 | 0 : ut)(0)(ot) | 0;
+                      const Qt = ht(x(ht)(1e18)(_t._1.incoming))(x(ht)(1e18)(_t._1.outgoing)), Tt = ht(x(ht)(1e18)(Z))(x(ht)(1e18)(E.outgoing)), Bt = pt(x(pt)(-1e18)(_t._1.incoming))(x(pt)(-1e18)(_t._1.outgoing)), $t = pt(x(pt)(-1e18)(Z))(x(pt)(-1e18)(E.outgoing)), xt = ht(x(ht)(1e18)(E.incoming))(x(ht)(1e18)(ot));
+                      return at.crossings + (() => {
+                        const mt = ht(x(ht)(1e18)(_t._1.incoming))(x(ht)(1e18)(_t._1.outgoing)), rt = pt(x(pt)(-1e18)(E.incoming))(x(pt)(-1e18)(ot)), K = pt(x(pt)(-1e18)(_t._1.incoming))(x(pt)(-1e18)(_t._1.outgoing));
+                        return ((x((st) => (gt) => gt > Bt ? st : gt >= Qt ? st + 1 | 0 : st)(0)(ot) + x((st) => (gt) => gt > rt ? st : gt >= xt ? st + 1 | 0 : st)(0)(_t._1.incoming) | 0) + x((st) => (gt) => gt > $t ? st : gt >= Tt ? st + 1 | 0 : st)(0)(_t._1.outgoing) | 0) + x((st) => (gt) => gt > K ? st : gt >= mt ? st + 1 | 0 : st)(0)(Z) | 0;
                       })() | 0;
                     })()
                   };
                 if (_t.tag === "Nothing")
-                  return st;
+                  return at;
                 f();
               })()
-            }))(S);
-            return J((nt) => (M) => M.rating.crossings < nt.rating.crossings || !(M.rating.crossings > nt.rating.crossings) && (M.rating.deps < nt.rating.deps || !(M.rating.deps > nt.rating.deps) && M.c.a.size > nt.c.a.size) ? M : nt)(0 < B.length ? B[0] : { c: F._1, rating: { crossings: 1e6, deps: 1e6 } })(B).c;
+            }))(I);
+            return x((et) => (j) => j.rating.crossings < et.rating.crossings || !(j.rating.crossings > et.rating.crossings) && (j.rating.deps < et.rating.deps || !(j.rating.deps > et.rating.deps) && j.c.a.size > et.c.a.size) ? j : et)(0 < H.length ? H[0] : { c: W._1, rating: { crossings: 1e6, deps: 1e6 } })(H).c;
           }
           f();
-        })(), K = {
-          ...x,
-          incoming: Lt(pt.compare)(x.incoming),
-          outgoing: Lt(pt.compare)([(W.a.startPosition + W.a.endPosition) / 2]),
-          splitPartner: b("Just", A.nextId)
+        })(), M = {
+          ...E,
+          incoming: kt(ft.compare)(E.incoming),
+          outgoing: kt(ft.compare)([(Q.a.startPosition + Q.a.endPosition) / 2]),
+          splitPartner: v("Just", R.nextId)
         }, V = {
-          id: A.nextId,
-          incoming: Lt(pt.compare)([(W.a.startPosition + W.a.endPosition) / 2]),
+          id: R.nextId,
+          incoming: kt(ft.compare)([(Q.a.startPosition + Q.a.endPosition) / 2]),
           mark: 0,
-          members: x.members,
-          outgoing: Lt(pt.compare)(x.outgoing),
+          members: E.members,
+          outgoing: kt(ft.compare)(E.outgoing),
           slot: 0,
-          splitBy: T,
-          splitPartner: b("Just", x.id)
+          splitBy: J,
+          splitPartner: v("Just", E.id)
         };
         return {
-          segMap: Y(rt)(V.id)(V)(Y(rt)(K.id)(K)(A.segMap)),
+          segMap: U(it)(V.id)(V)(U(it)(M.id)(M)(R.segMap)),
           freeAreas: (() => {
-            if (W.i >= 0 && W.i < A.freeAreas.length) {
-              const B = cc(Yt, T, W.i, A.freeAreas), nt = (() => {
-                if (B.tag === "Nothing")
-                  return A.freeAreas;
-                if (B.tag === "Just")
-                  return B._1;
+            if (Q.i >= 0 && Q.i < R.freeAreas.length) {
+              const H = vf(qt, J, Q.i, R.freeAreas), et = (() => {
+                if (H.tag === "Nothing")
+                  return R.freeAreas;
+                if (H.tag === "Just")
+                  return H._1;
                 f();
               })();
-              if (A.freeAreas[W.i].size / 2 < l)
-                return nt;
-              const M = (A.freeAreas[W.i].startPosition + A.freeAreas[W.i].endPosition) / 2, tt = M - l, ot = M + l;
+              if (R.freeAreas[Q.i].size / 2 < _)
+                return et;
+              const j = (R.freeAreas[Q.i].startPosition + R.freeAreas[Q.i].endPosition) / 2, ot = j - _, Z = j + _;
               return [
-                ...W.i < 1 ? [] : Gt(0, W.i, nt),
-                ...A.freeAreas[W.i].startPosition <= tt ? [{ startPosition: A.freeAreas[W.i].startPosition, endPosition: tt, size: tt - A.freeAreas[W.i].startPosition }] : [],
-                ...ot <= A.freeAreas[W.i].endPosition ? [{ startPosition: ot, endPosition: A.freeAreas[W.i].endPosition, size: A.freeAreas[W.i].endPosition - ot }] : [],
-                ...W.i < 1 ? nt : Gt(W.i, nt.length, nt)
+                ...Q.i < 1 ? [] : bt(0, Q.i, et),
+                ...R.freeAreas[Q.i].startPosition <= ot ? [{ startPosition: R.freeAreas[Q.i].startPosition, endPosition: ot, size: ot - R.freeAreas[Q.i].startPosition }] : [],
+                ...Z <= R.freeAreas[Q.i].endPosition ? [{ startPosition: Z, endPosition: R.freeAreas[Q.i].endPosition, size: R.freeAreas[Q.i].endPosition - Z }] : [],
+                ...Q.i < 1 ? et : bt(Q.i, et.length, et)
               ];
             }
-            return A.freeAreas;
+            return R.freeAreas;
           })(),
-          nextId: A.nextId + 1 | 0
+          nextId: R.nextId + 1 | 0
         };
       })({
-        segMap: et,
+        segMap: ct,
         freeAreas: (() => {
-          const A = Lt(pt.compare)([
-            ...bt(d.segments)((x) => x.incoming),
-            ...bt(d.segments)((x) => x.outgoing)
+          const R = kt(ft.compare)([
+            ...Jt(d.segments)((E) => E.incoming),
+            ...Jt(d.segments)((E) => E.outgoing)
           ]);
-          return vt(_d)($n(
-            (x) => (C) => C - x >= 2 * l ? b("Just", { startPosition: x + l, endPosition: C - l, size: C - x - 2 * l }) : T,
-            A,
-            Gt(1, A.length, A)
+          return yt(sm)(wn(
+            (E) => (S) => S - E >= 2 * _ ? v("Just", { startPosition: E + _, endPosition: S - _, size: S - E - 2 * _ }) : J,
+            R,
+            bt(1, R.length, R)
           ));
         })(),
         nextId: d.segments.length
-      })(Lt((A) => (x) => pt.compare(ft(J(ft)(-1e18)(A.incoming))(J(ft)(-1e18)(A.outgoing)) - at(J(at)(1e18)(A.incoming))(J(at)(1e18)(A.outgoing)))(ft(J(ft)(-1e18)(x.incoming))(J(ft)(-1e18)(x.outgoing)) - at(J(at)(1e18)(x.incoming))(J(at)(1e18)(x.outgoing))))(vt((A) => wt(A)(et))(j.decisions)));
+      })(kt((R) => (E) => ft.compare(pt(x(pt)(-1e18)(R.incoming))(x(pt)(-1e18)(R.outgoing)) - ht(x(ht)(1e18)(R.incoming))(x(ht)(1e18)(R.outgoing)))(pt(x(pt)(-1e18)(E.incoming))(x(pt)(-1e18)(E.outgoing)) - ht(x(ht)(1e18)(E.incoming))(x(ht)(1e18)(E.outgoing))))(yt((R) => Gt(R)(ct))(tt.decisions)));
       return {
         segments: (() => {
-          const A = (x, C) => {
-            if (x.tag === "Leaf")
-              return C;
-            if (x.tag === "Node")
-              return A(x._5, qt("Cons", x._4, A(x._6, C)));
+          const R = (E, S) => {
+            if (E.tag === "Leaf")
+              return S;
+            if (E.tag === "Node")
+              return R(E._5, zt("Cons", E._4, R(E._6, S)));
             f();
           };
-          return Et(Mt.foldr, A(X.segMap, zt));
+          return Lt(Xt.foldr, R(q.segMap, Yt));
         })(),
         deps: (() => {
-          const A = X.segMap, x = (S, F) => {
-            if (S.tag === "Leaf")
-              return F;
-            if (S.tag === "Node")
-              return x(S._5, qt("Cons", S._4, x(S._6, F)));
+          const R = q.segMap, E = (I, W) => {
+            if (I.tag === "Leaf")
+              return W;
+            if (I.tag === "Node")
+              return E(I._5, zt("Cons", I._4, E(I._6, W)));
             f();
-          }, C = Et(Mt.foldr, x(A, zt)), q = C.length;
+          }, S = Lt(Xt.foldr, E(R, Yt)), O = S.length;
           return [
-            ...bt(bt(Xt(0, q - 2 | 0))((S) => bt(Xt(S + 1 | 0, q - 1 | 0))((F) => [
-              L(S, F)
-            ])))((S) => S._1 >= 0 && S._1 < C.length ? S._2 >= 0 && S._2 < C.length ? C[S._1].splitPartner.tag !== "Nothing" && C[S._1].splitPartner.tag === "Just" && C[S._1].splitPartner._1 === C[S._2].id || C[S._2].splitPartner.tag !== "Nothing" && C[S._2].splitPartner.tag === "Just" && C[S._2].splitPartner._1 === C[S._1].id ? [] : i(l, C[S._1], C[S._2]) : [] : []),
-            ...bt(C)((S) => S.splitBy.tag === "Just" && S.splitPartner.tag === "Just" && (() => {
-              const F = wt(S.splitPartner._1)(A);
-              if (F.tag === "Nothing")
+            ...Jt(Jt(It(0, O - 2 | 0))((I) => Jt(It(I + 1 | 0, O - 1 | 0))((W) => [
+              b(I, W)
+            ])))((I) => I._1 >= 0 && I._1 < S.length ? I._2 >= 0 && I._2 < S.length ? S[I._1].splitPartner.tag !== "Nothing" && S[I._1].splitPartner.tag === "Just" && S[I._1].splitPartner._1 === S[I._2].id || S[I._2].splitPartner.tag !== "Nothing" && S[I._2].splitPartner.tag === "Just" && S[I._2].splitPartner._1 === S[I._1].id ? [] : i(_, S[I._1], S[I._2]) : [] : []),
+            ...Jt(S)((I) => I.splitBy.tag === "Just" && I.splitPartner.tag === "Just" && (() => {
+              const W = Gt(I.splitPartner._1)(R);
+              if (W.tag === "Nothing")
                 return !1;
-              if (F.tag === "Just")
+              if (W.tag === "Just")
                 return !0;
               f();
             })() && (() => {
-              const F = wt(S.splitBy._1)(A);
-              if (F.tag === "Nothing")
+              const W = Gt(I.splitBy._1)(R);
+              if (W.tag === "Nothing")
                 return !1;
-              if (F.tag === "Just")
+              if (W.tag === "Just")
                 return !0;
               f();
-            })() ? [{ src: S.id, tgt: S.splitBy._1, weight: 1, kind: oo }, { src: S.splitBy._1, tgt: S.splitPartner._1, weight: 1, kind: oo }] : [])
+            })() ? [{ src: I.id, tgt: I.splitBy._1, weight: 1, kind: ti }, { src: I.splitBy._1, tgt: I.splitPartner._1, weight: 1, kind: ti }] : [])
           ];
         })()
       };
-    })(), p = h.segments, $ = p.length, m = (P) => {
-      let R = P, j = !0, et;
-      for (; j; ) {
-        const X = R, A = ln((x) => {
-          const C = wt(x)(X.inWeight);
-          if (C.tag === "Nothing")
+    })(), $ = h.segments, p = $.length, m = (P) => {
+      let B = P, tt = !0, ct;
+      for (; tt; ) {
+        const q = B, R = jt((E) => {
+          const S = Gt(E)(q.inWeight);
+          if (S.tag === "Nothing")
             return !0;
-          if (C.tag === "Just")
-            return C._1 === 0;
+          if (S.tag === "Just")
+            return S._1 === 0;
           f();
-        })(X.remaining);
-        if (A.tag === "Nothing") {
-          j = !1, et = X;
+        })(q.remaining);
+        if (R.tag === "Nothing") {
+          tt = !1, ct = q;
           continue;
         }
-        if (A.tag === "Just") {
-          const x = A._1;
-          R = {
-            ...X,
-            inWeight: J((C) => (q) => yt(rt)(Zt)(q.tgt)(-q.weight)(C))(X.inWeight)((() => {
-              const C = wt(x)(X.depsBySrc);
-              if (C.tag === "Nothing")
+        if (R.tag === "Just") {
+          const E = R._1;
+          B = {
+            ...q,
+            inWeight: x((S) => (O) => vt(it)(on)(O.tgt)(-O.weight)(S))(q.inWeight)((() => {
+              const S = Gt(E)(q.depsBySrc);
+              if (S.tag === "Nothing")
                 return [];
-              if (C.tag === "Just")
-                return C._1;
+              if (S.tag === "Just")
+                return S._1;
               f();
             })()),
-            marks: Y(rt)(x)(X.nextSource)(X.marks),
-            nextSource: X.nextSource + 1 | 0,
-            outWeight: J((C) => (q) => yt(rt)(Zt)(q.src)(-q.weight)(C))(X.outWeight)((() => {
-              const C = wt(x)(X.depsByTgt);
-              if (C.tag === "Nothing")
+            marks: U(it)(E)(q.nextSource)(q.marks),
+            nextSource: q.nextSource + 1 | 0,
+            outWeight: x((S) => (O) => vt(it)(on)(O.src)(-O.weight)(S))(q.outWeight)((() => {
+              const S = Gt(E)(q.depsByTgt);
+              if (S.tag === "Nothing")
                 return [];
-              if (C.tag === "Just")
-                return C._1;
+              if (S.tag === "Just")
+                return S._1;
               f();
             })()),
-            remaining: gt((C) => C !== x, X.remaining)
+            remaining: lt((S) => S !== E, q.remaining)
           };
           continue;
         }
         f();
       }
-      return et;
-    }, N = (P) => {
-      let R = P, j = !0, et;
-      for (; j; ) {
-        const X = R, A = ln((x) => {
-          const C = wt(x)(X.outWeight);
-          if (C.tag === "Nothing")
+      return ct;
+    }, y = (P) => {
+      let B = P, tt = !0, ct;
+      for (; tt; ) {
+        const q = B, R = jt((E) => {
+          const S = Gt(E)(q.outWeight);
+          if (S.tag === "Nothing")
             return !0;
-          if (C.tag === "Just")
-            return C._1 === 0;
+          if (S.tag === "Just")
+            return S._1 === 0;
           f();
-        })(X.remaining);
-        if (A.tag === "Nothing") {
-          j = !1, et = X;
+        })(q.remaining);
+        if (R.tag === "Nothing") {
+          tt = !1, ct = q;
           continue;
         }
-        if (A.tag === "Just") {
-          const x = A._1;
-          R = {
-            ...X,
-            inWeight: J((C) => (q) => yt(rt)(Zt)(q.tgt)(-q.weight)(C))(X.inWeight)((() => {
-              const C = wt(x)(X.depsBySrc);
-              if (C.tag === "Nothing")
+        if (R.tag === "Just") {
+          const E = R._1;
+          B = {
+            ...q,
+            inWeight: x((S) => (O) => vt(it)(on)(O.tgt)(-O.weight)(S))(q.inWeight)((() => {
+              const S = Gt(E)(q.depsBySrc);
+              if (S.tag === "Nothing")
                 return [];
-              if (C.tag === "Just")
-                return C._1;
+              if (S.tag === "Just")
+                return S._1;
               f();
             })()),
-            marks: Y(rt)(x)(X.nextSink)(X.marks),
-            nextSink: X.nextSink - 1 | 0,
-            outWeight: J((C) => (q) => yt(rt)(Zt)(q.src)(-q.weight)(C))(X.outWeight)((() => {
-              const C = wt(x)(X.depsByTgt);
-              if (C.tag === "Nothing")
+            marks: U(it)(E)(q.nextSink)(q.marks),
+            nextSink: q.nextSink - 1 | 0,
+            outWeight: x((S) => (O) => vt(it)(on)(O.src)(-O.weight)(S))(q.outWeight)((() => {
+              const S = Gt(E)(q.depsByTgt);
+              if (S.tag === "Nothing")
                 return [];
-              if (C.tag === "Just")
-                return C._1;
+              if (S.tag === "Just")
+                return S._1;
               f();
             })()),
-            remaining: gt((C) => C !== x, X.remaining)
+            remaining: lt((S) => S !== E, q.remaining)
           };
           continue;
         }
         f();
       }
-      return et;
-    }, w = ((P) => {
-      let R = P, j = !0, et;
-      for (; j; ) {
-        const A = m(N(R));
-        if (A.remaining.length === 0) {
-          j = !1, et = O((x) => {
-            const C = wt(x.id)(A.marks), q = (() => {
-              if (C.tag === "Nothing")
-                return x.id;
-              if (C.tag === "Just")
-                return C._1;
+      return ct;
+    }, T = ((P) => {
+      let B = P, tt = !0, ct;
+      for (; tt; ) {
+        const R = m(y(B));
+        if (R.remaining.length === 0) {
+          tt = !1, ct = z((E) => {
+            const S = Gt(E.id)(R.marks), O = (() => {
+              if (S.tag === "Nothing")
+                return E.id;
+              if (S.tag === "Just")
+                return S._1;
               f();
             })();
-            return { ...x, mark: q < $ ? (q + $ | 0) + 1 | 0 : q };
-          })(p);
+            return { ...E, mark: O < p ? (O + p | 0) + 1 | 0 : O };
+          })($);
           continue;
         }
-        R = (() => {
-          const x = (q) => {
-            const S = wt(q)(A.outWeight), F = wt(q)(A.inWeight);
+        B = (() => {
+          const E = (O) => {
+            const I = Gt(O)(R.outWeight), W = Gt(O)(R.inWeight);
             return (() => {
+              if (I.tag === "Nothing")
+                return 0;
+              if (I.tag === "Just")
+                return I._1;
+              f();
+            })() - (() => {
+              if (W.tag === "Nothing")
+                return 0;
+              if (W.tag === "Just")
+                return W._1;
+              f();
+            })() | 0;
+          }, S = kt((O) => (I) => it.compare(E(I))(E(O)))(R.remaining);
+          if (0 < S.length) {
+            const O = S[0];
+            return {
+              ...R,
+              inWeight: x((I) => (W) => vt(it)(on)(W.tgt)(-W.weight)(I))(R.inWeight)((() => {
+                const I = Gt(O)(R.depsBySrc);
+                if (I.tag === "Nothing")
+                  return [];
+                if (I.tag === "Just")
+                  return I._1;
+                f();
+              })()),
+              marks: U(it)(O)(R.nextSource)(R.marks),
+              nextSource: R.nextSource + 1 | 0,
+              outWeight: x((I) => (W) => vt(it)(on)(W.src)(-W.weight)(I))(R.outWeight)((() => {
+                const I = Gt(O)(R.depsByTgt);
+                if (I.tag === "Nothing")
+                  return [];
+                if (I.tag === "Just")
+                  return I._1;
+                f();
+              })()),
+              remaining: lt((I) => I !== O, R.remaining)
+            };
+          }
+          return R;
+        })();
+      }
+      return ct;
+    })({
+      remaining: z((P) => P.id)($),
+      marks: A,
+      inWeight: x((P) => (B) => vt(it)(on)(B.tgt)(B.weight)(P))(A)(h.deps),
+      outWeight: x((P) => (B) => vt(it)(on)(B.src)(B.weight)(P))(A)(h.deps),
+      depsBySrc: x((P) => (B) => vt(it)(rn)(B.src)([B])(P))(A)(h.deps),
+      depsByTgt: x((P) => (B) => vt(it)(rn)(B.tgt)([B])(P))(A)(h.deps),
+      nextSink: p - 1 | 0,
+      nextSource: p + 1 | 0
+    }), w = (() => {
+      const P = (() => {
+        const q = Jr(z((R) => b(R.id, R.mark))(T));
+        return {
+          segments: T,
+          deps: yt((R) => (() => {
+            if (R.kind === "Critical")
+              return !0;
+            if (R.kind === "Regular")
+              return !1;
+            f();
+          })() ? v("Just", R) : (() => {
+            const E = Gt(R.src)(q), S = Gt(R.tgt)(q);
+            return (() => {
+              if (E.tag === "Nothing")
+                return 0;
+              if (E.tag === "Just")
+                return E._1;
+              f();
+            })() > (() => {
               if (S.tag === "Nothing")
                 return 0;
               if (S.tag === "Just")
                 return S._1;
               f();
-            })() - (() => {
-              if (F.tag === "Nothing")
-                return 0;
-              if (F.tag === "Just")
-                return F._1;
-              f();
-            })() | 0;
-          }, C = Lt((q) => (S) => rt.compare(x(S))(x(q)))(A.remaining);
-          if (0 < C.length) {
-            const q = C[0];
-            return {
-              ...A,
-              inWeight: J((S) => (F) => yt(rt)(Zt)(F.tgt)(-F.weight)(S))(A.inWeight)((() => {
-                const S = wt(q)(A.depsBySrc);
-                if (S.tag === "Nothing")
-                  return [];
-                if (S.tag === "Just")
-                  return S._1;
-                f();
-              })()),
-              marks: Y(rt)(q)(A.nextSource)(A.marks),
-              nextSource: A.nextSource + 1 | 0,
-              outWeight: J((S) => (F) => yt(rt)(Zt)(F.src)(-F.weight)(S))(A.outWeight)((() => {
-                const S = wt(q)(A.depsByTgt);
-                if (S.tag === "Nothing")
-                  return [];
-                if (S.tag === "Just")
-                  return S._1;
-                f();
-              })()),
-              remaining: gt((S) => S !== q, A.remaining)
-            };
-          }
-          return A;
-        })();
-      }
-      return et;
-    })({
-      remaining: O((P) => P.id)(p),
-      marks: Q,
-      inWeight: J((P) => (R) => yt(rt)(Zt)(R.tgt)(R.weight)(P))(Q)(h.deps),
-      outWeight: J((P) => (R) => yt(rt)(Zt)(R.src)(R.weight)(P))(Q)(h.deps),
-      depsBySrc: J((P) => (R) => yt(rt)(fn)(R.src)([R])(P))(Q)(h.deps),
-      depsByTgt: J((P) => (R) => yt(rt)(fn)(R.tgt)([R])(P))(Q)(h.deps),
-      nextSink: $ - 1 | 0,
-      nextSource: $ + 1 | 0
-    }), y = (() => {
-      const P = (() => {
-        const X = Ve(O((A) => L(A.id, A.mark))(w));
-        return {
-          segments: w,
-          deps: vt((A) => (() => {
-            if (A.kind === "Critical")
-              return !0;
-            if (A.kind === "Regular")
-              return !1;
-            f();
-          })() ? b("Just", A) : (() => {
-            const x = wt(A.src)(X), C = wt(A.tgt)(X);
-            return (() => {
-              if (x.tag === "Nothing")
-                return 0;
-              if (x.tag === "Just")
-                return x._1;
-              f();
-            })() > (() => {
-              if (C.tag === "Nothing")
-                return 0;
-              if (C.tag === "Just")
-                return C._1;
-              f();
             })();
-          })() ? A.weight === 0 ? T : b("Just", { src: A.tgt, tgt: A.src, weight: A.weight, kind: A.kind }) : b("Just", A))(h.deps)
+          })() ? R.weight === 0 ? J : v("Just", { src: R.tgt, tgt: R.src, weight: R.weight, kind: R.kind }) : v("Just", R))(h.deps)
         };
-      })(), R = J((X) => (A) => yt(rt)(Zt)(A.tgt)(1)(X))(Q)(P.deps), et = ((X) => {
-        let A = X, x = !0, C;
-        for (; x; ) {
-          const q = A, S = Wt((F) => T, (F) => (W) => b("Just", { head: F, tail: W }), q.queue);
-          if (S.tag === "Nothing") {
-            x = !1, C = q;
+      })(), B = x((q) => (R) => vt(it)(on)(R.tgt)(1)(q))(A)(P.deps), ct = ((q) => {
+        let R = q, E = !0, S;
+        for (; E; ) {
+          const O = R, I = Rt((W) => J, (W) => (Q) => v("Just", { head: W, tail: Q }), O.queue);
+          if (I.tag === "Nothing") {
+            E = !1, S = O;
             continue;
           }
-          if (S.tag === "Just") {
-            A = J((() => {
-              const F = wt(S._1.head)(q.slots), W = (() => {
-                if (F.tag === "Nothing")
+          if (I.tag === "Just") {
+            R = x((() => {
+              const W = Gt(I._1.head)(O.slots), Q = (() => {
+                if (W.tag === "Nothing")
                   return 0;
-                if (F.tag === "Just")
-                  return F._1;
+                if (W.tag === "Just")
+                  return W._1;
                 f();
               })();
-              return (K) => (V) => {
-                const B = wt(V)(K.inDegree), nt = (() => {
-                  if (B.tag === "Nothing")
+              return (M) => (V) => {
+                const H = Gt(V)(M.inDegree), et = (() => {
+                  if (H.tag === "Nothing")
                     return -1;
-                  if (B.tag === "Just")
-                    return B._1 - 1 | 0;
+                  if (H.tag === "Just")
+                    return H._1 - 1 | 0;
                   f();
                 })();
                 return {
-                  ...K,
-                  slots: Y(rt)(V)(Nu((() => {
-                    const M = wt(V)(K.slots);
-                    if (M.tag === "Nothing")
+                  ...M,
+                  slots: U(it)(V)(ca((() => {
+                    const j = Gt(V)(M.slots);
+                    if (j.tag === "Nothing")
                       return 0;
-                    if (M.tag === "Just")
-                      return M._1;
+                    if (j.tag === "Just")
+                      return j._1;
                     f();
-                  })())(W + 1 | 0))(K.slots),
-                  inDegree: Y(rt)(V)(nt)(K.inDegree),
-                  queue: nt === 0 ? [...K.queue, V] : K.queue
+                  })())(Q + 1 | 0))(M.slots),
+                  inDegree: U(it)(V)(et)(M.inDegree),
+                  queue: et === 0 ? [...M.queue, V] : M.queue
                 };
               };
-            })())({ ...q, queue: S._1.tail })((() => {
-              const F = wt(S._1.head)(q.adj);
-              if (F.tag === "Nothing")
+            })())({ ...O, queue: I._1.tail })((() => {
+              const W = Gt(I._1.head)(O.adj);
+              if (W.tag === "Nothing")
                 return [];
-              if (F.tag === "Just")
-                return F._1;
+              if (W.tag === "Just")
+                return W._1;
               f();
             })());
             continue;
           }
           f();
         }
-        return C;
+        return S;
       })({
-        slots: Ve(O((X) => L(X.id, 0))(P.segments)),
-        inDegree: R,
-        adj: J((X) => (A) => yt(rt)(fn)(A.src)([A.tgt])(X))(Q)(P.deps),
-        queue: O((X) => X.id)(gt(
-          (X) => {
-            const A = wt(X.id)(R);
-            if (A.tag === "Nothing")
+        slots: Jr(z((q) => b(q.id, 0))(P.segments)),
+        inDegree: B,
+        adj: x((q) => (R) => vt(it)(rn)(R.src)([R.tgt])(q))(A)(P.deps),
+        queue: z((q) => q.id)(lt(
+          (q) => {
+            const R = Gt(q.id)(B);
+            if (R.tag === "Nothing")
               return !0;
-            if (A.tag === "Just")
-              return A._1 === 0;
+            if (R.tag === "Just")
+              return R._1 === 0;
             f();
           },
           P.segments
         ))
       });
-      return Lt((X) => (A) => rt.compare(X.slot)(A.slot))(O((X) => ({
-        ...X,
+      return kt((q) => (R) => it.compare(q.slot)(R.slot))(z((q) => ({
+        ...q,
         slot: (() => {
-          const A = wt(X.id)(et.slots);
-          if (A.tag === "Nothing")
+          const R = Gt(q.id)(ct.slots);
+          if (R.tag === "Nothing")
             return 0;
-          if (A.tag === "Just")
-            return A._1;
+          if (R.tag === "Just")
+            return R._1;
           f();
         })()
       }))(P.segments));
-    })(), k = 1 + J((P) => (R) => Nu(P)(R.slot))(0)(y) | 0, E = bt(y)((P) => P.members), I = gt((P) => In(te)(P.edge.id)(E), t), D = J(ft)(-1e18)(O((P) => P.fromPos._2)(I)), z = J(at)(1e18)(O((P) => P.toPos._2)(I));
-    if (D > z) {
-      const P = Ve(O((R) => L(R.id, R))(y));
-      return Cn(O((R) => O((j) => L(
-        j,
+    })(), k = 1 + x((P) => (B) => ca(P)(B.slot))(0)(w) | 0, L = Jt(w)((P) => P.members), G = lt((P) => Hn(ge)(P.edge.id)(L), t), D = x(pt)(-1e18)(z((P) => P.fromPos._2)(G)), Y = x(ht)(1e18)(z((P) => P.toPos._2)(G));
+    if (D > Y) {
+      const P = Jr(z((B) => b(B.id, B))(w));
+      return zn(z((B) => z((tt) => b(
+        tt,
         {
-          slot: R.slot,
+          slot: B.slot,
           slotCount: k,
-          gapTop: z,
+          gapTop: Y,
           gapBottom: D,
           partner: (() => {
-            if (R.splitPartner.tag === "Just") {
-              const et = wt(R.splitPartner._1)(P);
-              if (et.tag === "Just")
-                return b("Just", { slot: et._1.slot, splitX: 0 < et._1.incoming.length ? et._1.incoming[0] : 0 });
-              if (et.tag === "Nothing")
-                return T;
+            if (B.splitPartner.tag === "Just") {
+              const ct = Gt(B.splitPartner._1)(P);
+              if (ct.tag === "Just")
+                return v("Just", { slot: ct._1.slot, splitX: 0 < ct._1.incoming.length ? ct._1.incoming[0] : 0 });
+              if (ct.tag === "Nothing")
+                return J;
               f();
             }
-            if (R.splitPartner.tag === "Nothing")
-              return T;
+            if (B.splitPartner.tag === "Nothing")
+              return J;
             f();
           })()
         }
-      ))(R.members))(gt(
-        (R) => {
-          if (R.splitPartner.tag === "Just") {
-            const j = wt(R.splitPartner._1)(P);
-            return !(j.tag === "Just" && (() => {
-              if (j._1.splitBy.tag === "Nothing")
+      ))(B.members))(lt(
+        (B) => {
+          if (B.splitPartner.tag === "Just") {
+            const tt = Gt(B.splitPartner._1)(P);
+            return !(tt.tag === "Just" && (() => {
+              if (tt._1.splitBy.tag === "Nothing")
                 return !1;
-              if (j._1.splitBy.tag === "Just")
+              if (tt._1.splitBy.tag === "Just")
                 return !0;
               f();
             })());
           }
-          if (R.splitPartner.tag === "Nothing")
+          if (B.splitPartner.tag === "Nothing")
             return !0;
           f();
         },
-        y
+        w
       )));
     }
-    const U = Ve(O((P) => L(P.id, P))(y));
-    return Cn(O((P) => O((R) => L(
-      R,
+    const X = Jr(z((P) => b(P.id, P))(w));
+    return zn(z((P) => z((B) => b(
+      B,
       {
         slot: P.slot,
         slotCount: k,
         gapTop: D,
-        gapBottom: z,
+        gapBottom: Y,
         partner: (() => {
           if (P.splitPartner.tag === "Just") {
-            const j = wt(P.splitPartner._1)(U);
-            if (j.tag === "Just")
-              return b("Just", { slot: j._1.slot, splitX: 0 < j._1.incoming.length ? j._1.incoming[0] : 0 });
-            if (j.tag === "Nothing")
-              return T;
+            const tt = Gt(P.splitPartner._1)(X);
+            if (tt.tag === "Just")
+              return v("Just", { slot: tt._1.slot, splitX: 0 < tt._1.incoming.length ? tt._1.incoming[0] : 0 });
+            if (tt.tag === "Nothing")
+              return J;
             f();
           }
           if (P.splitPartner.tag === "Nothing")
-            return T;
+            return J;
           f();
         })()
       }
-    ))(P.members))(gt(
+    ))(P.members))(lt(
       (P) => {
         if (P.splitPartner.tag === "Just") {
-          const R = wt(P.splitPartner._1)(U);
-          return !(R.tag === "Just" && (() => {
-            if (R._1.splitBy.tag === "Nothing")
+          const B = Gt(P.splitPartner._1)(X);
+          return !(B.tag === "Just" && (() => {
+            if (B._1.splitBy.tag === "Nothing")
               return !1;
-            if (R._1.splitBy.tag === "Just")
+            if (B._1.splitBy.tag === "Just")
               return !0;
             f();
           })());
@@ -6978,88 +7865,88 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
           return !0;
         f();
       },
-      y
+      w
     )));
-  })()))(Q)(gd(J((s) => (u) => {
-    const c = Me(u.edge.from.node)(e);
+  })()))(A)(im(x((s) => (u) => {
+    const c = br(u.edge.from.node)(e);
     if (c.tag === "Just") {
-      const a = Me(u.edge.to.node)(e);
-      return a.tag === "Just" && c._1.layer !== a._1.layer ? yt(rt)(fn)(Xe(c._1.layer)(a._1.layer))([u])(s) : s;
+      const a = br(u.edge.to.node)(e);
+      return a.tag === "Just" && c._1.layer !== a._1.layer ? vt(it)(rn)(vr(c._1.layer)(a._1.layer))([u])(s) : s;
     }
     return s;
-  })(Q)((() => {
-    const s = (u) => L(
+  })(A)((() => {
+    const s = (u) => b(
       (() => {
-        const c = Me(u.edge.from.node)(e);
+        const c = br(u.edge.from.node)(e);
         return c.tag === "Just" ? c._1.layer : 1e6;
       })(),
       (() => {
-        const c = Me(u.edge.from.node)(e);
+        const c = br(u.edge.from.node)(e);
         return c.tag === "Just" ? c._1.order : 1e6;
       })()
     );
-    return Lt((u) => (c) => fd(s(u))(s(c)))(t);
+    return kt((u) => (c) => om(s(u))(s(c)))(t);
   })())));
-}, dd = (t) => (n) => {
-  const e = fa(t)(n), r = J((o) => (i) => Y(G)(i.node)(i)(o))(Q)(n);
-  return J((o) => (i) => {
-    const s = Me(i.edge.from.node)(r);
+}, cm = (t) => (n) => {
+  const e = D0(t)(n), r = x((o) => (i) => U(C)(i.node)(i)(o))(A)(n);
+  return x((o) => (i) => {
+    const s = br(i.edge.from.node)(r);
     if (s.tag === "Just") {
-      const u = Me(i.edge.to.node)(r);
+      const u = br(i.edge.to.node)(r);
       if (u.tag === "Just" && s._1.layer !== u._1.layer) {
-        const c = ld(i.edge.id)(e);
+        const c = um(i.edge.id)(e);
         if (c.tag === "Just")
-          return Y(rt)(Xe(s._1.layer)(u._1.layer))(c._1.slotCount)(o);
+          return U(it)(vr(s._1.layer)(u._1.layer))(c._1.slotCount)(o);
       }
       return o;
     }
     return o;
-  })(Q)(t);
-}, ga = Bt.foldMap(/* @__PURE__ */ (() => {
+  })(A)(t);
+}, H0 = Ht.foldMap(/* @__PURE__ */ (() => {
   const t = { append: (n) => (e) => n || e };
   return { mempty: !1, Semigroup0: () => t };
-})()), rn = (t) => (n) => {
-  const e = pt.compare(t)(n);
+})()), gn = (t) => (n) => {
+  const e = ft.compare(t)(n);
   if (e === "LT" || e === "EQ")
     return t;
   if (e === "GT")
     return n;
   f();
-}, on = (t) => (n) => {
-  const e = pt.compare(t)(n);
+}, ln = (t) => (n) => {
+  const e = ft.compare(t)(n);
   if (e === "LT")
     return n;
   if (e === "EQ" || e === "GT")
     return t;
   f();
-}, mr = (t) => (n) => (e) => (r) => ga((o) => e >= o.x && e < o.x + o.w && n > o.y && t < o.y + o.h)(r), Lo = (t) => (n) => (e) => (r) => mr(rn(n)(e))(on(n)(e))(r)(t), io = /* @__PURE__ */ ct(4), hd = /* @__PURE__ */ gc((t) => {
+}, eo = (t) => (n) => (e) => (r) => H0((o) => e >= o.x && e < o.x + o.w && n > o.y && t < o.y + o.h)(r), vi = (t) => (n) => (e) => (r) => eo(gn(n)(e))(ln(n)(e))(r)(t), ni = /* @__PURE__ */ nt(4), am = /* @__PURE__ */ bf((t) => {
   if (t.direction === "H") {
-    const n = rn(t.start._1)(t.end._1);
-    return [{ x: n, y: t.start._2 - 1, w: on(t.start._1)(t.end._1) - n, h: 2 }];
+    const n = gn(t.start._1)(t.end._1);
+    return [{ x: n, y: t.start._2 - 1, w: ln(t.start._1)(t.end._1) - n, h: 2 }];
   }
   if (t.direction === "V") {
-    const n = rn(t.start._2)(t.end._2);
-    return [{ x: t.start._1 - 1, y: n, w: 2, h: on(t.start._2)(t.end._2) - n }];
+    const n = gn(t.start._2)(t.end._2);
+    return [{ x: t.start._1 - 1, y: n, w: 2, h: ln(t.start._2)(t.end._2) - n }];
   }
   f();
-}), Rr = /* @__PURE__ */ fc((t) => {
+}), ko = /* @__PURE__ */ kf((t) => {
   const n = t.start._1 - t.end._1;
   return !((n < 0 ? -n < 1e-6 : n < 1e-6) && (() => {
     const e = t.start._2 - t.end._2;
     return e < 0 ? -e < 1e-6 : e < 1e-6;
   })());
-}), pd = (t) => (n) => (e) => {
-  const r = Wt((o) => T, (o) => (i) => b("Just", { head: o, tail: i }), n);
+}), fm = (t) => (n) => (e) => {
+  const r = Rt((o) => J, (o) => (i) => v("Just", { head: o, tail: i }), n);
   if (r.tag === "Nothing")
     return [{ start: t.start, end: e.end, direction: t.direction }];
   if (r.tag === "Just") {
-    const o = (r._1.head.direction === "H" ? t.direction === "H" : r._1.head.direction === "V" && t.direction === "V") ? [{ start: t.start, end: r._1.head.end, direction: t.direction }] : [t, r._1.head], i = gg(r._1.tail);
+    const o = (r._1.head.direction === "H" ? t.direction === "H" : r._1.head.direction === "V" && t.direction === "V") ? [{ start: t.start, end: r._1.head.end, direction: t.direction }] : [t, r._1.head], i = zi(r._1.tail);
     if (i.tag === "Nothing") {
       const s = o.length - 1 | 0;
       return s >= 0 && s < o.length && (o[s].direction === "H" ? e.direction === "H" : o[s].direction === "V" && e.direction === "V") ? [
         ...(() => {
           const u = o.length - 1 | 0;
-          return u < 1 ? [] : Gt(0, u, o);
+          return u < 1 ? [] : bt(0, u, o);
         })(),
         { start: o[s].start, end: e.end, direction: e.direction }
       ] : [...o, e];
@@ -7068,9 +7955,9 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
       return (i._1.last.direction === "H" ? e.direction === "H" : i._1.last.direction === "V" && e.direction === "V") ? [...o, ...i._1.init, { start: i._1.last.start, end: e.end, direction: e.direction }] : [...o, ...r._1.tail, e];
   }
   f();
-}, Fr = (t) => {
+}, bo = (t) => {
   const n = (r) => (o) => {
-    const i = Wt((s) => T, (s) => (u) => b("Just", { head: s, tail: u }), o);
+    const i = Rt((s) => J, (s) => (u) => v("Just", { head: s, tail: u }), o);
     if (i.tag === "Nothing")
       return [r];
     if (i.tag === "Just")
@@ -7082,28 +7969,28 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
         f();
       })() ? n({ start: r.start, end: i._1.head.end, direction: r.direction })(i._1.tail) : [r, ...n(i._1.head)(i._1.tail)];
     f();
-  }, e = Wt((r) => T, (r) => (o) => b("Just", { head: r, tail: o }), t);
+  }, e = Rt((r) => J, (r) => (o) => v("Just", { head: r, tail: o }), t);
   if (e.tag === "Nothing")
     return [];
   if (e.tag === "Just")
     return n(e._1.head)(e._1.tail);
   f();
-}, Nr = (t) => (n) => (e) => (r) => ga((o) => e >= o.y && e < o.y + o.h && n > o.x && t < o.x + o.w)(r), kr = (t) => (n) => (e) => (r) => Nr(rn(n)(e))(on(n)(e))(r)(t), $d = (t) => (n) => (e) => (r) => {
-  const o = e + 2 | 0, i = o < 1 ? n : Gt(o, n.length, n), s = e < 1 ? [] : Gt(0, e, n), u = (e + 1 | 0) === (r - 1 | 0), c = e === 0, a = e >= 0 && e < n.length ? b("Just", n[e]) : T;
+}, ro = (t) => (n) => (e) => (r) => H0((o) => e >= o.y && e < o.y + o.h && n > o.x && t < o.x + o.w)(r), ho = (t) => (n) => (e) => (r) => ro(gn(n)(e))(ln(n)(e))(r)(t), gm = (t) => (n) => (e) => (r) => {
+  const o = e + 2 | 0, i = o < 1 ? n : bt(o, n.length, n), s = e < 1 ? [] : bt(0, e, n), u = (e + 1 | 0) === (r - 1 | 0), c = e === 0, a = e >= 0 && e < n.length ? v("Just", n[e]) : J;
   if (a.tag === "Just") {
-    const g = e + 1 | 0, l = g >= 0 && g < n.length ? b("Just", n[g]) : T;
-    if (l.tag === "Just") {
-      const d = a._1.start._1 === l._1.end._1 && (!c || a._1.direction === "V") && (!u || l._1.direction === "V") && !Lo(t)(rn(a._1.start._2)(l._1.end._2))(on(a._1.start._2)(l._1.end._2))(a._1.start._1) ? b("Just", [...s, { start: a._1.start, end: l._1.end, direction: Ot }, ...i]) : T, _ = a._1.start._2 === l._1.end._2 && (!c || a._1.direction === "H") && (!u || l._1.direction === "H") && !kr(t)(rn(a._1.start._1)(l._1.end._1))(on(a._1.start._1)(l._1.end._1))(a._1.start._2) ? b("Just", [...s, { start: a._1.start, end: l._1.end, direction: Ht }, ...i]) : T;
-      return d.tag === "Nothing" ? _ : d;
+    const g = e + 1 | 0, _ = g >= 0 && g < n.length ? v("Just", n[g]) : J;
+    if (_.tag === "Just") {
+      const d = a._1.start._1 === _._1.end._1 && (!c || a._1.direction === "V") && (!u || _._1.direction === "V") && !vi(t)(gn(a._1.start._2)(_._1.end._2))(ln(a._1.start._2)(_._1.end._2))(a._1.start._1) ? v("Just", [...s, { start: a._1.start, end: _._1.end, direction: tn }, ...i]) : J, l = a._1.start._2 === _._1.end._2 && (!c || a._1.direction === "H") && (!u || _._1.direction === "H") && !ho(t)(gn(a._1.start._1)(_._1.end._1))(ln(a._1.start._1)(_._1.end._1))(a._1.start._2) ? v("Just", [...s, { start: a._1.start, end: _._1.end, direction: Zt }, ...i]) : J;
+      return d.tag === "Nothing" ? l : d;
     }
-    if (l.tag === "Nothing")
-      return T;
+    if (_.tag === "Nothing")
+      return J;
     f();
   }
   if (a.tag === "Nothing")
-    return T;
+    return J;
   f();
-}, md = (t) => (n) => {
+}, lm = (t) => (n) => {
   const e = n.length;
   return ((o) => {
     let i = o, s = !0, u;
@@ -7113,7 +8000,7 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
         s = !1, u = n;
         continue;
       }
-      const a = $d(t)(n)(c)(e);
+      const a = gm(t)(n)(c)(e);
       if (a.tag === "Just") {
         s = !1, u = a._1;
         continue;
@@ -7126,46 +8013,46 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
     }
     return u;
   })(0);
-}, Nd = (t) => (n) => (e) => (r) => {
-  const o = (d, _, h) => !Lo(t)(rn(_)(h))(on(_)(h))(d), i = e + 3 | 0, s = i < 1 ? n : Gt(i, n.length, n), u = e < 1 ? [] : Gt(0, e, n), c = (e + 2 | 0) === (r - 1 | 0), a = e === 0, g = (d, _, h) => !kr(t)(rn(_)(h))(on(_)(h))(d), l = e >= 0 && e < n.length ? b("Just", n[e]) : T;
-  if (l.tag === "Just") {
-    const d = e + 2 | 0, _ = d >= 0 && d < n.length ? b("Just", n[d]) : T;
-    if (_.tag === "Just") {
-      const h = l._1.start._1 === _._1.end._1 && (!a || l._1.direction === "V") && (!c || _._1.direction === "V") && o(l._1.start._1, l._1.start._2, _._1.end._2) ? b("Just", [...u, { start: l._1.start, end: _._1.end, direction: Ot }, ...s]) : l._1.start._2 === _._1.end._2 && (!a || l._1.direction === "H") && (!c || _._1.direction === "H") && g(l._1.start._2, l._1.start._1, _._1.end._1) ? b("Just", [...u, { start: l._1.start, end: _._1.end, direction: Ht }, ...s]) : T, p = (!a || l._1.direction === "V") && (!c || _._1.direction === "H") && o(l._1.start._1, l._1.start._2, _._1.end._2) && g(
-        _._1.end._2,
-        l._1.start._1,
-        _._1.end._1
-      ) ? b(
+}, _m = (t) => (n) => (e) => (r) => {
+  const o = (d, l, h) => !vi(t)(gn(l)(h))(ln(l)(h))(d), i = e + 3 | 0, s = i < 1 ? n : bt(i, n.length, n), u = e < 1 ? [] : bt(0, e, n), c = (e + 2 | 0) === (r - 1 | 0), a = e === 0, g = (d, l, h) => !ho(t)(gn(l)(h))(ln(l)(h))(d), _ = e >= 0 && e < n.length ? v("Just", n[e]) : J;
+  if (_.tag === "Just") {
+    const d = e + 2 | 0, l = d >= 0 && d < n.length ? v("Just", n[d]) : J;
+    if (l.tag === "Just") {
+      const h = _._1.start._1 === l._1.end._1 && (!a || _._1.direction === "V") && (!c || l._1.direction === "V") && o(_._1.start._1, _._1.start._2, l._1.end._2) ? v("Just", [...u, { start: _._1.start, end: l._1.end, direction: tn }, ...s]) : _._1.start._2 === l._1.end._2 && (!a || _._1.direction === "H") && (!c || l._1.direction === "H") && g(_._1.start._2, _._1.start._1, l._1.end._1) ? v("Just", [...u, { start: _._1.start, end: l._1.end, direction: Zt }, ...s]) : J, $ = (!a || _._1.direction === "V") && (!c || l._1.direction === "H") && o(_._1.start._1, _._1.start._2, l._1.end._2) && g(
+        l._1.end._2,
+        _._1.start._1,
+        l._1.end._1
+      ) ? v(
         "Just",
         [
           ...u,
-          { start: l._1.start, end: L(l._1.start._1, _._1.end._2), direction: Ot },
-          { start: L(l._1.start._1, _._1.end._2), end: _._1.end, direction: Ht },
+          { start: _._1.start, end: b(_._1.start._1, l._1.end._2), direction: tn },
+          { start: b(_._1.start._1, l._1.end._2), end: l._1.end, direction: Zt },
           ...s
         ]
-      ) : T, $ = (!a || l._1.direction === "H") && (!c || _._1.direction === "V") && g(l._1.start._2, l._1.start._1, _._1.end._1) && o(
-        _._1.end._1,
-        l._1.start._2,
-        _._1.end._2
-      ) ? b(
+      ) : J, p = (!a || _._1.direction === "H") && (!c || l._1.direction === "V") && g(_._1.start._2, _._1.start._1, l._1.end._1) && o(
+        l._1.end._1,
+        _._1.start._2,
+        l._1.end._2
+      ) ? v(
         "Just",
         [
           ...u,
-          { start: l._1.start, end: L(_._1.end._1, l._1.start._2), direction: Ht },
-          { start: L(_._1.end._1, l._1.start._2), end: _._1.end, direction: Ot },
+          { start: _._1.start, end: b(l._1.end._1, _._1.start._2), direction: Zt },
+          { start: b(l._1.end._1, _._1.start._2), end: l._1.end, direction: tn },
           ...s
         ]
-      ) : T, m = p.tag === "Nothing" ? $ : p;
+      ) : J, m = $.tag === "Nothing" ? p : $;
       return h.tag === "Nothing" ? m : h;
     }
-    if (_.tag === "Nothing")
-      return T;
+    if (l.tag === "Nothing")
+      return J;
     f();
   }
-  if (l.tag === "Nothing")
-    return T;
+  if (_.tag === "Nothing")
+    return J;
   f();
-}, Jd = (t) => (n) => {
+}, dm = (t) => (n) => {
   const e = n.length;
   return ((o) => {
     let i = o, s = !0, u;
@@ -7175,7 +8062,7 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
         s = !1, u = n;
         continue;
       }
-      const a = Nd(t)(n)(c)(e);
+      const a = _m(t)(n)(c)(e);
       if (a.tag === "Just") {
         s = !1, u = a._1;
         continue;
@@ -7188,11 +8075,11 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
     }
     return u;
   })(0);
-}, vd = (t) => {
+}, hm = (t) => {
   const n = (e) => {
     let r = e, o = !0, i;
     for (; o; ) {
-      const s = r, u = Fr(Rr(md(t)(Jd(t)(s))));
+      const s = r, u = bo(ko(lm(t)(dm(t)(s))));
       if (u.length < s.length) {
         r = u;
         continue;
@@ -7201,40 +8088,40 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
     }
     return i;
   };
-  return (e) => n(Fr(Rr(e)));
-}, Td = (t) => (n) => (e) => (r) => {
-  const o = rn(e)(r), i = on(e)(r), s = gt((c) => n >= c.y && n < c.y + c.h && c.x + c.w > o && c.x < i, t);
+  return (e) => n(bo(ko(e)));
+}, pm = (t) => (n) => (e) => (r) => {
+  const o = gn(e)(r), i = ln(e)(r), s = lt((c) => n >= c.y && n < c.y + c.h && c.x + c.w > o && c.x < i, t);
   if (r > e) {
-    const c = Lt((a) => (g) => pt.compare(a.x)(g.x))(s);
+    const c = kt((a) => (g) => ft.compare(a.x)(g.x))(s);
     return 0 < c.length ? c[0].x - 1 : (e + r) / 2;
   }
-  const u = Lt((c) => (a) => pt.compare(a.x)(c.x))(O((c) => ({ ...c, x: c.x + c.w }))(s));
+  const u = kt((c) => (a) => ft.compare(a.x)(c.x))(z((c) => ({ ...c, x: c.x + c.w }))(s));
   return 0 < u.length ? u[0].x + 1 : (e + r) / 2;
-}, yd = (t) => (n) => (e) => (r) => {
-  const o = rn(e)(r), i = on(e)(r), s = gt((c) => n >= c.x && n < c.x + c.w && c.y + c.h > o && c.y < i, t);
+}, $m = (t) => (n) => (e) => (r) => {
+  const o = gn(e)(r), i = ln(e)(r), s = lt((c) => n >= c.x && n < c.x + c.w && c.y + c.h > o && c.y < i, t);
   if (r > e) {
-    const c = Lt((a) => (g) => pt.compare(a.y)(g.y))(s);
+    const c = kt((a) => (g) => ft.compare(a.y)(g.y))(s);
     return 0 < c.length ? c[0].y - 1 : (e + r) / 2;
   }
-  const u = Lt((c) => (a) => pt.compare(a.y)(c.y))(O((c) => ({ ...c, y: c.y + c.h }))(s));
+  const u = kt((c) => (a) => ft.compare(a.y)(c.y))(z((c) => ({ ...c, y: c.y + c.h }))(s));
   return 0 < u.length ? u[0].y + 1 : (e + r) / 2;
-}, wd = (t) => (n) => (e) => (r) => {
-  const o = rn(e)(r), i = on(e)(r), s = gt((c) => n >= c.y && n < c.y + c.h && c.x + c.w > o && c.x < i, t);
+}, mm = (t) => (n) => (e) => (r) => {
+  const o = gn(e)(r), i = ln(e)(r), s = lt((c) => n >= c.y && n < c.y + c.h && c.x + c.w > o && c.x < i, t);
   if (r > e) {
-    const c = Lt((a) => (g) => pt.compare(g.x)(a.x))(O((a) => ({ ...a, x: a.x + a.w }))(s));
+    const c = kt((a) => (g) => ft.compare(g.x)(a.x))(z((a) => ({ ...a, x: a.x + a.w }))(s));
     return 0 < c.length ? c[0].x : (e + r) / 2;
   }
-  const u = Lt((c) => (a) => pt.compare(c.x)(a.x))(s);
+  const u = kt((c) => (a) => ft.compare(c.x)(a.x))(s);
   return 0 < u.length ? u[0].x - 1 : (e + r) / 2;
-}, Ld = (t) => (n) => (e) => (r) => {
-  const o = rn(e)(r), i = on(e)(r), s = gt((c) => n >= c.x && n < c.x + c.w && c.y + c.h > o && c.y < i, t);
+}, ym = (t) => (n) => (e) => (r) => {
+  const o = gn(e)(r), i = ln(e)(r), s = lt((c) => n >= c.x && n < c.x + c.w && c.y + c.h > o && c.y < i, t);
   if (r > e) {
-    const c = Lt((a) => (g) => pt.compare(g.y)(a.y))(O((a) => ({ ...a, y: a.y + a.h }))(s));
+    const c = kt((a) => (g) => ft.compare(g.y)(a.y))(z((a) => ({ ...a, y: a.y + a.h }))(s));
     return 0 < c.length ? c[0].y : (e + r) / 2;
   }
-  const u = Lt((c) => (a) => pt.compare(c.y)(a.y))(s);
+  const u = kt((c) => (a) => ft.compare(c.y)(a.y))(s);
   return 0 < u.length ? u[0].y - 1 : (e + r) / 2;
-}, _a = (t) => (n) => (e) => {
+}, O0 = (t) => (n) => (e) => {
   let r = t, o = n, i = e, s = !0, u;
   for (; s; ) {
     const c = r, a = o, g = i;
@@ -7253,155 +8140,155 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
     r = c, o = a, i = g + 1;
   }
   return u;
-}, vu = (t) => (n) => (e) => (r) => (o) => {
-  const i = rn(n)(e), s = on(n)(e);
-  if (!mr(i)(s)(r)(t))
+}, fa = (t) => (n) => (e) => (r) => (o) => {
+  const i = gn(n)(e), s = ln(n)(e);
+  if (!eo(i)(s)(r)(t))
     return r;
-  if (!mr(i)(s)(o)(t))
+  if (!eo(i)(s)(o)(t))
     return o;
   const u = (r + o) / 2;
-  return mr(i)(s)(u)(t) ? _a((c) => mr(i)(s)(c)(t))(u)(1) : u;
-}, kd = (t) => (n) => (e) => (r) => (o) => {
-  const i = rn(n)(e), s = on(n)(e);
-  if (!Nr(i)(s)(r)(t))
+  return eo(i)(s)(u)(t) ? O0((c) => eo(i)(s)(c)(t))(u)(1) : u;
+}, Nm = (t) => (n) => (e) => (r) => (o) => {
+  const i = gn(n)(e), s = ln(n)(e);
+  if (!ro(i)(s)(r)(t))
     return r;
-  if (!Nr(i)(s)(o)(t))
+  if (!ro(i)(s)(o)(t))
     return o;
   const u = (r + o) / 2;
-  return Nr(i)(s)(u)(t) ? _a((c) => Nr(i)(s)(c)(t))(u)(1) : u;
-}, bd = (t) => (n) => (e) => (r) => {
-  const o = rn(n)(e), i = on(n)(e), s = gt((a) => r >= a.x && r < a.x + a.w && a.y + a.h > o && a.y < i, t), u = J((a) => (g) => on(a)(g.x + g.w + 4))(r + 4)(s), c = J((a) => (g) => rn(a)(g.x - 4))(r - 4)(s);
+  return ro(i)(s)(u)(t) ? O0((c) => ro(i)(s)(c)(t))(u)(1) : u;
+}, xm = (t) => (n) => (e) => (r) => {
+  const o = gn(n)(e), i = ln(n)(e), s = lt((a) => r >= a.x && r < a.x + a.w && a.y + a.h > o && a.y < i, t), u = x((a) => (g) => ln(a)(g.x + g.w + 4))(r + 4)(s), c = x((a) => (g) => gn(a)(g.x - 4))(r - 4)(s);
   return (() => {
     const a = u - r, g = c - r;
     return (a < 0 ? -a : a) <= (g < 0 ? -g : g);
   })() ? u : c;
-}, Ed = (t) => (n) => (e) => (r) => {
-  const o = rn(n)(e), i = on(n)(e), s = gt((a) => r >= a.y && r < a.y + a.h && a.x + a.w > o && a.x < i, t), u = J((a) => (g) => on(a)(g.y + g.h + 4))(r + 4)(s), c = J((a) => (g) => rn(a)(g.y - 4))(r - 4)(s);
+}, Jm = (t) => (n) => (e) => (r) => {
+  const o = gn(n)(e), i = ln(n)(e), s = lt((a) => r >= a.y && r < a.y + a.h && a.x + a.w > o && a.x < i, t), u = x((a) => (g) => ln(a)(g.y + g.h + 4))(r + 4)(s), c = x((a) => (g) => gn(a)(g.y - 4))(r - 4)(s);
   return (() => {
     const a = u - r, g = c - r;
     return (a < 0 ? -a : a) <= (g < 0 ? -g : g);
   })() ? u : c;
-}, xd = (t) => (n) => (e) => (r) => (o) => (i) => (s) => {
+}, Tm = (t) => (n) => (e) => (r) => (o) => (i) => (s) => {
   const u = (() => {
     if (r === "South")
-      return L(o._1, o._2 + 4);
+      return b(o._1, o._2 + 4);
     if (r === "North")
-      return L(o._1, o._2 - 4);
+      return b(o._1, o._2 - 4);
     if (r === "East")
-      return L(o._1 + 4, o._2);
+      return b(o._1 + 4, o._2);
     if (r === "West")
-      return L(o._1 - 4, o._2);
+      return b(o._1 - 4, o._2);
     f();
   })(), c = (() => {
     if (i === "South")
-      return L(s._1, s._2 + 4);
+      return b(s._1, s._2 + 4);
     if (i === "North")
-      return L(s._1, s._2 - 4);
+      return b(s._1, s._2 - 4);
     if (i === "East")
-      return L(s._1 + 4, s._2);
+      return b(s._1 + 4, s._2);
     if (i === "West")
-      return L(s._1 - 4, s._2);
+      return b(s._1 - 4, s._2);
     f();
-  })(), a = (y, k, E) => !Lo(n)(rn(k)(E))(on(k)(E))(y), g = (y, k, E) => !Lo(e)(rn(k)(E))(on(k)(E))(y), l = (y, k, E, I) => t.tag === "Just" && !kr(e)(rn(y)(k))(on(y)(k))(t._1) ? t._1 : kd(n)(y)(k)(E)(I), d = (y, k, E, I) => {
-    if (y === E) {
-      const z = bd(n)(k)(I)(y), U = yd(n)(y)(k)(I), P = Ld(n)(y)(k)(I);
+  })(), a = (w, k, L) => !vi(n)(gn(k)(L))(ln(k)(L))(w), g = (w, k, L) => !vi(e)(gn(k)(L))(ln(k)(L))(w), _ = (w, k, L, G) => t.tag === "Just" && !ho(e)(gn(w)(k))(ln(w)(k))(t._1) ? t._1 : Nm(n)(w)(k)(L)(G), d = (w, k, L, G) => {
+    if (w === L) {
+      const Y = xm(n)(k)(G)(w), X = $m(n)(w)(k)(G), P = ym(n)(w)(k)(G);
       return [
-        { start: L(y, k), end: L(y, U), direction: Ot },
-        { start: L(y, U), end: L(z, U), direction: Ht },
-        { start: L(z, U), end: L(z, P), direction: Ot },
-        { start: L(z, P), end: L(E, P), direction: Ht },
-        { start: L(E, P), end: L(E, I), direction: Ot }
+        { start: b(w, k), end: b(w, X), direction: tn },
+        { start: b(w, X), end: b(Y, X), direction: Zt },
+        { start: b(Y, X), end: b(Y, P), direction: tn },
+        { start: b(Y, P), end: b(L, P), direction: Zt },
+        { start: b(L, P), end: b(L, G), direction: tn }
       ];
     }
-    const D = l(y, E, k, I);
+    const D = _(w, L, k, G);
     return [
-      { start: L(y, k), end: L(y, D), direction: Ot },
-      { start: L(y, D), end: L(E, D), direction: Ht },
-      { start: L(E, D), end: L(E, I), direction: Ot }
+      { start: b(w, k), end: b(w, D), direction: tn },
+      { start: b(w, D), end: b(L, D), direction: Zt },
+      { start: b(L, D), end: b(L, G), direction: tn }
     ];
-  }, _ = (y, k, E, I) => {
-    if (k === I) {
-      const z = Ed(n)(y)(E)(k), U = Td(n)(k)(y)(E), P = wd(n)(k)(y)(E);
+  }, l = (w, k, L, G) => {
+    if (k === G) {
+      const Y = Jm(n)(w)(L)(k), X = pm(n)(k)(w)(L), P = mm(n)(k)(w)(L);
       return [
-        { start: L(y, k), end: L(U, k), direction: Ht },
-        { start: L(U, k), end: L(U, z), direction: Ot },
-        { start: L(U, z), end: L(P, z), direction: Ht },
-        { start: L(P, z), end: L(P, I), direction: Ot },
-        { start: L(P, I), end: L(E, I), direction: Ht }
+        { start: b(w, k), end: b(X, k), direction: Zt },
+        { start: b(X, k), end: b(X, Y), direction: tn },
+        { start: b(X, Y), end: b(P, Y), direction: Zt },
+        { start: b(P, Y), end: b(P, G), direction: tn },
+        { start: b(P, G), end: b(L, G), direction: Zt }
       ];
     }
-    const D = vu(n)(k)(I)(y)(E);
+    const D = fa(n)(k)(G)(w)(L);
     return [
-      { start: L(y, k), end: L(D, k), direction: Ht },
-      { start: L(D, k), end: L(D, I), direction: Ot },
-      { start: L(D, I), end: L(E, I), direction: Ht }
+      { start: b(w, k), end: b(D, k), direction: Zt },
+      { start: b(D, k), end: b(D, G), direction: tn },
+      { start: b(D, G), end: b(L, G), direction: Zt }
     ];
-  }, h = (y, k, E) => !kr(n)(rn(k)(E))(on(k)(E))(y), p = (y, k, E) => !kr(e)(rn(k)(E))(on(k)(E))(y), $ = (y, k, E, I) => {
-    if (p(k, y, E) && g(E, k, I))
+  }, h = (w, k, L) => !ho(n)(gn(k)(L))(ln(k)(L))(w), $ = (w, k, L) => !ho(e)(gn(k)(L))(ln(k)(L))(w), p = (w, k, L, G) => {
+    if ($(k, w, L) && g(L, k, G))
       return [
-        { start: L(y, k), end: L(E, k), direction: Ht },
-        { start: L(E, k), end: L(E, I), direction: Ot }
+        { start: b(w, k), end: b(L, k), direction: Zt },
+        { start: b(L, k), end: b(L, G), direction: tn }
       ];
-    const D = vu(n)(k)(I)(y)(E);
+    const D = fa(n)(k)(G)(w)(L);
     return [
-      { start: L(y, k), end: L(D, k), direction: Ht },
-      { start: L(D, k), end: L(D, I), direction: Ot },
-      { start: L(D, I), end: L(E, I), direction: Ht }
+      { start: b(w, k), end: b(D, k), direction: Zt },
+      { start: b(D, k), end: b(D, G), direction: tn },
+      { start: b(D, G), end: b(L, G), direction: Zt }
     ];
-  }, m = (y, k, E, I) => {
-    if (g(y, k, I) && p(I, y, E))
+  }, m = (w, k, L, G) => {
+    if (g(w, k, G) && $(G, w, L))
       return [
-        { start: L(y, k), end: L(y, I), direction: Ot },
-        { start: L(y, I), end: L(E, I), direction: Ht }
+        { start: b(w, k), end: b(w, G), direction: tn },
+        { start: b(w, G), end: b(L, G), direction: Zt }
       ];
-    const D = l(y, E, k, I);
+    const D = _(w, L, k, G);
     return [
-      { start: L(y, k), end: L(y, D), direction: Ot },
-      { start: L(y, D), end: L(E, D), direction: Ht },
-      { start: L(E, D), end: L(E, I), direction: Ot }
+      { start: b(w, k), end: b(w, D), direction: tn },
+      { start: b(w, D), end: b(L, D), direction: Zt },
+      { start: b(L, D), end: b(L, G), direction: tn }
     ];
-  }, N = (() => {
+  }, y = (() => {
     if (r === "South")
-      return i === "North" ? u._1 === c._1 && a(u._1, u._2, c._2) ? [{ start: L(u._1, u._2), end: L(c._1, c._2), direction: Ot }] : d(u._1, u._2, c._1, c._2) : i === "East" || i === "West" ? m(u._1, u._2, c._1, c._2) : d(u._1, u._2, c._1, c._2);
+      return i === "North" ? u._1 === c._1 && a(u._1, u._2, c._2) ? [{ start: b(u._1, u._2), end: b(c._1, c._2), direction: tn }] : d(u._1, u._2, c._1, c._2) : i === "East" || i === "West" ? m(u._1, u._2, c._1, c._2) : d(u._1, u._2, c._1, c._2);
     if (r === "North")
-      return i === "South" ? u._1 === c._1 && a(u._1, u._2, c._2) ? [{ start: L(u._1, u._2), end: L(c._1, c._2), direction: Ot }] : d(u._1, u._2, c._1, c._2) : i === "East" || i === "West" ? m(u._1, u._2, c._1, c._2) : d(u._1, u._2, c._1, c._2);
+      return i === "South" ? u._1 === c._1 && a(u._1, u._2, c._2) ? [{ start: b(u._1, u._2), end: b(c._1, c._2), direction: tn }] : d(u._1, u._2, c._1, c._2) : i === "East" || i === "West" ? m(u._1, u._2, c._1, c._2) : d(u._1, u._2, c._1, c._2);
     if (r === "East")
-      return i === "West" ? u._2 === c._2 && h(u._2, u._1, c._1) ? [{ start: L(u._1, u._2), end: L(c._1, c._2), direction: Ht }] : _(u._1, u._2, c._1, c._2) : i === "North" || i === "South" ? $(u._1, u._2, c._1, c._2) : d(u._1, u._2, c._1, c._2);
+      return i === "West" ? u._2 === c._2 && h(u._2, u._1, c._1) ? [{ start: b(u._1, u._2), end: b(c._1, c._2), direction: Zt }] : l(u._1, u._2, c._1, c._2) : i === "North" || i === "South" ? p(u._1, u._2, c._1, c._2) : d(u._1, u._2, c._1, c._2);
     if (r === "West") {
       if (i === "East")
-        return u._2 === c._2 && h(u._2, u._1, c._1) ? [{ start: L(u._1, u._2), end: L(c._1, c._2), direction: Ht }] : _(u._1, u._2, c._1, c._2);
+        return u._2 === c._2 && h(u._2, u._1, c._1) ? [{ start: b(u._1, u._2), end: b(c._1, c._2), direction: Zt }] : l(u._1, u._2, c._1, c._2);
       if (i === "North" || i === "South")
-        return $(u._1, u._2, c._1, c._2);
+        return p(u._1, u._2, c._1, c._2);
     }
     return d(u._1, u._2, c._1, c._2);
-  })(), v = (() => {
+  })(), N = (() => {
     if (r === "South" || r === "North")
-      return Ot;
+      return tn;
     if (r === "East" || r === "West")
-      return Ht;
+      return Zt;
     f();
-  })(), w = {
-    start: L(c._1, c._2),
-    end: L(s._1, s._2),
+  })(), T = {
+    start: b(c._1, c._2),
+    end: b(s._1, s._2),
     direction: (() => {
       if (i === "South" || i === "North")
-        return Ot;
+        return tn;
       if (i === "East" || i === "West")
-        return Ht;
+        return Zt;
       f();
     })()
   };
-  return u._1 === c._1 && u._2 === c._2 ? [{ start: L(o._1, o._2), end: L(s._1, s._2), direction: v }] : pd({ start: L(o._1, o._2), end: L(u._1, u._2), direction: v })(N)(w);
-}, Cd = /* @__PURE__ */ O((t) => ({ x: t.position._1 * io - 2, y: t.position._2 * io - 2, w: t.size._1 * io + 4, h: t.size._2 * io + 4 })), ko = /* @__PURE__ */ jt(G)(Bt), se = (t) => (e) => {
+  return u._1 === c._1 && u._2 === c._2 ? [{ start: b(o._1, o._2), end: b(s._1, s._2), direction: N }] : fm({ start: b(o._1, o._2), end: b(u._1, u._2), direction: N })(y)(T);
+}, vm = /* @__PURE__ */ z((t) => ({ x: t.position._1 * ni - 2, y: t.position._2 * ni - 2, w: t.size._1 * ni + 4, h: t.size._2 * ni + 4 })), wi = /* @__PURE__ */ nn(C)(Ht), Le = (t) => (e) => {
   let r = e, o = !0, i;
   for (; o; ) {
     const s = r;
     if (s.tag === "Leaf") {
-      o = !1, i = T;
+      o = !1, i = J;
       continue;
     }
     if (s.tag === "Node") {
-      const u = G.compare(t)(s._3);
+      const u = C.compare(t)(s._3);
       if (u === "LT") {
         r = s._5;
         continue;
@@ -7411,23 +8298,23 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
         continue;
       }
       if (u === "EQ") {
-        o = !1, i = b("Just", s._4);
+        o = !1, i = v("Just", s._4);
         continue;
       }
     }
     f();
   }
   return i;
-}, _i = (t) => (e) => {
+}, Es = (t) => (e) => {
   let r = e, o = !0, i;
   for (; o; ) {
     const s = r;
     if (s.tag === "Leaf") {
-      o = !1, i = T;
+      o = !1, i = J;
       continue;
     }
     if (s.tag === "Node") {
-      const u = G.compare(t)(s._3);
+      const u = C.compare(t)(s._3);
       if (u === "LT") {
         r = s._5;
         continue;
@@ -7437,23 +8324,23 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
         continue;
       }
       if (u === "EQ") {
-        o = !1, i = b("Just", s._4);
+        o = !1, i = v("Just", s._4);
         continue;
       }
     }
     f();
   }
   return i;
-}, Sd = (t) => (e) => {
+}, wm = (t) => (e) => {
   let r = e, o = !0, i;
   for (; o; ) {
     const s = r;
     if (s.tag === "Leaf") {
-      o = !1, i = T;
+      o = !1, i = J;
       continue;
     }
     if (s.tag === "Node") {
-      const u = G.compare(t._1)(s._3._1);
+      const u = C.compare(t._1)(s._3._1);
       if (u === "LT") {
         r = s._5;
         continue;
@@ -7464,7 +8351,7 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
       }
       if (t._2 === "North") {
         if (s._3._2 === "North") {
-          o = !1, i = b("Just", s._4);
+          o = !1, i = v("Just", s._4);
           continue;
         }
         r = s._5;
@@ -7476,7 +8363,7 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
       }
       if (t._2 === "South") {
         if (s._3._2 === "South") {
-          o = !1, i = b("Just", s._4);
+          o = !1, i = v("Just", s._4);
           continue;
         }
         r = s._5;
@@ -7488,7 +8375,7 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
       }
       if (t._2 === "East") {
         if (s._3._2 === "East") {
-          o = !1, i = b("Just", s._4);
+          o = !1, i = v("Just", s._4);
           continue;
         }
         r = s._5;
@@ -7499,26 +8386,26 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
         continue;
       }
       if (t._2 === "West" && s._3._2 === "West") {
-        o = !1, i = b("Just", s._4);
+        o = !1, i = v("Just", s._4);
         continue;
       }
     }
     f();
   }
   return i;
-}, Tu = (t) => (n) => {
+}, ga = (t) => (n) => {
   const e = n.position._1 + n.size._1, r = n.position._2 * 2 + n.size._2, o = n.position._1 * 2 + n.size._1, i = n.position._2 + n.size._2;
   if (t === "South")
-    return L(o, i * 2);
+    return b(o, i * 2);
   if (t === "North")
-    return L(o, n.position._2 * 2);
+    return b(o, n.position._2 * 2);
   if (t === "East")
-    return L(e * 2, r);
+    return b(e * 2, r);
   if (t === "West")
-    return L(n.position._1 * 2, r);
+    return b(n.position._1 * 2, r);
   f();
-}, li = (t) => (n) => {
-  const e = ct(4);
+}, Ss = (t) => (n) => {
+  const e = nt(4);
   if (t === "South")
     return { lo: n.position._1 * e, hi: (n.position._1 + n.size._1) * e };
   if (t === "North")
@@ -7528,7 +8415,7 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
   if (t === "West")
     return { lo: n.position._2 * e, hi: (n.position._2 + n.size._2) * e };
   f();
-}, yu = (t) => (n) => J((e) => (r) => yt(t)(fn)(n(r))([r])(e))(Q), wu = (t) => (n) => (e) => (r) => {
+}, la = (t) => (n) => x((e) => (r) => vt(t)(rn)(n(r))([r])(e))(A), _a = (t) => (n) => (e) => (r) => {
   const o = (t === "South" || t === "North") && (n === "East" || n === "West") && (() => {
     if (t === "South")
       return r._2 > e._2;
@@ -7567,255 +8454,255 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
     f();
   })();
   return (t === "South" ? n === "North" && e._1 === r._1 && r._2 > e._2 : t === "North" ? n === "South" && e._1 === r._1 && r._2 < e._2 : t === "East" ? n === "West" && e._2 === r._2 && r._1 > e._1 : t === "West" && n === "East" && e._2 === r._2 && r._1 < e._1) ? 0 : o || i ? 1 : 2;
-}, la = (t) => (n) => {
+}, z0 = (t) => (n) => {
   const e = t.hi - t.lo, r = (t.lo + t.hi) / 2, o = n.length;
-  return o === 0 ? Q : ko(o === 1 ? O((i) => L(i, r))(n) : Pt((i) => (s) => L(s, t.lo + ct(i + 1 | 0) * e / ct(o + 1 | 0)))(n));
-}, da = (t) => (n) => (e) => (r) => (o) => {
-  const i = yu(G)((_) => _.to.node)(t), s = yu(G)((_) => _.from.node)(t), u = J((_) => (h) => Y(G)(h.node)(h)(_))(Q)(n), c = (_, h, p) => {
-    const $ = se(_)(u);
-    if ($.tag === "Nothing")
-      return L(0, 0);
-    if ($.tag === "Just") {
-      const m = se(_)(e);
+  return o === 0 ? A : wi(o === 1 ? z((i) => b(i, r))(n) : Ft((i) => (s) => b(s, t.lo + nt(i + 1 | 0) * e / nt(o + 1 | 0)))(n));
+}, q0 = (t) => (n) => (e) => (r) => (o) => {
+  const i = la(C)((l) => l.to.node)(t), s = la(C)((l) => l.from.node)(t), u = x((l) => (h) => U(C)(h.node)(h)(l))(A)(n), c = (l, h, $) => {
+    const p = Le(l)(u);
+    if (p.tag === "Nothing")
+      return b(0, 0);
+    if (p.tag === "Just") {
+      const m = Le(l)(e);
       if (m.tag === "Nothing") {
-        const N = ct(4);
-        if (p === "South")
-          return L($._1.position._1 * N + $._1.size._1 * N / 2, ($._1.position._2 + $._1.size._2) * N);
-        if (p === "North")
-          return L($._1.position._1 * N + $._1.size._1 * N / 2, $._1.position._2 * N);
-        if (p === "East")
-          return L(($._1.position._1 + $._1.size._1) * N, $._1.position._2 * N + $._1.size._2 * N / 2);
-        if (p === "West")
-          return L($._1.position._1 * N, $._1.position._2 * N + $._1.size._2 * N / 2);
+        const y = nt(4);
+        if ($ === "South")
+          return b(p._1.position._1 * y + p._1.size._1 * y / 2, (p._1.position._2 + p._1.size._2) * y);
+        if ($ === "North")
+          return b(p._1.position._1 * y + p._1.size._1 * y / 2, p._1.position._2 * y);
+        if ($ === "East")
+          return b((p._1.position._1 + p._1.size._1) * y, p._1.position._2 * y + p._1.size._2 * y / 2);
+        if ($ === "West")
+          return b(p._1.position._1 * y, p._1.position._2 * y + p._1.size._2 * y / 2);
         f();
       }
       if (m.tag === "Just") {
-        const N = ln((v) => v.id === h)(m._1);
-        if (N.tag === "Nothing") {
-          const v = ct(4);
-          if (p === "South")
-            return L($._1.position._1 * v + $._1.size._1 * v / 2, ($._1.position._2 + $._1.size._2) * v);
-          if (p === "North")
-            return L($._1.position._1 * v + $._1.size._1 * v / 2, $._1.position._2 * v);
-          if (p === "East")
-            return L(($._1.position._1 + $._1.size._1) * v, $._1.position._2 * v + $._1.size._2 * v / 2);
-          if (p === "West")
-            return L($._1.position._1 * v, $._1.position._2 * v + $._1.size._2 * v / 2);
+        const y = jt((N) => N.id === h)(m._1);
+        if (y.tag === "Nothing") {
+          const N = nt(4);
+          if ($ === "South")
+            return b(p._1.position._1 * N + p._1.size._1 * N / 2, (p._1.position._2 + p._1.size._2) * N);
+          if ($ === "North")
+            return b(p._1.position._1 * N + p._1.size._1 * N / 2, p._1.position._2 * N);
+          if ($ === "East")
+            return b((p._1.position._1 + p._1.size._1) * N, p._1.position._2 * N + p._1.size._2 * N / 2);
+          if ($ === "West")
+            return b(p._1.position._1 * N, p._1.position._2 * N + p._1.size._2 * N / 2);
           f();
         }
-        if (N.tag === "Just") {
-          const v = ct(4);
-          if (N._1.side === "North")
-            return L($._1.position._1 * v + ct(N._1.offset) * v, $._1.position._2 * v);
-          if (N._1.side === "South")
-            return L($._1.position._1 * v + ct(N._1.offset) * v, ($._1.position._2 + $._1.size._2) * v);
-          if (N._1.side === "East")
-            return L(($._1.position._1 + $._1.size._1) * v, $._1.position._2 * v + ct(N._1.offset) * v);
-          if (N._1.side === "West")
-            return L($._1.position._1 * v, $._1.position._2 * v + ct(N._1.offset) * v);
+        if (y.tag === "Just") {
+          const N = nt(4);
+          if (y._1.side === "North")
+            return b(p._1.position._1 * N + nt(y._1.offset) * N, p._1.position._2 * N);
+          if (y._1.side === "South")
+            return b(p._1.position._1 * N + nt(y._1.offset) * N, (p._1.position._2 + p._1.size._2) * N);
+          if (y._1.side === "East")
+            return b((p._1.position._1 + p._1.size._1) * N, p._1.position._2 * N + nt(y._1.offset) * N);
+          if (y._1.side === "West")
+            return b(p._1.position._1 * N, p._1.position._2 * N + nt(y._1.offset) * N);
         }
       }
     }
     f();
-  }, a = ko(bt(r)((_) => {
-    if (_.nodes.length <= 2)
+  }, a = wi(Jt(r)((l) => {
+    if (l.nodes.length <= 2)
       return [];
-    const h = ct(4);
-    if (1 < _.nodes.length) {
-      const p = se(_.nodes[1])(u);
-      if (p.tag === "Nothing")
+    const h = nt(4);
+    if (1 < l.nodes.length) {
+      const $ = Le(l.nodes[1])(u);
+      if ($.tag === "Nothing")
         return [];
-      if (p.tag === "Just") {
-        const $ = p._1.position._1 * h + p._1.size._1 * h / 2;
-        return O((m) => L(m, $))($n(
-          (m) => (N) => _.edgeId + ":" + m + "->" + N,
-          _.nodes,
-          Gt(1, _.nodes.length, _.nodes)
+      if ($.tag === "Just") {
+        const p = $._1.position._1 * h + $._1.size._1 * h / 2;
+        return z((m) => b(m, p))(wn(
+          (m) => (y) => l.edgeId + ":" + m + "->" + y,
+          l.nodes,
+          bt(1, l.nodes.length, l.nodes)
         ));
       }
       f();
     }
     return [];
-  })), g = (_) => {
-    const h = se(_.from.node)(u), p = se(_.to.node)(u);
-    if (h.tag === "Just" && p.tag === "Just") {
-      const $ = h._1, m = p._1, N = Lt((v) => (w) => rt.compare(v.score)(w.score))(O((v) => {
-        const w = v._1, y = v._2;
+  })), g = (l) => {
+    const h = Le(l.from.node)(u), $ = Le(l.to.node)(u);
+    if (h.tag === "Just" && $.tag === "Just") {
+      const p = h._1, m = $._1, y = kt((N) => (T) => it.compare(N.score)(T.score))(z((N) => {
+        const T = N._1, w = N._2;
         return {
-          from: w,
-          to: y,
+          from: T,
+          to: w,
           score: (() => {
-            const k = (z, U, P, R, j) => {
-              const et = li(z)(U), X = li(z)(P);
-              return et.lo < X.hi && X.lo < et.hi && (w === "South" ? y === "North" && j._2 > R._2 : w === "North" ? y === "South" && j._2 < R._2 : w === "East" ? y === "West" && j._1 > R._1 : w === "West" && y === "East" && j._1 < R._1) ? 0 : wu(w)(y)(R)(j);
-            }, E = Tu(w)($), I = Tu(y)(m), D = wu(w)(y)(E)(I);
+            const k = (Y, X, P, B, tt) => {
+              const ct = Ss(Y)(X), q = Ss(Y)(P);
+              return ct.lo < q.hi && q.lo < ct.hi && (T === "South" ? w === "North" && tt._2 > B._2 : T === "North" ? w === "South" && tt._2 < B._2 : T === "East" ? w === "West" && tt._1 > B._1 : T === "West" && w === "East" && tt._1 < B._1) ? 0 : _a(T)(w)(B)(tt);
+            }, L = ga(T)(p), G = ga(w)(m), D = _a(T)(w)(L)(G);
             return (() => {
               if (D > 0) {
-                if (w === "South")
-                  return y === "North" ? k(cn, $, m, E, I) * 10 | 0 : D * 10 | 0;
-                if (w === "North")
-                  return y === "South" ? k(un, $, m, E, I) * 10 | 0 : D * 10 | 0;
-                if (w === "East")
-                  return y === "West" ? k(Kn, $, m, E, I) * 10 | 0 : D * 10 | 0;
-                if (w === "West" && y === "East")
-                  return k(xe, $, m, E, I) * 10 | 0;
+                if (T === "South")
+                  return w === "North" ? k(hn, p, m, L, G) * 10 | 0 : D * 10 | 0;
+                if (T === "North")
+                  return w === "South" ? k(dn, p, m, L, G) * 10 | 0 : D * 10 | 0;
+                if (T === "East")
+                  return w === "West" ? k(pe, p, m, L, G) * 10 | 0 : D * 10 | 0;
+                if (T === "West" && w === "East")
+                  return k(nr, p, m, L, G) * 10 | 0;
               }
               return D * 10 | 0;
-            })() + (w === "South" ? y === "North" ? 0 : 15 : w === "North" ? y === "South" ? 0 : 15 : w === "East" ? y === "West" ? 5 : 15 : w === "West" && y === "East" ? 5 : 15) | 0;
+            })() + (T === "South" ? w === "North" ? 0 : 15 : T === "North" ? w === "South" ? 0 : 15 : T === "East" ? w === "West" ? 5 : 15 : T === "West" && w === "East" ? 5 : 15) | 0;
           })()
         };
       })([
-        L(cn, un),
-        L(Kn, un),
-        L(xe, un),
-        L(cn, Kn),
-        L(cn, xe),
-        L(un, cn),
-        L(un, Kn),
-        L(un, xe),
-        L(Kn, cn),
-        L(xe, cn),
-        L(Kn, xe),
-        L(xe, Kn)
+        b(hn, dn),
+        b(pe, dn),
+        b(nr, dn),
+        b(hn, pe),
+        b(hn, nr),
+        b(dn, hn),
+        b(dn, pe),
+        b(dn, nr),
+        b(pe, hn),
+        b(nr, hn),
+        b(pe, nr),
+        b(nr, pe)
       ]));
-      if (0 < N.length)
-        return { from: N[0].from, to: N[0].to };
+      if (0 < y.length)
+        return { from: y[0].from, to: y[0].to };
     }
-    return { from: cn, to: un };
-  }, l = ko(O((_) => L(_.id, g(_)))(t)), d = (_, h, p, $, m, N) => {
-    const v = ct(4), w = se(h)(u);
-    if (w.tag === "Nothing")
-      return L(0, 0);
-    if (w.tag === "Just") {
-      const y = Sd(L(p, _))(o);
-      if (y.tag === "Just") {
-        const k = w._1.position._1 * v + y._1, E = ct(4);
-        if (_ === "South")
-          return L(k, (w._1.position._2 + w._1.size._2) * E);
-        if (_ === "North")
-          return L(k, w._1.position._2 * E);
-        if (_ === "East")
-          return L((w._1.position._1 + w._1.size._1) * E, k);
-        if (_ === "West")
-          return L(w._1.position._1 * E, k);
+    return { from: hn, to: dn };
+  }, _ = wi(z((l) => b(l.id, g(l)))(t)), d = (l, h, $, p, m, y) => {
+    const N = nt(4), T = Le(h)(u);
+    if (T.tag === "Nothing")
+      return b(0, 0);
+    if (T.tag === "Just") {
+      const w = wm(b($, l))(o);
+      if (w.tag === "Just") {
+        const k = T._1.position._1 * N + w._1, L = nt(4);
+        if (l === "South")
+          return b(k, (T._1.position._2 + T._1.size._2) * L);
+        if (l === "North")
+          return b(k, T._1.position._2 * L);
+        if (l === "East")
+          return b((T._1.position._1 + T._1.size._1) * L, k);
+        if (l === "West")
+          return b(T._1.position._1 * L, k);
         f();
       }
-      if (y.tag === "Nothing") {
-        const k = li(_)(w._1), E = (k.lo + k.hi) / 2, I = _i(p)(la(k)(O((U) => U.id)(Lt((U) => (P) => pt.compare(m(_)(U))(m(_)(P)))(gt(
-          (U) => {
-            const P = _i(U.id)(l);
+      if (w.tag === "Nothing") {
+        const k = Ss(l)(T._1), L = (k.lo + k.hi) / 2, G = Es($)(z0(k)(z((X) => X.id)(kt((X) => (P) => ft.compare(m(l)(X))(m(l)(P)))(lt(
+          (X) => {
+            const P = Es(X.id)(_);
             if (P.tag === "Just") {
-              const R = N(P._1);
-              return R === "North" ? _ === "North" : R === "South" ? _ === "South" : R === "East" ? _ === "East" : R === "West" && _ === "West";
+              const B = y(P._1);
+              return B === "North" ? l === "North" : B === "South" ? l === "South" : B === "East" ? l === "East" : B === "West" && l === "West";
             }
             if (P.tag === "Nothing")
               return !0;
             f();
           },
           (() => {
-            const U = se(h)($);
-            if (U.tag === "Nothing")
+            const X = Le(h)(p);
+            if (X.tag === "Nothing")
               return [];
-            if (U.tag === "Just")
-              return U._1;
+            if (X.tag === "Just")
+              return X._1;
             f();
           })()
         ))))), D = (() => {
-          if (I.tag === "Nothing")
-            return E;
-          if (I.tag === "Just")
-            return I._1;
+          if (G.tag === "Nothing")
+            return L;
+          if (G.tag === "Just")
+            return G._1;
           f();
-        })(), z = ct(4);
-        if (_ === "South")
-          return L(D, (w._1.position._2 + w._1.size._2) * z);
-        if (_ === "North")
-          return L(D, w._1.position._2 * z);
-        if (_ === "East")
-          return L((w._1.position._1 + w._1.size._1) * z, D);
-        if (_ === "West")
-          return L(w._1.position._1 * z, D);
+        })(), Y = nt(4);
+        if (l === "South")
+          return b(D, (T._1.position._2 + T._1.size._2) * Y);
+        if (l === "North")
+          return b(D, T._1.position._2 * Y);
+        if (l === "East")
+          return b((T._1.position._1 + T._1.size._1) * Y, D);
+        if (l === "West")
+          return b(T._1.position._1 * Y, D);
       }
     }
     f();
   };
-  return O((_) => {
-    const h = _i(_.edge.id)(a);
+  return z((l) => {
+    const h = Es(l.edge.id)(a);
     if (h.tag === "Nothing")
-      return _;
+      return l;
     if (h.tag === "Just")
       return {
-        ..._,
-        fromPos: _n(3)(_.edge.from.node) === "$d:" ? L(h._1, _.fromPos._2) : _.fromPos,
-        toPos: _n(3)(_.edge.to.node) === "$d:" ? L(h._1, _.toPos._2) : _.toPos
+        ...l,
+        fromPos: mn(3)(l.edge.from.node) === "$d:" ? b(h._1, l.fromPos._2) : l.fromPos,
+        toPos: mn(3)(l.edge.to.node) === "$d:" ? b(h._1, l.toPos._2) : l.toPos
       };
     f();
-  })(O((_) => {
-    if (_.from.port.tag === "Just" && _.to.port.tag === "Just")
+  })(z((l) => {
+    if (l.from.port.tag === "Just" && l.to.port.tag === "Just")
       return {
-        edge: _,
-        fromPos: c(_.from.node, _.from.port._1, cn),
-        toPos: c(_.to.node, _.to.port._1, un),
-        fromSide: cn,
-        toSide: un
+        edge: l,
+        fromPos: c(l.from.node, l.from.port._1, hn),
+        toPos: c(l.to.node, l.to.port._1, dn),
+        fromSide: hn,
+        toSide: dn
       };
-    const h = g(_);
+    const h = g(l);
     return {
-      edge: _,
+      edge: l,
       fromPos: d(
         h.from,
-        _.from.node,
-        _.id,
+        l.from.node,
+        l.id,
         s,
-        (p) => ($) => {
-          const m = se($.to.node)(u);
+        ($) => (p) => {
+          const m = Le(p.to.node)(u);
           if (m.tag === "Nothing")
             return 0;
           if (m.tag === "Just") {
-            const N = ct(4);
-            if (p === "South" || p === "North")
-              return m._1.position._1 * N + m._1.size._1 * N / 2;
-            if (p === "East" || p === "West")
-              return m._1.position._2 * N + m._1.size._2 * N / 2;
+            const y = nt(4);
+            if ($ === "South" || $ === "North")
+              return m._1.position._1 * y + m._1.size._1 * y / 2;
+            if ($ === "East" || $ === "West")
+              return m._1.position._2 * y + m._1.size._2 * y / 2;
           }
           f();
         },
-        (p) => p.from
+        ($) => $.from
       ),
       toPos: d(
         h.to,
-        _.to.node,
-        _.id,
+        l.to.node,
+        l.id,
         i,
-        (p) => ($) => {
-          const m = se($.from.node)(u);
+        ($) => (p) => {
+          const m = Le(p.from.node)(u);
           if (m.tag === "Nothing")
             return 0;
           if (m.tag === "Just") {
-            const N = ct(4);
-            if (p === "South" || p === "North")
-              return m._1.position._1 * N + m._1.size._1 * N / 2;
-            if (p === "East" || p === "West")
-              return m._1.position._2 * N + m._1.size._2 * N / 2;
+            const y = nt(4);
+            if ($ === "South" || $ === "North")
+              return m._1.position._1 * y + m._1.size._1 * y / 2;
+            if ($ === "East" || $ === "West")
+              return m._1.position._2 * y + m._1.size._2 * y / 2;
           }
           f();
         },
-        (p) => p.to
+        ($) => $.to
       ),
       fromSide: h.from,
       toSide: h.to
     };
   })(t));
-}, ha = (t) => (e) => {
+}, Y0 = (t) => (e) => {
   let r = e, o = !0, i;
   for (; o; ) {
     const s = r;
     if (s.tag === "Leaf") {
-      o = !1, i = T;
+      o = !1, i = J;
       continue;
     }
     if (s.tag === "Node") {
-      const u = G.compare(t)(s._3);
+      const u = C.compare(t)(s._3);
       if (u === "LT") {
         r = s._5;
         continue;
@@ -7825,23 +8712,23 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
         continue;
       }
       if (u === "EQ") {
-        o = !1, i = b("Just", s._4);
+        o = !1, i = v("Just", s._4);
         continue;
       }
     }
     f();
   }
   return i;
-}, Ze = (t) => (e) => {
+}, Er = (t) => (e) => {
   let r = e, o = !0, i;
   for (; o; ) {
     const s = r;
     if (s.tag === "Leaf") {
-      o = !1, i = T;
+      o = !1, i = J;
       continue;
     }
     if (s.tag === "Node") {
-      const u = G.compare(t)(s._3);
+      const u = C.compare(t)(s._3);
       if (u === "LT") {
         r = s._5;
         continue;
@@ -7851,187 +8738,187 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
         continue;
       }
       if (u === "EQ") {
-        o = !1, i = b("Just", s._4);
+        o = !1, i = v("Just", s._4);
         continue;
       }
     }
     f();
   }
   return i;
-}, Gd = /* @__PURE__ */ (() => {
-  const t = On.unfoldr(De);
-  return (n) => t(Wn("IterNode", n, Qe));
-})(), Ai = (t) => (n) => t.gapTop + 1 * ct(4) + ct(n) * 2.5 * ct(4), Id = (t) => (n) => {
-  const e = ha(n.edge.id)(t);
+}, km = /* @__PURE__ */ (() => {
+  const t = te.unfoldr(ke);
+  return (n) => t(Kn("IterNode", n, we));
+})(), uu = (t) => (n) => t.gapTop + 1 * nt(4) + nt(n) * 2.5 * nt(4), bm = (t) => (n) => {
+  const e = Y0(n.edge.id)(t);
   if (e.tag === "Just") {
     if (e._1.partner.tag === "Just")
-      return b("Just", { slot1Y: Ai(e._1)(e._1.slot), splitX: e._1.partner._1.splitX, slot2Y: Ai(e._1)(e._1.partner._1.slot) });
+      return v("Just", { slot1Y: uu(e._1)(e._1.slot), splitX: e._1.partner._1.splitX, slot2Y: uu(e._1)(e._1.partner._1.slot) });
     if (e._1.partner.tag === "Nothing")
-      return T;
+      return J;
     f();
   }
   if (e.tag === "Nothing")
-    return T;
+    return J;
   f();
-}, Pd = (t) => (n) => {
-  const e = J((r) => (o) => Y(G)(o.node)(o)(r))(Q)(n);
-  return Cn(Pt((r) => (o) => {
-    const i = Ze(o.node)(e);
+}, Lm = (t) => (n) => {
+  const e = x((r) => (o) => U(C)(o.node)(o)(r))(A)(n);
+  return zn(Ft((r) => (o) => {
+    const i = Er(o.node)(e);
     if (i.tag === "Nothing")
       return [];
     if (i.tag === "Just") {
       const s = i._1;
-      return Pt((u) => (c) => {
-        const a = o.edges.length, g = ct(4), l = s.position._1 * g, d = s.position._2 * g, _ = s.size._2 * g, h = ct((2 * a | 0) + 1 | 0), p = d + _ * ct(a - u | 0) / h, $ = d + _ * ct((a + 1 | 0) + u | 0) / h, m = l - g * 2.5 * ct(u + 1 | 0), N = [
-          { start: L(l, p), end: L(m, p), direction: Ht },
-          { start: L(m, p), end: L(m, $), direction: Ot },
-          { start: L(m, $), end: L(l, $), direction: Ht }
+      return Ft((u) => (c) => {
+        const a = o.edges.length, g = nt(4), _ = s.position._1 * g, d = s.position._2 * g, l = s.size._2 * g, h = nt((2 * a | 0) + 1 | 0), $ = d + l * nt(a - u | 0) / h, p = d + l * nt((a + 1 | 0) + u | 0) / h, m = _ - g * 2.5 * nt(u + 1 | 0), y = [
+          { start: b(_, $), end: b(m, $), direction: Zt },
+          { start: b(m, $), end: b(m, p), direction: tn },
+          { start: b(m, p), end: b(_, p), direction: Zt }
         ];
-        return { edge: c.id, segments: N, bends: $n((v) => (w) => v.end, N, Gt(1, 3, N)), bendType: [], jumps: [], reversed: !1 };
+        return { edge: c.id, segments: y, bends: wn((N) => (T) => N.end, y, bt(1, 3, y)), bendType: [], jumps: [], reversed: !1 };
       })(o.edges);
     }
     f();
-  })(O((r) => ({ node: r._1, edges: r._2 }))(Gd(J((r) => (o) => yt(G)(fn)(o.from.node)([
+  })(z((r) => ({ node: r._1, edges: r._2 }))(km(x((r) => (o) => vt(C)(rn)(o.from.node)([
     o
-  ])(r))(Q)(t)))));
-}, Ad = (t) => (n) => {
-  const e = J((i) => (s) => Y(G)(s.node)(s)(i))(Q)(n), r = (i) => {
-    const s = Ze(i)(e);
+  ])(r))(A)(t)))));
+}, Em = (t) => (n) => {
+  const e = x((i) => (s) => U(C)(s.node)(s)(i))(A)(n), r = (i) => {
+    const s = Er(i)(e);
     if (s.tag === "Nothing")
       return 0;
     if (s.tag === "Just")
       return s._1.position._1;
     f();
   }, o = (i) => {
-    const s = Ze(i)(e);
+    const s = Er(i)(e);
     if (s.tag === "Nothing")
       return 0;
     if (s.tag === "Just")
       return s._1.layer;
     f();
   };
-  return Lt((i) => (s) => {
-    const u = rt.compare(o(i.edge.from.node))(o(s.edge.from.node));
+  return kt((i) => (s) => {
+    const u = it.compare(o(i.edge.from.node))(o(s.edge.from.node));
     if (u === "EQ") {
-      const c = pt.compare(r(i.edge.from.node))(r(s.edge.from.node));
-      return c === "EQ" ? pt.compare(r(i.edge.to.node))(r(s.edge.to.node)) : c;
+      const c = ft.compare(r(i.edge.from.node))(r(s.edge.from.node));
+      return c === "EQ" ? ft.compare(r(i.edge.to.node))(r(s.edge.to.node)) : c;
     }
     return u;
   })(t);
-}, Nn = (t) => {
-  const n = ct(4);
+}, An = (t) => {
+  const n = nt(4);
   return { x: t.position._1 * n - 2, y: t.position._2 * n - 2, w: t.size._1 * n + 4, h: t.size._2 * n + 4 };
-}, Rd = (t) => t.from.node === t.to.node, Fd = (t) => (n) => (e) => (r) => {
-  const o = vd(e)(xd(t)(n)(e)(r.fromSide)(r.fromPos)(r.toSide)(r.toPos));
+}, Sm = (t) => t.from.node === t.to.node, Cm = (t) => (n) => (e) => (r) => {
+  const o = hm(e)(Tm(t)(n)(e)(r.fromSide)(r.fromPos)(r.toSide)(r.toPos));
   return {
     edge: r.edge.id,
     segments: o,
-    bends: $n((i) => (s) => i.end, o, Gt(1, o.length, o)),
+    bends: wn((i) => (s) => i.end, o, bt(1, o.length, o)),
     bendType: [],
     jumps: [],
     reversed: !1
   };
-}, Bd = (t) => (n) => (e) => (r) => {
+}, Pm = (t) => (n) => (e) => (r) => {
   const o = [
-    { start: L(r.fromPos._1, r.fromPos._2), end: L(r.fromPos._1, t.slot1Y), direction: Ot },
-    { start: L(r.fromPos._1, t.slot1Y), end: L(t.splitX, t.slot1Y), direction: Ht },
-    { start: L(t.splitX, t.slot1Y), end: L(t.splitX, t.slot2Y), direction: Ot },
-    { start: L(t.splitX, t.slot2Y), end: L(r.toPos._1, t.slot2Y), direction: Ht },
-    { start: L(r.toPos._1, t.slot2Y), end: L(r.toPos._1, r.toPos._2), direction: Ot }
+    { start: b(r.fromPos._1, r.fromPos._2), end: b(r.fromPos._1, t.slot1Y), direction: tn },
+    { start: b(r.fromPos._1, t.slot1Y), end: b(t.splitX, t.slot1Y), direction: Zt },
+    { start: b(t.splitX, t.slot1Y), end: b(t.splitX, t.slot2Y), direction: tn },
+    { start: b(t.splitX, t.slot2Y), end: b(r.toPos._1, t.slot2Y), direction: Zt },
+    { start: b(r.toPos._1, t.slot2Y), end: b(r.toPos._1, r.toPos._2), direction: tn }
   ];
   return {
     edge: r.edge.id,
     segments: o,
-    bends: $n((i) => (s) => i.end, o, Gt(1, 5, o)),
+    bends: wn((i) => (s) => i.end, o, bt(1, 5, o)),
     bendType: [],
     jumps: [],
     reversed: !1
   };
-}, Qd = (t) => (n) => (e) => {
-  const r = Ze(t.edge.from.node)(e);
+}, Gm = (t) => (n) => (e) => {
+  const r = Er(t.edge.from.node)(e);
   if (r.tag === "Just") {
-    const i = Ze(t.edge.to.node)(e);
-    return i.tag === "Just" ? gt(
-      (s) => !(s.h === Nn(r._1).h && s.w === Nn(r._1).w && s.x === Nn(r._1).x && s.y === Nn(r._1).y) && !(s.h === Nn(i._1).h && s.w === Nn(i._1).w && s.x === Nn(i._1).x && s.y === Nn(i._1).y),
+    const i = Er(t.edge.to.node)(e);
+    return i.tag === "Just" ? lt(
+      (s) => !(s.h === An(r._1).h && s.w === An(r._1).w && s.x === An(r._1).x && s.y === An(r._1).y) && !(s.h === An(i._1).h && s.w === An(i._1).w && s.x === An(i._1).x && s.y === An(i._1).y),
       n
-    ) : gt((s) => !(s.h === Nn(r._1).h && s.w === Nn(r._1).w && s.x === Nn(r._1).x && s.y === Nn(r._1).y), n);
+    ) : lt((s) => !(s.h === An(r._1).h && s.w === An(r._1).w && s.x === An(r._1).x && s.y === An(r._1).y), n);
   }
-  const o = Ze(t.edge.to.node)(e);
-  return o.tag === "Just" ? gt((i) => !(i.h === Nn(o._1).h && i.w === Nn(o._1).w && i.x === Nn(o._1).x && i.y === Nn(o._1).y), n) : gt((i) => !0, n);
-}, Dd = (t) => (n) => {
-  const e = ha(n.edge.id)(t);
+  const o = Er(t.edge.to.node)(e);
+  return o.tag === "Just" ? lt((i) => !(i.h === An(o._1).h && i.w === An(o._1).w && i.x === An(o._1).x && i.y === An(o._1).y), n) : lt((i) => !0, n);
+}, Im = (t) => (n) => {
+  const e = Y0(n.edge.id)(t);
   if (e.tag === "Just")
-    return b("Just", Ai(e._1)(e._1.slot));
+    return v("Just", uu(e._1)(e._1.slot));
   if (e.tag === "Nothing")
-    return T;
+    return J;
   f();
-}, Wd = (t) => (n) => (e) => (r) => (o) => {
-  const i = J((a) => (g) => Y(G)(g.node)(g)(a))(Q)(n), s = Cd(n), u = da(gt((a) => a.from.node !== a.to.node, t))(n)(e)(r)(o), c = fa(u)(n);
+}, Am = (t) => (n) => (e) => (r) => (o) => {
+  const i = x((a) => (g) => U(C)(g.node)(g)(a))(A)(n), s = vm(n), u = q0(lt((a) => a.from.node !== a.to.node, t))(n)(e)(r)(o), c = D0(u)(n);
   return [
-    ...Pd(gt(Rd, t))(n),
-    ...J((a) => (g) => {
-      const l = Qd(g)(s)(i), d = [...l, ...a.edgeObstacles], _ = Id(c)(g), h = (() => {
-        if (_.tag === "Just")
-          return Bd(_._1)(l)(d)(g);
-        if (_.tag === "Nothing")
-          return Fd(Dd(c)(g))(l)(d)(g);
+    ...Lm(lt(Sm, t))(n),
+    ...x((a) => (g) => {
+      const _ = Gm(g)(s)(i), d = [..._, ...a.edgeObstacles], l = bm(c)(g), h = (() => {
+        if (l.tag === "Just")
+          return Pm(l._1)(_)(d)(g);
+        if (l.tag === "Nothing")
+          return Cm(Im(c)(g))(_)(d)(g);
         f();
       })();
-      return { results: [...a.results, h], edgeObstacles: [...a.edgeObstacles, ...hd(h.segments)] };
-    })({ results: [], edgeObstacles: [] })(Ad(u)(n)).results
+      return { results: [...a.results, h], edgeObstacles: [...a.edgeObstacles, ...am(h.segments)] };
+    })({ results: [], edgeObstacles: [] })(Em(u)(n)).results
   ];
-}, Je = (t) => (n) => {
-  const e = pt.compare(t)(n);
+}, qe = (t) => (n) => {
+  const e = ft.compare(t)(n);
   if (e === "LT" || e === "EQ")
     return t;
   if (e === "GT")
     return n;
   f();
-}, ve = (t) => (n) => {
-  const e = pt.compare(t)(n);
+}, Ye = (t) => (n) => {
+  const e = ft.compare(t)(n);
   if (e === "LT")
     return n;
   if (e === "EQ" || e === "GT")
     return t;
   f();
-}, qd = (t) => (n) => (e) => {
+}, Fm = (t) => (n) => (e) => {
   if (t.start._1 !== n.start._1)
-    return T;
-  const r = ve(Je(t.start._2)(t.end._2))(Je(n.start._2)(n.end._2)), o = Je(ve(t.start._2)(t.end._2))(ve(n.start._2)(n.end._2));
-  return r < o ? b("Just", { position: L(t.start._1, (r + o) / 2), crossingEdge: e }) : T;
-}, Hd = (t) => (n) => (e) => {
+    return J;
+  const r = Ye(qe(t.start._2)(t.end._2))(qe(n.start._2)(n.end._2)), o = qe(Ye(t.start._2)(t.end._2))(Ye(n.start._2)(n.end._2));
+  return r < o ? v("Just", { position: b(t.start._1, (r + o) / 2), crossingEdge: e }) : J;
+}, Rm = (t) => (n) => (e) => {
   if (t.start._2 !== n.start._2)
-    return T;
-  const r = ve(Je(t.start._1)(t.end._1))(Je(n.start._1)(n.end._1)), o = Je(ve(t.start._1)(t.end._1))(ve(n.start._1)(n.end._1));
-  return r < o ? b("Just", { position: L((r + o) / 2, t.start._2), crossingEdge: e }) : T;
-}, Od = (t) => (n) => (e) => {
+    return J;
+  const r = Ye(qe(t.start._1)(t.end._1))(qe(n.start._1)(n.end._1)), o = qe(Ye(t.start._1)(t.end._1))(Ye(n.start._1)(n.end._1));
+  return r < o ? v("Just", { position: b((r + o) / 2, t.start._2), crossingEdge: e }) : J;
+}, Bm = (t) => (n) => (e) => {
   if (t.direction === "H")
-    return Hd(t)(n)(e);
+    return Rm(t)(n)(e);
   if (t.direction === "V")
-    return qd(t)(n)(e);
+    return Fm(t)(n)(e);
   f();
-}, zd = (t) => (n) => (e) => {
-  const r = t + 1 | 0, o = r < 1 ? e : Gt(r, e.length, e);
-  return bt(n.segments)((i) => bt(o)((s) => vt((u) => Od(i)(u)(s.edge))(gt(
+}, Qm = (t) => (n) => (e) => {
+  const r = t + 1 | 0, o = r < 1 ? e : bt(r, e.length, e);
+  return Jt(n.segments)((i) => Jt(o)((s) => yt((u) => Bm(i)(u)(s.edge))(lt(
     (u) => u.direction === "H" ? i.direction === "H" : u.direction === "V" && i.direction === "V",
     s.segments
   ))));
-}, Vd = (t) => (n) => (e) => n.start._1 > Je(t.start._1)(t.end._1) && n.start._1 < ve(t.start._1)(t.end._1) && t.start._2 > Je(n.start._2)(n.end._2) && t.start._2 < ve(n.start._2)(n.end._2) ? b("Just", { position: L(n.start._1, t.start._2), crossingEdge: e }) : T, Yd = (t) => (n) => bt(gt((e) => e.direction === "H", t.segments))((e) => bt(n)((r) => vt((o) => Vd(e)(o)(r.edge))(gt(
+}, Wm = (t) => (n) => (e) => n.start._1 > qe(t.start._1)(t.end._1) && n.start._1 < Ye(t.start._1)(t.end._1) && t.start._2 > qe(n.start._2)(n.end._2) && t.start._2 < Ye(n.start._2)(n.end._2) ? v("Just", { position: b(n.start._1, t.start._2), crossingEdge: e }) : J, Dm = (t) => (n) => Jt(lt((e) => e.direction === "H", t.segments))((e) => Jt(n)((r) => yt((o) => Wm(e)(o)(r.edge))(lt(
   (o) => o.direction === "V",
   r.segments
-)))), Xd = (t) => (n) => (e) => [
-  ...Yd(n)(gt((r) => r.edge !== n.edge, e)),
-  ...zd(t)(n)(e)
-], Lu = (t) => (e) => {
+)))), Hm = (t) => (n) => (e) => [
+  ...Dm(n)(lt((r) => r.edge !== n.edge, e)),
+  ...Qm(t)(n)(e)
+], da = (t) => (e) => {
   let r = e, o = !0, i;
   for (; o; ) {
     const s = r;
     if (s.tag === "Leaf") {
-      o = !1, i = T;
+      o = !1, i = J;
       continue;
     }
     if (s.tag === "Node") {
-      const u = G.compare(t)(s._3);
+      const u = C.compare(t)(s._3);
       if (u === "LT") {
         r = s._5;
         continue;
@@ -8041,21 +8928,21 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
         continue;
       }
       if (u === "EQ") {
-        o = !1, i = b("Just", s._4);
+        o = !1, i = v("Just", s._4);
         continue;
       }
     }
     f();
   }
   return i;
-}, pa = (t) => _n(3)(t) === "$d:", Ud = (t) => (n) => (e) => J((r) => (o) => {
-  const i = Lu(o.from.node)(t), s = (() => {
+}, X0 = (t) => mn(3)(t) === "$d:", Om = (t) => (n) => (e) => x((r) => (o) => {
+  const i = da(o.from.node)(t), s = (() => {
     if (i.tag === "Nothing")
       return 0;
     if (i.tag === "Just")
       return i._1;
     f();
-  })(), u = Lu(o.to.node)(t), c = (() => {
+  })(), u = da(o.to.node)(t), c = (() => {
     if (u.tag === "Nothing")
       return -s;
     if (u.tag === "Just")
@@ -8064,66 +8951,66 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
   })();
   if (c <= 1)
     return { ...r, edges: [...r.edges, o], chains: [...r.chains, { edgeId: o.id, nodes: [o.from.node, o.to.node] }] };
-  const a = o.id, g = O((d) => "$d:" + a + ":" + an(d))(Xt(1, c - 1 | 0)), l = [o.from.node, ...g, o.to.node];
+  const a = o.id, g = z((d) => "$d:" + a + ":" + un(d))(It(1, c - 1 | 0)), _ = [o.from.node, ...g, o.to.node];
   return {
     ...r,
-    layers: J((d) => (_) => {
-      const h = _._2, p = _g(s + _._1 | 0)(($) => [...$, h])(d);
-      if (p.tag === "Nothing")
+    layers: x((d) => (l) => {
+      const h = l._2, $ = $_(s + l._1 | 0)((p) => [...p, h])(d);
+      if ($.tag === "Nothing")
         return d;
-      if (p.tag === "Just")
-        return p._1;
+      if ($.tag === "Just")
+        return $._1;
       f();
-    })(r.layers)($n(gr, Xt(1, c - 1 | 0), g)),
+    })(r.layers)(wn(Xe, It(1, c - 1 | 0), g)),
     edges: [
       ...r.edges,
-      ...$n(
-        (d) => (_) => ({ id: a + ":" + d + "->" + _, from: { node: d, port: o.from.port }, to: { node: _, port: o.to.port } }),
-        l,
-        Gt(1, l.length, l)
+      ...wn(
+        (d) => (l) => ({ id: a + ":" + d + "->" + l, from: { node: d, port: o.from.port }, to: { node: l, port: o.to.port } }),
+        _,
+        bt(1, _.length, _)
       )
     ],
-    chains: [...r.chains, { edgeId: o.id, nodes: l }]
+    chains: [...r.chains, { edgeId: o.id, nodes: _ }]
   };
-})({ layers: e, edges: [], chains: [] })(n), bo = /* @__PURE__ */ (() => {
+})({ layers: e, edges: [], chains: [] })(n), ki = /* @__PURE__ */ (() => {
   const t = {
     eq: (n) => (e) => n._1 === e._1 && (n._2 === "North" ? e._2 === "North" : n._2 === "South" ? e._2 === "South" : n._2 === "East" ? e._2 === "East" : n._2 === "West" && e._2 === "West")
   };
   return {
     compare: (n) => (e) => {
-      const r = G.compare(n._1)(e._1);
+      const r = C.compare(n._1)(e._1);
       if (r === "LT")
-        return dn;
-      if (r === "GT")
-        return hn;
-      if (n._2 === "North")
-        return e._2 === "North" ? yn : dn;
-      if (e._2 === "North")
-        return hn;
-      if (n._2 === "South")
-        return e._2 === "South" ? yn : dn;
-      if (e._2 === "South")
-        return hn;
-      if (n._2 === "East")
-        return e._2 === "East" ? yn : dn;
-      if (e._2 === "East")
-        return hn;
-      if (n._2 === "West" && e._2 === "West")
         return yn;
+      if (r === "GT")
+        return Nn;
+      if (n._2 === "North")
+        return e._2 === "North" ? Gn : yn;
+      if (e._2 === "North")
+        return Nn;
+      if (n._2 === "South")
+        return e._2 === "South" ? Gn : yn;
+      if (e._2 === "South")
+        return Nn;
+      if (n._2 === "East")
+        return e._2 === "East" ? Gn : yn;
+      if (e._2 === "East")
+        return Nn;
+      if (n._2 === "West" && e._2 === "West")
+        return Gn;
       f();
     },
     Eq0: () => t
   };
-})(), Md = (t) => (e) => {
+})(), zm = (t) => (e) => {
   let r = e, o = !0, i;
   for (; o; ) {
     const s = r;
     if (s.tag === "Leaf") {
-      o = !1, i = T;
+      o = !1, i = J;
       continue;
     }
     if (s.tag === "Node") {
-      const u = bo.compare(t)(s._3);
+      const u = ki.compare(t)(s._3);
       if (u === "LT") {
         r = s._5;
         continue;
@@ -8133,23 +9020,23 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
         continue;
       }
       if (u === "EQ") {
-        o = !1, i = b("Just", s._4);
+        o = !1, i = v("Just", s._4);
         continue;
       }
     }
     f();
   }
   return i;
-}, Kd = /* @__PURE__ */ jt(G)(Bt), di = (t) => (e) => {
+}, qm = /* @__PURE__ */ nn(C)(Ht), Cs = (t) => (e) => {
   let r = e, o = !0, i;
   for (; o; ) {
     const s = r;
     if (s.tag === "Leaf") {
-      o = !1, i = T;
+      o = !1, i = J;
       continue;
     }
     if (s.tag === "Node") {
-      const u = G.compare(t)(s._3);
+      const u = C.compare(t)(s._3);
       if (u === "LT") {
         r = s._5;
         continue;
@@ -8159,27 +9046,27 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
         continue;
       }
       if (u === "EQ") {
-        o = !1, i = b("Just", s._4);
+        o = !1, i = v("Just", s._4);
         continue;
       }
     }
     f();
   }
   return i;
-}, jd = /* @__PURE__ */ jt(bo)(Bt), ku = /* @__PURE__ */ (() => {
-  const t = On.unfoldr(De);
-  return (n) => t(Wn("IterNode", n, Qe));
-})(), tr = (t) => (n) => (e) => (r) => {
-  const o = Md(L(n, e))(t);
+}, Ym = /* @__PURE__ */ nn(ki)(Ht), ha = /* @__PURE__ */ (() => {
+  const t = te.unfoldr(ke);
+  return (n) => t(Kn("IterNode", n, we));
+})(), Sr = (t) => (n) => (e) => (r) => {
+  const o = zm(b(n, e))(t);
   if (o.tag === "Nothing")
     return r;
   if (o.tag === "Just")
     return o._1;
   f();
-}, $a = (t) => (n) => (e) => {
-  const r = Kd(Cn(O((s) => Pt((u) => (c) => L(c, u))(s))(t))), o = (s, u) => {
+}, V0 = (t) => (n) => (e) => {
+  const r = qm(zn(z((s) => Ft((u) => (c) => b(c, u))(s))(t))), o = (s, u) => {
     if (s === "South") {
-      const c = di(u.to.node)(r);
+      const c = Cs(u.to.node)(r);
       if (c.tag === "Nothing")
         return 0;
       if (c.tag === "Just")
@@ -8187,7 +9074,7 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
       f();
     }
     if (s === "North") {
-      const c = di(u.from.node)(r);
+      const c = Cs(u.from.node)(r);
       if (c.tag === "Nothing")
         return 0;
       if (c.tag === "Just")
@@ -8195,29 +9082,29 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
       f();
     }
     return 0;
-  }, i = (s) => J((u) => (c) => bn(
-    bo.compare,
-    Ln,
-    jd(O((a) => L(L(a._1, s), a._2))(ku(la({
+  }, i = (s) => x((u) => (c) => Cn(
+    ki.compare,
+    Sn,
+    Ym(z((a) => b(b(a._1, s), a._2))(ha(z0({
       lo: 0,
       hi: (() => {
-        const a = di(c._1)(e);
+        const a = Cs(c._1)(e);
         if (a.tag === "Just")
           return a._1._1;
         if (a.tag === "Nothing")
-          return _n(3)(c._1) === "$d:" ? 0 : 1;
+          return mn(3)(c._1) === "$d:" ? 0 : 1;
         f();
       })()
-    })(O((a) => a.id)(Lt((a) => (g) => rt.compare(o(s, a))(o(s, g)))(c._2)))))),
+    })(z((a) => a.id)(kt((a) => (g) => it.compare(o(s, a))(o(s, g)))(c._2)))))),
     u
-  ))(Q)(ku(J((u) => (c) => c.from.node === c.to.node ? u : s === "South" ? yt(G)(fn)(c.from.node)([c])(u) : s === "North" ? yt(G)(fn)(c.to.node)([c])(u) : u)(Q)(n)));
-  return bn(bo.compare, Ln, i(un), i(cn));
-}, ma = (t) => t, Na = (t) => t, Ja = (t) => t, Zd = /* @__PURE__ */ J((t) => (n) => Y(G)(n)()(t))(Q), th = /* @__PURE__ */ (() => {
-  const t = On.unfoldr((n) => {
+  ))(A)(ha(x((u) => (c) => c.from.node === c.to.node ? u : s === "South" ? vt(C)(rn)(c.from.node)([c])(u) : s === "North" ? vt(C)(rn)(c.to.node)([c])(u) : u)(A)(n)));
+  return Cn(ki.compare, Sn, i(dn), i(hn));
+}, U0 = (t) => t, K0 = (t) => t, M0 = (t) => t, Xm = /* @__PURE__ */ x((t) => (n) => U(C)(n)()(t))(A), Vm = /* @__PURE__ */ (() => {
+  const t = te.unfoldr((n) => {
     if (n.tag === "Nil")
-      return T;
+      return J;
     if (n.tag === "Cons")
-      return b("Just", L(n._1, n._2));
+      return v("Just", b(n._1, n._2));
     f();
   });
   return (n) => t((() => {
@@ -8225,21 +9112,21 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
       if (r.tag === "Leaf")
         return o;
       if (r.tag === "Node")
-        return e(r._5, qt("Cons", r._3, e(r._6, o)));
+        return e(r._5, zt("Cons", r._3, e(r._6, o)));
       f();
     };
-    return e(n, zt);
+    return e(n, Yt);
   })());
-})(), Z = (t) => (e) => {
+})(), ut = (t) => (e) => {
   let r = e, o = !0, i;
   for (; o; ) {
     const s = r;
     if (s.tag === "Leaf") {
-      o = !1, i = T;
+      o = !1, i = J;
       continue;
     }
     if (s.tag === "Node") {
-      const u = G.compare(t)(s._3);
+      const u = C.compare(t)(s._3);
       if (u === "LT") {
         r = s._5;
         continue;
@@ -8249,47 +9136,47 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
         continue;
       }
       if (u === "EQ") {
-        o = !1, i = b("Just", s._4);
+        o = !1, i = v("Just", s._4);
         continue;
       }
     }
     f();
   }
   return i;
-}, Sn = (t) => (n) => {
-  const e = pt.compare(t)(n);
+}, ee = (t) => (n) => {
+  const e = ft.compare(t)(n);
   if (e === "LT" || e === "EQ")
     return t;
   if (e === "GT")
     return n;
   f();
-}, ne = (t) => (n) => {
-  const e = pt.compare(t)(n);
+}, Je = (t) => (n) => {
+  const e = ft.compare(t)(n);
   if (e === "LT")
     return n;
   if (e === "EQ" || e === "GT")
     return t;
   f();
-}, jn = /* @__PURE__ */ jt(G)(Bt), hi = /* @__PURE__ */ kg(G), Ri = /* @__PURE__ */ (() => {
-  const t = On.unfoldr(De);
-  return (n) => t(Wn("IterNode", n, Qe));
-})(), nh = (t) => (n) => {
-  const e = rt.compare(t)(n);
+}, $e = /* @__PURE__ */ nn(C)(Ht), Ps = /* @__PURE__ */ Sf(C), cu = /* @__PURE__ */ (() => {
+  const t = te.unfoldr(ke);
+  return (n) => t(Kn("IterNode", n, we));
+})(), Um = (t) => (n) => {
+  const e = it.compare(t)(n);
   if (e === "LT")
     return n;
   if (e === "EQ" || e === "GT")
     return t;
   f();
-}, eh = (t) => (e) => {
+}, Km = (t) => (e) => {
   let r = e, o = !0, i;
   for (; o; ) {
     const s = r;
     if (s.tag === "Leaf") {
-      o = !1, i = T;
+      o = !1, i = J;
       continue;
     }
     if (s.tag === "Node") {
-      const u = rt.compare(t)(s._3);
+      const u = it.compare(t)(s._3);
       if (u === "LT") {
         r = s._5;
         continue;
@@ -8299,14 +9186,14 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
         continue;
       }
       if (u === "EQ") {
-        o = !1, i = b("Just", s._4);
+        o = !1, i = v("Just", s._4);
         continue;
       }
     }
     f();
   }
   return i;
-}, bu = /* @__PURE__ */ Ja("VDown"), Eu = /* @__PURE__ */ Ja("VUp"), rh = /* @__PURE__ */ Na("ForwardPhase"), oh = /* @__PURE__ */ Na("StackPhase"), xu = /* @__PURE__ */ ma("HRight"), Cu = /* @__PURE__ */ ma("HLeft"), Su = (t) => (e) => {
+}, pa = /* @__PURE__ */ M0("VDown"), $a = /* @__PURE__ */ M0("VUp"), Mm = /* @__PURE__ */ K0("ForwardPhase"), jm = /* @__PURE__ */ K0("StackPhase"), ma = /* @__PURE__ */ U0("HRight"), ya = /* @__PURE__ */ U0("HLeft"), Na = (t) => (e) => {
   let r = e, o = !0, i;
   for (; o; ) {
     const s = r;
@@ -8315,7 +9202,7 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
       continue;
     }
     if (s.tag === "Node") {
-      const u = G.compare(t)(s._3);
+      const u = C.compare(t)(s._3);
       if (u === "LT") {
         r = s._5;
         continue;
@@ -8332,76 +9219,76 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
     f();
   }
   return i;
-}, ih = (t) => (n) => (e) => {
-  const r = J((u) => (c) => yt(G)(Zt)(c.tgt)(1)(u))(Q)(t), o = th(Zd([
-    ...O((u) => u.src)(t),
-    ...O((u) => u.tgt)(t),
+}, Zm = (t) => (n) => (e) => {
+  const r = x((u) => (c) => vt(C)(on)(c.tgt)(1)(u))(A)(t), o = Vm(Xm([
+    ...z((u) => u.src)(t),
+    ...z((u) => u.tgt)(t),
     ...(() => {
       const u = (c, a) => {
         if (c.tag === "Leaf")
           return a;
         if (c.tag === "Node")
-          return u(c._5, qt("Cons", c._4, u(c._6, a)));
+          return u(c._5, zt("Cons", c._4, u(c._6, a)));
         f();
       };
-      return Et(Mt.foldr, u(n, zt));
+      return Lt(Xt.foldr, u(n, Yt));
     })()
-  ])), i = J((u) => (c) => yt(G)(fn)(c.src)([{ target: c.tgt, sep: c.sep }])(u))(Q)(t);
+  ])), i = x((u) => (c) => vt(C)(rn)(c.src)([{ target: c.tgt, sep: c.sep }])(u))(A)(t);
   return ((u) => (c) => (a) => {
-    let g = u, l = c, d = a, _ = !0, h;
-    for (; _; ) {
-      const p = g, $ = l, m = d, N = Wt((v) => T, (v) => (w) => b("Just", { head: v, tail: w }), p);
-      if (N.tag === "Nothing") {
-        _ = !1, h = m;
+    let g = u, _ = c, d = a, l = !0, h;
+    for (; l; ) {
+      const $ = g, p = _, m = d, y = Rt((N) => J, (N) => (T) => v("Just", { head: N, tail: T }), $);
+      if (y.tag === "Nothing") {
+        l = !1, h = m;
         continue;
       }
-      if (N.tag === "Just") {
-        const v = Z(N._1.head)(m), w = (() => {
-          if (v.tag === "Nothing")
+      if (y.tag === "Just") {
+        const N = ut(y._1.head)(m), T = (() => {
+          if (N.tag === "Nothing")
             return 0;
-          if (v.tag === "Just")
-            return v._1;
+          if (N.tag === "Just")
+            return N._1;
           f();
-        })(), y = J((k) => (E) => {
-          const I = Z(E.target)(k.result), D = w + E.sep, z = Z(E.target)(k.indeg), U = (() => {
-            if (z.tag === "Nothing")
+        })(), w = x((k) => (L) => {
+          const G = ut(L.target)(k.result), D = T + L.sep, Y = ut(L.target)(k.indeg), X = (() => {
+            if (Y.tag === "Nothing")
               return -1;
-            if (z.tag === "Just")
-              return z._1 - 1 | 0;
+            if (Y.tag === "Just")
+              return Y._1 - 1 | 0;
             f();
           })();
           return {
-            newQueue: U === 0 ? [...k.newQueue, E.target] : k.newQueue,
-            result: Y(G)(E.target)((() => {
-              if (I.tag === "Nothing")
+            newQueue: X === 0 ? [...k.newQueue, L.target] : k.newQueue,
+            result: U(C)(L.target)((() => {
+              if (G.tag === "Nothing")
                 return D;
-              if (I.tag === "Just") {
+              if (G.tag === "Just") {
                 if (e === "VDown")
-                  return Sn(I._1)(D);
+                  return ee(G._1)(D);
                 if (e === "VUp")
-                  return ne(I._1)(D);
+                  return Je(G._1)(D);
               }
               f();
             })())(k.result),
-            indeg: Y(G)(E.target)(U)(k.indeg)
+            indeg: U(C)(L.target)(X)(k.indeg)
           };
-        })({ newQueue: [], result: m, indeg: $ })((() => {
-          const k = Z(N._1.head)(i);
+        })({ newQueue: [], result: m, indeg: p })((() => {
+          const k = ut(y._1.head)(i);
           if (k.tag === "Nothing")
             return [];
           if (k.tag === "Just")
             return k._1;
           f();
         })());
-        g = [...N._1.tail, ...y.newQueue], l = y.indeg, d = y.result;
+        g = [...y._1.tail, ...w.newQueue], _ = w.indeg, d = w.result;
         continue;
       }
       f();
     }
     return h;
-  })(gt(
+  })(lt(
     (u) => {
-      const c = Z(u)(r);
+      const c = ut(u)(r);
       if (c.tag === "Nothing")
         return !0;
       if (c.tag === "Just")
@@ -8409,42 +9296,42 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
       f();
     },
     o
-  ))(Q)(J((u) => (c) => Y(G)(c)(0)(u))(Q)(o));
-}, sh = (t) => {
+  ))(r)(x((u) => (c) => U(C)(c)(0)(u))(A)(o));
+}, t2 = (t) => {
   const n = (i, s) => {
     if (i.tag === "Leaf")
       return s;
     if (i.tag === "Node")
-      return n(i._5, qt("Cons", i._4, n(i._6, s)));
+      return n(i._5, zt("Cons", i._4, n(i._6, s)));
     f();
-  }, e = Et(Mt.foldr, n(t, zt)), r = J(Sn)(999999)(e);
+  }, e = Lt(Xt.foldr, n(t, Yt)), r = x(ee)(999999)(e);
   if (r === 0 || e.length === 0)
     return t;
   const o = (i) => {
     if (i.tag === "Leaf")
-      return Q;
+      return A;
     if (i.tag === "Node")
-      return Dt("Node", i._1, i._2, i._3, i._4 - r, o(i._5), o(i._6));
+      return Ot("Node", i._1, i._2, i._3, i._4 - r, o(i._5), o(i._6));
     f();
   };
   return o(t);
-}, va = (t) => {
+}, j0 = (t) => {
   const n = (i, s) => {
     if (i.tag === "Leaf")
       return s;
     if (i.tag === "Node")
-      return n(i._5, qt("Cons", i._4, n(i._6, s)));
+      return n(i._5, zt("Cons", i._4, n(i._6, s)));
     f();
-  }, e = n(t, zt), r = (i) => (s) => {
+  }, e = n(t, Yt), r = (i) => (s) => {
     let u = i, c = s, a = !0, g;
     for (; a; ) {
-      const l = u, d = c;
+      const _ = u, d = c;
       if (d.tag === "Nil") {
-        a = !1, g = l;
+        a = !1, g = _;
         continue;
       }
       if (d.tag === "Cons") {
-        u = ne(l)(d._1), c = d._2;
+        u = Je(_)(d._1), c = d._2;
         continue;
       }
       f();
@@ -8453,13 +9340,13 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
   }, o = (i) => (s) => {
     let u = i, c = s, a = !0, g;
     for (; a; ) {
-      const l = u, d = c;
+      const _ = u, d = c;
       if (d.tag === "Nil") {
-        a = !1, g = l;
+        a = !1, g = _;
         continue;
       }
       if (d.tag === "Cons") {
-        u = Sn(l)(d._1), c = d._2;
+        u = ee(_)(d._1), c = d._2;
         continue;
       }
       f();
@@ -8467,7 +9354,7 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
     return g;
   };
   return r(-999999)(e) - o(999999)(e);
-}, Jr = (t) => (n) => ((r) => (o) => {
+}, oo = (t) => (n) => ((r) => (o) => {
   let i = r, s = o, u = !0, c;
   for (; u; ) {
     const a = i, g = s;
@@ -8476,176 +9363,176 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
       continue;
     }
     i = (() => {
-      const l = Z(a)(t.align);
-      if (l.tag === "Nothing")
+      const _ = ut(a)(t.align);
+      if (_.tag === "Nothing")
         return n;
-      if (l.tag === "Just")
-        return l._1;
+      if (_.tag === "Just")
+        return _._1;
       f();
     })(), s = [...g, a];
   }
   return c;
 })((() => {
-  const r = Z(n)(t.align);
+  const r = ut(n)(t.align);
   if (r.tag === "Nothing")
     return n;
   if (r.tag === "Just")
     return r._1;
   f();
-})())([n]), uh = (t) => (n) => (e) => (r) => (o) => (i) => (s) => (u) => (c) => (a) => (g) => {
-  const l = (x, C, q) => {
-    const S = x.from.node === C ? x.from.port : x.to.node === C ? x.to.port : T;
-    if (S.tag === "Just") {
-      const F = Z(C)(o);
-      if (F.tag === "Just") {
-        const W = ln((K) => K.id === S._1)(F._1);
-        if (W.tag === "Just") {
-          const K = ct(W._1.offset) * ct(4);
-          return q === "North" || q === "South" ? K : 0;
+})())([n]), n2 = (t) => (n) => (e) => (r) => (o) => (i) => (s) => (u) => (c) => (a) => (g) => {
+  const _ = (E, S, O) => {
+    const I = E.from.node === S ? E.from.port : E.to.node === S ? E.to.port : J;
+    if (I.tag === "Just") {
+      const W = ut(S)(o);
+      if (W.tag === "Just") {
+        const Q = jt((M) => M.id === I._1)(W._1);
+        if (Q.tag === "Just") {
+          const M = nt(Q._1.offset) * nt(4);
+          return O === "North" || O === "South" ? M : 0;
         }
-        if (W.tag === "Nothing") {
-          const K = Z(C)(r), V = tr(s)(x.id)(q)((() => {
-            if (K.tag === "Nothing")
+        if (Q.tag === "Nothing") {
+          const M = ut(S)(r), V = Sr(s)(E.id)(O)((() => {
+            if (M.tag === "Nothing")
               return 0.5;
-            if (K.tag === "Just")
-              return K._1._1 / 2;
+            if (M.tag === "Just")
+              return M._1._1 / 2;
             f();
           })());
-          return q === "North" || q === "South" ? V : 0;
+          return O === "North" || O === "South" ? V : 0;
         }
         f();
       }
-      if (F.tag === "Nothing") {
-        const W = Z(C)(r), K = tr(s)(x.id)(q)((() => {
-          if (W.tag === "Nothing")
+      if (W.tag === "Nothing") {
+        const Q = ut(S)(r), M = Sr(s)(E.id)(O)((() => {
+          if (Q.tag === "Nothing")
             return 0.5;
-          if (W.tag === "Just")
-            return W._1._1 / 2;
+          if (Q.tag === "Just")
+            return Q._1._1 / 2;
           f();
         })());
-        return q === "North" || q === "South" ? K : 0;
+        return O === "North" || O === "South" ? M : 0;
       }
       f();
     }
-    if (S.tag === "Nothing") {
-      const F = Z(C)(r), W = tr(s)(x.id)(q)((() => {
-        if (F.tag === "Nothing")
+    if (I.tag === "Nothing") {
+      const W = ut(S)(r), Q = Sr(s)(E.id)(O)((() => {
+        if (W.tag === "Nothing")
           return 0.5;
-        if (F.tag === "Just")
-          return F._1._1 / 2;
+        if (W.tag === "Just")
+          return W._1._1 / 2;
         f();
       })());
-      return q === "North" || q === "South" ? W : 0;
+      return O === "North" || O === "South" ? Q : 0;
     }
     f();
-  }, d = (x, C) => {
-    if (x.from.node === C) {
+  }, d = (E, S) => {
+    if (E.from.node === S) {
       if (g === "HRight")
-        return cn;
+        return hn;
       if (g === "HLeft")
-        return un;
+        return dn;
       f();
     }
     if (g === "HRight")
-      return un;
+      return dn;
     if (g === "HLeft")
-      return cn;
+      return hn;
     f();
-  }, _ = (x, C, q) => J((S) => (F) => Y(G)(F)((() => {
-    const W = Z(F)(S);
-    if (W.tag === "Nothing")
-      return 0 + C;
-    if (W.tag === "Just")
-      return W._1 + C;
+  }, l = (E, S, O) => x((I) => (W) => U(C)(W)((() => {
+    const Q = ut(W)(I);
+    if (Q.tag === "Nothing")
+      return 0 + S;
+    if (Q.tag === "Just")
+      return Q._1 + S;
     f();
-  })())(S))(q)(Jr(c)(x)), h = (() => {
+  })())(I))(O)(oo(c)(E)), h = (() => {
     if (g === "HRight")
       return e;
     if (g === "HLeft")
-      return vn(e);
+      return Ln(e);
     f();
-  })(), p = (x) => {
-    const C = Z(x)(r);
-    if (C.tag === "Nothing")
+  })(), $ = (E) => {
+    const S = ut(E)(r);
+    if (S.tag === "Nothing")
       return 1;
-    if (C.tag === "Just")
-      return C._1._1;
+    if (S.tag === "Just")
+      return S._1._1;
     f();
-  }, $ = jn(Cn(Pt((x) => (C) => O((q) => L(q, x))(C))(e))), m = (x, C) => _n(3)(x) === "$d:" && _n(3)(C) === "$d:" || _n(3)(x) === "$d:" || _n(3)(C) === "$d:" ? 10 : ct(t.nodeGap), N = J((x) => (C) => hi((q) => b(
+  }, p = $e(zn(Ft((E) => (S) => z((O) => b(O, E))(S))(e))), m = (E, S) => mn(3)(E) === "$d:" && mn(3)(S) === "$d:" || mn(3)(E) === "$d:" || mn(3)(S) === "$d:" ? 10 : nt(t.nodeGap), y = x((E) => (S) => Ps((O) => v(
     "Just",
     [
       ...(() => {
-        if (q.tag === "Nothing")
+        if (O.tag === "Nothing")
           return [];
-        if (q.tag === "Just")
-          return q._1;
+        if (O.tag === "Just")
+          return O._1;
         f();
       })(),
-      C
+      S
     ]
-  ))(C.to.node)(x))(Q)(i), v = J((x) => (C) => hi((q) => b(
+  ))(S.to.node)(E))(A)(i), N = x((E) => (S) => Ps((O) => v(
     "Just",
     [
       ...(() => {
-        if (q.tag === "Nothing")
+        if (O.tag === "Nothing")
           return [];
-        if (q.tag === "Just")
-          return q._1;
+        if (O.tag === "Just")
+          return O._1;
         f();
       })(),
-      C
+      S
     ]
-  ))(C.from.node)(x))(Q)(i), w = Cn(e), y = J((x) => (C) => {
-    const q = Z(C)(c.root), S = (() => {
-      if (q.tag === "Nothing")
-        return C;
-      if (q.tag === "Just")
-        return q._1;
+  ))(S.from.node)(E))(A)(i), T = zn(e), w = x((E) => (S) => {
+    const O = ut(S)(c.root), I = (() => {
+      if (O.tag === "Nothing")
+        return S;
+      if (O.tag === "Just")
+        return O._1;
       f();
     })();
-    return C === S ? x : hi((F) => b(
+    return S === I ? E : Ps((W) => v(
       "Just",
       (() => {
-        if (F.tag === "Nothing")
+        if (W.tag === "Nothing")
           return !0;
-        if (F.tag === "Just")
-          return F._1;
+        if (W.tag === "Just")
+          return W._1;
         f();
-      })() && _n(3)(C) === "$d:"
-    ))(S)(x);
-  })(jn(O((x) => L(x, !0))(or(G.compare)((() => {
-    const x = (C, q) => {
-      if (C.tag === "Leaf")
-        return q;
-      if (C.tag === "Node")
-        return x(C._5, qt("Cons", C._4, x(C._6, q)));
+      })() && mn(3)(S) === "$d:"
+    ))(I)(E);
+  })($e(z((E) => b(E, !0))(Ar(C.compare)((() => {
+    const E = (S, O) => {
+      if (S.tag === "Leaf")
+        return O;
+      if (S.tag === "Node")
+        return E(S._5, zt("Cons", S._4, E(S._6, O)));
       f();
     };
-    return Et(Mt.foldr, x(c.root, zt));
-  })()))))(w), k = (x, C) => {
-    const q = x.free, S = Z(q)(c.root), F = (() => {
-      if (S.tag === "Nothing")
-        return q;
-      if (S.tag === "Just")
-        return S._1;
+    return Lt(Xt.foldr, E(c.root, Yt));
+  })()))))(T), k = (E, S) => {
+    const O = E.free, I = ut(O)(c.root), W = (() => {
+      if (I.tag === "Nothing")
+        return O;
+      if (I.tag === "Just")
+        return I._1;
       f();
-    })(), W = Z(F)(y), K = (() => {
-      if (W.tag === "Nothing")
+    })(), Q = ut(W)(w), M = (() => {
+      if (Q.tag === "Nothing")
         return !0;
-      if (W.tag === "Just")
-        return W._1;
+      if (Q.tag === "Just")
+        return Q._1;
       f();
     })();
-    return J((V) => (B) => {
+    return x((V) => (H) => {
       if (V.edge.tag === "Just")
         return V;
       if (V.edge.tag === "Nothing") {
         if ((() => {
-          const st = Z(F)(C.su);
-          return !K && (() => {
-            const _t = Z(B.from.node)($);
-            return B.from.node !== B.to.node && (() => {
-              const At = Z(B.to.node)($);
+          const at = ut(W)(S.su);
+          return !M && (() => {
+            const _t = ut(H.from.node)(p);
+            return H.from.node !== H.to.node && (() => {
+              const Qt = ut(H.to.node)(p);
               return (() => {
                 if (_t.tag === "Nothing")
                   return -1;
@@ -8653,43 +9540,43 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
                   return _t._1;
                 f();
               })() === (() => {
-                if (At.tag === "Nothing")
+                if (Qt.tag === "Nothing")
                   return -1;
-                if (At.tag === "Just")
-                  return At._1;
+                if (Qt.tag === "Just")
+                  return Qt._1;
                 f();
               })();
             })();
           })() || (() => {
-            if (st.tag === "Nothing")
+            if (at.tag === "Nothing")
               return !1;
-            if (st.tag === "Just")
-              return st._1;
+            if (at.tag === "Just")
+              return at._1;
             f();
           })();
         })())
           return V;
-        const nt = B.from.node === q ? B.to.node : B.from.node, M = Z(nt)(c.root), tt = (() => {
-          if (M.tag === "Nothing")
-            return nt;
-          if (M.tag === "Just")
-            return M._1;
+        const et = H.from.node === O ? H.to.node : H.from.node, j = ut(et)(c.root), ot = (() => {
+          if (j.tag === "Nothing")
+            return et;
+          if (j.tag === "Just")
+            return j._1;
           f();
-        })(), ot = tt !== F;
-        return ot && (() => {
-          const st = Z(tt)(C.blockFinished);
-          if (st.tag === "Nothing")
+        })(), Z = ot !== W;
+        return Z && (() => {
+          const at = ut(ot)(S.blockFinished);
+          if (at.tag === "Nothing")
             return !1;
-          if (st.tag === "Just")
-            return st._1;
+          if (at.tag === "Just")
+            return at._1;
           f();
-        })() ? { ...V, edge: b("Just", B), hasEdges: !0 } : { ...V, hasEdges: V.hasEdges || ot };
+        })() ? { ...V, edge: v("Just", H), hasEdges: !0 } : { ...V, hasEdges: V.hasEdges || Z };
       }
       f();
-    })({ edge: T, hasEdges: !1 })((() => {
-      if (x.isRoot) {
+    })({ edge: J, hasEdges: !1 })((() => {
+      if (E.isRoot) {
         if (g === "HRight") {
-          const V = Z(q)(N);
+          const V = ut(O)(y);
           if (V.tag === "Nothing")
             return [];
           if (V.tag === "Just")
@@ -8697,7 +9584,7 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
           f();
         }
         if (g === "HLeft") {
-          const V = Z(q)(v);
+          const V = ut(O)(N);
           if (V.tag === "Nothing")
             return [];
           if (V.tag === "Just")
@@ -8706,7 +9593,7 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
         f();
       }
       if (g === "HRight") {
-        const V = Z(q)(v);
+        const V = ut(O)(N);
         if (V.tag === "Nothing")
           return [];
         if (V.tag === "Just")
@@ -8714,7 +9601,7 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
         f();
       }
       if (g === "HLeft") {
-        const V = Z(q)(N);
+        const V = ut(O)(y);
         if (V.tag === "Nothing")
           return [];
         if (V.tag === "Just")
@@ -8722,332 +9609,332 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
       }
       f();
     })());
-  }, E = (x, C, q, S) => {
-    const F = (() => {
+  }, L = (E, S, O, I) => {
+    const W = (() => {
       if (a === "VDown")
         return -1e18;
       if (a === "VUp")
         return 1e18;
       f();
-    })(), W = { free: C, isRoot: q }, K = k(W, S);
-    if (K.edge.tag === "Nothing")
-      return K.hasEdges ? { thresh: F, state: { ...S, queue: [...S.queue, W] } } : { thresh: F, state: S };
-    if (K.edge.tag === "Just") {
-      const V = K.edge._1.from.node === C ? K.edge._1.to.node : K.edge._1.from.node;
+    })(), Q = { free: S, isRoot: O }, M = k(Q, I);
+    if (M.edge.tag === "Nothing")
+      return M.hasEdges ? { thresh: W, state: { ...I, queue: [...I.queue, Q] } } : { thresh: W, state: I };
+    if (M.edge.tag === "Just") {
+      const V = M.edge._1.from.node === S ? M.edge._1.to.node : M.edge._1.from.node;
       return {
         thresh: (() => {
-          const B = Z((() => {
-            const ot = Z(V)(c.root);
-            if (ot.tag === "Nothing")
+          const H = ut((() => {
+            const Z = ut(V)(c.root);
+            if (Z.tag === "Nothing")
               return V;
-            if (ot.tag === "Just")
-              return ot._1;
+            if (Z.tag === "Just")
+              return Z._1;
             f();
-          })())(S.x), nt = Z(V)(u), M = Z(C)(u), tt = (() => {
-            if (B.tag === "Just")
-              return B._1;
-            if (B.tag === "Nothing")
-              return T;
+          })())(I.x), et = ut(V)(u), j = ut(S)(u), ot = (() => {
+            if (H.tag === "Just")
+              return H._1;
+            if (H.tag === "Nothing")
+              return J;
             f();
           })();
           return (() => {
-            if (tt.tag === "Nothing")
+            if (ot.tag === "Nothing")
               return 0;
-            if (tt.tag === "Just")
-              return tt._1;
+            if (ot.tag === "Just")
+              return ot._1;
             f();
           })() + (() => {
-            if (nt.tag === "Nothing")
+            if (et.tag === "Nothing")
               return 0;
-            if (nt.tag === "Just")
-              return nt._1;
+            if (et.tag === "Just")
+              return et._1;
             f();
-          })() + l(
-            K.edge._1,
+          })() + _(
+            M.edge._1,
             V,
             (() => {
-              if (q) {
+              if (O) {
                 if (g === "HRight")
-                  return cn;
+                  return hn;
                 if (g === "HLeft")
-                  return un;
+                  return dn;
                 f();
               }
               if (g === "HRight")
-                return un;
+                return dn;
               if (g === "HLeft")
-                return cn;
+                return hn;
               f();
             })()
           ) - (() => {
-            if (M.tag === "Nothing")
+            if (j.tag === "Nothing")
               return 0;
-            if (M.tag === "Just")
-              return M._1;
+            if (j.tag === "Just")
+              return j._1;
             f();
-          })() - l(
-            K.edge._1,
-            C,
+          })() - _(
+            M.edge._1,
+            S,
             (() => {
-              if (q) {
+              if (O) {
                 if (g === "HRight")
-                  return un;
+                  return dn;
                 if (g === "HLeft")
-                  return cn;
+                  return hn;
                 f();
               }
               if (g === "HRight")
-                return cn;
+                return hn;
               if (g === "HLeft")
-                return un;
+                return dn;
               f();
             })()
           );
         })(),
         state: {
-          ...S,
-          su: Y(G)((() => {
-            const B = Z(K.edge._1.from.node)(c.root);
-            if (B.tag === "Nothing")
-              return K.edge._1.from.node;
-            if (B.tag === "Just")
-              return B._1;
+          ...I,
+          su: U(C)((() => {
+            const H = ut(M.edge._1.from.node)(c.root);
+            if (H.tag === "Nothing")
+              return M.edge._1.from.node;
+            if (H.tag === "Just")
+              return H._1;
             f();
-          })())(!0)(Y(G)((() => {
-            const B = Z(K.edge._1.to.node)(c.root);
-            if (B.tag === "Nothing")
-              return K.edge._1.to.node;
-            if (B.tag === "Just")
-              return B._1;
+          })())(!0)(U(C)((() => {
+            const H = ut(M.edge._1.to.node)(c.root);
+            if (H.tag === "Nothing")
+              return M.edge._1.to.node;
+            if (H.tag === "Just")
+              return H._1;
             f();
-          })())(!0)(S.su))
+          })())(!0)(I.su))
         }
       };
     }
     f();
-  }, I = (x, C, q, S) => {
-    const F = C === x, W = Z(C)(c.align), K = (() => {
-      if (W.tag === "Nothing")
-        return C === x;
-      if (W.tag === "Just")
-        return W._1 === x;
+  }, G = (E, S, O, I) => {
+    const W = S === E, Q = ut(S)(c.align), M = (() => {
+      if (Q.tag === "Nothing")
+        return S === E;
+      if (Q.tag === "Just")
+        return Q._1 === E;
       f();
     })();
-    if (!(F || K))
-      return { thresh: q, state: S };
+    if (!(W || M))
+      return { thresh: O, state: I };
     const V = (() => {
       if (a === "VDown")
-        return F && q <= -1e18;
+        return W && O <= -1e18;
       if (a === "VUp")
-        return F && q >= 1e18;
+        return W && O >= 1e18;
       f();
-    })() ? E(x, C, !0, S) : { thresh: q, state: S };
+    })() ? L(E, S, !0, I) : { thresh: O, state: I };
     return (() => {
       if (a === "VDown")
-        return V.thresh <= -1e18 && K;
+        return V.thresh <= -1e18 && M;
       if (a === "VUp")
-        return V.thresh >= 1e18 && K;
+        return V.thresh >= 1e18 && M;
       f();
-    })() ? E(x, C, !1, V.state) : V;
-  }, D = (x) => (C) => (q) => {
-    const S = Z(q)(n.nodeIndex), F = (() => {
-      if (S.tag === "Nothing")
+    })() ? L(E, S, !1, V.state) : V;
+  }, D = (E) => (S) => (O) => {
+    const I = ut(O)(n.nodeIndex), W = (() => {
+      if (I.tag === "Nothing")
         return 0;
-      if (S.tag === "Just")
-        return S._1;
+      if (I.tag === "Just")
+        return I._1;
       f();
-    })(), W = ln((M) => In(te)(q)(M))(h), K = (() => {
-      if (W.tag === "Nothing")
+    })(), Q = jt((j) => Hn(ge)(O)(j))(h), M = (() => {
+      if (Q.tag === "Nothing")
         return [];
-      if (W.tag === "Just")
-        return W._1;
+      if (Q.tag === "Just")
+        return Q._1;
       f();
-    })(), V = K.length;
+    })(), V = M.length;
     if ((() => {
       if (a === "VDown")
-        return F <= 0;
+        return W <= 0;
       if (a === "VUp")
-        return F >= (V - 1 | 0);
+        return W >= (V - 1 | 0);
       f();
     })()) {
-      const M = I(x, q, C.thresh, C.st);
-      return { ...C, st: M.state, thresh: M.thresh };
+      const j = G(E, O, S.thresh, S.st);
+      return { ...S, st: j.state, thresh: j.thresh };
     }
-    const B = (() => {
+    const H = (() => {
       if (a === "VDown")
-        return F - 1 | 0;
+        return W - 1 | 0;
       if (a === "VUp")
-        return F + 1 | 0;
+        return W + 1 | 0;
       f();
-    })(), nt = B >= 0 && B < K.length ? b("Just", K[B]) : T;
-    if (nt.tag === "Nothing")
-      return C;
-    if (nt.tag === "Just") {
-      const M = Z(nt._1)(c.root), tt = (() => {
-        if (M.tag === "Nothing")
-          return nt._1;
-        if (M.tag === "Just")
-          return M._1;
+    })(), et = H >= 0 && H < M.length ? v("Just", M[H]) : J;
+    if (et.tag === "Nothing")
+      return S;
+    if (et.tag === "Just") {
+      const j = ut(et._1)(c.root), ot = (() => {
+        if (j.tag === "Nothing")
+          return et._1;
+        if (j.tag === "Just")
+          return j._1;
         f();
-      })(), ot = I(x, q, C.thresh, z(tt)(C.st)), st = (() => {
-        const tn = Z(x)(ot.state.sink);
-        if (tn.tag === "Nothing")
-          return x === x;
-        if (tn.tag === "Just")
-          return tn._1 === x;
+      })(), Z = G(E, O, S.thresh, Y(ot)(S.st)), at = (() => {
+        const Vt = ut(E)(Z.state.sink);
+        if (Vt.tag === "Nothing")
+          return E === E;
+        if (Vt.tag === "Just")
+          return Vt._1 === E;
         f();
       })() ? {
-        ...ot.state,
-        sink: Y(G)(x)((() => {
-          const tn = Z(tt)(ot.state.sink);
-          if (tn.tag === "Nothing")
-            return tt;
-          if (tn.tag === "Just")
-            return tn._1;
+        ...Z.state,
+        sink: U(C)(E)((() => {
+          const Vt = ut(ot)(Z.state.sink);
+          if (Vt.tag === "Nothing")
+            return ot;
+          if (Vt.tag === "Just")
+            return Vt._1;
           f();
-        })())(ot.state.sink)
-      } : ot.state, _t = Z(tt)(st.sink), At = (() => {
+        })())(Z.state.sink)
+      } : Z.state, _t = ut(ot)(at.sink), Qt = (() => {
         if (_t.tag === "Nothing")
-          return tt;
+          return ot;
         if (_t.tag === "Just")
           return _t._1;
         f();
-      })(), Tt = Z(x)(st.sink), Vt = (() => {
+      })(), Tt = ut(E)(at.sink), Bt = (() => {
         if (Tt.tag === "Nothing")
-          return x;
+          return E;
         if (Tt.tag === "Just")
           return Tt._1;
         f();
       })();
-      if (Vt === At) {
-        const tn = Z(tt)(st.x), zn = (() => {
-          if (tn.tag === "Just")
-            return tn._1;
-          if (tn.tag === "Nothing")
-            return T;
+      if (Bt === Qt) {
+        const Vt = ut(ot)(at.x), Pn = (() => {
+          if (Vt.tag === "Just")
+            return Vt._1;
+          if (Vt.tag === "Nothing")
+            return J;
           f();
-        })(), qe = (() => {
-          if (zn.tag === "Nothing")
+        })(), ne = (() => {
+          if (Pn.tag === "Nothing")
             return 0;
-          if (zn.tag === "Just")
-            return zn._1;
+          if (Pn.tag === "Just")
+            return Pn._1;
           f();
-        })(), ke = Z(x)(st.x), oe = (() => {
-          if (ke.tag === "Just")
-            return ke._1;
-          if (ke.tag === "Nothing")
-            return T;
+        })(), kn = ut(E)(at.x), Qn = (() => {
+          if (kn.tag === "Just")
+            return kn._1;
+          if (kn.tag === "Nothing")
+            return J;
           f();
-        })(), Ct = (() => {
-          if (oe.tag === "Nothing")
+        })(), St = (() => {
+          if (Qn.tag === "Nothing")
             return 0;
-          if (oe.tag === "Just")
-            return oe._1;
+          if (Qn.tag === "Just")
+            return Qn._1;
           f();
-        })(), St = m(q, nt._1), be = Z(nt._1)(u), Ee = Z(q)(u), He = (() => {
-          if (be.tag === "Nothing")
+        })(), Pt = m(O, et._1), Xn = ut(et._1)(u), _e = ut(O)(u), Nr = (() => {
+          if (Xn.tag === "Nothing")
             return 0;
-          if (be.tag === "Just")
-            return be._1;
+          if (Xn.tag === "Just")
+            return Xn._1;
           f();
         })() - (() => {
-          if (Ee.tag === "Nothing")
+          if (_e.tag === "Nothing")
             return 0;
-          if (Ee.tag === "Just")
-            return Ee._1;
+          if (_e.tag === "Just")
+            return _e._1;
           f();
         })();
         if (a === "VDown") {
-          const ie = ne(qe + He + p(nt._1) + St)(ot.thresh);
+          const be = Je(ne + Nr + $(et._1) + Pt)(Z.thresh);
           return {
-            st: { ...st, x: Y(G)(x)(b("Just", C.initial ? ie : ne(Ct)(ie)))(st.x) },
+            st: { ...at, x: U(C)(E)(v("Just", S.initial ? be : Je(St)(be)))(at.x) },
             initial: !1,
-            thresh: ot.thresh
+            thresh: Z.thresh
           };
         }
         if (a === "VUp") {
-          const ie = Sn(qe + He - St - p(q))(ot.thresh);
+          const be = ee(ne + Nr - Pt - $(O))(Z.thresh);
           return {
-            st: { ...st, x: Y(G)(x)(b("Just", C.initial ? ie : Sn(Ct)(ie)))(st.x) },
+            st: { ...at, x: U(C)(E)(v("Just", S.initial ? be : ee(St)(be)))(at.x) },
             initial: !1,
-            thresh: ot.thresh
+            thresh: Z.thresh
           };
         }
         f();
       }
-      const ht = Z(tt)(st.x), mt = (() => {
-        if (ht.tag === "Just")
-          return ht._1;
-        if (ht.tag === "Nothing")
-          return T;
+      const $t = ut(ot)(at.x), xt = (() => {
+        if ($t.tag === "Just")
+          return $t._1;
+        if ($t.tag === "Nothing")
+          return J;
         f();
-      })(), lt = (() => {
-        if (mt.tag === "Nothing")
+      })(), mt = (() => {
+        if (xt.tag === "Nothing")
           return 0;
-        if (mt.tag === "Just")
-          return mt._1;
+        if (xt.tag === "Just")
+          return xt._1;
         f();
-      })(), dt = Z(x)(st.x), it = (() => {
+      })(), rt = ut(E)(at.x), K = (() => {
+        if (rt.tag === "Just")
+          return rt._1;
+        if (rt.tag === "Nothing")
+          return J;
+        f();
+      })(), st = (() => {
+        if (K.tag === "Nothing")
+          return 0;
+        if (K.tag === "Just")
+          return K._1;
+        f();
+      })(), gt = nt(t.nodeGap), dt = ut(O)(u), Nt = ut(et._1)(u), At = (() => {
+        if (dt.tag === "Nothing")
+          return 0;
         if (dt.tag === "Just")
           return dt._1;
-        if (dt.tag === "Nothing")
-          return T;
         f();
-      })(), ut = (() => {
-        if (it.tag === "Nothing")
-          return 0;
-        if (it.tag === "Just")
-          return it._1;
-        f();
-      })(), $t = ct(t.nodeGap), Nt = Z(q)(u), Rt = Z(nt._1)(u), It = (() => {
+      })() - (() => {
         if (Nt.tag === "Nothing")
           return 0;
         if (Nt.tag === "Just")
           return Nt._1;
         f();
-      })() - (() => {
-        if (Rt.tag === "Nothing")
-          return 0;
-        if (Rt.tag === "Just")
-          return Rt._1;
-        f();
       })();
       return {
         st: {
-          ...st,
+          ...at,
           classEdges: [
-            ...st.classEdges,
+            ...at.classEdges,
             {
-              src: Vt,
-              tgt: At,
+              src: Bt,
+              tgt: Qt,
               sep: (() => {
                 if (a === "VDown")
-                  return ut + It - lt - p(nt._1) - $t;
+                  return st + At - mt - $(et._1) - gt;
                 if (a === "VUp")
-                  return ut + It + p(q) + $t - lt;
+                  return st + At + $(O) + gt - mt;
                 f();
               })()
             }
           ]
         },
-        initial: C.initial,
-        thresh: ot.thresh
+        initial: S.initial,
+        thresh: Z.thresh
       };
     }
     f();
-  }, z = (x) => (C) => {
-    const q = Z(x)(C.x), S = (() => {
-      if (q.tag === "Just")
-        return q._1;
-      if (q.tag === "Nothing")
-        return T;
+  }, Y = (E) => (S) => {
+    const O = ut(E)(S.x), I = (() => {
+      if (O.tag === "Just")
+        return O._1;
+      if (O.tag === "Nothing")
+        return J;
       f();
     })();
-    if (S.tag === "Just")
-      return C;
-    if (S.tag === "Nothing") {
-      const F = J(D(x))({
-        st: { ...C, x: Y(G)(x)(b("Just", 0))(C.x) },
+    if (I.tag === "Just")
+      return S;
+    if (I.tag === "Nothing") {
+      const W = x(D(E))({
+        st: { ...S, x: U(C)(E)(v("Just", 0))(S.x) },
         initial: !0,
         thresh: (() => {
           if (a === "VDown")
@@ -9056,428 +9943,428 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
             return 1e18;
           f();
         })()
-      })(Jr(c)(x));
-      return { ...F.st, blockFinished: Y(G)(x)(!0)(F.st.blockFinished) };
+      })(oo(c)(E));
+      return { ...W.st, blockFinished: U(C)(E)(!0)(W.st.blockFinished) };
     }
     f();
-  }, U = J((x) => (C) => J((q) => (S) => {
-    const F = Z(S)(c.root), W = (() => {
-      if (F.tag === "Nothing")
-        return S;
-      if (F.tag === "Just")
-        return F._1;
+  }, X = x((E) => (S) => x((O) => (I) => {
+    const W = ut(I)(c.root), Q = (() => {
+      if (W.tag === "Nothing")
+        return I;
+      if (W.tag === "Just")
+        return W._1;
       f();
     })();
-    return W === S ? z(W)(q) : q;
-  })(x)((() => {
+    return Q === I ? Y(Q)(O) : O;
+  })(E)((() => {
     if (a === "VDown")
-      return C;
+      return S;
     if (a === "VUp")
-      return vn(C);
+      return Ln(S);
     f();
   })()))({
-    x: jn(O((x) => L(x, T))(w)),
-    sink: jn(O((x) => L(x, x))(w)),
+    x: $e(z((E) => b(E, J))(T)),
+    sink: $e(z((E) => b(E, E))(T)),
     classEdges: [],
-    su: Q,
-    blockFinished: Q,
+    su: A,
+    blockFinished: A,
     queue: []
-  })(h), P = ih(U.classEdges)(U.sink)(a), R = (x, C, q, S) => {
-    const F = Z(C)(S), W = Z(C)(u);
+  })(h), P = Zm(X.classEdges)(X.sink)(a), B = (E, S, O, I) => {
+    const W = ut(S)(I), Q = ut(S)(u);
     return (() => {
-      if (F.tag === "Nothing")
-        return 0;
-      if (F.tag === "Just")
-        return F._1;
-      f();
-    })() + (() => {
       if (W.tag === "Nothing")
         return 0;
       if (W.tag === "Just")
         return W._1;
       f();
-    })() + l(x, C, q);
-  }, j = jn(O((x) => L(x, !0))(or(G.compare)((() => {
-    const x = (C, q) => {
-      if (C.tag === "Leaf")
-        return q;
-      if (C.tag === "Node")
-        return x(C._5, qt("Cons", C._4, x(C._6, q)));
+    })() + (() => {
+      if (Q.tag === "Nothing")
+        return 0;
+      if (Q.tag === "Just")
+        return Q._1;
+      f();
+    })() + _(E, S, O);
+  }, tt = $e(z((E) => b(E, !0))(Ar(C.compare)((() => {
+    const E = (S, O) => {
+      if (S.tag === "Leaf")
+        return O;
+      if (S.tag === "Node")
+        return E(S._5, zt("Cons", S._4, E(S._6, O)));
       f();
     };
-    return Et(Mt.foldr, x(c.root, zt));
-  })()))), et = (x) => (C) => (q) => {
-    const S = k(q, { su: C.su, blockFinished: j }), F = {
-      phase: x,
-      ppFree: q.free,
-      ppIsRoot: q.isRoot,
-      edgeId: T,
+    return Lt(Xt.foldr, E(c.root, Yt));
+  })()))), ct = (E) => (S) => (O) => {
+    const I = k(O, { su: S.su, blockFinished: tt }), W = {
+      phase: E,
+      ppFree: O.free,
+      ppIsRoot: O.isRoot,
+      edgeId: J,
       delta: 0,
       avail: 0,
       shift: 0,
       freeSu: (() => {
-        const W = Z((() => {
-          const K = Z(q.free)(c.root);
-          if (K.tag === "Nothing")
-            return q.free;
-          if (K.tag === "Just")
-            return K._1;
+        const Q = ut((() => {
+          const M = ut(O.free)(c.root);
+          if (M.tag === "Nothing")
+            return O.free;
+          if (M.tag === "Just")
+            return M._1;
           f();
-        })())(C.su);
-        if (W.tag === "Nothing")
+        })())(S.su);
+        if (Q.tag === "Nothing")
           return !1;
-        if (W.tag === "Just")
-          return W._1;
+        if (Q.tag === "Just")
+          return Q._1;
         f();
       })(),
-      hasEdges: S.hasEdges,
+      hasEdges: I.hasEdges,
       candCount: (() => {
-        if (q.isRoot) {
+        if (O.isRoot) {
           if (g === "HRight") {
-            const W = Z(q.free)(N);
-            if (W.tag === "Nothing")
+            const Q = ut(O.free)(y);
+            if (Q.tag === "Nothing")
               return 0;
-            if (W.tag === "Just")
-              return W._1.length;
+            if (Q.tag === "Just")
+              return Q._1.length;
             f();
           }
           if (g === "HLeft") {
-            const W = Z(q.free)(v);
-            if (W.tag === "Nothing")
+            const Q = ut(O.free)(N);
+            if (Q.tag === "Nothing")
               return 0;
-            if (W.tag === "Just")
-              return W._1.length;
+            if (Q.tag === "Just")
+              return Q._1.length;
           }
           f();
         }
         if (g === "HRight") {
-          const W = Z(q.free)(v);
-          if (W.tag === "Nothing")
+          const Q = ut(O.free)(N);
+          if (Q.tag === "Nothing")
             return 0;
-          if (W.tag === "Just")
-            return W._1.length;
+          if (Q.tag === "Just")
+            return Q._1.length;
           f();
         }
         if (g === "HLeft") {
-          const W = Z(q.free)(N);
-          if (W.tag === "Nothing")
+          const Q = ut(O.free)(y);
+          if (Q.tag === "Nothing")
             return 0;
-          if (W.tag === "Just")
-            return W._1.length;
+          if (Q.tag === "Just")
+            return Q._1.length;
         }
         f();
       })()
     };
-    if (S.edge.tag === "Nothing")
-      return { ...C, stack: [...C.stack, q], trace: [...C.trace, F], x: C.x };
-    if (S.edge.tag === "Just") {
-      const W = S.edge._1.from.node === q.free ? L(S.edge._1.from.node, S.edge._1.to.node) : L(S.edge._1.to.node, S.edge._1.from.node), K = R(S.edge._1, W._1, d(S.edge._1, W._1), C.x) - R(S.edge._1, W._2, d(S.edge._1, W._2), C.x), V = Z(W._1)(c.root), B = (() => {
+    if (I.edge.tag === "Nothing")
+      return { ...S, stack: [...S.stack, O], trace: [...S.trace, W], x: S.x };
+    if (I.edge.tag === "Just") {
+      const Q = I.edge._1.from.node === O.free ? b(I.edge._1.from.node, I.edge._1.to.node) : b(I.edge._1.to.node, I.edge._1.from.node), M = B(I.edge._1, Q._1, d(I.edge._1, Q._1), S.x) - B(I.edge._1, Q._2, d(I.edge._1, Q._2), S.x), V = ut(Q._1)(c.root), H = (() => {
         if (V.tag === "Nothing")
-          return W._1;
+          return Q._1;
         if (V.tag === "Just")
           return V._1;
         f();
-      })(), nt = { ...F, edgeId: b("Just", S.edge._1.id), delta: K };
-      if (K > 0 && K < 1e300) {
-        const M = J((st) => (_t) => {
-          const At = Z(_t)($), Tt = (() => {
-            if (At.tag === "Nothing")
+      })(), et = { ...W, edgeId: v("Just", I.edge._1.id), delta: M };
+      if (M > 0 && M < 1e300) {
+        const j = x((at) => (_t) => {
+          const Qt = ut(_t)(p), Tt = (() => {
+            if (Qt.tag === "Nothing")
               return -1;
-            if (At.tag === "Just")
-              return At._1;
+            if (Qt.tag === "Just")
+              return Qt._1;
             f();
           })();
           if (Tt >= 0 && Tt < e.length) {
-            const mt = e[Tt], lt = Z(_t)(n.nodeIndex), dt = (() => {
-              if (lt.tag === "Nothing")
+            const xt = e[Tt], mt = ut(_t)(n.nodeIndex), rt = (() => {
+              if (mt.tag === "Nothing")
                 return -2;
-              if (lt.tag === "Just")
-                return lt._1 - 1 | 0;
+              if (mt.tag === "Just")
+                return mt._1 - 1 | 0;
               f();
             })();
-            return dt >= 0 && dt < mt.length ? Sn(st)((() => {
-              const it = Z(_t)(C.x), ut = Z(_t)(u), $t = Z(mt[dt])(C.x), Nt = Z(mt[dt])(u);
+            return rt >= 0 && rt < xt.length ? ee(at)((() => {
+              const K = ut(_t)(S.x), st = ut(_t)(u), gt = ut(xt[rt])(S.x), dt = ut(xt[rt])(u);
               return (() => {
-                if (it.tag === "Nothing")
+                if (K.tag === "Nothing")
                   return 0;
-                if (it.tag === "Just")
-                  return it._1;
+                if (K.tag === "Just")
+                  return K._1;
                 f();
               })() + (() => {
-                if (ut.tag === "Nothing")
+                if (st.tag === "Nothing")
                   return 0;
-                if (ut.tag === "Just")
-                  return ut._1;
+                if (st.tag === "Just")
+                  return st._1;
                 f();
               })() - ((() => {
-                if ($t.tag === "Nothing")
+                if (gt.tag === "Nothing")
                   return 0;
-                if ($t.tag === "Just")
-                  return $t._1;
+                if (gt.tag === "Just")
+                  return gt._1;
                 f();
               })() + (() => {
-                if (Nt.tag === "Nothing")
+                if (dt.tag === "Nothing")
                   return 0;
-                if (Nt.tag === "Just")
-                  return Nt._1;
+                if (dt.tag === "Just")
+                  return dt._1;
                 f();
-              })() + p(mt[dt]) + m(_t, mt[dt]));
-            })()) : st;
+              })() + $(xt[rt]) + m(_t, xt[rt]));
+            })()) : at;
           }
-          const Vt = Z(_t)(n.nodeIndex), ht = (() => {
-            if (Vt.tag === "Nothing")
+          const Bt = ut(_t)(n.nodeIndex), $t = (() => {
+            if (Bt.tag === "Nothing")
               return -2;
-            if (Vt.tag === "Just")
-              return Vt._1 - 1 | 0;
+            if (Bt.tag === "Just")
+              return Bt._1 - 1 | 0;
             f();
           })();
-          return ht >= 0 && ht < 0 ? Sn(st)((() => {
-            const mt = Z(_t)(C.x), lt = Z(_t)(u), dt = Z([][ht])(C.x), it = Z([][ht])(u);
+          return $t >= 0 && $t < 0 ? ee(at)((() => {
+            const xt = ut(_t)(S.x), mt = ut(_t)(u), rt = ut([][$t])(S.x), K = ut([][$t])(u);
             return (() => {
+              if (xt.tag === "Nothing")
+                return 0;
+              if (xt.tag === "Just")
+                return xt._1;
+              f();
+            })() + (() => {
               if (mt.tag === "Nothing")
                 return 0;
               if (mt.tag === "Just")
                 return mt._1;
               f();
-            })() + (() => {
-              if (lt.tag === "Nothing")
-                return 0;
-              if (lt.tag === "Just")
-                return lt._1;
-              f();
             })() - ((() => {
-              if (dt.tag === "Nothing")
+              if (rt.tag === "Nothing")
                 return 0;
-              if (dt.tag === "Just")
-                return dt._1;
+              if (rt.tag === "Just")
+                return rt._1;
               f();
             })() + (() => {
-              if (it.tag === "Nothing")
+              if (K.tag === "Nothing")
                 return 0;
-              if (it.tag === "Just")
-                return it._1;
+              if (K.tag === "Just")
+                return K._1;
               f();
-            })() + p([][ht]) + m(_t, [][ht]));
-          })()) : st;
-        })(K)(Jr(c)(B)), tt = M > 0 ? -M : 0, ot = { ...C, x: M > 0 ? _(B, tt, C.x) : C.x, trace: [...C.trace, { ...nt, avail: M, shift: tt }] };
-        return M > 0 ? ot : { ...ot, stack: [...ot.stack, q] };
+            })() + $([][$t]) + m(_t, [][$t]));
+          })()) : at;
+        })(M)(oo(c)(H)), ot = j > 0 ? -j : 0, Z = { ...S, x: j > 0 ? l(H, ot, S.x) : S.x, trace: [...S.trace, { ...et, avail: j, shift: ot }] };
+        return j > 0 ? Z : { ...Z, stack: [...Z.stack, O] };
       }
-      if (K < 0 && -K < 1e300) {
-        const M = J((st) => (_t) => {
-          const At = Z(_t)($), Tt = (() => {
-            if (At.tag === "Nothing")
+      if (M < 0 && -M < 1e300) {
+        const j = x((at) => (_t) => {
+          const Qt = ut(_t)(p), Tt = (() => {
+            if (Qt.tag === "Nothing")
               return -1;
-            if (At.tag === "Just")
-              return At._1;
+            if (Qt.tag === "Just")
+              return Qt._1;
             f();
           })();
           if (Tt >= 0 && Tt < e.length) {
-            const mt = e[Tt], lt = Z(_t)(n.nodeIndex), dt = (() => {
-              if (lt.tag === "Nothing")
+            const xt = e[Tt], mt = ut(_t)(n.nodeIndex), rt = (() => {
+              if (mt.tag === "Nothing")
                 return 0;
-              if (lt.tag === "Just")
-                return lt._1 + 1 | 0;
+              if (mt.tag === "Just")
+                return mt._1 + 1 | 0;
               f();
             })();
-            return dt >= 0 && dt < mt.length ? Sn(st)((() => {
-              const it = Z(mt[dt])(C.x), ut = Z(mt[dt])(u), $t = Z(_t)(C.x), Nt = Z(_t)(u);
+            return rt >= 0 && rt < xt.length ? ee(at)((() => {
+              const K = ut(xt[rt])(S.x), st = ut(xt[rt])(u), gt = ut(_t)(S.x), dt = ut(_t)(u);
               return (() => {
-                if (it.tag === "Nothing")
+                if (K.tag === "Nothing")
                   return 0;
-                if (it.tag === "Just")
-                  return it._1;
+                if (K.tag === "Just")
+                  return K._1;
                 f();
               })() + (() => {
-                if (ut.tag === "Nothing")
+                if (st.tag === "Nothing")
                   return 0;
-                if (ut.tag === "Just")
-                  return ut._1;
+                if (st.tag === "Just")
+                  return st._1;
                 f();
               })() - ((() => {
-                if ($t.tag === "Nothing")
+                if (gt.tag === "Nothing")
                   return 0;
-                if ($t.tag === "Just")
-                  return $t._1;
+                if (gt.tag === "Just")
+                  return gt._1;
                 f();
               })() + (() => {
-                if (Nt.tag === "Nothing")
+                if (dt.tag === "Nothing")
                   return 0;
-                if (Nt.tag === "Just")
-                  return Nt._1;
+                if (dt.tag === "Just")
+                  return dt._1;
                 f();
-              })() + p(_t) + m(_t, mt[dt]));
-            })()) : st;
+              })() + $(_t) + m(_t, xt[rt]));
+            })()) : at;
           }
-          const Vt = Z(_t)(n.nodeIndex), ht = (() => {
-            if (Vt.tag === "Nothing")
+          const Bt = ut(_t)(n.nodeIndex), $t = (() => {
+            if (Bt.tag === "Nothing")
               return 0;
-            if (Vt.tag === "Just")
-              return Vt._1 + 1 | 0;
+            if (Bt.tag === "Just")
+              return Bt._1 + 1 | 0;
             f();
           })();
-          return ht >= 0 && ht < 0 ? Sn(st)((() => {
-            const mt = Z([][ht])(C.x), lt = Z([][ht])(u), dt = Z(_t)(C.x), it = Z(_t)(u);
+          return $t >= 0 && $t < 0 ? ee(at)((() => {
+            const xt = ut([][$t])(S.x), mt = ut([][$t])(u), rt = ut(_t)(S.x), K = ut(_t)(u);
             return (() => {
+              if (xt.tag === "Nothing")
+                return 0;
+              if (xt.tag === "Just")
+                return xt._1;
+              f();
+            })() + (() => {
               if (mt.tag === "Nothing")
                 return 0;
               if (mt.tag === "Just")
                 return mt._1;
               f();
-            })() + (() => {
-              if (lt.tag === "Nothing")
-                return 0;
-              if (lt.tag === "Just")
-                return lt._1;
-              f();
             })() - ((() => {
-              if (dt.tag === "Nothing")
+              if (rt.tag === "Nothing")
                 return 0;
-              if (dt.tag === "Just")
-                return dt._1;
+              if (rt.tag === "Just")
+                return rt._1;
               f();
             })() + (() => {
-              if (it.tag === "Nothing")
+              if (K.tag === "Nothing")
                 return 0;
-              if (it.tag === "Just")
-                return it._1;
+              if (K.tag === "Just")
+                return K._1;
               f();
-            })() + p(_t) + m(_t, [][ht]));
-          })()) : st;
-        })(-K)(Jr(c)(B)), tt = M > 0 ? M : 0, ot = { ...C, x: M > 0 ? _(B, tt, C.x) : C.x, trace: [...C.trace, { ...nt, avail: M, shift: tt }] };
-        return M > 0 ? ot : { ...ot, stack: [...ot.stack, q] };
+            })() + $(_t) + m(_t, [][$t]));
+          })()) : at;
+        })(-M)(oo(c)(H)), ot = j > 0 ? j : 0, Z = { ...S, x: j > 0 ? l(H, ot, S.x) : S.x, trace: [...S.trace, { ...et, avail: j, shift: ot }] };
+        return j > 0 ? Z : { ...Z, stack: [...Z.stack, O] };
       }
-      return { ...C, stack: [...C.stack, q], trace: [...C.trace, nt], x: C.x };
+      return { ...S, stack: [...S.stack, O], trace: [...S.trace, et], x: S.x };
     }
     f();
-  }, X = J(et(rh))({
-    x: jn(O((x) => L(
-      x,
+  }, q = x(ct(Mm))({
+    x: $e(z((E) => b(
+      E,
       (() => {
-        const C = Z(x)(c.root), q = (() => {
-          if (C.tag === "Nothing")
-            return x;
-          if (C.tag === "Just")
-            return C._1;
-          f();
-        })(), S = Z(q)(U.x), F = Z((() => {
-          const K = Z(q)(U.sink);
-          if (K.tag === "Nothing")
-            return q;
-          if (K.tag === "Just")
-            return K._1;
-          f();
-        })())(P), W = (() => {
+        const S = ut(E)(c.root), O = (() => {
+          if (S.tag === "Nothing")
+            return E;
           if (S.tag === "Just")
             return S._1;
-          if (S.tag === "Nothing")
-            return T;
+          f();
+        })(), I = ut(O)(X.x), W = ut((() => {
+          const M = ut(O)(X.sink);
+          if (M.tag === "Nothing")
+            return O;
+          if (M.tag === "Just")
+            return M._1;
+          f();
+        })())(P), Q = (() => {
+          if (I.tag === "Just")
+            return I._1;
+          if (I.tag === "Nothing")
+            return J;
           f();
         })();
         return (() => {
+          if (Q.tag === "Nothing")
+            return 0;
+          if (Q.tag === "Just")
+            return Q._1;
+          f();
+        })() + (() => {
           if (W.tag === "Nothing")
             return 0;
           if (W.tag === "Just")
             return W._1;
           f();
-        })() + (() => {
-          if (F.tag === "Nothing")
-            return 0;
-          if (F.tag === "Just")
-            return F._1;
-          f();
         })();
       })()
-    ))(w)),
-    su: U.su,
+    ))(T)),
+    su: X.su,
     stack: [],
     trace: []
-  })(U.queue), A = J(et(oh))({ ...X, stack: [] })(vn(X.stack));
-  return { x: A.x, queue: U.queue, trace: A.trace };
-}, ch = (t) => (n) => (e) => (r) => (o) => (i) => (s) => (u) => (c) => (a) => (g) => uh(t)(n)(e)(r)(o)(i)(s)(u)(c)(a)(g).x, ah = (t) => (n) => (e) => (r) => (o) => (i) => {
+  })(X.queue), R = x(ct(jm))({ ...q, stack: [] })(Ln(q.stack));
+  return { x: R.x, queue: X.queue, trace: R.trace };
+}, e2 = (t) => (n) => (e) => (r) => (o) => (i) => (s) => (u) => (c) => (a) => (g) => n2(t)(n)(e)(r)(o)(i)(s)(u)(c)(a)(g).x, r2 = (t) => (n) => (e) => (r) => (o) => (i) => {
   const s = (c, a, g) => {
-    const l = Z(a)(e), d = (() => {
-      if (l.tag === "Nothing")
+    const _ = ut(a)(e), d = (() => {
+      if (_.tag === "Nothing")
         return 0.5;
-      if (l.tag === "Just")
-        return l._1._1 / 2;
+      if (_.tag === "Just")
+        return _._1._1 / 2;
       f();
-    })(), _ = c.from.node === a ? c.from.port : c.to.node === a ? c.to.port : T;
-    if (_.tag === "Just") {
-      const h = Z(a)(n);
+    })(), l = c.from.node === a ? c.from.port : c.to.node === a ? c.to.port : J;
+    if (l.tag === "Just") {
+      const h = ut(a)(n);
       if (h.tag === "Just") {
-        const p = ln(($) => $.id === _._1)(h._1);
-        if (p.tag === "Just") {
-          const $ = ct(p._1.offset) * ct(4);
-          return g === "North" || g === "South" ? $ : 0;
+        const $ = jt((p) => p.id === l._1)(h._1);
+        if ($.tag === "Just") {
+          const p = nt($._1.offset) * nt(4);
+          return g === "North" || g === "South" ? p : 0;
         }
-        if (p.tag === "Nothing") {
-          const $ = tr(o)(c.id)(g)(d);
-          return g === "North" || g === "South" ? $ : 0;
+        if ($.tag === "Nothing") {
+          const p = Sr(o)(c.id)(g)(d);
+          return g === "North" || g === "South" ? p : 0;
         }
         f();
       }
       if (h.tag === "Nothing") {
-        const p = tr(o)(c.id)(g)(d);
-        return g === "North" || g === "South" ? p : 0;
+        const $ = Sr(o)(c.id)(g)(d);
+        return g === "North" || g === "South" ? $ : 0;
       }
       f();
     }
-    if (_.tag === "Nothing") {
-      const h = tr(o)(c.id)(g)(d);
+    if (l.tag === "Nothing") {
+      const h = Sr(o)(c.id)(g)(d);
       return g === "North" || g === "South" ? h : 0;
     }
     f();
-  }, u = (c) => (a) => (g) => (l) => {
-    let d = c, _ = a, h = g, p = l, $ = !0, m;
-    for (; $; ) {
-      const N = d, v = _, w = h, k = Wt((E) => T, (E) => (I) => b("Just", { head: E, tail: I }), p);
+  }, u = (c) => (a) => (g) => (_) => {
+    let d = c, l = a, h = g, $ = _, p = !0, m;
+    for (; p; ) {
+      const y = d, N = l, T = h, k = Rt((L) => J, (L) => (G) => v("Just", { head: L, tail: G }), $);
       if (k.tag === "Nothing") {
-        $ = !1, m = N;
+        p = !1, m = y;
         continue;
       }
       if (k.tag === "Just") {
-        const E = k._1.head, I = ln((z) => z.from.node === w && z.to.node === E || z.from.node === E && z.to.node === w)(r), D = (() => {
-          if (I.tag === "Nothing")
-            return v + 0;
-          if (I.tag === "Just")
-            return v + (s(I._1, w, I._1.from.node === w ? cn : un) - s(
-              I._1,
-              E,
-              I._1.from.node === E ? cn : un
+        const L = k._1.head, G = jt((Y) => Y.from.node === T && Y.to.node === L || Y.from.node === L && Y.to.node === T)(r), D = (() => {
+          if (G.tag === "Nothing")
+            return N + 0;
+          if (G.tag === "Just")
+            return N + (s(G._1, T, G._1.from.node === T ? hn : dn) - s(
+              G._1,
+              L,
+              G._1.from.node === L ? hn : dn
             ));
           f();
         })();
-        d = Y(G)(E)(D)(N), _ = D, h = E, p = k._1.tail;
+        d = U(C)(L)(D)(y), l = D, h = L, $ = k._1.tail;
         continue;
       }
       f();
     }
     return m;
   };
-  return J((c) => (a) => {
-    const g = Wt((_) => T, (_) => (h) => b("Just", { head: _, tail: h }), Jr(t)(a)), l = (() => {
+  return x((c) => (a) => {
+    const g = Rt((l) => J, (l) => (h) => v("Just", { head: l, tail: h }), oo(t)(a)), _ = (() => {
       if (g.tag === "Nothing")
-        return Y(G)(a)(0)(Q);
+        return U(C)(a)(0)(A);
       if (g.tag === "Just")
-        return u(Y(G)(g._1.head)(0)(Q))(0)(g._1.head)(g._1.tail);
+        return u(U(C)(g._1.head)(0)(A))(0)(g._1.head)(g._1.tail);
       f();
-    })(), d = J((_) => (h) => ne(_)(-h._2))(0)(Ri(l));
-    return J((_) => (h) => Y(G)(h._1)(h._2 + d)(_))(c)(Ri(l));
-  })(Q)(or(G.compare)((() => {
+    })(), d = x((l) => (h) => Je(l)(-h._2))(0)(cu(_));
+    return x((l) => (h) => U(C)(h._1)(h._2 + d)(l))(c)(cu(_));
+  })(A)(Ar(C.compare)((() => {
     const c = (a, g) => {
       if (a.tag === "Leaf")
         return g;
       if (a.tag === "Node")
-        return c(a._5, qt("Cons", a._4, c(a._6, g)));
+        return c(a._5, zt("Cons", a._4, c(a._6, g)));
       f();
     };
-    return Et(Mt.foldr, c(t.root, zt));
+    return Lt(Xt.foldr, c(t.root, Yt));
   })()));
-}, fh = (t) => (n) => {
-  const e = (o, i, s) => _n(3)(i) === "$d:" && ac(
-    pa,
+}, o2 = (t) => (n) => {
+  const e = (o, i, s) => mn(3)(i) === "$d:" && wf(
+    X0,
     (() => {
-      const u = Z(i)(t.preds);
+      const u = ut(i)(t.preds);
       if (u.tag === "Nothing")
         return [];
       if (u.tag === "Just")
@@ -9485,87 +10372,87 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
       f();
     })()
   ), r = (o) => (i) => (s) => (u) => (c) => (a) => (g) => {
-    let l = o, d = i, _ = u, h = a, p = g, $ = !0, m;
-    for (; $; ) {
-      const N = l, v = d, w = _, y = h, k = p, E = v.length;
-      if (k >= E) {
-        $ = !1, m = N;
+    let _ = o, d = i, l = u, h = a, $ = g, p = !0, m;
+    for (; p; ) {
+      const y = _, N = d, T = l, w = h, k = $, L = N.length;
+      if (k >= L) {
+        p = !1, m = y;
         continue;
       }
-      const I = k >= 0 && k < v.length ? b("Just", v[k]) : T, D = (() => {
-        if (I.tag === "Nothing")
+      const G = k >= 0 && k < N.length ? v("Just", N[k]) : J, D = (() => {
+        if (G.tag === "Nothing")
           return "";
-        if (I.tag === "Just")
-          return I._1;
+        if (G.tag === "Just")
+          return G._1;
         f();
-      })(), z = e(t, D);
-      if (k === (E - 1 | 0) || z) {
-        const U = (() => {
-          if (z) {
-            const P = Z(D)(t.preds), R = (() => {
+      })(), Y = e(t, D);
+      if (k === (L - 1 | 0) || Y) {
+        const X = (() => {
+          if (Y) {
+            const P = ut(D)(t.preds), B = (() => {
               if (P.tag === "Nothing")
                 return [];
               if (P.tag === "Just")
                 return P._1;
               f();
             })();
-            if (0 < R.length) {
-              const j = w - 1 | 0, et = Z(R[0])(t.nodeIndex);
-              if (et.tag === "Nothing")
-                return j;
-              if (et.tag === "Just")
-                return et._1;
+            if (0 < B.length) {
+              const tt = T - 1 | 0, ct = ut(B[0])(t.nodeIndex);
+              if (ct.tag === "Nothing")
+                return tt;
+              if (ct.tag === "Just")
+                return ct._1;
               f();
             }
           }
-          return w - 1 | 0;
+          return T - 1 | 0;
         })();
-        l = J((P) => (R) => {
-          if (R >= 0 && R < v.length) {
-            const j = v[R];
-            return e(t, j) ? P : J((et) => (X) => {
-              const A = Z(X)(t.nodeIndex), x = (() => {
-                if (A.tag === "Nothing")
+        _ = x((P) => (B) => {
+          if (B >= 0 && B < N.length) {
+            const tt = N[B];
+            return e(t, tt) ? P : x((ct) => (q) => {
+              const R = ut(q)(t.nodeIndex), E = (() => {
+                if (R.tag === "Nothing")
                   return 0;
-                if (A.tag === "Just")
-                  return A._1;
+                if (R.tag === "Just")
+                  return R._1;
                 f();
               })();
-              return x < y || x > U ? Y(G)(X + "→" + j)()(et) : et;
+              return E < w || E > X ? U(C)(q + "→" + tt)()(ct) : ct;
             })(P)((() => {
-              const et = Z(j)(t.preds);
-              if (et.tag === "Nothing")
+              const ct = ut(tt)(t.preds);
+              if (ct.tag === "Nothing")
                 return [];
-              if (et.tag === "Just")
-                return et._1;
+              if (ct.tag === "Just")
+                return ct._1;
               f();
             })());
           }
-          return e(t, "") ? P : J((j) => (et) => {
-            const X = Z(et)(t.nodeIndex), A = (() => {
-              if (X.tag === "Nothing")
+          return e(t, "") ? P : x((tt) => (ct) => {
+            const q = ut(ct)(t.nodeIndex), R = (() => {
+              if (q.tag === "Nothing")
                 return 0;
-              if (X.tag === "Just")
-                return X._1;
+              if (q.tag === "Just")
+                return q._1;
               f();
             })();
-            return A < y || A > U ? Y(G)(et + "→")()(j) : j;
+            return R < w || R > X ? U(C)(ct + "→")()(tt) : tt;
           })(P)((() => {
-            const j = Z("")(t.preds);
-            if (j.tag === "Nothing")
+            const tt = ut("")(t.preds);
+            if (tt.tag === "Nothing")
               return [];
-            if (j.tag === "Just")
-              return j._1;
+            if (tt.tag === "Just")
+              return tt._1;
             f();
           })());
-        })(N)(Xt(0, k)), d = v, _ = w, h = U, p = k + 1 | 0;
+        })(y)(It(0, k)), d = N, l = T, h = X, $ = k + 1 | 0;
         continue;
       }
-      l = N, d = v, _ = w, h = y, p = k + 1 | 0;
+      _ = y, d = N, l = T, h = w, $ = k + 1 | 0;
     }
     return m;
   };
-  return n.length < 3 ? Q : J((o) => (i) => {
+  return n.length < 3 ? A : x((o) => (i) => {
     if (i >= 0 && i < n.length) {
       const s = n[i];
       return r(o)((() => {
@@ -9577,76 +10464,76 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
       const s = i + 1 | 0;
       return s >= 0 && s < n.length ? n[s] : [];
     })())([])(0)(i)(0)(0);
-  })(Q)(Xt(1, n.length - 2 | 0));
-}, gh = (t) => (n) => (e) => (r) => (o) => {
-  const i = Cn(n), s = J((u) => (c) => {
-    const a = J((g) => (l) => {
+  })(A)(It(1, n.length - 2 | 0));
+}, i2 = (t) => (n) => (e) => (r) => (o) => {
+  const i = zn(n), s = x((u) => (c) => {
+    const a = x((g) => (_) => {
       const d = (() => {
         if (o === "HRight") {
-          const $ = Z(l)(t.preds);
-          if ($.tag === "Nothing")
+          const p = ut(_)(t.preds);
+          if (p.tag === "Nothing")
             return [];
-          if ($.tag === "Just")
-            return $._1;
+          if (p.tag === "Just")
+            return p._1;
           f();
         }
         if (o === "HLeft") {
-          const $ = Z(l)(t.succs);
-          if ($.tag === "Nothing")
+          const p = ut(_)(t.succs);
+          if (p.tag === "Nothing")
             return [];
-          if ($.tag === "Just")
-            return $._1;
+          if (p.tag === "Just")
+            return p._1;
         }
         f();
-      })(), _ = d.length;
-      if (_ === 0)
+      })(), l = d.length;
+      if (l === 0)
         return g;
-      const h = Ke(_ - 1 | 0, 2), p = Ke(_, 2);
-      return J(($) => (m) => {
+      const h = Ce(l - 1 | 0, 2), $ = Ce(l, 2);
+      return x((p) => (m) => {
         if ((() => {
-          const N = Z(l)($.align);
-          if (N.tag === "Nothing")
-            return l !== l;
-          if (N.tag === "Just")
-            return N._1 !== l;
+          const y = ut(_)(p.align);
+          if (y.tag === "Nothing")
+            return _ !== _;
+          if (y.tag === "Just")
+            return y._1 !== _;
           f();
         })())
-          return $;
+          return p;
         if (m >= 0 && m < d.length) {
-          const N = Z(d[m])(t.nodeIndex), v = (() => {
-            if (N.tag === "Nothing")
+          const y = ut(d[m])(t.nodeIndex), N = (() => {
+            if (y.tag === "Nothing")
               return 0;
-            if (N.tag === "Just")
-              return N._1;
+            if (y.tag === "Just")
+              return y._1;
             f();
           })();
-          if (!(Su(d[m] + "→" + l)(e) || Su(l + "→" + d[m])(e)) && (() => {
+          if (!(Na(d[m] + "→" + _)(e) || Na(_ + "→" + d[m])(e)) && (() => {
             if (r === "VDown")
-              return $.r < v;
+              return p.r < N;
             if (r === "VUp")
-              return $.r > v;
+              return p.r > N;
             f();
           })()) {
-            const w = Z(d[m])($.root), y = (() => {
-              if (w.tag === "Nothing")
+            const T = ut(d[m])(p.root), w = (() => {
+              if (T.tag === "Nothing")
                 return d[m];
-              if (w.tag === "Just")
-                return w._1;
+              if (T.tag === "Just")
+                return T._1;
               f();
             })();
             return {
-              root: Y(G)(l)(y)($.root),
-              align: Y(G)(d[m])(l)(Y(G)(l)(y)($.align)),
-              r: v
+              root: U(C)(_)(w)(p.root),
+              align: U(C)(d[m])(_)(U(C)(_)(w)(p.align)),
+              r: N
             };
           }
         }
-        return $;
+        return p;
       })(g)((() => {
         if (r === "VDown")
-          return Xt(h, p);
+          return It(h, $);
         if (r === "VUp")
-          return vn(Xt(h, p));
+          return Ln(It(h, $));
         f();
       })());
     })({
@@ -9663,51 +10550,51 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
       if (r === "VDown")
         return c;
       if (r === "VUp")
-        return vn(c);
+        return Ln(c);
       f();
     })());
     return { root: a.root, align: a.align };
-  })({ root: jn(O((u) => L(u, u))(i)), align: jn(O((u) => L(u, u))(i)) })((() => {
+  })({ root: $e(z((u) => b(u, u))(i)), align: $e(z((u) => b(u, u))(i)) })((() => {
     if (o === "HRight")
       return n;
     if (o === "HLeft")
-      return vn(n);
+      return Ln(n);
     f();
   })());
   return { root: s.root, align: s.align };
-}, so = (t) => (n) => (e) => (r) => (o) => (i) => (s) => (u) => (c) => (a) => {
-  const g = gh(n)(e)(u)(c)(a), l = ah(g)(o)(r)(i)(s)(a);
-  return wg()((d) => (_) => b(
+}, ei = (t) => (n) => (e) => (r) => (o) => (i) => (s) => (u) => (c) => (a) => {
+  const g = i2(n)(e)(u)(c)(a), _ = r2(g)(o)(r)(i)(s)(a);
+  return P_()((d) => (l) => v(
     "Just",
     (() => {
-      const h = Z(d)(l);
+      const h = ut(d)(_);
       if (h.tag === "Nothing")
-        return _ + 0;
+        return l + 0;
       if (h.tag === "Just")
-        return _ + h._1;
+        return l + h._1;
       f();
     })()
-  ))(ch(t)(n)(e)(r)(o)(i)(s)(l)(g)(c)(a));
-}, Gu = (t) => (n) => Pt((e) => (r) => J((o) => (i) => i >= 0 && i < n.length ? i >= 0 && i < t.length ? o + n[i] + t[i] : o + n[i] + 0 : i >= 0 && i < t.length ? o + 1 + t[i] : o + 1)(0)((() => {
-  const o = Xt(0, n.length - 1 | 0);
-  return e < 1 ? [] : Gt(0, e, o);
-})()))(n), _h = (t) => (n) => (e) => (r) => (o) => (i) => (s) => {
-  const u = nh(0)(n.length - 1 | 0), c = ct(t.layerGap), a = s(ig(u, c)), g = dd(da(o)(a)(r)(i)(Q))(a);
-  return O((l) => {
-    const d = eh(l)(g);
-    return d.tag === "Just" && d._1 > 0 ? ne(c)(2 + ct(d._1 - 1 | 0) * 2.5) : c;
-  })(Xt(0, u - 1 | 0));
-}, Ta = (t) => (n) => (e) => (r) => ac(
-  (o) => J((i) => (s) => {
+  ))(e2(t)(n)(e)(r)(o)(i)(s)(_)(g)(c)(a));
+}, xa = (t) => (n) => Ft((e) => (r) => x((o) => (i) => i >= 0 && i < n.length ? i >= 0 && i < t.length ? o + n[i] + t[i] : o + n[i] + 0 : i >= 0 && i < t.length ? o + 1 + t[i] : o + 1)(0)((() => {
+  const o = It(0, n.length - 1 | 0);
+  return e < 1 ? [] : bt(0, e, o);
+})()))(n), s2 = (t) => (n) => (e) => (r) => (o) => (i) => (s) => {
+  const u = Um(0)(n.length - 1 | 0), c = nt(t.layerGap), a = s(__(u, c)), g = cm(q0(o)(a)(r)(i)(A))(a);
+  return z((_) => {
+    const d = Km(_)(g);
+    return d.tag === "Just" && d._1 > 0 ? Je(c)(2 + nt(d._1 - 1 | 0) * 2.5) : c;
+  })(It(0, u - 1 | 0));
+}, Z0 = (t) => (n) => (e) => (r) => wf(
+  (o) => x((i) => (s) => {
     if (!i.ok)
       return i;
-    const u = Z(s)(r), c = (() => {
+    const u = ut(s)(r), c = (() => {
       if (u.tag === "Nothing")
         return 0;
       if (u.tag === "Just")
         return u._1;
       f();
-    })(), a = Z(s)(e), g = (() => {
+    })(), a = ut(s)(e), g = (() => {
       if (a.tag === "Nothing")
         return c + 1;
       if (a.tag === "Just")
@@ -9717,22 +10604,22 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
     return c + 1e-4 > i.pos && g + 1e-4 > i.pos ? { ok: !0, pos: g } : { ok: !1, pos: i.pos };
   })({ ok: !0, pos: -1e18 })(o).ok,
   n
-), lh = (t) => (n) => (e) => (r) => {
-  const o = Lt((i) => (s) => pt.compare(i.w)(s.w))(O((i) => ({ l: i, w: va(i) }))(gt(
-    Ta()(n)(e),
+), u2 = (t) => (n) => (e) => (r) => {
+  const o = kt((i) => (s) => ft.compare(i.w)(s.w))(z((i) => ({ l: i, w: j0(i) }))(lt(
+    Z0()(n)(e),
     r
   )));
-  return 0 < o.length ? b("Just", o[0].l) : T;
-}, dh = (t) => (n) => {
-  const e = jn(Cn(O(Pt((o) => (i) => L(i, o)))(t))), r = (o) => Lt((i) => (s) => rt.compare((() => {
-    const u = Z(i)(e);
+  return 0 < o.length ? v("Just", o[0].l) : J;
+}, c2 = (t) => (n) => {
+  const e = $e(zn(z(Ft((o) => (i) => b(i, o)))(t))), r = (o) => kt((i) => (s) => it.compare((() => {
+    const u = ut(i)(e);
     if (u.tag === "Nothing")
       return 0;
     if (u.tag === "Just")
       return u._1;
     f();
   })())((() => {
-    const u = Z(s)(e);
+    const u = ut(s)(e);
     if (u.tag === "Nothing")
       return 0;
     if (u.tag === "Just")
@@ -9743,297 +10630,291 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
     preds: (() => {
       const o = (i) => {
         if (i.tag === "Leaf")
-          return Q;
+          return A;
         if (i.tag === "Node")
-          return Dt("Node", i._1, i._2, i._3, r(i._4), o(i._5), o(i._6));
+          return Ot("Node", i._1, i._2, i._3, r(i._4), o(i._5), o(i._6));
         f();
       };
-      return o(J((i) => (s) => yt(G)(fn)(s.to.node)([s.from.node])(i))(Q)(n));
+      return o(x((i) => (s) => vt(C)(rn)(s.to.node)([s.from.node])(i))(A)(n));
     })(),
     succs: (() => {
       const o = (i) => {
         if (i.tag === "Leaf")
-          return Q;
+          return A;
         if (i.tag === "Node")
-          return Dt("Node", i._1, i._2, i._3, r(i._4), o(i._5), o(i._6));
+          return Ot("Node", i._1, i._2, i._3, r(i._4), o(i._5), o(i._6));
         f();
       };
-      return o(J((i) => (s) => yt(G)(fn)(s.from.node)([s.to.node])(i))(Q)(n));
+      return o(x((i) => (s) => vt(C)(rn)(s.from.node)([s.to.node])(i))(A)(n));
     })(),
     nodeIndex: e
   };
-}, hh = (t) => (n) => {
-  const e = Lt((l) => (d) => pt.compare(l.w)(d.w))(Pt((l) => (d) => ({ i: l, l: d, w: va(d) }))(n)), r = 0 < e.length ? b("Just", e[0]) : T, o = (() => {
+}, a2 = (t) => (n) => {
+  const e = kt((_) => (d) => ft.compare(_.w)(d.w))(Ft((_) => (d) => ({ i: _, l: d, w: j0(d) }))(n)), r = 0 < e.length ? v("Just", e[0]) : J, o = (() => {
     if (r.tag === "Just")
       return r._1.i;
     if (r.tag === "Nothing")
       return 0;
     f();
-  })(), i = o >= 0 && o < n.length ? b("Just", n[o]) : T, s = (() => {
+  })(), i = o >= 0 && o < n.length ? v("Just", n[o]) : J, s = (() => {
     if (i.tag === "Just")
-      return ((d) => (_) => {
-        let h = d, p = _, $ = !0, m;
-        for (; $; ) {
-          const N = h, v = p;
-          if (v.tag === "Nil") {
-            $ = !1, m = N;
+      return ((d) => (l) => {
+        let h = d, $ = l, p = !0, m;
+        for (; p; ) {
+          const y = h, N = $;
+          if (N.tag === "Nil") {
+            p = !1, m = y;
             continue;
           }
-          if (v.tag === "Cons") {
-            h = Sn(N)(v._1), p = v._2;
+          if (N.tag === "Cons") {
+            h = ee(y)(N._1), $ = N._2;
             continue;
           }
           f();
         }
         return m;
       })(999999)((() => {
-        const d = (_, h) => {
-          if (_.tag === "Leaf")
+        const d = (l, h) => {
+          if (l.tag === "Leaf")
             return h;
-          if (_.tag === "Node")
-            return d(_._5, qt("Cons", _._4, d(_._6, h)));
+          if (l.tag === "Node")
+            return d(l._5, zt("Cons", l._4, d(l._6, h)));
           f();
         };
-        return d(i._1, zt);
+        return d(i._1, Yt);
       })());
     if (i.tag === "Nothing")
       return 0;
     f();
-  })(), u = (l) => J((d) => (_) => ne(d)((() => {
-    const h = Z(_._1)(t);
+  })(), u = (_) => x((d) => (l) => Je(d)((() => {
+    const h = ut(l._1)(t);
     if (h.tag === "Nothing")
-      return _._2 + 1;
+      return l._2 + 1;
     if (h.tag === "Just")
-      return _._2 + h._1._1;
+      return l._2 + h._1._1;
     f();
-  })()))(-999999)(Ri(l)), c = o >= 0 && o < n.length ? b("Just", n[o]) : T, a = (() => {
+  })()))(-999999)(cu(_)), c = o >= 0 && o < n.length ? v("Just", n[o]) : J, a = (() => {
     if (c.tag === "Just")
       return u(c._1);
     if (c.tag === "Nothing")
       return 0;
     f();
-  })(), g = $n(
-    (l) => (d) => {
-      const _ = (h) => {
+  })(), g = wn(
+    (_) => (d) => {
+      const l = (h) => {
         if (h.tag === "Leaf")
-          return Q;
+          return A;
         if (h.tag === "Node")
-          return Dt("Node", h._1, h._2, h._3, h._4 + d, _(h._5), _(h._6));
+          return Ot("Node", h._1, h._2, h._3, h._4 + d, l(h._5), l(h._6));
         f();
       };
-      return _(l);
+      return l(_);
     },
     n,
-    Pt((l) => (d) => ns(l)(2) === 0 ? s - ((h) => (p) => {
-      let $ = h, m = p, N = !0, v;
-      for (; N; ) {
-        const w = $, y = m;
-        if (y.tag === "Nil") {
-          N = !1, v = w;
+    Ft((_) => (d) => ze(_)(2) === 0 ? s - ((h) => ($) => {
+      let p = h, m = $, y = !0, N;
+      for (; y; ) {
+        const T = p, w = m;
+        if (w.tag === "Nil") {
+          y = !1, N = T;
           continue;
         }
-        if (y.tag === "Cons") {
-          $ = Sn(w)(y._1), m = y._2;
+        if (w.tag === "Cons") {
+          p = ee(T)(w._1), m = w._2;
           continue;
         }
         f();
       }
-      return v;
+      return N;
     })(999999)((() => {
-      const h = (p, $) => {
-        if (p.tag === "Leaf")
-          return $;
-        if (p.tag === "Node")
-          return h(p._5, qt("Cons", p._4, h(p._6, $)));
+      const h = ($, p) => {
+        if ($.tag === "Leaf")
+          return p;
+        if ($.tag === "Node")
+          return h($._5, zt("Cons", $._4, h($._6, p)));
         f();
       };
-      return h(d, zt);
+      return h(d, Yt);
     })()) : a - u(d))(n)
   );
-  return sh(J((l) => (d) => {
-    const _ = Lt(pt.compare)(vt(Z(d))(g));
-    return Y(G)(d)(_.length === 4 ? 1 < _.length && 2 < _.length ? (_[1] + _[2]) / 2 : 0 : 0 < _.length ? _[0] : 0)(l);
-  })(Q)(or(G.compare)(Cn(O((l) => {
-    const d = (_) => {
-      if (_.tag === "Leaf")
-        return Q;
-      if (_.tag === "Node")
-        return Dt("Node", _._1, _._2, _._3, void 0, d(_._5), d(_._6));
+  return t2(x((_) => (d) => {
+    const l = kt(ft.compare)(yt(ut(d))(g));
+    return U(C)(d)(l.length === 4 ? 1 < l.length && 2 < l.length ? (l[1] + l[2]) / 2 : 0 : 0 < l.length ? l[0] : 0)(_);
+  })(A)(Ar(C.compare)(zn(z((_) => {
+    const d = (l) => {
+      if (l.tag === "Leaf")
+        return A;
+      if (l.tag === "Node")
+        return Ot("Node", l._1, l._2, l._3, void 0, d(l._5), d(l._6));
       f();
     };
-    return Et(Pn.foldr, d(l));
+    return Lt(On.foldr, d(_));
   })(g)))));
-}, ph = (t) => (n) => (e) => (r) => (o) => (i) => {
-  const s = dh(n)(o), u = fh(s)(n), c = { nodeGap: t.nodeGap * 4 | 0 }, a = bn(
-    G.compare,
-    Ln,
-    jn(O((_) => L(_, L(1, 1)))(gt(
-      pa,
-      Cn(n)
+}, f2 = (t) => (n) => (e) => (r) => (o) => (i) => {
+  const s = c2(n)(o), u = o2(s)(n), c = { nodeGap: t.nodeGap * 4 | 0 }, a = Cn(
+    C.compare,
+    Sn,
+    $e(z((l) => b(l, b(1, 1)))(lt(
+      X0,
+      zn(n)
     ))),
     (() => {
-      const _ = (h) => {
+      const l = (h) => {
         if (h.tag === "Leaf")
-          return Q;
+          return A;
         if (h.tag === "Node")
-          return Dt("Node", h._1, h._2, h._3, L(h._4._1 * ct(4), h._4._2), _(h._5), _(h._6));
+          return Ot("Node", h._1, h._2, h._3, b(h._4._1 * nt(4), h._4._2), l(h._5), l(h._6));
         f();
       };
-      return _(e);
+      return l(e);
     })()
   ), g = [
-    so(c)(s)(n)(a)(r)(o)(i)(u)(bu)(xu),
-    so(c)(s)(n)(a)(r)(o)(i)(u)(Eu)(xu),
-    so(c)(s)(n)(a)(r)(o)(i)(u)(bu)(Cu),
-    so(c)(s)(n)(a)(r)(o)(i)(u)(Eu)(Cu)
-  ], l = hh(a)(g);
-  if (Ta()(n)(a)(l))
-    return l;
-  const d = lh()(n)(a)(g);
+    ei(c)(s)(n)(a)(r)(o)(i)(u)(pa)(ma),
+    ei(c)(s)(n)(a)(r)(o)(i)(u)($a)(ma),
+    ei(c)(s)(n)(a)(r)(o)(i)(u)(pa)(ya),
+    ei(c)(s)(n)(a)(r)(o)(i)(u)($a)(ya)
+  ], _ = a2(a)(g);
+  if (Z0()(n)(a)(_))
+    return _;
+  const d = u2()(n)(a)(g);
   if (d.tag === "Just")
     return d._1;
   if (d.tag === "Nothing")
     return g[0];
   f();
-}, $h = (t) => (n) => (e) => (r) => {
-  const o = sg(
-    T,
-    yf,
-    (i) => i.node === n ? b("Just", i.position) : T,
+}, g2 = (t) => (n) => (e) => (r) => {
+  const o = xf(
+    J,
+    hf,
+    (i) => i.node === n ? v("Just", i.position) : J,
     t
   );
   if (o.tag === "Nothing")
     return t;
   if (o.tag === "Just") {
     const i = o._1;
-    return O((s) => s.node === e ? { ...s, position: L(i._1 + r._1, i._2 + r._2) } : s)(t);
+    return z((s) => s.node === e ? { ...s, position: b(i._1 + r._1, i._2 + r._2) } : s)(t);
   }
   f();
-}, mh = (t) => (n) => (e) => (r) => {
-  const o = gt((s) => In(te)(s.node)(n), t), i = (() => {
+}, l2 = (t) => (n) => (e) => (r) => {
+  const o = lt((s) => Hn(ge)(s.node)(n), t), i = (() => {
     if (e === "Vertical") {
       if (r === "Start")
-        return J((s) => (u) => Sn(s)(u.position._1))(99999)(o);
+        return x((s) => (u) => ee(s)(u.position._1))(99999)(o);
       if (r === "End")
-        return J((s) => (u) => ne(s)(u.position._1))(0)(o);
+        return x((s) => (u) => Je(s)(u.position._1))(0)(o);
       if (r === "Center") {
-        const s = J((u) => (c) => u + c.position._1)(0)(o);
-        return o.length === 0 ? 0 : s / ct(o.length);
+        const s = x((u) => (c) => u + c.position._1)(0)(o);
+        return o.length === 0 ? 0 : s / nt(o.length);
       }
       f();
     }
     if (e === "Horizontal") {
       if (r === "Start")
-        return J((s) => (u) => Sn(s)(u.position._2))(99999)(o);
+        return x((s) => (u) => ee(s)(u.position._2))(99999)(o);
       if (r === "End")
-        return J((s) => (u) => ne(s)(u.position._2))(0)(o);
+        return x((s) => (u) => Je(s)(u.position._2))(0)(o);
       if (r === "Center") {
-        const s = J((u) => (c) => u + c.position._2)(0)(o);
-        return o.length === 0 ? 0 : s / ct(o.length);
+        const s = x((u) => (c) => u + c.position._2)(0)(o);
+        return o.length === 0 ? 0 : s / nt(o.length);
       }
     }
     f();
   })();
-  return O((s) => {
-    if (In(te)(s.node)(n)) {
+  return z((s) => {
+    if (Hn(ge)(s.node)(n)) {
       if (e === "Vertical")
-        return { ...s, position: L(i, s.position._2) };
+        return { ...s, position: b(i, s.position._2) };
       if (e === "Horizontal")
-        return { ...s, position: L(s.position._1, i) };
+        return { ...s, position: b(s.position._1, i) };
       f();
     }
     return s;
   })(t);
-}, Nh = (t) => (n) => J((e) => (r) => {
-  if (r.tag === "Lock") {
-    const o = r._1.node, i = r._1.position;
-    return O((s) => s.node === o ? { ...s, position: i } : s)(e);
-  }
-  return r.tag === "AlignGroup" ? mh(e)(r._1.nodes)(r._1.axis)(r._1.alignment) : r.tag === "RelativePosition" ? $h(e)(r._1.anchor)(r._1.target)(r._1.offset) : e;
-})(n)(t), Jh = (t) => (n) => (e) => (r) => (o) => (i) => (s) => (u) => {
-  const c = O((l) => J((d) => (_) => ne(d)((() => {
-    const h = Z(_)(r);
+}, _2 = (t) => (n) => x((e) => (r) => r.tag === "AlignGroup" ? l2(e)(r._1.nodes)(r._1.axis)(r._1.alignment) : r.tag === "RelativePosition" ? g2(e)(r._1.anchor)(r._1.target)(r._1.offset) : e)(n)(t), d2 = (t) => (n) => (e) => (r) => (o) => (i) => (s) => (u) => {
+  const c = z((_) => x((d) => (l) => Je(d)((() => {
+    const h = ut(l)(r);
     if (h.tag === "Nothing")
       return 1;
     if (h.tag === "Just")
       return h._1._2;
     f();
-  })()))(1)(l))(e), a = ph(t)(e)(r)(o)(i)(u), g = Gu(_h(t)(e)(r)(o)(i)(s)((l) => {
-    const d = Gu(l)(c);
-    return Cn(Pt((_) => (h) => Pt((p) => ($) => ({
-      node: $,
-      position: L(
+  })()))(1)(_))(e), a = f2(t)(e)(r)(o)(i)(u), g = xa(s2(t)(e)(r)(o)(i)(s)((_) => {
+    const d = xa(_)(c);
+    return zn(Ft((l) => (h) => Ft(($) => (p) => ({
+      node: p,
+      position: b(
         (() => {
-          const m = Z($)(a);
+          const m = ut(p)(a);
           return (() => {
             if (m.tag === "Nothing")
               return 0;
             if (m.tag === "Just")
               return m._1;
             f();
-          })() / ct(4);
+          })() / nt(4);
         })(),
-        _ >= 0 && _ < d.length ? d[_] : 0
+        l >= 0 && l < d.length ? d[l] : 0
       ),
       size: (() => {
-        const m = _n(3)($) === "$d:" ? L(0, 1) : L(1, 1), N = Z($)(r);
-        if (N.tag === "Nothing")
+        const m = mn(3)(p) === "$d:" ? b(0, 1) : b(1, 1), y = ut(p)(r);
+        if (y.tag === "Nothing")
           return m;
-        if (N.tag === "Just")
-          return N._1;
+        if (y.tag === "Just")
+          return y._1;
         f();
       })(),
-      layer: _,
-      order: p
+      layer: l,
+      order: $
     }))(h))(e));
   }))(c);
-  return Nh(n)(Cn(Pt((l) => (d) => Pt((_) => (h) => ({
+  return _2(n)(zn(Ft((_) => (d) => Ft((l) => (h) => ({
     node: h,
-    position: L(
+    position: b(
       (() => {
-        const p = Z(h)(a);
+        const $ = ut(h)(a);
         return (() => {
-          if (p.tag === "Nothing")
+          if ($.tag === "Nothing")
             return 0;
-          if (p.tag === "Just")
-            return p._1;
+          if ($.tag === "Just")
+            return $._1;
           f();
-        })() / ct(4);
+        })() / nt(4);
       })(),
-      l >= 0 && l < g.length ? g[l] : 0
+      _ >= 0 && _ < g.length ? g[_] : 0
     ),
     size: (() => {
-      const p = _n(3)(h) === "$d:" ? L(0, 1) : L(1, 1), $ = Z(h)(r);
-      if ($.tag === "Nothing")
-        return p;
-      if ($.tag === "Just")
-        return $._1;
+      const $ = mn(3)(h) === "$d:" ? b(0, 1) : b(1, 1), p = ut(h)(r);
+      if (p.tag === "Nothing")
+        return $;
+      if (p.tag === "Just")
+        return p._1;
       f();
     })(),
-    layer: l,
-    order: _
+    layer: _,
+    order: l
   }))(d))(e)));
-}, pi = /* @__PURE__ */ Js($o)(/* @__PURE__ */ Ae(32)), Iu = /* @__PURE__ */ Js($o)(/* @__PURE__ */ Ae(31)), Br = /* @__PURE__ */ (() => {
-  const t = w0("25214903917");
+}, Gs = /* @__PURE__ */ zu(_i)(/* @__PURE__ */ dr(32)), Ja = /* @__PURE__ */ zu(_i)(/* @__PURE__ */ dr(31)), Lo = /* @__PURE__ */ (() => {
+  const t = b1("25214903917");
   if (t.tag === "Nothing")
-    return Tc;
+    return Bf;
   if (t.tag === "Just")
     return t._1;
   f();
-})(), Qr = /* @__PURE__ */ wi(/* @__PURE__ */ Js($o)(/* @__PURE__ */ Ae(48)))($o), vh = (t) => {
-  const n = L0(t);
-  return Gr(yc((() => {
+})(), Eo = /* @__PURE__ */ Ys(/* @__PURE__ */ zu(_i)(/* @__PURE__ */ dr(48)))(_i), h2 = (t) => {
+  const n = L1(t);
+  return yo(Qf((() => {
     if (n.tag === "Nothing")
-      return Tc;
+      return Bf;
     if (n.tag === "Just")
       return n._1;
     f();
-  })())(Br))(Qr);
-}, Fi = /* @__PURE__ */ Ae(11), Eo = (t) => (n) => {
-  const e = Gr(lo(ho(n)(Br))(Fi))(Qr);
-  return L(
+  })())(Lo))(Eo);
+}, au = /* @__PURE__ */ dr(11), bi = (t) => (n) => {
+  const e = yo(ui(ci(n)(Lo))(au))(Eo);
+  return b(
     (() => {
-      const r = dc(J0(Li(e)(Ae(48 - t | 0))));
+      const r = Lf(T1(Xs(e)(dr(48 - t | 0))));
       if (r.tag === "Nothing")
         return 0;
       if (r.tag === "Just")
@@ -10042,40 +10923,40 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
     })(),
     e
   );
-}, Th = (t) => {
-  const n = Eo(26)(t), e = Eo(27)(n._2);
-  return L((ct(n._1) * yi(2)(27) + ct(e._1)) / yi(2)(53), e._2);
-}, yh = (t) => (n) => {
-  const e = J((r) => (o) => {
-    const i = Th(r.finalR);
+}, p2 = (t) => {
+  const n = bi(26)(t), e = bi(27)(n._2);
+  return b((nt(n._1) * zs(2)(27) + nt(e._1)) / zs(2)(53), e._2);
+}, $2 = (t) => (n) => {
+  const e = x((r) => (o) => {
+    const i = p2(r.finalR);
     return { rs: [...r.rs, i._1], finalR: i._2 };
   })({ rs: [], finalR: t })(n);
-  return L(
-    O((r) => r.x)(Lt((r) => (o) => pt.compare(r.k)(o.k))($n((r) => (o) => ({ x: r, k: o }), n, e.rs))),
+  return b(
+    z((r) => r.x)(kt((r) => (o) => ft.compare(r.k)(o.k))(wn((r) => (o) => ({ x: r, k: o }), n, e.rs))),
     e.finalR
   );
-}, wh = (t) => {
-  const n = Gr(lo(ho(t)(Br))(Fi))(Qr), e = Gr(lo(ho(n)(Br))(Fi))(Qr);
-  return L(
-    lo(ho((() => {
-      const r = Li(n)(Ae(16));
-      return eu.compare(r)(Iu) !== "LT" ? wi(r)(pi) : r;
-    })())(pi))((() => {
-      const r = Li(e)(Ae(16));
-      return eu.compare(r)(Iu) !== "LT" ? wi(r)(pi) : r;
+}, m2 = (t) => {
+  const n = yo(ui(ci(t)(Lo))(au))(Eo), e = yo(ui(ci(n)(Lo))(au))(Eo);
+  return b(
+    ui(ci((() => {
+      const r = Xs(n)(dr(16));
+      return Cc.compare(r)(Ja) !== "LT" ? Ys(r)(Gs) : r;
+    })())(Gs))((() => {
+      const r = Xs(e)(dr(16));
+      return Cc.compare(r)(Ja) !== "LT" ? Ys(r)(Gs) : r;
     })()),
     e
   );
-}, Dr = (t) => (e) => {
+}, So = (t) => (e) => {
   let r = e, o = !0, i;
   for (; o; ) {
     const s = r;
     if (s.tag === "Leaf") {
-      o = !1, i = T;
+      o = !1, i = J;
       continue;
     }
     if (s.tag === "Node") {
-      const u = G.compare(t)(s._3);
+      const u = C.compare(t)(s._3);
       if (u === "LT") {
         r = s._5;
         continue;
@@ -10085,14 +10966,14 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
         continue;
       }
       if (u === "EQ") {
-        o = !1, i = b("Just", s._4);
+        o = !1, i = v("Just", s._4);
         continue;
       }
     }
     f();
   }
   return i;
-}, xo = (t) => (e) => {
+}, Li = (t) => (e) => {
   let r = e, o = !0, i;
   for (; o; ) {
     const s = r;
@@ -10101,7 +10982,7 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
       continue;
     }
     if (s.tag === "Node") {
-      const u = G.compare(t)(s._3);
+      const u = C.compare(t)(s._3);
       if (u === "LT") {
         r = s._5;
         continue;
@@ -10118,16 +10999,16 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
     f();
   }
   return i;
-}, As = /* @__PURE__ */ jt(G)(Bt), Zn = (t) => (e) => {
+}, ac = /* @__PURE__ */ nn(C)(Ht), Lr = (t) => (e) => {
   let r = e, o = !0, i;
   for (; o; ) {
     const s = r;
     if (s.tag === "Leaf") {
-      o = !1, i = T;
+      o = !1, i = J;
       continue;
     }
     if (s.tag === "Node") {
-      const u = G.compare(t)(s._3);
+      const u = C.compare(t)(s._3);
       if (u === "LT") {
         r = s._5;
         continue;
@@ -10137,21 +11018,21 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
         continue;
       }
       if (u === "EQ") {
-        o = !1, i = b("Just", s._4);
+        o = !1, i = v("Just", s._4);
         continue;
       }
     }
     f();
   }
   return i;
-}, Co = /* @__PURE__ */ jt(G)(Bt), Lh = /* @__PURE__ */ Uf(Mi), kh = /* @__PURE__ */ J(ur)(0), bh = (t) => (n) => {
-  const e = rt.compare(t)(n);
+}, Ei = /* @__PURE__ */ nn(C)(Ht), y2 = /* @__PURE__ */ Eu(Bo), N2 = /* @__PURE__ */ x(Rr)(0), x2 = (t) => (n) => {
+  const e = it.compare(t)(n);
   if (e === "LT")
     return n;
   if (e === "EQ" || e === "GT")
     return t;
   f();
-}, Pu = (t) => (e) => {
+}, Ta = (t) => (e) => {
   let r = e, o = !0, i;
   for (; o; ) {
     const s = r;
@@ -10160,7 +11041,7 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
       continue;
     }
     if (s.tag === "Node") {
-      const u = G.compare(t)(s._3);
+      const u = C.compare(t)(s._3);
       if (u === "LT") {
         r = s._5;
         continue;
@@ -10177,297 +11058,352 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
     f();
   }
   return i;
-}, Eh = (t) => (n) => (e) => (r) => (o) => As(J((i) => (s) => {
-  const u = Lt((c) => (a) => rt.compare((() => {
-    const g = Dr(c.id)(o);
+}, J2 = (t) => (n) => (e) => {
+  if (t >= 0 && t < e.length) {
+    const r = e[t];
+    if (n >= 0 && n < e.length) {
+      const o = Ue(qt, J, t, e[n], e);
+      if (o.tag === "Just")
+        return Ue(qt, J, n, r, o._1);
+      if (o.tag === "Nothing")
+        return J;
+      f();
+    }
+  }
+  return J;
+}, T2 = (t) => (n) => (e) => (r) => (o) => ac(x((i) => (s) => {
+  const u = kt((c) => (a) => it.compare((() => {
+    const g = So(c.id)(o);
     if (g.tag === "Nothing")
       return 1e6;
     if (g.tag === "Just")
       return g._1;
     f();
   })())((() => {
-    const g = Dr(a.id)(o);
+    const g = So(a.id)(o);
     if (g.tag === "Nothing")
       return 1e6;
     if (g.tag === "Just")
       return g._1;
     f();
-  })()))(gt((c) => xo(c.to.node)(e), gt((c) => c.from.node === s, r)));
+  })()))(lt((c) => Li(c.to.node)(e), lt((c) => c.from.node === s, r)));
   return {
-    ranks: [...i.ranks, ...Pt((c) => (a) => L(a.id, ct((i.rankSum + c | 0) + 1 | 0)))(u)],
+    ranks: [...i.ranks, ...Ft((c) => (a) => b(a.id, nt((i.rankSum + c | 0) + 1 | 0)))(u)],
     rankSum: i.rankSum + u.length | 0
   };
-})({ ranks: [], rankSum: 0 })(t).ranks), xh = (t) => (n) => (e) => (r) => (o) => As(J((i) => (s) => {
-  const u = Lt((a) => (g) => {
-    const l = rt.compare((() => {
-      const d = Zn(g.from.node)(e);
+})({ ranks: [], rankSum: 0 })(t).ranks), v2 = (t) => (n) => (e) => (r) => (o) => ac(x((i) => (s) => {
+  const u = kt((a) => (g) => {
+    const _ = it.compare((() => {
+      const d = Lr(g.from.node)(e);
       if (d.tag === "Nothing")
         return -1;
       if (d.tag === "Just")
         return d._1;
       f();
     })())((() => {
-      const d = Zn(a.from.node)(e);
+      const d = Lr(a.from.node)(e);
       if (d.tag === "Nothing")
         return -1;
       if (d.tag === "Just")
         return d._1;
       f();
     })());
-    return l === "EQ" ? rt.compare((() => {
-      const d = Dr(a.id)(o);
+    return _ === "EQ" ? it.compare((() => {
+      const d = So(a.id)(o);
       if (d.tag === "Nothing")
         return 1e6;
       if (d.tag === "Just")
         return d._1;
       f();
     })())((() => {
-      const d = Dr(g.id)(o);
+      const d = So(g.id)(o);
       if (d.tag === "Nothing")
         return 1e6;
       if (d.tag === "Just")
         return d._1;
       f();
-    })()) : l;
-  })(gt((a) => xo(a.from.node)(e), gt((a) => a.to.node === s, r))), c = u.length;
+    })()) : _;
+  })(lt((a) => Li(a.from.node)(e), lt((a) => a.to.node === s, r))), c = u.length;
   return {
-    ranks: [...i.ranks, ...Pt((a) => (g) => L(g.id, ct((i.rankSum + c | 0) - a | 0)))(u)],
+    ranks: [...i.ranks, ...Ft((a) => (g) => b(g.id, nt((i.rankSum + c | 0) - a | 0)))(u)],
     rankSum: i.rankSum + c | 0
   };
-})({ ranks: [], rankSum: 0 })(t).ranks), Bi = (t) => (n) => (e) => {
-  const r = Co(Pt((u) => (c) => L(c, u))(t)), o = Co(Pt((u) => (c) => L(c, u))(n)), i = vt((u) => {
-    const c = Zn(u.from.node)(r), a = Zn(u.to.node)(o);
+})({ ranks: [], rankSum: 0 })(t).ranks), fu = (t) => (n) => (e) => {
+  const r = Ei(Ft((u) => (c) => b(c, u))(t)), o = Ei(Ft((u) => (c) => b(c, u))(n)), i = yt((u) => {
+    const c = Lr(u.from.node)(r), a = Lr(u.to.node)(o);
     if (c.tag === "Just" && a.tag === "Just")
-      return b("Just", L(c._1, a._1));
-    const g = Zn(u.from.node)(o), l = Zn(u.to.node)(r);
-    return g.tag === "Just" && l.tag === "Just" ? b("Just", L(l._1, g._1)) : T;
+      return v("Just", b(c._1, a._1));
+    const g = Lr(u.from.node)(o), _ = Lr(u.to.node)(r);
+    return g.tag === "Just" && _.tag === "Just" ? v("Just", b(_._1, g._1)) : J;
   })(e), s = i.length;
-  return J((u) => (c) => J((a) => (g) => c >= 0 && c < i.length && g >= 0 && g < i.length && ((i[c]._1 - i[g]._1 | 0) * (i[c]._2 - i[g]._2 | 0) | 0) < 0 ? a + 1 | 0 : a)(u)(Xt(c + 1 | 0, s - 1 | 0)))(0)(Xt(0, s - 2 | 0));
-}, Ch = (t) => (n) => (e) => (r) => (o) => {
-  const i = (u) => (c) => {
-    let a = u, g = c, l = !0, d;
-    for (; l; ) {
-      const _ = a, h = g;
-      if (h >= (_.length - 1 | 0)) {
-        l = !1, d = _;
+  return x((u) => (c) => x((a) => (g) => c >= 0 && c < i.length && g >= 0 && g < i.length && ((i[c]._1 - i[g]._1 | 0) * (i[c]._2 - i[g]._2 | 0) | 0) < 0 ? a + 1 | 0 : a)(u)(It(c + 1 | 0, s - 1 | 0)))(0)(It(0, s - 2 | 0));
+}, w2 = (t) => (n) => (e) => (r) => {
+  const o = (s) => (u) => {
+    let c = s, a = u, g = !0, _;
+    for (; g; ) {
+      const d = c, l = a;
+      if (l >= (d.length - 1 | 0)) {
+        g = !1, _ = d;
         continue;
       }
-      const p = h >= 0 && h < _.length ? b("Just", _[h]) : T, $ = h + 1 | 0;
-      if ($ >= 0 && $ < _.length && p.tag === "Just") {
-        const m = p._1, N = _[$];
-        if (de((k) => k.before === m && k.after === N, o)) {
-          a = _, g = h + 1 | 0;
+      if (l >= 0 && l < d.length) {
+        const h = l + 1 | 0;
+        if (h >= 0 && h < d.length) {
+          const $ = d[l], p = d[h];
+          if (qn((T) => T.before === $ && T.after === p, r)) {
+            c = d, a = l + 1 | 0;
+            continue;
+          }
+          const m = Ue(qt, J, l, p, d), y = (() => {
+            if (m.tag === "Just")
+              return Ue(qt, J, l + 1 | 0, $, m._1);
+            if (m.tag === "Nothing")
+              return J;
+            f();
+          })(), N = (() => {
+            if (y.tag === "Nothing")
+              return d;
+            if (y.tag === "Just")
+              return y._1;
+            f();
+          })();
+          if (fu(n)(N)(e) < fu(n)(d)(e)) {
+            c = N, a = l + 1 | 0;
+            continue;
+          }
+          c = d, a = l + 1 | 0;
           continue;
         }
-        if ((() => {
-          const k = Zn(m)(t), E = Zn(N)(t);
-          return k.tag === "Just" && E.tag === "Just" && k._1 < E._1;
-        })()) {
-          a = _, g = h + 1 | 0;
-          continue;
-        }
-        const v = rr(Yt, T, h, N, _), w = (() => {
-          if (v.tag === "Just")
-            return rr(Yt, T, h + 1 | 0, m, v._1);
-          if (v.tag === "Nothing")
-            return T;
-          f();
-        })(), y = (() => {
-          if (w.tag === "Nothing")
-            return _;
-          if (w.tag === "Just")
-            return w._1;
-          f();
-        })();
-        if (Bi(e)(y)(r) < Bi(e)(_)(r)) {
-          a = y, g = h + 1 | 0;
-          continue;
-        }
-        a = _, g = h + 1 | 0;
+        g = !1, _ = d;
         continue;
       }
-      l = !1, d = _;
+      g = !1, _ = d;
     }
-    return d;
+    return _;
   };
-  return ((u) => {
-    let c = u, a = !0, g;
-    for (; a; ) {
-      const l = c, d = i(l)(0);
-      if (Lh(d)(l)) {
-        a = !1, g = l;
+  return ((s) => {
+    let u = s, c = !0, a;
+    for (; c; ) {
+      const g = u, _ = o(g)(0);
+      if (y2(_)(g)) {
+        c = !1, a = g;
         continue;
       }
-      c = d;
+      u = _;
     }
-    return g;
-  })(n);
-}, uo = (t) => (n) => J((e) => (r) => {
+    return a;
+  })(t);
+}, ri = (t) => (n) => x((e) => (r) => {
   if (r >= 0 && r < t.length) {
     const o = t[r], i = r + 1 | 0;
     if (i >= 0 && i < t.length)
-      return e + Bi(o)(t[i])(n) | 0;
+      return e + fu(o)(t[i])(n) | 0;
   }
   return e;
-})(0)(Xt(0, t.length - 2 | 0)), Sh = (t) => (n) => (e) => {
-  const r = vt((a) => a.tag === "OrderConstraint" ? b("Just", { before: a._1.before, after: a._1.after }) : T)(t.constraints), o = (a) => J((g) => (l) => {
-    const d = l.after, _ = l.before, h = er(Yt, T, ($) => $ === _, g), p = er(Yt, T, ($) => $ === d, g);
-    if (h.tag === "Just" && p.tag === "Just" && h._1 > p._1) {
-      const $ = cc(Yt, T, h._1, g), m = (() => {
-        if ($.tag === "Nothing")
+})(0)(It(0, t.length - 2 | 0)), k2 = /* @__PURE__ */ (() => {
+  const t = (n) => {
+    if (n.length < 7) {
+      const s = (u) => (c) => {
+        let a = u, g = c, _ = !0, d;
+        for (; _; ) {
+          const l = a, h = g, $ = h - 1 | 0;
+          if ($ >= 0 && $ < l.length) {
+            if (h >= 0 && h < l.length && h > 0 && l[$].key > l[h].key) {
+              const p = J2(h - 1 | 0)(h)(l);
+              if (p.tag === "Just") {
+                a = p._1, g = h - 1 | 0;
+                continue;
+              }
+              if (p.tag === "Nothing") {
+                _ = !1, d = l;
+                continue;
+              }
+              f();
+            }
+            _ = !1, d = l;
+            continue;
+          }
+          _ = !1, d = l;
+        }
+        return d;
+      };
+      return x((u) => (c) => s(u)(c))(n)(It(1, n.length - 1 | 0));
+    }
+    const e = Ce(n.length, 2), r = t(bt(0, e, n)), o = t(bt(e, n.length, n));
+    return ((s) => (u) => (c) => {
+      let a = s, g = u, _ = c, d = !0, l;
+      for (; d; ) {
+        const h = a, $ = g, p = _;
+        if ($ >= 0 && $ < r.length) {
+          if (p >= 0 && p < o.length) {
+            if (r[$].key > o[p].key) {
+              a = Dt(h)(o[p]), g = $, _ = p + 1 | 0;
+              continue;
+            }
+            a = Dt(h)(r[$]), g = $ + 1 | 0, _ = p;
+            continue;
+          }
+          d = !1, l = [...h, ...$ < 1 ? r : bt($, r.length, r)];
+          continue;
+        }
+        d = !1, l = [...h, ...p < 1 ? o : bt(p, o.length, o)];
+      }
+      return l;
+    })([])(0)(0);
+  };
+  return t;
+})(), b2 = (t) => (n) => (e) => {
+  const r = yt((a) => a.tag === "OrderConstraint" ? v("Just", { before: a._1.before, after: a._1.after }) : J)(t.constraints), o = (a) => x((g) => (_) => {
+    const d = _.after, l = _.before, h = _r(qt, J, (p) => p === l, g), $ = _r(qt, J, (p) => p === d, g);
+    if (h.tag === "Just" && $.tag === "Just" && h._1 > $._1) {
+      const p = vf(qt, J, h._1, g), m = (() => {
+        if (p.tag === "Nothing")
           return g;
-        if ($.tag === "Just")
-          return $._1;
+        if (p.tag === "Just")
+          return p._1;
         f();
-      })(), N = cg(Yt, T, p._1, _, m);
-      if (N.tag === "Nothing")
+      })(), y = Tf(qt, J, $._1, l, m);
+      if (y.tag === "Nothing")
         return m;
-      if (N.tag === "Just")
-        return N._1;
+      if (y.tag === "Just")
+        return y._1;
       f();
     }
     return g;
-  })(a)(r), i = As(Pt((a) => (g) => L(g.id, a))(e)), s = (a, g, l) => {
+  })(a)(r), i = ac(Ft((a) => (g) => b(g.id, a))(e)), s = (a, g, _) => {
     const d = a.length;
-    return J((_) => (h) => {
-      const p = g ? h - 1 | 0 : h + 1 | 0, $ = p >= 0 && p < _._1.length ? b("Just", _._1[p]) : T;
-      if ($.tag === "Just") {
-        const m = h >= 0 && h < _._1.length ? b("Just", _._1[h]) : T;
+    return x((l) => (h) => {
+      const $ = g ? h - 1 | 0 : h + 1 | 0, p = $ >= 0 && $ < l._1.length ? v("Just", l._1[$]) : J;
+      if (p.tag === "Just") {
+        const m = h >= 0 && h < l._1.length ? v("Just", l._1[h]) : J;
         if (m.tag === "Just") {
-          const N = Co(Pt((E) => (I) => L(I, E))($._1)), v = Co(Pt((E) => (I) => L(I, E))(m._1)), w = g ? Eh($._1)(N)(v)(e)(i) : xh($._1)(N)(v)(e)(i), y = J((E) => (I) => {
-            const D = vt((U) => Dr(U.id)(w))(gt(g ? (U) => U.to.node === I._2 && xo(U.from.node)(N) : (U) => U.from.node === I._2 && xo(U.to.node)(N), e));
+          const y = Ei(Ft((L) => (G) => b(G, L))(p._1)), N = Ei(Ft((L) => (G) => b(G, L))(m._1)), T = g ? T2(p._1)(y)(N)(e)(i) : v2(p._1)(y)(N)(e)(i), w = x((L) => (G) => {
+            const D = yt((X) => So(X.id)(T))(lt(g ? (X) => X.to.node === G._2 && Li(X.from.node)(y) : (X) => X.from.node === G._2 && Li(X.to.node)(y), e));
             if (D.length === 0)
-              return { ...E, items: [...E.items, { n: I._2, key: T, origIdx: I._1 }] };
-            const z = Eo(24)(E.r);
+              return { ...L, items: [...L.items, { n: G._2, key: J, origIdx: G._1 }] };
+            const Y = bi(24)(L.r);
             return {
               items: [
-                ...E.items,
+                ...L.items,
                 {
-                  n: I._2,
-                  key: b("Just", (kh(D) + (ct(z._1) * 4172325152040912e-24 - 0.03500000014901161)) / ct(D.length)),
-                  origIdx: I._1
+                  n: G._2,
+                  key: v("Just", (N2(D) + (nt(Y._1) * 4172325152040912e-24 - 0.03500000014901161)) / nt(D.length)),
+                  origIdx: G._1
                 }
               ],
-              r: z._2
+              r: Y._2
             };
-          })({ items: [], r: _._2 })(Pt(gr)(m._1)), k = rr(
-            Yt,
-            T,
+          })({ items: [], r: l._2 })(Ft(Xe)(m._1)), k = Ue(
+            qt,
+            J,
             h,
-            Ch(t.modelOrder)(o(O((E) => E.n)(Lt((E) => (I) => {
-              const D = Zn(E.n)(t.modelOrder), z = Zn(I.n)(t.modelOrder);
-              if (D.tag === "Just" && z.tag === "Just") {
-                const U = rt.compare(D._1)(z._1);
-                return U === "EQ" ? pt.compare(E.key)(I.key) : U;
-              }
-              return pt.compare(E.key)(I.key);
-            })((() => {
-              const E = y.items, I = (z) => (U) => {
-                let P = z, R = U, j = !0, et;
-                for (; j; ) {
-                  const X = P, A = R;
-                  if (X >= 0 && X < E.length) {
-                    if (E[X].key.tag === "Just") {
-                      j = !1, et = E[X].key._1;
+            w2(o(z((L) => L.n)(k2((() => {
+              const L = w.items, G = (Y) => (X) => {
+                let P = Y, B = X, tt = !0, ct;
+                for (; tt; ) {
+                  const q = P, R = B;
+                  if (q >= 0 && q < L.length) {
+                    if (L[q].key.tag === "Just") {
+                      tt = !1, ct = L[q].key._1;
                       continue;
                     }
-                    if (E[X].key.tag === "Nothing") {
-                      P = X + 1 | 0, R = A;
+                    if (L[q].key.tag === "Nothing") {
+                      P = q + 1 | 0, B = R;
                       continue;
                     }
                     f();
                   }
-                  j = !1, et = A;
+                  tt = !1, ct = R;
                 }
-                return et;
+                return ct;
               };
-              return ((z) => (U) => (P) => {
-                let R = z, j = U, et = P, X = !0, A;
-                for (; X; ) {
-                  const x = R, C = j, q = et;
-                  if (x >= 0 && x < E.length) {
-                    if (E[x].key.tag === "Just") {
-                      R = x + 1 | 0, j = E[x].key._1, et = [...q, { n: E[x].n, key: E[x].key._1, origIdx: E[x].origIdx }];
+              return ((Y) => (X) => (P) => {
+                let B = Y, tt = X, ct = P, q = !0, R;
+                for (; q; ) {
+                  const E = B, S = tt, O = ct;
+                  if (E >= 0 && E < L.length) {
+                    if (L[E].key.tag === "Just") {
+                      B = E + 1 | 0, tt = L[E].key._1, ct = [...O, { n: L[E].n, key: L[E].key._1, origIdx: L[E].origIdx }];
                       continue;
                     }
-                    if (E[x].key.tag === "Nothing") {
-                      const S = (C + I(x + 1 | 0)(C + 1)) / 2;
-                      R = x + 1 | 0, j = S, et = [...q, { n: E[x].n, key: S, origIdx: E[x].origIdx }];
+                    if (L[E].key.tag === "Nothing") {
+                      const I = (S + G(E + 1 | 0)(S + 1)) / 2;
+                      B = E + 1 | 0, tt = I, ct = [...O, { n: L[E].n, key: I, origIdx: L[E].origIdx }];
                       continue;
                     }
                     f();
                   }
-                  X = !1, A = q;
+                  q = !1, R = O;
                 }
-                return A;
+                return R;
               })(0)(-1)([]);
-            })()))))($._1)(e)(r),
-            _._1
+            })()))))(p._1)(e)(r),
+            l._1
           );
           if (k.tag === "Just")
-            return L(k._1, y.r);
+            return b(k._1, w.r);
           if (k.tag === "Nothing")
-            return L(_._1, _._2);
+            return b(l._1, l._2);
           f();
         }
         if (m.tag === "Nothing")
-          return L(_._1, _._2);
+          return b(l._1, l._2);
         f();
       }
-      if ($.tag === "Nothing")
-        return L(_._1, _._2);
+      if (p.tag === "Nothing")
+        return b(l._1, l._2);
       f();
-    })(L(a, l))(g ? Xt(1, d - 1 | 0) : vn(Xt(0, d - 2 | 0)));
-  }, u = J((a) => (g) => Y(G)(g.from.node)()(Y(G)(g.to.node)()(a)))(Q)(e), c = J((a) => (g) => {
+    })(b(a, _))(g ? It(1, d - 1 | 0) : Ln(It(0, d - 2 | 0)));
+  }, u = x((a) => (g) => U(C)(g.from.node)()(U(C)(g.to.node)()(a)))(A)(e), c = x((a) => (g) => {
     if (a.result.crossings === 0)
       return a;
-    const l = (N) => (v) => (w) => (y) => {
-      let k = N, E = v, I = w, D = y, z = !0, U;
-      for (; z; ) {
-        const P = k, R = E, j = I, et = D;
-        if (j === 0) {
-          z = !1, U = { layout: P, crossings: 0, random: et };
+    const _ = (y) => (N) => (T) => (w) => {
+      let k = y, L = N, G = T, D = w, Y = !0, X;
+      for (; Y; ) {
+        const P = k, B = L, tt = G, ct = D;
+        if (tt === 0) {
+          Y = !1, X = { layout: P, crossings: 0, random: ct };
           continue;
         }
-        const X = s(P, R, et), A = uo(X._1)(e);
-        if (A < j) {
-          k = X._1, E = !R, I = A, D = X._2;
+        const q = s(P, B, ct), R = ri(q._1)(e);
+        if (R < tt) {
+          k = q._1, L = !B, G = R, D = q._2;
           continue;
         }
-        z = !1, U = { layout: P, crossings: j, random: X._2 };
+        Y = !1, X = { layout: P, crossings: tt, random: q._2 };
       }
-      return U;
-    }, d = Eo(1)(a.result.random), _ = d._1 !== 0, h = t.modelOrder.tag === "Leaf", p = (a.firstTry || a.secondTry) && !h ? a.firstTry : _, $ = (() => {
+      return X;
+    }, d = bi(1)(a.result.random), l = d._1 !== 0, h = t.modelOrder.tag === "Leaf", $ = (a.firstTry || a.secondTry) && !h ? a.firstTry : l, p = (() => {
       if (!h) {
-        const y = s(n, p, d._2);
-        return l(y._1)(!p)(uo(y._1)(e))(y._2);
+        const w = s(n, $, d._2);
+        return _(w._1)(!$)(ri(w._1)(e))(w._2);
       }
-      const N = p ? 0 : bh(0)(n.length - 1 | 0), v = N >= 0 && N < n.length ? b("Just", n[N]) : T;
-      if (v.tag === "Just" && v._1.length > 1) {
-        const y = gt((k) => Pu(k)(u), v._1);
-        if (y.length > 1) {
-          const k = yh(d._2)(y), E = k._1, I = rr(
-            Yt,
-            T,
-            N,
-            o(J((D) => (z) => Pu(z)(u) ? D.idx >= 0 && D.idx < E.length ? { idx: D.idx + 1 | 0, result: [...D.result, E[D.idx]] } : { idx: D.idx, result: [...D.result, z] } : { idx: D.idx, result: [...D.result, z] })({ idx: 0, result: [] })(v._1).result),
+      const y = $ ? 0 : x2(0)(n.length - 1 | 0), N = y >= 0 && y < n.length ? v("Just", n[y]) : J;
+      if (N.tag === "Just" && N._1.length > 1) {
+        const w = lt((k) => Ta(k)(u), N._1);
+        if (w.length > 1) {
+          const k = $2(d._2)(w), L = k._1, G = Ue(
+            qt,
+            J,
+            y,
+            o(x((D) => (Y) => Ta(Y)(u) ? D.idx >= 0 && D.idx < L.length ? { idx: D.idx + 1 | 0, result: [...D.result, L[D.idx]] } : { idx: D.idx, result: [...D.result, Y] } : { idx: D.idx, result: [...D.result, Y] })({ idx: 0, result: [] })(N._1).result),
             n
           );
-          if (I.tag === "Just") {
-            const D = s(I._1, p, k._2);
-            return l(D._1)(!p)(uo(D._1)(e))(D._2);
+          if (G.tag === "Just") {
+            const D = s(G._1, $, k._2);
+            return _(D._1)(!$)(ri(D._1)(e))(D._2);
           }
         }
       }
-      const w = s(n, p, d._2);
-      return l(w._1)(!p)(uo(w._1)(e))(w._2);
+      const T = s(n, $, d._2);
+      return _(T._1)(!$)(ri(T._1)(e))(T._2);
     })(), m = a.secondTry ? !1 : a.secondTry;
     return a.firstTry ? {
-      result: $.crossings < a.result.crossings ? { layout: $.layout, crossings: $.crossings, random: $.random } : { ...a.result, random: $.random },
+      result: p.crossings < a.result.crossings ? { layout: p.layout, crossings: p.crossings, random: p.random } : { ...a.result, random: p.random },
       firstTry: !1,
       secondTry: !0
     } : {
-      result: $.crossings < a.result.crossings ? { layout: $.layout, crossings: $.crossings, random: $.random } : { ...a.result, random: $.random },
+      result: p.crossings < a.result.crossings ? { layout: p.layout, crossings: p.crossings, random: p.random } : { ...a.result, random: p.random },
       firstTry: a.firstTry,
       secondTry: m
     };
@@ -10475,13 +11411,13 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
     result: {
       layout: n,
       crossings: 1e9,
-      random: Gr(yc(wh(vh(1))._1)(Br))(Qr)
+      random: yo(Qf(m2(h2(1))._1)(Lo))(Eo)
     },
     firstTry: t.modelOrder.tag !== "Leaf",
     secondTry: !1
-  })(Xt(1, t.iterations)).result;
+  })(It(1, t.iterations)).result;
   return n.length <= 0 || t.iterations <= 0 ? n : c.layout;
-}, Gh = (t) => t, Au = (t) => (e) => {
+}, L2 = (t) => t, va = (t) => (e) => {
   let r = e, o = !0, i;
   for (; o; ) {
     const s = r;
@@ -10490,7 +11426,7 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
       continue;
     }
     if (s.tag === "Node") {
-      const u = G.compare(t)(s._3);
+      const u = C.compare(t)(s._3);
       if (u === "LT") {
         r = s._5;
         continue;
@@ -10507,16 +11443,16 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
     f();
   }
   return i;
-}, Jn = (t) => (e) => {
+}, Rn = (t) => (e) => {
   let r = e, o = !0, i;
   for (; o; ) {
     const s = r;
     if (s.tag === "Leaf") {
-      o = !1, i = T;
+      o = !1, i = J;
       continue;
     }
     if (s.tag === "Node") {
-      const u = G.compare(t)(s._3);
+      const u = C.compare(t)(s._3);
       if (u === "LT") {
         r = s._5;
         continue;
@@ -10526,14 +11462,14 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
         continue;
       }
       if (u === "EQ") {
-        o = !1, i = b("Just", s._4);
+        o = !1, i = v("Just", s._4);
         continue;
       }
     }
     f();
   }
   return i;
-}, ar = (t) => (e) => {
+}, zr = (t) => (e) => {
   let r = e, o = !0, i;
   for (; o; ) {
     const s = r;
@@ -10542,7 +11478,7 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
       continue;
     }
     if (s.tag === "Node") {
-      const u = G.compare(t)(s._3);
+      const u = C.compare(t)(s._3);
       if (u === "LT") {
         r = s._5;
         continue;
@@ -10559,16 +11495,16 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
     f();
   }
   return i;
-}, Wr = /* @__PURE__ */ (() => {
+}, Co = /* @__PURE__ */ (() => {
   const t = { eq: (n) => (e) => n._1 === e._1 && n._2 === e._2 };
   return {
     compare: (n) => (e) => {
-      const r = G.compare(n._1)(e._1);
-      return r === "LT" ? dn : r === "GT" ? hn : G.compare(n._2)(e._2);
+      const r = C.compare(n._1)(e._1);
+      return r === "LT" ? yn : r === "GT" ? Nn : C.compare(n._2)(e._2);
     },
     Eq0: () => t
   };
-})(), Ih = /* @__PURE__ */ jt(G)(Bt), Ph = (t) => (e) => {
+})(), E2 = /* @__PURE__ */ nn(C)(Ht), S2 = (t) => (e) => {
   let r = e, o = !0, i;
   for (; o; ) {
     const s = r;
@@ -10577,7 +11513,7 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
       continue;
     }
     if (s.tag === "Node") {
-      const u = Wr.compare(t)(s._3);
+      const u = Co.compare(t)(s._3);
       if (u === "LT") {
         r = s._5;
         continue;
@@ -10594,66 +11530,66 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
     f();
   }
   return i;
-}, Ah = /* @__PURE__ */ Gh("Greedy"), $i = (t) => (n) => (e) => J((r) => (o) => {
+}, C2 = /* @__PURE__ */ L2("Greedy"), Is = (t) => (n) => (e) => x((r) => (o) => {
   if (o.from.node === o.to.node)
     return r;
-  if (o.from.node === n && !Au(o.to.node)(r.marks)) {
-    const i = Jn(o.to.node)(r.inDeg), s = (() => {
+  if (o.from.node === n && !va(o.to.node)(r.marks)) {
+    const i = Rn(o.to.node)(r.inDeg), s = (() => {
       if (i.tag === "Nothing")
         return -1;
       if (i.tag === "Just")
         return i._1 - 1 | 0;
       f();
-    })(), u = Y(G)(o.to.node)(s)(r.inDeg);
+    })(), u = U(C)(o.to.node)(s)(r.inDeg);
     return (() => {
-      const c = Jn(o.to.node)(r.outDeg);
+      const c = Rn(o.to.node)(r.outDeg);
       return s <= 0 && (() => {
         if (c.tag === "Nothing")
           return !1;
         if (c.tag === "Just")
           return c._1 > 0;
         f();
-      })() && !In(te)(o.to.node)(r.sources);
+      })() && !Hn(ge)(o.to.node)(r.sources);
     })() ? { ...r, inDeg: u, sources: [...r.sources, o.to.node] } : { ...r, inDeg: u };
   }
-  if (o.to.node === n && !Au(o.from.node)(r.marks)) {
-    const i = Jn(o.from.node)(r.outDeg), s = (() => {
+  if (o.to.node === n && !va(o.from.node)(r.marks)) {
+    const i = Rn(o.from.node)(r.outDeg), s = (() => {
       if (i.tag === "Nothing")
         return -1;
       if (i.tag === "Just")
         return i._1 - 1 | 0;
       f();
-    })(), u = Y(G)(o.from.node)(s)(r.outDeg);
+    })(), u = U(C)(o.from.node)(s)(r.outDeg);
     return (() => {
-      const c = Jn(o.from.node)(r.inDeg);
+      const c = Rn(o.from.node)(r.inDeg);
       return s <= 0 && (() => {
         if (c.tag === "Nothing")
           return !1;
         if (c.tag === "Just")
           return c._1 > 0;
         f();
-      })() && !In(te)(o.from.node)(r.sinks);
+      })() && !Hn(ge)(o.from.node)(r.sinks);
     })() ? { ...r, outDeg: u, sinks: [...r.sinks, o.from.node] } : { ...r, outDeg: u };
   }
   return r;
-})({ ...e, remaining: gt((r) => r !== n, e.remaining) })(t), Rh = /* @__PURE__ */ J((t) => (n) => {
+})({ ...e, remaining: lt((r) => r !== n, e.remaining) })(t), P2 = /* @__PURE__ */ x((t) => (n) => {
   if (n.tag === "LayerConstraint") {
     if (n._1.pin.tag === "SpecificLayer")
-      return Y(G)(n._1.node)(n._1.pin._1)(t);
+      return U(C)(n._1.node)(n._1.pin._1)(t);
     if (n._1.pin.tag === "FirstLayer")
-      return Y(G)(n._1.node)(0)(t);
+      return U(C)(n._1.node)(0)(t);
     if (n._1.pin.tag === "LastLayer")
-      return Y(G)(n._1.node)(99999)(t);
+      return U(C)(n._1.node)(99999)(t);
   }
   return t;
-})(Q), ya = (t) => (n) => (e) => {
-  const r = Jn(n)(t), o = Jn(e)(t);
+})(A), tg = (t) => (n) => (e) => {
+  const r = Rn(n)(t), o = Rn(e)(t);
   return r.tag === "Just" && o.tag === "Just" && r._1 > o._1;
-}, wa = (t) => (n) => (e) => (r) => {
-  if (ar(e)(r.visited) || ar(e)(r.visiting))
+}, ng = (t) => (n) => (e) => (r) => {
+  if (zr(e)(r.visited) || zr(e)(r.visiting))
     return r;
-  const o = J(Fh(t)(n)(e))({ ...r, visiting: Y(G)(e)()(r.visiting) })((() => {
-    const i = Jn(e)(n);
+  const o = x(G2(t)(n)(e))({ ...r, visiting: U(C)(e)()(r.visiting) })((() => {
+    const i = Rn(e)(n);
     if (i.tag === "Nothing")
       return [];
     if (i.tag === "Just")
@@ -10662,37 +11598,37 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
   })());
   return {
     ...o,
-    visiting: xr(G)(e)(o.visiting),
-    visited: Y(G)(e)()(o.visited)
+    visiting: $o(C)(e)(o.visiting),
+    visited: U(C)(e)()(o.visited)
   };
-}, Fh = (t) => (n) => (e) => (r) => (o) => ya(t)(e)(o) ? { ...r, backEdges: Y(Wr)(L(e, o))()(r.backEdges) } : ar(o)(r.visiting) ? { ...r, backEdges: Y(Wr)(L(e, o))()(r.backEdges) } : ar(o)(r.visited) ? r : wa(t)(n)(o)(r), Bh = (t) => (n) => (e) => {
+}, G2 = (t) => (n) => (e) => (r) => (o) => tg(t)(e)(o) ? { ...r, backEdges: U(Co)(b(e, o))()(r.backEdges) } : zr(o)(r.visiting) ? { ...r, backEdges: U(Co)(b(e, o))()(r.backEdges) } : zr(o)(r.visited) ? r : ng(t)(n)(o)(r), I2 = (t) => (n) => (e) => {
   const r = (d) => {
-    let _ = d, h = !0, p;
+    let l = d, h = !0, $;
     for (; h; ) {
-      const $ = _, m = Wt((N) => T, (N) => (v) => b("Just", { head: N, tail: v }), $.sinks);
+      const p = l, m = Rt((y) => J, (y) => (N) => v("Just", { head: y, tail: N }), p.sinks);
       if (m.tag === "Just") {
-        _ = $i(e)(m._1.head)({
-          ...$,
+        l = Is(e)(m._1.head)({
+          ...p,
           sinks: m._1.tail,
-          marks: Y(G)(m._1.head)($.nextRight)($.marks),
-          nextRight: $.nextRight - 1 | 0
+          marks: U(C)(m._1.head)(p.nextRight)(p.marks),
+          nextRight: p.nextRight - 1 | 0
         });
         continue;
       }
       if (m.tag === "Nothing") {
-        const N = Wt((v) => T, (v) => (w) => b("Just", { head: v, tail: w }), $.sources);
-        if (N.tag === "Just") {
-          _ = $i(e)(N._1.head)({
-            ...$,
-            sources: N._1.tail,
-            marks: Y(G)(N._1.head)($.nextLeft)($.marks),
-            nextLeft: $.nextLeft + 1 | 0
+        const y = Rt((N) => J, (N) => (T) => v("Just", { head: N, tail: T }), p.sources);
+        if (y.tag === "Just") {
+          l = Is(e)(y._1.head)({
+            ...p,
+            sources: y._1.tail,
+            marks: U(C)(y._1.head)(p.nextLeft)(p.marks),
+            nextLeft: p.nextLeft + 1 | 0
           });
           continue;
         }
-        if (N.tag === "Nothing") {
-          const v = (y) => {
-            const k = Jn(y)($.outDeg), E = Jn(y)($.inDeg);
+        if (y.tag === "Nothing") {
+          const N = (w) => {
+            const k = Rn(w)(p.outDeg), L = Rn(w)(p.inDeg);
             return (() => {
               if (k.tag === "Nothing")
                 return 0;
@@ -10700,73 +11636,73 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
                 return k._1;
               f();
             })() - (() => {
-              if (E.tag === "Nothing")
+              if (L.tag === "Nothing")
                 return 0;
-              if (E.tag === "Just")
-                return E._1;
+              if (L.tag === "Just")
+                return L._1;
               f();
             })() | 0;
-          }, w = Lt((y) => (k) => {
-            const E = rt.compare(v(k))(v(y));
-            return E === "EQ" ? rt.compare((() => {
-              const I = Jn(y)(n);
-              if (I.tag === "Nothing")
+          }, T = kt((w) => (k) => {
+            const L = it.compare(N(k))(N(w));
+            return L === "EQ" ? it.compare((() => {
+              const G = Rn(w)(n);
+              if (G.tag === "Nothing")
                 return 1e6;
-              if (I.tag === "Just")
-                return I._1;
+              if (G.tag === "Just")
+                return G._1;
               f();
             })())((() => {
-              const I = Jn(k)(n);
-              if (I.tag === "Nothing")
+              const G = Rn(k)(n);
+              if (G.tag === "Nothing")
                 return 1e6;
-              if (I.tag === "Just")
-                return I._1;
+              if (G.tag === "Just")
+                return G._1;
               f();
-            })()) : E;
-          })($.remaining);
-          if (0 < w.length) {
-            const y = w[0];
-            _ = $i(e)(y)({
-              ...$,
-              remaining: gt((k) => k !== y, $.remaining),
-              marks: Y(G)(y)($.nextLeft)($.marks),
-              nextLeft: $.nextLeft + 1 | 0
+            })()) : L;
+          })(p.remaining);
+          if (0 < T.length) {
+            const w = T[0];
+            l = Is(e)(w)({
+              ...p,
+              remaining: lt((k) => k !== w, p.remaining),
+              marks: U(C)(w)(p.nextLeft)(p.marks),
+              nextLeft: p.nextLeft + 1 | 0
             });
             continue;
           }
-          h = !1, p = $;
+          h = !1, $ = p;
           continue;
         }
       }
       f();
     }
-    return p;
-  }, o = or(G.compare)([...O((d) => d.from.node)(e), ...O((d) => d.to.node)(e)]), i = gt((d) => d.from.node !== d.to.node, e), s = J((d) => (_) => yt(G)(Zt)(_.to.node)(1)(d))(Q)(i), u = J((d) => (_) => yt(G)(Zt)(_.from.node)(1)(d))(Q)(i), c = gt(
+    return $;
+  }, o = Ar(C.compare)([...z((d) => d.from.node)(e), ...z((d) => d.to.node)(e)]), i = lt((d) => d.from.node !== d.to.node, e), s = x((d) => (l) => vt(C)(on)(l.to.node)(1)(d))(A)(i), u = x((d) => (l) => vt(C)(on)(l.from.node)(1)(d))(A)(i), c = lt(
     (d) => {
-      const _ = Jn(d)(s);
-      if (_.tag === "Nothing")
+      const l = Rn(d)(s);
+      if (l.tag === "Nothing")
         return !0;
-      if (_.tag === "Just")
-        return _._1 === 0;
+      if (l.tag === "Just")
+        return l._1 === 0;
       f();
     },
     o
-  ), a = gt(
+  ), a = lt(
     (d) => {
-      const _ = Jn(d)(u);
-      if (_.tag === "Nothing")
+      const l = Rn(d)(u);
+      if (l.tag === "Nothing")
         return !0;
-      if (_.tag === "Just")
-        return _._1 === 0;
+      if (l.tag === "Just")
+        return l._1 === 0;
       f();
     },
     o
-  ), g = o.length + 1 | 0, l = J((d) => (_) => {
-    const h = Jn(_)(d);
-    return h.tag === "Just" && h._1 < 0 ? Y(G)(_)(h._1 + g | 0)(d) : d;
+  ), g = o.length + 1 | 0, _ = x((d) => (l) => {
+    const h = Rn(l)(d);
+    return h.tag === "Just" && h._1 < 0 ? U(C)(l)(h._1 + g | 0)(d) : d;
   })(r({
-    remaining: gt((d) => !In(te)(d)(c) && !In(te)(d)(a), o),
-    marks: Q,
+    remaining: lt((d) => !Hn(ge)(d)(c) && !Hn(ge)(d)(a), o),
+    marks: A,
     inDeg: s,
     outDeg: u,
     sources: c,
@@ -10774,41 +11710,41 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
     nextLeft: 1,
     nextRight: -1
   }).marks)(o);
-  return J((d) => (_) => {
-    if (_.from.node === _.to.node)
+  return x((d) => (l) => {
+    if (l.from.node === l.to.node)
       return d;
-    if (ya(t)(_.from.node)(_.to.node))
-      return Y(Wr)(L(_.from.node, _.to.node))()(d);
-    const h = Jn(_.from.node)(l), p = Jn(_.to.node)(l);
-    return h.tag === "Just" && p.tag === "Just" && h._1 > p._1 ? Y(Wr)(L(_.from.node, _.to.node))()(d) : d;
-  })(Q)(e);
-}, Qh = /* @__PURE__ */ J((t) => (n) => yt(G)(fn)(n.from.node)([n.to.node])(t))(Q), Dh = (t) => (n) => {
-  const e = Qh(n), r = or(G.compare)([...O((i) => i.from.node)(n), ...O((i) => i.to.node)(n)]), o = J((i) => (s) => Y(G)(s.to.node)()(i))(Q)(n);
-  return J((i) => (s) => wa(t)(e)(s)(i))({
-    visiting: Q,
-    visited: Q,
-    backEdges: Q
-  })([...gt((i) => !ar(i)(o), r), ...gt((i) => ar(i)(o), r)]).backEdges;
-}, Wh = (t) => (n) => (e) => (r) => {
-  const o = Ih(Pt((u) => (c) => L(c, u))(n)), i = Rh(e), s = (() => {
+    if (tg(t)(l.from.node)(l.to.node))
+      return U(Co)(b(l.from.node, l.to.node))()(d);
+    const h = Rn(l.from.node)(_), $ = Rn(l.to.node)(_);
+    return h.tag === "Just" && $.tag === "Just" && h._1 > $._1 ? U(Co)(b(l.from.node, l.to.node))()(d) : d;
+  })(A)(e);
+}, A2 = /* @__PURE__ */ x((t) => (n) => vt(C)(rn)(n.from.node)([n.to.node])(t))(A), F2 = (t) => (n) => {
+  const e = A2(n), r = Ar(C.compare)([...z((i) => i.from.node)(n), ...z((i) => i.to.node)(n)]), o = x((i) => (s) => U(C)(s.to.node)()(i))(A)(n);
+  return x((i) => (s) => ng(t)(e)(s)(i))({
+    visiting: A,
+    visited: A,
+    backEdges: A
+  })([...lt((i) => !zr(i)(o), r), ...lt((i) => zr(i)(o), r)]).backEdges;
+}, R2 = (t) => (n) => (e) => (r) => {
+  const o = E2(Ft((u) => (c) => b(c, u))(n)), i = P2(e), s = (() => {
     if (t === "DepthFirst")
-      return Dh(i)(r);
+      return F2(i)(r);
     if (t === "Greedy")
-      return Bh(i)(o)(r);
+      return I2(i)(o)(r);
     f();
   })();
   return {
-    edges: O((u) => Ph(L(u.from.node, u.to.node))(s) ? { ...u, from: u.to, to: u.from } : u)(r),
+    edges: z((u) => S2(b(u.from.node, u.to.node))(s) ? { ...u, from: u.to, to: u.from } : u)(r),
     reversedEdges: s
   };
-}, La = (t) => (n) => {
-  const e = rt.compare(t)(n);
+}, eg = (t) => (n) => {
+  const e = it.compare(t)(n);
   if (e === "LT")
     return n;
   if (e === "EQ" || e === "GT")
     return t;
   f();
-}, qh = /* @__PURE__ */ J((t) => (n) => Y(G)(n)()(t))(Q), So = (t) => (e) => {
+}, B2 = /* @__PURE__ */ x((t) => (n) => U(C)(n)()(t))(A), Si = (t) => (e) => {
   let r = e, o = !0, i;
   for (; o; ) {
     const s = r;
@@ -10817,7 +11753,7 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
       continue;
     }
     if (s.tag === "Node") {
-      const u = G.compare(t)(s._3);
+      const u = C.compare(t)(s._3);
       if (u === "LT") {
         r = s._5;
         continue;
@@ -10834,16 +11770,16 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
     f();
   }
   return i;
-}, Hh = /* @__PURE__ */ oa(G), Yn = (t) => (e) => {
+}, Q2 = /* @__PURE__ */ A0(C), he = (t) => (e) => {
   let r = e, o = !0, i;
   for (; o; ) {
     const s = r;
     if (s.tag === "Leaf") {
-      o = !1, i = T;
+      o = !1, i = J;
       continue;
     }
     if (s.tag === "Node") {
-      const u = G.compare(t)(s._3);
+      const u = C.compare(t)(s._3);
       if (u === "LT") {
         r = s._5;
         continue;
@@ -10853,30 +11789,30 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
         continue;
       }
       if (u === "EQ") {
-        o = !1, i = b("Just", s._4);
+        o = !1, i = v("Just", s._4);
         continue;
       }
     }
     f();
   }
   return i;
-}, Ru = (t) => (n) => {
-  const e = rt.compare(t)(n);
+}, wa = (t) => (n) => {
+  const e = it.compare(t)(n);
   if (e === "LT" || e === "EQ")
     return t;
   if (e === "GT")
     return n;
   f();
-}, mi = (t) => (e) => {
+}, As = (t) => (e) => {
   let r = e, o = !0, i;
   for (; o; ) {
     const s = r;
     if (s.tag === "Leaf") {
-      o = !1, i = T;
+      o = !1, i = J;
       continue;
     }
     if (s.tag === "Node") {
-      const u = rt.compare(t)(s._3);
+      const u = it.compare(t)(s._3);
       if (u === "LT") {
         r = s._5;
         continue;
@@ -10886,25 +11822,25 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
         continue;
       }
       if (u === "EQ") {
-        o = !1, i = b("Just", s._4);
+        o = !1, i = v("Just", s._4);
         continue;
       }
     }
     f();
   }
   return i;
-}, Oh = /* @__PURE__ */ jt(rt)(Bt), zh = (t) => (n) => bn(G.compare, Ln, t, n), ka = /* @__PURE__ */ Pt((t) => (n) => ({ src: n.src, tgt: n.tgt, delta: 1, weight: 1, eid: t })), Vh = (t) => J((n) => (e) => ({
+}, W2 = /* @__PURE__ */ nn(it)(Ht), D2 = (t) => (n) => Cn(C.compare, Sn, t, n), rg = /* @__PURE__ */ Ft((t) => (n) => ({ src: n.src, tgt: n.tgt, delta: 1, weight: 1, eid: t })), H2 = (t) => x((n) => (e) => ({
   base: (() => {
     const r = (o) => (i) => {
       let s = o, u = i, c = !0, a;
       for (; c; ) {
-        const g = s, l = u;
-        if (l.tag === "Nil") {
+        const g = s, _ = u;
+        if (_.tag === "Nil") {
           c = !1, a = g;
           continue;
         }
-        if (l.tag === "Cons") {
-          s = La(g)(l._1), u = l._2;
+        if (_.tag === "Cons") {
+          s = eg(g)(_._1), u = _._2;
           continue;
         }
         f();
@@ -10916,10 +11852,10 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
         if (i.tag === "Leaf")
           return s;
         if (i.tag === "Node")
-          return o(i._5, qt("Cons", i._4, o(i._6, s)));
+          return o(i._5, zt("Cons", i._4, o(i._6, s)));
         f();
       };
-      return o(e, zt);
+      return o(e, Yt);
     })()) | 0) + 1 | 0;
   })(),
   result: [
@@ -10929,64 +11865,64 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
         return e;
       const r = (o) => {
         if (o.tag === "Leaf")
-          return Q;
+          return A;
         if (o.tag === "Node")
-          return Dt("Node", o._1, o._2, o._3, o._4 + n.base | 0, r(o._5), r(o._6));
+          return Ot("Node", o._1, o._2, o._3, o._4 + n.base | 0, r(o._5), r(o._6));
         f();
       };
       return r(e);
     })()
   ]
-}))({ base: 0, result: [] })(t).result, Yh = (t) => (n) => {
-  const e = qh(t);
-  return Hh(t)(ka(gt((r) => So(r.src)(e) && So(r.tgt)(e), n)));
-}, Xh = (t) => (n) => {
-  const e = J((o) => (i) => yt(G)(fn)(i.tgt)([i.src])(yt(G)(fn)(i.src)([
+}))({ base: 0, result: [] })(t).result, O2 = (t) => (n) => {
+  const e = B2(t);
+  return Q2(t)(rg(lt((r) => Si(r.src)(e) && Si(r.tgt)(e), n)));
+}, z2 = (t) => (n) => {
+  const e = x((o) => (i) => vt(C)(rn)(i.tgt)([i.src])(vt(C)(rn)(i.src)([
     i.tgt
-  ])(o)))(Q)(n), r = (o) => (i) => (s) => {
-    let u = o, c = i, a = s, g = !0, l;
+  ])(o)))(A)(n), r = (o) => (i) => (s) => {
+    let u = o, c = i, a = s, g = !0, _;
     for (; g; ) {
-      const d = u, _ = c, h = a, p = Wt(($) => T, ($) => (m) => b("Just", { head: $, tail: m }), d);
-      if (p.tag === "Nothing") {
-        g = !1, l = { nodes: h };
+      const d = u, l = c, h = a, $ = Rt((p) => J, (p) => (m) => v("Just", { head: p, tail: m }), d);
+      if ($.tag === "Nothing") {
+        g = !1, _ = { nodes: h };
         continue;
       }
-      if (p.tag === "Just") {
-        if (So(p._1.head)(_)) {
-          u = p._1.tail, c = _, a = h;
+      if ($.tag === "Just") {
+        if (Si($._1.head)(l)) {
+          u = $._1.tail, c = l, a = h;
           continue;
         }
         u = [
-          ...p._1.tail,
+          ...$._1.tail,
           ...(() => {
-            const $ = Yn(p._1.head)(e);
-            if ($.tag === "Nothing")
+            const p = he($._1.head)(e);
+            if (p.tag === "Nothing")
               return [];
-            if ($.tag === "Just")
-              return $._1;
+            if (p.tag === "Just")
+              return p._1;
             f();
           })()
-        ], c = Y(G)(p._1.head)()(_), a = [...h, p._1.head];
+        ], c = U(C)($._1.head)()(l), a = [...h, $._1.head];
         continue;
       }
       f();
     }
-    return l;
+    return _;
   };
-  return J((o) => (i) => {
-    if (So(i)(o.visited))
+  return x((o) => (i) => {
+    if (Si(i)(o.visited))
       return o;
     const s = r([i])(o.visited)([]);
     return {
       ...o,
-      visited: J((u) => (c) => Y(G)(c)()(u))(o.visited)(s.nodes),
+      visited: x((u) => (c) => U(C)(c)()(u))(o.visited)(s.nodes),
       components: [...o.components, s.nodes]
     };
-  })({ visited: Q, components: [] })(t).components;
-}, Uh = (t) => (n) => (e) => {
-  const r = J((i) => (s) => yt(G)(Zt)(s.tgt)(1)(i))(Q)(n), o = J((i) => (s) => yt(G)(Zt)(s.src)(1)(i))(Q)(n);
-  return J((i) => (s) => {
-    const u = Yn(s)(r), c = (() => {
+  })({ visited: A, components: [] })(t).components;
+}, q2 = (t) => (n) => (e) => {
+  const r = x((i) => (s) => vt(C)(on)(s.tgt)(1)(i))(A)(n), o = x((i) => (s) => vt(C)(on)(s.src)(1)(i))(A)(n);
+  return x((i) => (s) => {
+    const u = he(s)(r), c = (() => {
       if (u.tag === "Nothing")
         return 0;
       if (u.tag === "Just")
@@ -10994,107 +11930,107 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
       f();
     })();
     if ((() => {
-      const N = Yn(s)(o);
+      const y = he(s)(o);
       return (() => {
-        if (N.tag === "Nothing")
+        if (y.tag === "Nothing")
           return c !== 0;
-        if (N.tag === "Just")
-          return c !== N._1;
+        if (y.tag === "Just")
+          return c !== y._1;
         f();
       })() || c === 0;
     })())
       return i;
-    const a = Yn(s)(i.layers), g = (() => {
+    const a = he(s)(i.layers), g = (() => {
       if (a.tag === "Nothing")
         return 0;
       if (a.tag === "Just")
         return a._1;
       f();
-    })(), l = i.layers, d = J((N) => (v) => v.tgt === s ? {
-      ...N,
-      mIn: Ru(N.mIn)((() => {
-        const w = Yn(s)(l), y = Yn(v.src)(l);
+    })(), _ = i.layers, d = x((y) => (N) => N.tgt === s ? {
+      ...y,
+      mIn: wa(y.mIn)((() => {
+        const T = he(s)(_), w = he(N.src)(_);
         return (() => {
+          if (T.tag === "Nothing")
+            return 0;
+          if (T.tag === "Just")
+            return T._1;
+          f();
+        })() - (() => {
           if (w.tag === "Nothing")
             return 0;
           if (w.tag === "Just")
             return w._1;
           f();
-        })() - (() => {
-          if (y.tag === "Nothing")
-            return 0;
-          if (y.tag === "Just")
-            return y._1;
-          f();
         })() | 0;
       })())
-    } : v.src === s ? {
-      ...N,
-      mOut: Ru(N.mOut)((() => {
-        const w = Yn(v.tgt)(l), y = Yn(s)(l);
+    } : N.src === s ? {
+      ...y,
+      mOut: wa(y.mOut)((() => {
+        const T = he(N.tgt)(_), w = he(s)(_);
         return (() => {
+          if (T.tag === "Nothing")
+            return 0;
+          if (T.tag === "Just")
+            return T._1;
+          f();
+        })() - (() => {
           if (w.tag === "Nothing")
             return 0;
           if (w.tag === "Just")
             return w._1;
           f();
-        })() - (() => {
-          if (y.tag === "Nothing")
-            return 0;
-          if (y.tag === "Just")
-            return y._1;
-          f();
         })() | 0;
       })())
-    } : N)({ mIn: 1e9, mOut: 1e9 })(n), _ = d.mIn === 1e9 ? -1 : d.mIn, h = d.mOut === 1e9 ? -1 : d.mOut;
-    if (_ < 0 || h < 0)
+    } : y)({ mIn: 1e9, mOut: 1e9 })(n), l = d.mIn === 1e9 ? -1 : d.mIn, h = d.mOut === 1e9 ? -1 : d.mOut;
+    if (l < 0 || h < 0)
       return i;
-    const p = (g - _ | 0) + 1 | 0, $ = (g + h | 0) - 1 | 0;
-    if ($ < p)
+    const $ = (g - l | 0) + 1 | 0, p = (g + h | 0) - 1 | 0;
+    if (p < $)
       return i;
-    const m = J((N) => (v) => {
-      const w = mi(v)(i.filling), y = (() => {
-        if (w.tag === "Nothing")
+    const m = x((y) => (N) => {
+      const T = As(N)(i.filling), w = (() => {
+        if (T.tag === "Nothing")
           return 0;
-        if (w.tag === "Just")
-          return w._1;
+        if (T.tag === "Just")
+          return T._1;
         f();
       })();
-      return y < N.bestFill ? { best: v, bestFill: y } : N;
+      return w < y.bestFill ? { best: N, bestFill: w } : y;
     })({
       best: g,
       bestFill: (() => {
-        const N = mi(g)(i.filling);
-        if (N.tag === "Nothing")
+        const y = As(g)(i.filling);
+        if (y.tag === "Nothing")
           return 0;
-        if (N.tag === "Just")
-          return N._1;
+        if (y.tag === "Just")
+          return y._1;
         f();
       })()
-    })(Xt(p, $));
+    })(It($, p));
     return m.best === g ? i : {
-      layers: Y(G)(s)(m.best)(i.layers),
-      filling: Y(rt)(g)((() => {
-        const N = mi(g)(i.filling);
-        if (N.tag === "Nothing")
+      layers: U(C)(s)(m.best)(i.layers),
+      filling: U(it)(g)((() => {
+        const y = As(g)(i.filling);
+        if (y.tag === "Nothing")
           return -1;
-        if (N.tag === "Just")
-          return N._1 - 1 | 0;
+        if (y.tag === "Just")
+          return y._1 - 1 | 0;
         f();
-      })())(Y(rt)(m.best)(m.bestFill + 1 | 0)(i.filling))
+      })())(U(it)(m.best)(m.bestFill + 1 | 0)(i.filling))
     };
   })({
     layers: e,
-    filling: Oh(O((i) => L(
+    filling: W2(z((i) => b(
       i,
-      J((s) => (u) => (() => {
-        const c = Yn(u)(e);
+      x((s) => (u) => (() => {
+        const c = he(u)(e);
         return c.tag === "Nothing" ? !1 : c.tag === "Just" && c._1 === i;
       })() ? s + 1 | 0 : s)(0)(t)
-    ))(Xt(
+    ))(It(
       0,
-      J((i) => (s) => La(i)((() => {
-        const u = Yn(s)(e);
+      x((i) => (s) => eg(i)((() => {
+        const u = he(s)(e);
         if (u.tag === "Nothing")
           return 0;
         if (u.tag === "Just")
@@ -11103,16 +12039,16 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
       })()))(0)(t)
     )))
   })(t).layers;
-}, Mh = (t) => (n) => Uh(t)(ka(n))(J(zh)(Q)(Vh(O((e) => Yh(e)(n))(Xh(t)(n))))), Kh = (t) => t, Ge = (t) => (e) => {
+}, Y2 = (t) => (n) => q2(t)(rg(n))(x(D2)(A)(H2(z((e) => O2(e)(n))(z2(t)(n))))), X2 = (t) => t, fr = (t) => (e) => {
   let r = e, o = !0, i;
   for (; o; ) {
     const s = r;
     if (s.tag === "Leaf") {
-      o = !1, i = T;
+      o = !1, i = J;
       continue;
     }
     if (s.tag === "Node") {
-      const u = G.compare(t)(s._3);
+      const u = C.compare(t)(s._3);
       if (u === "LT") {
         r = s._5;
         continue;
@@ -11122,34 +12058,34 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
         continue;
       }
       if (u === "EQ") {
-        o = !1, i = b("Just", s._4);
+        o = !1, i = v("Just", s._4);
         continue;
       }
     }
     f();
   }
   return i;
-}, Go = (t) => (n) => {
-  const e = rt.compare(t)(n);
+}, Ci = (t) => (n) => {
+  const e = it.compare(t)(n);
   if (e === "LT")
     return n;
   if (e === "EQ" || e === "GT")
     return t;
   f();
-}, ba = /* @__PURE__ */ (() => {
-  const t = On.unfoldr(De);
-  return (n) => t(Wn("IterNode", n, Qe));
-})(), jh = /* @__PURE__ */ Kh("NetworkSimplex"), Zh = (t) => (n) => J((e) => (r) => {
-  const o = J(Go)(0)(vt((i) => Ge(i)(e))(r));
-  return J((i) => (s) => Y(G)(s)(o)(i))(e)(r);
-})(n)(t), tp = (t) => (n) => ({
-  layers: O((e) => gt(
+}, og = /* @__PURE__ */ (() => {
+  const t = te.unfoldr(ke);
+  return (n) => t(Kn("IterNode", n, we));
+})(), V2 = /* @__PURE__ */ X2("NetworkSimplex"), U2 = (t) => (n) => x((e) => (r) => {
+  const o = x(Ci)(0)(yt((i) => fr(i)(e))(r));
+  return x((i) => (s) => U(C)(s)(o)(i))(e)(r);
+})(n)(t), K2 = (t) => (n) => ({
+  layers: z((e) => lt(
     (r) => {
-      const o = Ge(r)(n);
+      const o = fr(r)(n);
       return o.tag === "Nothing" ? !1 : o.tag === "Just" && o._1 === e;
     },
     t
-  ))(Xt(
+  ))(It(
     0,
     ((r) => (o) => {
       let i = r, s = o, u = !0, c;
@@ -11160,7 +12096,7 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
           continue;
         }
         if (g.tag === "Cons") {
-          i = Go(a)(g._1), s = g._2;
+          i = Ci(a)(g._1), s = g._2;
           continue;
         }
         f();
@@ -11171,112 +12107,112 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
         if (o.tag === "Leaf")
           return i;
         if (o.tag === "Node")
-          return r(o._5, qt("Cons", o._4, r(o._6, i)));
+          return r(o._5, zt("Cons", o._4, r(o._6, i)));
         f();
       };
-      return r(n, zt);
+      return r(n, Yt);
     })())
   )),
   nodeLayer: n
-}), np = (t) => (n) => (e) => {
-  const r = J((o) => (i) => Y(G)(i)(!0)(o))(Q)(n);
-  return J((o) => (i) => Y(G)(i._1)(i._2)(o))(Mh(n)(vt((o) => o.from.node === o.to.node || (() => {
-    const i = Ge(o.from.node)(r);
+}), M2 = (t) => (n) => (e) => {
+  const r = x((o) => (i) => U(C)(i)(!0)(o))(A)(n);
+  return x((o) => (i) => U(C)(i._1)(i._2)(o))(Y2(n)(yt((o) => o.from.node === o.to.node || (() => {
+    const i = fr(o.from.node)(r);
     if (i.tag === "Nothing")
       return !0;
     if (i.tag === "Just")
       return !i._1;
     f();
   })() || (() => {
-    const i = Ge(o.to.node)(r);
+    const i = fr(o.to.node)(r);
     if (i.tag === "Nothing")
       return !0;
     if (i.tag === "Just")
       return !i._1;
     f();
-  })() ? T : b("Just", { src: o.from.node, tgt: o.to.node }))(t)))(ba(e));
-}, ep = (t) => (n) => (e) => (r) => {
+  })() ? J : v("Just", { src: o.from.node, tgt: o.to.node }))(t)))(og(e));
+}, j2 = (t) => (n) => (e) => (r) => {
   const o = (c) => (a) => {
-    const g = Ge(a)(c);
+    const g = fr(a)(c);
     if (g.tag === "Just")
       return c;
     if (g.tag === "Nothing") {
-      const l = gt(
-        (_) => _ !== a,
+      const _ = lt(
+        (l) => l !== a,
         (() => {
-          const _ = Ge(a)(t);
-          if (_.tag === "Nothing")
+          const l = fr(a)(t);
+          if (l.tag === "Nothing")
             return [];
-          if (_.tag === "Just")
-            return _._1;
+          if (l.tag === "Just")
+            return l._1;
           f();
         })()
-      ), d = J(o)(c)(l);
-      return Y(G)(a)(1 + J(Go)(0)(vt((_) => Ge(_)(d))(l)) | 0)(d);
+      ), d = x(o)(c)(_);
+      return U(C)(a)(1 + x(Ci)(0)(yt((l) => fr(l)(d))(_)) | 0)(d);
     }
     f();
-  }, i = J(o)(Q)(e), u = ((c) => (a) => {
-    let g = c, l = a, d = !0, _;
+  }, i = x(o)(A)(e), u = ((c) => (a) => {
+    let g = c, _ = a, d = !0, l;
     for (; d; ) {
-      const h = g, p = l;
-      if (p.tag === "Nil") {
-        d = !1, _ = h;
+      const h = g, $ = _;
+      if ($.tag === "Nil") {
+        d = !1, l = h;
         continue;
       }
-      if (p.tag === "Cons") {
-        g = Go(h)(p._1), l = p._2;
+      if ($.tag === "Cons") {
+        g = Ci(h)($._1), _ = $._2;
         continue;
       }
       f();
     }
-    return _;
+    return l;
   })(1)((() => {
     const c = (a, g) => {
       if (a.tag === "Leaf")
         return g;
       if (a.tag === "Node")
-        return c(a._5, qt("Cons", a._4, c(a._6, g)));
+        return c(a._5, zt("Cons", a._4, c(a._6, g)));
       f();
     };
-    return c(i, zt);
+    return c(i, Yt);
   })());
-  return J((c) => (a) => Y(G)(a._1)(a._2)(c))((() => {
+  return x((c) => (a) => U(C)(a._1)(a._2)(c))((() => {
     const c = (a) => {
       if (a.tag === "Leaf")
-        return Q;
+        return A;
       if (a.tag === "Node")
-        return Dt("Node", a._1, a._2, a._3, u - a._4 | 0, c(a._5), c(a._6));
+        return Ot("Node", a._1, a._2, a._3, u - a._4 | 0, c(a._5), c(a._6));
       f();
     };
     return c(i);
-  })())(ba(r));
-}, rp = /* @__PURE__ */ J((t) => (n) => {
+  })())(og(r));
+}, Z2 = /* @__PURE__ */ x((t) => (n) => {
   if (n.tag === "LayerConstraint") {
     if (n._1.pin.tag === "SpecificLayer")
-      return Y(G)(n._1.node)(n._1.pin._1)(t);
+      return U(C)(n._1.node)(n._1.pin._1)(t);
     if (n._1.pin.tag === "FirstLayer")
-      return Y(G)(n._1.node)(0)(t);
+      return U(C)(n._1.node)(0)(t);
   }
   return t;
-})(Q), op = /* @__PURE__ */ J((t) => (n) => yt(G)(fn)(n.to.node)([n.from.node])(t))(Q), ip = /* @__PURE__ */ J((t) => (n) => yt(G)(fn)(n.from.node)([n.to.node])(t))(Q), sp = (t) => (n) => (e) => (r) => {
-  const o = ip(e), i = op(e), s = rp(n);
-  return tp(r)(Zh(vt((u) => u.tag === "SameLayer" ? b("Just", u._1.nodes) : T)(n))((() => {
+})(A), ty = /* @__PURE__ */ x((t) => (n) => vt(C)(rn)(n.to.node)([n.from.node])(t))(A), ny = /* @__PURE__ */ x((t) => (n) => vt(C)(rn)(n.from.node)([n.to.node])(t))(A), ey = (t) => (n) => (e) => (r) => {
+  const o = ny(e), i = ty(e), s = Z2(n);
+  return K2(r)(U2(yt((u) => u.tag === "SameLayer" ? v("Just", u._1.nodes) : J)(n))((() => {
     if (t === "LongestPath")
-      return ep(o)(i)(r)(s);
+      return j2(o)(i)(r)(s);
     if (t === "NetworkSimplex")
-      return np(e)(r)(s);
+      return M2(e)(r)(s);
     f();
   })()));
-}, up = /* @__PURE__ */ jt(G)(Bt), cp = (t) => (e) => {
+}, ry = /* @__PURE__ */ nn(C)(Ht), oy = (t) => (e) => {
   let r = e, o = !0, i;
   for (; o; ) {
     const s = r;
     if (s.tag === "Leaf") {
-      o = !1, i = T;
+      o = !1, i = J;
       continue;
     }
     if (s.tag === "Node") {
-      const u = G.compare(t)(s._3);
+      const u = C.compare(t)(s._3);
       if (u === "LT") {
         r = s._5;
         continue;
@@ -11286,23 +12222,23 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
         continue;
       }
       if (u === "EQ") {
-        o = !1, i = b("Just", s._4);
+        o = !1, i = v("Just", s._4);
         continue;
       }
     }
     f();
   }
   return i;
-}, Fu = (t) => (e) => {
+}, ka = (t) => (e) => {
   let r = e, o = !0, i;
   for (; o; ) {
     const s = r;
     if (s.tag === "Leaf") {
-      o = !1, i = T;
+      o = !1, i = J;
       continue;
     }
     if (s.tag === "Node") {
-      const u = G.compare(t)(s._3);
+      const u = C.compare(t)(s._3);
       if (u === "LT") {
         r = s._5;
         continue;
@@ -11312,278 +12248,469 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
         continue;
       }
       if (u === "EQ") {
-        o = !1, i = b("Just", s._4);
+        o = !1, i = v("Just", s._4);
         continue;
       }
     }
     f();
   }
   return i;
-}, Bu = (t) => (n) => {
-  const e = pt.compare(t)(n);
+}, ba = (t) => (n) => {
+  const e = ft.compare(t)(n);
   if (e === "LT")
     return n;
   if (e === "EQ" || e === "GT")
     return t;
   f();
-}, qr = /* @__PURE__ */ jt(G)(Bt), ap = /* @__PURE__ */ jt(G)(Bt), Qu = /* @__PURE__ */ (() => {
-  const t = O((n) => ({ start: n.end, end: n.start, direction: n.direction }));
-  return (n) => vn(t(n));
-})(), fp = (t) => (n) => (e) => (r) => {
-  const o = up(O((s) => L(s.edge, s))(r)), i = (s) => 0 < s.nodes.length && (() => {
-    const u = cp(s.edgeId)(e);
+}, Po = /* @__PURE__ */ nn(C)(Ht), iy = /* @__PURE__ */ nn(C)(Ht), La = /* @__PURE__ */ (() => {
+  const t = z((n) => ({ start: n.end, end: n.start, direction: n.direction }));
+  return (n) => Ln(t(n));
+})(), sy = (t) => (n) => (e) => (r) => {
+  const o = ry(z((s) => b(s.edge, s))(r)), i = (s) => 0 < s.nodes.length && (() => {
+    const u = oy(s.edgeId)(e);
     return u.tag === "Just" && s.nodes[0] !== u._1._1;
   })();
-  return O((s) => {
+  return z((s) => {
     if (s.nodes.length <= 2) {
-      const g = Fu(s.edgeId)(o);
+      const g = ka(s.edgeId)(o);
       if (g.tag === "Just") {
-        const l = i(s), d = Fr(Rr(l ? Qu(g._1.segments) : g._1.segments));
-        return { ...g._1, edge: s.edgeId, segments: d, bends: $n((_) => (h) => _.end, d, Gt(1, d.length, d)), reversed: l };
+        const _ = i(s), d = bo(ko(_ ? La(g._1.segments) : g._1.segments));
+        return { ...g._1, edge: s.edgeId, segments: d, bends: wn((l) => (h) => l.end, d, bt(1, d.length, d)), reversed: _ };
       }
       if (g.tag === "Nothing")
         return { edge: s.edgeId, segments: [], bends: [], bendType: [], jumps: [], reversed: !1 };
       f();
     }
-    const u = bt(vt((g) => Fu(g)(o))($n(
-      (g) => (l) => s.edgeId + ":" + g + "->" + l,
+    const u = Jt(yt((g) => ka(g)(o))(wn(
+      (g) => (_) => s.edgeId + ":" + g + "->" + _,
       s.nodes,
-      Gt(1, s.nodes.length, s.nodes)
-    )))((g) => g.segments), c = i(s), a = Fr(Rr(c ? Qu(u) : u));
+      bt(1, s.nodes.length, s.nodes)
+    )))((g) => g.segments), c = i(s), a = bo(ko(c ? La(u) : u));
     return {
       edge: s.edgeId,
       segments: a,
-      bends: $n((g) => (l) => g.end, a, Gt(1, a.length, a)),
+      bends: wn((g) => (_) => g.end, a, bt(1, a.length, a)),
       bendType: [],
       jumps: [],
       reversed: c
     };
   })(t);
-}, gp = { layers: [], edges: [], chains: [] }, _p = {
+}, uy = { layers: [], edges: [], chains: [] }, cy = {
   nodeGap: 3,
   layerGap: 2,
   iterations: 8,
-  layerer: jh,
-  cycleBreaker: Ah,
+  layerer: V2,
+  cycleBreaker: C2,
   compactPostRouting: !1
-}, lp = (t) => ({
-  pos: L(0, 0),
-  size: L(
-    J((n) => (e) => Bu(n)(e.position._1 + e.size._1))(0)(t),
-    J((n) => (e) => Bu(n)(e.position._2 + e.size._2))(0)(t)
+}, ay = (t) => ({
+  pos: b(0, 0),
+  size: b(
+    x((n) => (e) => ba(n)(e.position._1 + e.size._1))(0)(t),
+    x((n) => (e) => ba(n)(e.position._2 + e.size._2))(0)(t)
   )
-}), dp = (t) => (n) => (e) => {
-  const r = qr(O((a) => L(a.id, a.ports))(n.nodes)), o = gt((a) => _n(3)(a.node) !== "$d:", e.placements), i = fp(e.withDummies.chains)(e.acyclic.reversedEdges)(ap(O((a) => L(
+}), fy = (t) => (n) => (e) => {
+  const r = Po(z((a) => b(a.id, a.ports))(n.nodes)), o = lt((a) => mn(3)(a.node) !== "$d:", e.placements), i = sy(e.withDummies.chains)(e.acyclic.reversedEdges)(iy(z((a) => b(
     a.id,
-    L(a.from.node, a.to.node)
-  ))(n.edges)))(Wd(e.withDummies.edges)(e.placements)(r)(e.withDummies.chains)($a(e.ordered)(gt(
+    b(a.from.node, a.to.node)
+  ))(n.edges)))(Am(e.withDummies.edges)(e.placements)(r)(e.withDummies.chains)(V0(e.ordered)(lt(
     (a) => a.from.node !== a.to.node,
     e.withDummies.edges
   ))((() => {
     const a = (g) => {
       if (g.tag === "Leaf")
-        return Q;
+        return A;
       if (g.tag === "Node")
-        return Dt("Node", g._1, g._2, g._3, L(g._4._1 * 4, g._4._2), a(g._5), a(g._6));
+        return Ot("Node", g._1, g._2, g._3, b(g._4._1 * 4, g._4._2), a(g._5), a(g._6));
       f();
     };
-    return a(qr(O((g) => L(g.id, g.size))(n.nodes)));
-  })()))), s = t.compactPostRouting ? ad()({
+    return a(Po(z((g) => b(g.id, g.size))(n.nodes)));
+  })()))), s = t.compactPostRouting ? rm()({
     nodes: o,
     edges: n.edges,
     paths: i,
     ports: r
-  }) : { nodes: o, edges: i }, u = O((a) => {
-    const g = Fr(Rr(a.segments));
-    return { ...a, segments: g, bends: $n((l) => (d) => l.end, g, Gt(1, g.length, g)) };
-  })(s.edges), c = Pt((a) => (g) => ({ ...g, jumps: Xd(a)(g)(u) }))(u);
-  return { nodes: s.nodes, edges: c, boundingBox: lp(s.nodes), metrics: Hl(s.nodes)(c)(0) };
-}, hp = (t) => (n) => (e) => {
-  const r = qr(O((i) => L(i.id, i.size))(n.nodes)), o = {
+  }) : { nodes: o, edges: i }, u = z((a) => {
+    const g = bo(ko(a.segments));
+    return { ...a, segments: g, bends: wn((_) => (d) => _.end, g, bt(1, g.length, g)) };
+  })(s.edges), c = Ft((a) => (g) => ({ ...g, jumps: Hm(a)(g)(u) }))(u);
+  return { nodes: s.nodes, edges: c, boundingBox: ay(s.nodes), metrics: Ep(s.nodes)(c)(0) };
+}, gy = (t) => (n) => (e) => {
+  const r = Po(z((i) => b(i.id, i.size))(n.nodes)), o = {
     ...e,
-    placements: Jh({ nodeGap: t.nodeGap, layerGap: t.layerGap })(n.constraints)(e.ordered)(r)(qr(O((i) => L(
+    placements: d2({ nodeGap: t.nodeGap, layerGap: t.layerGap })(n.constraints)(e.ordered)(r)(Po(z((i) => b(
       i.id,
       i.ports
-    ))(n.nodes)))(e.withDummies.edges)(e.withDummies.chains)($a(e.ordered)(e.withDummies.edges)((() => {
+    ))(n.nodes)))(e.withDummies.edges)(e.withDummies.chains)(V0(e.ordered)(e.withDummies.edges)((() => {
       const i = (s) => {
         if (s.tag === "Leaf")
-          return Q;
+          return A;
         if (s.tag === "Node")
-          return Dt("Node", s._1, s._2, s._3, L(s._4._1 * 4, s._4._2), i(s._5), i(s._6));
+          return Ot("Node", s._1, s._2, s._3, b(s._4._1 * 4, s._4._2), i(s._5), i(s._6));
         f();
       };
       return i(r);
     })()))
   };
-  return { pipeline: o, result: dp(t)(n)(o) };
-}, pp = (t) => (n) => (e) => hp(t)(n)({
+  return { pipeline: o, result: fy(t)(n)(o) };
+}, ly = (t) => (n) => (e) => gy(t)(n)({
   ...e,
-  ordered: Sh({
+  ordered: b2({
     iterations: t.iterations,
     constraints: n.constraints,
-    modelOrder: qr(Pt((r) => (o) => L(o.id, r))(n.nodes))
+    modelOrder: Po(Ft((r) => (o) => b(o.id, r))(n.nodes))
   })(e.withDummies.layers)(e.withDummies.edges)
-}), $p = (t) => (n) => (e) => pp(t)(n)({
+}), _y = (t) => (n) => (e) => ly(t)(n)({
   ...e,
-  withDummies: Ud(e.layered.nodeLayer)(e.acyclic.edges)(e.layered.layers)
-}), mp = (t) => (n) => {
-  const e = O((o) => o.id)(n.nodes), r = Wh(t.cycleBreaker)(e)(n.constraints)(n.edges);
-  return $p(t)(n)({
+  withDummies: Om(e.layered.nodeLayer)(e.acyclic.edges)(e.layered.layers)
+}), dy = (t) => (n) => {
+  const e = z((o) => o.id)(n.nodes), r = R2(t.cycleBreaker)(e)(n.constraints)(n.edges);
+  return _y(t)(n)({
     acyclic: r,
-    layered: sp(t.layerer)(n.constraints)(r.edges)(e),
-    withDummies: gp,
+    layered: ey(t.layerer)(n.constraints)(r.edges)(e),
+    withDummies: uy,
     ordered: [],
     placements: []
   });
-}, Np = (t) => (e) => {
-  let r = e, o = !0, i;
-  for (; o; ) {
-    const s = r;
-    if (s.tag === "Leaf") {
-      o = !1, i = T;
-      continue;
-    }
-    if (s.tag === "Node") {
-      const u = G.compare(t)(s._3);
-      if (u === "LT") {
-        r = s._5;
-        continue;
-      }
-      if (u === "GT") {
-        r = s._6;
-        continue;
-      }
-      if (u === "EQ") {
-        o = !1, i = b("Just", s._4);
-        continue;
-      }
-    }
-    f();
-  }
-  return i;
-}, Jp = (t) => (e) => {
-  let r = e, o = !0, i;
-  for (; o; ) {
-    const s = r;
-    if (s.tag === "Leaf") {
-      o = !1, i = T;
-      continue;
-    }
-    if (s.tag === "Node") {
-      const u = G.compare(t)(s._3);
-      if (u === "LT") {
-        r = s._5;
-        continue;
-      }
-      if (u === "GT") {
-        r = s._6;
-        continue;
-      }
-      if (u === "EQ") {
-        o = !1, i = b("Just", s._4);
-        continue;
-      }
-    }
-    f();
-  }
-  return i;
-}, Ea = /* @__PURE__ */ jt(G)(Bt), vp = (t) => (e) => {
-  let r = e, o = !0, i;
-  for (; o; ) {
-    const s = r;
-    if (s.tag === "Leaf") {
-      o = !1, i = !1;
-      continue;
-    }
-    if (s.tag === "Node") {
-      const u = G.compare(t)(s._3);
-      if (u === "LT") {
-        r = s._5;
-        continue;
-      }
-      if (u === "GT") {
-        r = s._6;
-        continue;
-      }
-      if (u === "EQ") {
-        o = !1, i = !0;
-        continue;
-      }
-    }
-    f();
-  }
-  return i;
-}, Tp = (t) => (e) => {
-  let r = e, o = !0, i;
-  for (; o; ) {
-    const s = r;
-    if (s.tag === "Leaf") {
-      o = !1, i = !1;
-      continue;
-    }
-    if (s.tag === "Node") {
-      const u = G.compare(t)(s._3);
-      if (u === "LT") {
-        r = s._5;
-        continue;
-      }
-      if (u === "GT") {
-        r = s._6;
-        continue;
-      }
-      if (u === "EQ") {
-        o = !1, i = !0;
-        continue;
-      }
-    }
-    f();
-  }
-  return i;
-}, yp = /* @__PURE__ */ J((t) => (n) => Y(G)(n)()(t))(Q), wp = /* @__PURE__ */ J((t) => (n) => Y(G)(n)()(t))(Q), Lp = Yr.traverse(Xi), Rs = /* @__PURE__ */ jt(G)(Bt), kp = (t) => (n) => (e) => {
-  const r = ln((o) => o.id === e)(t.graph.edges);
-  if (r.tag === "Just")
-    return b("Just", r._1);
-  if (r.tag === "Nothing")
-    return Np(e)(n);
+}, ss = (t) => t, hy = (t) => (n) => {
+  const e = ft.compare(t)(n);
+  if (e === "LT" || e === "EQ")
+    return t;
+  if (e === "GT")
+    return n;
   f();
-}, bp = (t) => (n) => (e) => ({
-  x: e.position._1 * t,
-  y: e.position._2 * t,
-  w: e.size._1 * t,
-  h: e.size._2 * t,
+}, gu = /* @__PURE__ */ ss("TopSide"), lu = /* @__PURE__ */ ss("BottomSide"), _u = /* @__PURE__ */ ss("LeftSide"), du = /* @__PURE__ */ ss("RightSide"), py = (t) => {
+  const n = ft.compare(0)(t), e = (() => {
+    if (n === "LT")
+      return t;
+    if (n === "EQ" || n === "GT")
+      return 0;
+    f();
+  })(), r = ft.compare(1)(e);
+  if (r === "LT" || r === "EQ")
+    return 1;
+  if (r === "GT")
+    return e;
+  f();
+}, Ea = (t) => (n) => (e) => {
+  const r = hy(t.h * 0.12)(t.w * 0.2), o = t.w / 2;
+  return (n < 0 ? t.y + r : t.y + t.h - r) + n * r * En(py((() => {
+    const i = (e - (t.x + o)) / o;
+    return 1 - i * i;
+  })()));
+}, He = (t) => (n) => (e) => (r) => {
+  let o = t, i = n, s = e, u = r, c = !0, a;
+  for (; c; ) {
+    const g = o, _ = i, d = s, l = u;
+    if (g === "Rectangle") {
+      if (d === "TopSide") {
+        c = !1, a = _.y;
+        continue;
+      }
+      if (d === "BottomSide") {
+        c = !1, a = _.y + _.h;
+        continue;
+      }
+      if (d === "LeftSide") {
+        c = !1, a = _.x;
+        continue;
+      }
+      if (d === "RightSide") {
+        c = !1, a = _.x + _.w;
+        continue;
+      }
+      o = Ge, i = _, s = d, u = l;
+      continue;
+    }
+    if (g === "Cylinder") {
+      if (d === "TopSide") {
+        c = !1, a = Ea(_)(-1)(l);
+        continue;
+      }
+      if (d === "BottomSide") {
+        c = !1, a = Ea(_)(1)(l);
+        continue;
+      }
+      if (d === "LeftSide") {
+        c = !1, a = _.x;
+        continue;
+      }
+      if (d === "RightSide") {
+        c = !1, a = _.x + _.w;
+        continue;
+      }
+    }
+    o = Ge, i = _, s = d, u = l;
+  }
+  return a;
+}, Sa = (t) => (n) => {
+  const e = n.y - t.y, r = e < 0 ? -e : e, o = n.x - (t.x + t.w), i = o < 0 ? -o : o, s = n.x - t.x, u = s < 0 ? -s : s, c = n.y - (t.y + t.h), a = c < 0 ? -c : c;
+  return r <= a && r <= u && r <= i ? gu : a <= u && a <= i ? lu : u <= i ? _u : du;
+}, fc = (t) => (e) => {
+  let r = e, o = !0, i;
+  for (; o; ) {
+    const s = r;
+    if (s.tag === "Leaf") {
+      o = !1, i = J;
+      continue;
+    }
+    if (s.tag === "Node") {
+      const u = C.compare(t)(s._3);
+      if (u === "LT") {
+        r = s._5;
+        continue;
+      }
+      if (u === "GT") {
+        r = s._6;
+        continue;
+      }
+      if (u === "EQ") {
+        o = !1, i = v("Just", s._4);
+        continue;
+      }
+    }
+    f();
+  }
+  return i;
+}, Go = (t) => (e) => {
+  let r = e, o = !0, i;
+  for (; o; ) {
+    const s = r;
+    if (s.tag === "Leaf") {
+      o = !1, i = J;
+      continue;
+    }
+    if (s.tag === "Node") {
+      const u = C.compare(t)(s._3);
+      if (u === "LT") {
+        r = s._5;
+        continue;
+      }
+      if (u === "GT") {
+        r = s._6;
+        continue;
+      }
+      if (u === "EQ") {
+        o = !1, i = v("Just", s._4);
+        continue;
+      }
+    }
+    f();
+  }
+  return i;
+}, $y = /* @__PURE__ */ (() => {
+  const t = te.unfoldr(ke);
+  return (n) => t(Kn("IterNode", n, we));
+})(), us = /* @__PURE__ */ nn(C)(Ht), my = (t) => (e) => {
+  let r = e, o = !0, i;
+  for (; o; ) {
+    const s = r;
+    if (s.tag === "Leaf") {
+      o = !1, i = !1;
+      continue;
+    }
+    if (s.tag === "Node") {
+      const u = C.compare(t)(s._3);
+      if (u === "LT") {
+        r = s._5;
+        continue;
+      }
+      if (u === "GT") {
+        r = s._6;
+        continue;
+      }
+      if (u === "EQ") {
+        o = !1, i = !0;
+        continue;
+      }
+    }
+    f();
+  }
+  return i;
+}, yy = (t) => (e) => {
+  let r = e, o = !0, i;
+  for (; o; ) {
+    const s = r;
+    if (s.tag === "Leaf") {
+      o = !1, i = !1;
+      continue;
+    }
+    if (s.tag === "Node") {
+      const u = C.compare(t)(s._3);
+      if (u === "LT") {
+        r = s._5;
+        continue;
+      }
+      if (u === "GT") {
+        r = s._6;
+        continue;
+      }
+      if (u === "EQ") {
+        o = !1, i = !0;
+        continue;
+      }
+    }
+    f();
+  }
+  return i;
+}, Ny = /* @__PURE__ */ x((t) => (n) => U(C)(n)()(t))(A), xy = /* @__PURE__ */ x((t) => (n) => U(C)(n)()(t))(A), cs = $r.traverse(Oi), Pi = /* @__PURE__ */ nn(C)(Ht), Jy = (t) => (n) => Cn(C.compare, Sn, t, n), Ty = /* @__PURE__ */ x((t) => (n) => U(C)(n)()(t))(A), vy = /* @__PURE__ */ nn(C)(Ht), wy = (t) => (n) => Cn(C.compare, Sn, t, n), ky = (t) => (e) => {
+  let r = e, o = !0, i;
+  for (; o; ) {
+    const s = r;
+    if (s.tag === "Leaf") {
+      o = !1, i = J;
+      continue;
+    }
+    if (s.tag === "Node") {
+      const u = C.compare(t)(s._3);
+      if (u === "LT") {
+        r = s._5;
+        continue;
+      }
+      if (u === "GT") {
+        r = s._6;
+        continue;
+      }
+      if (u === "EQ") {
+        o = !1, i = v("Just", s._4);
+        continue;
+      }
+    }
+    f();
+  }
+  return i;
+}, Ca = (t) => (n) => {
+  const e = ft.compare(t)(n);
+  if (e === "LT")
+    return n;
+  if (e === "EQ" || e === "GT")
+    return t;
+  f();
+}, by = (t) => (n) => ({
+  ...n,
+  edges: us(z((e) => b(
+    e._1,
+    (() => {
+      const r = fc(e._1)(t);
+      if (r.tag === "Nothing")
+        return e._2;
+      if (r.tag === "Just") {
+        const o = Go(r._1._2)(n.nodes), i = Go(r._1._1)(n.nodes), s = (() => {
+          if (i.tag === "Nothing")
+            return e._2;
+          if (i.tag === "Just") {
+            const u = Rt((c) => J, (c) => (a) => v("Just", { head: c, tail: a }), e._2);
+            if (u.tag === "Nothing")
+              return e._2;
+            if (u.tag === "Just") {
+              const c = { x: i._1.x, y: i._1.y, w: i._1.w, h: i._1.h }, a = Sa(c)(u._1.head);
+              return [
+                (() => {
+                  if (a === "TopSide")
+                    return { ...u._1.head, y: He(i._1.shape)(c)(gu)(u._1.head.x) };
+                  if (a === "BottomSide")
+                    return { ...u._1.head, y: He(i._1.shape)(c)(lu)(u._1.head.x) };
+                  if (a === "LeftSide")
+                    return { ...u._1.head, x: He(i._1.shape)(c)(_u)(u._1.head.y) };
+                  if (a === "RightSide")
+                    return { ...u._1.head, x: He(i._1.shape)(c)(du)(u._1.head.y) };
+                  f();
+                })(),
+                ...u._1.tail
+              ];
+            }
+          }
+          f();
+        })();
+        if (o.tag === "Nothing")
+          return s;
+        if (o.tag === "Just") {
+          const u = zi(s);
+          if (u.tag === "Nothing")
+            return s;
+          if (u.tag === "Just")
+            return Dt(u._1.init)((() => {
+              const c = { x: o._1.x, y: o._1.y, w: o._1.w, h: o._1.h }, a = Sa(c)(u._1.last);
+              if (a === "TopSide")
+                return { ...u._1.last, y: He(o._1.shape)(c)(gu)(u._1.last.x) };
+              if (a === "BottomSide")
+                return { ...u._1.last, y: He(o._1.shape)(c)(lu)(u._1.last.x) };
+              if (a === "LeftSide")
+                return { ...u._1.last, x: He(o._1.shape)(c)(_u)(u._1.last.y) };
+              if (a === "RightSide")
+                return { ...u._1.last, x: He(o._1.shape)(c)(du)(u._1.last.y) };
+              f();
+            })());
+        }
+      }
+      f();
+    })()
+  ))($y(n.edges)))
+}), Ly = (t) => (n) => (e) => {
+  const r = jt((o) => o.id === e)(t.graph.edges);
+  if (r.tag === "Just")
+    return v("Just", r._1);
+  if (r.tag === "Nothing")
+    return fc(e)(n);
+  f();
+}, Ey = (t) => (n) => (e) => (r) => ({
+  x: r.position._1 * t,
+  y: r.position._2 * t,
+  w: r.size._1 * t,
+  h: r.size._2 * t,
   label: (() => {
-    const r = Jp(e.node)(n);
-    if (r.tag === "Just")
-      return r._1;
-    if (r.tag === "Nothing")
-      return e.node;
+    const o = Go(r.node)(n);
+    if (o.tag === "Just")
+      return o._1;
+    if (o.tag === "Nothing")
+      return r.node;
+    f();
+  })(),
+  shape: (() => {
+    const o = Go(r.node)(e);
+    if (o.tag === "Nothing")
+      return Ge;
+    if (o.tag === "Just")
+      return o._1;
     f();
   })()
-}), Ep = (t) => ({ id: t, size: L(1, 1), ports: [], label: b("Just", t) }), xp = (t) => (n) => (e) => L(e.node, bp(t)(n)(e)), Cp = (t) => Ea(vt((n) => b(
+}), Sy = (t) => ({ id: t, size: b(1, 1), ports: [], label: v("Just", t), shape: Ge }), Cy = (t) => (n) => (e) => (r) => b(r.node, Ey(t)(n)(e)(r)), ig = (t) => {
+  const n = ts(`
+`)(t);
+  return n.length === 0 ? [""] : n;
+}, sg = (t) => {
+  const n = (e, r) => {
+    if (e.tag === "Leaf")
+      return r;
+    if (e.tag === "Node")
+      return n(e._5, zt("Cons", e._4, n(e._6, r)));
+    f();
+  };
+  return Lt(Xt.foldr, n(t.interiors, Yt));
+}, Py = (t) => us(yt((n) => v(
   "Just",
-  L(n.edge, { id: n.edge, from: { node: n.from, port: T }, to: { node: n.to, port: T } })
-))(bt(t.scenes)((n) => n.tag === "DataFlow" ? vt((e) => e.kind.tag === "SendToken" ? b("Just", e.kind._1) : T)(n._1.events) : []))), xa = (t) => {
-  const n = S0(t), e = gt((o) => vp(o.id)(n.nodes), t.graph.nodes), r = gt((o) => Tp(o.id)(n.edges), t.graph.edges);
+  b(n.edge, { id: n.edge, from: { node: n.from, port: J }, to: { node: n.to, port: J } })
+))(Jt(t.scenes)((n) => n.tag === "DataFlow" ? yt((e) => e.kind.tag === "SendToken" ? v("Just", e.kind._1) : J)(n._1.events) : []))), ug = (t) => {
+  const n = O1(t), e = lt((o) => my(o.id)(n.nodes), t.graph.nodes), r = lt((o) => yy(o.id)(n.edges), t.graph.edges);
   return {
     nodes: [
       ...e,
-      ...O(Ep)(Et(
-        Pn.foldr,
-        ae(G.compare, n.nodes, yp(O((o) => o.id)(e)))
+      ...z(Sy)(Lt(
+        On.foldr,
+        Pe(C.compare, n.nodes, Ny(z((o) => o.id)(e)))
       ))
     ],
     edges: [
       ...r,
-      ...vt(kp(t)(Cp(t)))(Et(
-        Pn.foldr,
-        ae(G.compare, n.edges, wp(O((o) => o.id)(r)))
+      ...yt(Ly(t)(Py(t)))(Lt(
+        On.foldr,
+        Pe(C.compare, n.edges, xy(z((o) => o.id)(r)))
       ))
     ],
     constraints: t.graph.constraints
   };
-}, Sp = (t) => {
-  const n = Lp((e) => {
-    const r = Cl(Il)((() => {
+}, Gy = (t) => {
+  const n = cs((e) => {
+    const r = m0(y0)((() => {
       if (e.label.tag === "Just")
         return e.label._1;
       if (e.label.tag === "Nothing")
@@ -11592,27 +12719,68 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
     })());
     return () => {
       const o = r();
-      return L(e.id, o);
+      return b(e.id, o);
     };
-  })(xa(t).nodes);
+  })(ug(t).nodes);
   return () => {
     const e = n();
-    return Rs(e);
+    return Pi(e);
   };
-}, Gp = (t) => (n) => {
-  const e = Wt((r) => T, (r) => (o) => b("Just", { head: r, tail: o }), n.segments);
+}, cg = (t) => {
+  const n = Gy(t);
+  return () => {
+    const e = n(), r = cs(cg)(sg(t))();
+    return x(Jy)(e)(r);
+  };
+}, Iy = (t) => (n) => {
+  const e = Rt((r) => J, (r) => (o) => v("Just", { head: r, tail: o }), n.segments);
   if (e.tag === "Nothing")
     return [];
   if (e.tag === "Just")
-    return [{ x: e._1.head.start._1 * t, y: e._1.head.start._2 * t }, ...O((r) => ({ x: r.end._1 * t, y: r.end._2 * t }))([e._1.head, ...e._1.tail])];
+    return [{ x: e._1.head.start._1 * t, y: e._1.head.start._2 * t }, ...z((r) => ({ x: r.end._1 * t, y: r.end._2 * t }))([e._1.head, ...e._1.tail])];
   f();
-}, Ip = (t) => (n) => L(n.edge, Gp(t)(n)), Pp = (t) => (n) => (e) => ({
-  nodes: Rs(O(xp(ct(4) * t)(n))(e.nodes)),
-  edges: Ea(O(Ip(t))(e.edges)),
-  chipExtras: Q
-}), Ap = ct(4) * 8, Rp = (t) => (n) => {
-  const e = Dl(Ap)(t)(Ql(Bl)(xa(n)));
-  return Pp(8)(Rs(O((r) => L(
+}, Ay = (t) => (n) => b(n.edge, Iy(t)(n)), Fy = (t) => (n) => (e) => (r) => ({
+  nodes: Pi(z(Cy(nt(4) * t)(n)(e))(r.nodes)),
+  edges: us(z(Ay(t))(r.edges)),
+  chipExtras: A
+}), Ry = (t) => x((n) => (e) => {
+  if (e.tag === "Structural")
+    return n;
+  if (e.tag === "DataFlow")
+    return x((r) => (o) => {
+      if (o.kind.tag === "SendToken")
+        return x((i) => (s) => U(C)(s)()(i))(r)(o.kind._1.labels);
+      if (o.kind.tag === "FillNodeWithoutTransition")
+        return x((i) => (s) => U(C)(s)()(i))(r)(o.kind._1.labels);
+      f();
+    })(n)(e._1.events);
+  if (e.tag === "EnterNode" || e.tag === "ExitNode")
+    return n;
+  f();
+})(A)(t.scenes), By = (t) => {
+  const n = cs((e) => {
+    const r = m0(y0)(e);
+    return () => {
+      const o = r();
+      return b(e, { labelW: o, charCount: Me(Or(e)), lineCount: 1 });
+    };
+  })(Lt(
+    On.foldr,
+    Ty(Jt(Lt(On.foldr, Ry(t)))(ig))
+  ));
+  return () => {
+    const e = n();
+    return vy(e);
+  };
+}, ag = (t) => {
+  const n = By(t);
+  return () => {
+    const e = n(), r = cs(ag)(sg(t))();
+    return x(wy)(e)(r);
+  };
+}, Qy = nt(4) * 8, Wy = (t) => (n) => {
+  const e = kp(Qy)(t)(wp(vp)(ug(n)));
+  return by(us(z((r) => b(r.id, b(r.from.node, r.to.node)))(e.edges)))(Fy(8)(Pi(z((r) => b(
     r.id,
     (() => {
       if (r.label.tag === "Just")
@@ -11621,17 +12789,71 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
         return r.id;
       f();
     })()
-  ))(e.nodes)))(mp(_p)(e).result);
-}, Du = (t) => (e) => {
+  ))(e.nodes)))(Pi(z((r) => b(r.id, r.shape))(e.nodes)))(dy(cy)(e).result));
+}, Dy = (t) => Jt(t.scenes)((n) => {
+  if (n.tag === "Structural")
+    return [];
+  if (n.tag === "DataFlow")
+    return n._1.events;
+  if (n.tag === "EnterNode")
+    return [];
+  if (n.tag === "ExitNode")
+    return [];
+  f();
+}), Hy = (t) => (n) => (e) => {
+  const r = (o) => {
+    const i = yt((s) => {
+      const u = ky(s)(t);
+      return u.tag === "Just" ? v("Just", { w: u._1.labelW + 28, h: nt(yp(1)(u._1.lineCount)) * 13.2 + 12 }) : J;
+    })(Jt(o)(ig));
+    return i.length === 0 ? J : v(
+      "Just",
+      { w: x(Ca)(0)(z((s) => s.w)(i)), h: x(Ca)(0)(z((s) => s.h)(i)) }
+    );
+  };
+  return x((o) => (i) => {
+    if (i.kind.tag === "SendToken") {
+      const s = fc(i.kind._1.edge)(e.edges), u = r(i.kind._1.labels);
+      if (u.tag === "Just" && s.tag === "Just") {
+        const c = u._1;
+        return vt(C)(rn)(i.kind._1.edge)(z((a) => ({ x: a.x + 14 + c.w, y: a.y - 6 - 8 - c.h }))(s._1))(o);
+      }
+      return o;
+    }
+    if (i.kind.tag === "FillNodeWithoutTransition") {
+      const s = Go(i.kind._1.node)(e.nodes), u = r(i.kind._1.labels);
+      return u.tag === "Just" && s.tag === "Just" ? vt(C)(rn)("__fill__:" + i.kind._1.node)((() => {
+        const c = s._1.y - u._1.h - 14, a = s._1.x + s._1.w / 2, g = a - u._1.w / 2, _ = a + u._1.w / 2, d = s._1.y - 14;
+        return [{ x: g, y: c }, { x: _, y: c }, { x: g, y: d }, { x: _, y: d }];
+      })())(o) : o;
+    }
+    f();
+  })(A)(Dy(n));
+}, fg = (t) => (n) => (e) => ({
+  layout: (() => {
+    const r = Wy(t)(e);
+    return { ...r, chipExtras: Hy(n)(e)(r) };
+  })(),
+  interiors: (() => {
+    const r = fg(t)(n), o = (i) => {
+      if (i.tag === "Leaf")
+        return A;
+      if (i.tag === "Node")
+        return Ot("Node", i._1, i._2, i._3, r(i._4), o(i._5), o(i._6));
+      f();
+    };
+    return o(e.interiors);
+  })()
+}), Pa = (t) => (e) => {
   let r = e, o = !0, i;
   for (; o; ) {
     const s = r;
     if (s.tag === "Leaf") {
-      o = !1, i = T;
+      o = !1, i = J;
       continue;
     }
     if (s.tag === "Node") {
-      const u = G.compare(t)(s._3);
+      const u = C.compare(t)(s._3);
       if (u === "LT") {
         r = s._5;
         continue;
@@ -11641,33 +12863,33 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
         continue;
       }
       if (u === "EQ") {
-        o = !1, i = b("Just", s._4);
+        o = !1, i = v("Just", s._4);
         continue;
       }
     }
     f();
   }
   return i;
-}, Fp = (t) => (n) => (e) => {
+}, hu = (t) => (n) => (e) => {
   const r = t < 0.05 ? t : 0.05, o = (s, u) => {
     if (u.tag === "Leaf")
       return s;
     if (u.tag === "Node")
       return o(
         (() => {
-          const c = Du(u._3)(e), a = (() => {
+          const c = Pa(u._3)(e), a = (() => {
             if (c.tag === "Just")
               return c._1;
             if (c.tag === "Nothing")
               return { x: u._4.x, y: u._4.y, vx: 0, vy: 0 };
             f();
-          })(), g = a.vx + (180 * (u._4.x - a.x) - 22 * a.vx) * r, l = a.vy + (180 * (u._4.y - a.y) - 22 * a.vy) * r;
-          return Y(G)(u._3)({ x: a.x + g * r, y: a.y + l * r, vx: g, vy: l })(o(s, u._5));
+          })(), g = a.vx + (180 * (u._4.x - a.x) - 22 * a.vx) * r, _ = a.vy + (180 * (u._4.y - a.y) - 22 * a.vy) * r;
+          return U(C)(u._3)({ x: a.x + g * r, y: a.y + _ * r, vx: g, vy: _ })(o(s, u._5));
         })(),
         u._6
       );
     f();
-  }, i = o(Q, n);
+  }, i = o(A, n);
   return {
     springs: i,
     applied: (() => {
@@ -11677,1120 +12899,536 @@ const gu = /* @__PURE__ */ new Map(), bl = (t) => (n) => (e) => (r) => () => {
         if (c.tag === "Node")
           return s(
             (() => {
-              const a = s(u, c._5), g = Du(c._3)(i);
+              const a = s(u, c._5), g = Pa(c._3)(i);
               if (g.tag === "Just")
-                return Y(G)(c._3)({ ...c._4, x: g._1.x, y: g._1.y })(a);
+                return U(C)(c._3)({ ...c._4, x: g._1.x, y: g._1.y })(a);
               if (g.tag === "Nothing")
-                return Y(G)(c._3)(c._4)(a);
+                return U(C)(c._3)(c._4)(a);
               f();
             })(),
             c._6
           );
         f();
       };
-      return s(Q, n);
+      return s(A, n);
     })()
   };
 };
 (function() {
-  var t = {}, n = "Pure", e = "Throw", r = "Catch", o = "Sync", i = "Async", s = "Bind", u = "Bracket", c = "Fork", a = "Sequential", g = "Map", l = "Apply", d = "Alt", _ = "Cons", h = "Resume", p = "Release", $ = "Finalizer", m = "Finalized", N = "Forked";
-  function v(S, F, W, K) {
-    this.tag = S, this._1 = F, this._2 = W, this._3 = K;
+  var t = {}, n = "Pure", e = "Throw", r = "Catch", o = "Sync", i = "Async", s = "Bind", u = "Bracket", c = "Fork", a = "Sequential", g = "Map", _ = "Apply", d = "Alt", l = "Cons", h = "Resume", $ = "Release", p = "Finalizer", m = "Finalized", y = "Forked";
+  function N(I, W, Q, M) {
+    this.tag = I, this._1 = W, this._2 = Q, this._3 = M;
   }
-  function w(S) {
-    var F = function(W, K, V) {
-      return new v(S, W, K, V);
+  function T(I) {
+    var W = function(Q, M, V) {
+      return new N(I, Q, M, V);
     };
-    return F.tag = S, F;
+    return W.tag = I, W;
   }
-  function y(S) {
-    return new v(n, void 0);
+  function w(I) {
+    return new N(n, void 0);
   }
-  function k(S) {
+  function k(I) {
     try {
-      S();
-    } catch (F) {
+      I();
+    } catch (W) {
       setTimeout(function() {
-        throw F;
+        throw W;
       }, 0);
     }
   }
-  function E(S, F, W) {
+  function L(I, W, Q) {
     try {
-      return F(W());
-    } catch (K) {
-      return S(K);
+      return W(Q());
+    } catch (M) {
+      return I(M);
     }
   }
-  function I(S, F, W) {
+  function G(I, W, Q) {
     try {
-      return F(W)();
-    } catch (K) {
-      return W(S(K))(), y;
+      return W(Q)();
+    } catch (M) {
+      return Q(I(M))(), w;
     }
   }
   var D = (function() {
-    var S = 1024, F = 0, W = 0, K = new Array(S), V = !1;
-    function B() {
-      var nt;
-      for (V = !0; F !== 0; )
-        F--, nt = K[W], K[W] = void 0, W = (W + 1) % S, nt();
+    var I = 1024, W = 0, Q = 0, M = new Array(I), V = !1;
+    function H() {
+      var et;
+      for (V = !0; W !== 0; )
+        W--, et = M[Q], M[Q] = void 0, Q = (Q + 1) % I, et();
       V = !1;
     }
     return {
       isDraining: function() {
         return V;
       },
-      enqueue: function(nt) {
-        var M;
-        F === S && (M = V, B(), V = M), K[(W + F) % S] = nt, F++, V || B();
+      enqueue: function(et) {
+        var j;
+        W === I && (j = V, H(), V = j), M[(Q + W) % I] = et, W++, V || H();
       }
     };
   })();
-  function z(S) {
-    var F = {}, W = 0, K = 0;
+  function Y(I) {
+    var W = {}, Q = 0, M = 0;
     return {
       register: function(V) {
-        var B = W++;
+        var H = Q++;
         V.onComplete({
           rethrow: !0,
-          handler: function(nt) {
+          handler: function(et) {
             return function() {
-              K--, delete F[B];
+              M--, delete W[H];
             };
           }
-        })(), F[B] = V, K++;
+        })(), W[H] = V, M++;
       },
       isEmpty: function() {
-        return K === 0;
+        return M === 0;
       },
-      killAll: function(V, B) {
+      killAll: function(V, H) {
         return function() {
-          if (K === 0)
-            return B();
-          var nt = 0, M = {};
-          function tt(st) {
-            M[st] = F[st].kill(V, function(_t) {
+          if (M === 0)
+            return H();
+          var et = 0, j = {};
+          function ot(at) {
+            j[at] = W[at].kill(V, function(_t) {
               return function() {
-                delete M[st], nt--, S.isLeft(_t) && S.fromLeft(_t) && setTimeout(function() {
-                  throw S.fromLeft(_t);
-                }, 0), nt === 0 && B();
+                delete j[at], et--, I.isLeft(_t) && I.fromLeft(_t) && setTimeout(function() {
+                  throw I.fromLeft(_t);
+                }, 0), et === 0 && H();
               };
             })();
           }
-          for (var ot in F)
-            F.hasOwnProperty(ot) && (nt++, tt(ot));
-          return F = {}, W = 0, K = 0, function(st) {
-            return new v(o, function() {
-              for (var _t in M)
-                M.hasOwnProperty(_t) && M[_t]();
+          for (var Z in W)
+            W.hasOwnProperty(Z) && (et++, ot(Z));
+          return W = {}, Q = 0, M = 0, function(at) {
+            return new N(o, function() {
+              for (var _t in j)
+                j.hasOwnProperty(_t) && j[_t]();
             });
           };
         };
       }
     };
   }
-  var U = 0, P = 1, R = 2, j = 3, et = 4, X = 5, A = 6;
-  function x(S, F, W) {
-    var K = 0, V = U, B = W, nt = null, M = null, tt = null, ot = null, st = null, _t = 0, At = 0, Tt = null, Vt = !0;
-    function ht(it) {
-      for (var ut, $t, Nt; ; )
-        switch (ut = null, $t = null, Nt = null, V) {
-          case R:
+  var X = 0, P = 1, B = 2, tt = 3, ct = 4, q = 5, R = 6;
+  function E(I, W, Q) {
+    var M = 0, V = X, H = Q, et = null, j = null, ot = null, Z = null, at = null, _t = 0, Qt = 0, Tt = null, Bt = !0;
+    function $t(K) {
+      for (var st, gt, dt; ; )
+        switch (st = null, gt = null, dt = null, V) {
+          case B:
             V = P;
             try {
-              B = tt(B), ot === null ? tt = null : (tt = ot._1, ot = ot._2);
-            } catch (It) {
-              V = X, nt = S.left(It), B = null;
+              H = ot(H), Z === null ? ot = null : (ot = Z._1, Z = Z._2);
+            } catch (At) {
+              V = q, et = I.left(At), H = null;
             }
             break;
-          case j:
-            S.isLeft(B) ? (V = X, nt = B, B = null) : tt === null ? V = X : (V = R, B = S.fromRight(B));
+          case tt:
+            I.isLeft(H) ? (V = q, et = H, H = null) : ot === null ? V = q : (V = B, H = I.fromRight(H));
             break;
           case P:
-            switch (B.tag) {
+            switch (H.tag) {
               case s:
-                tt && (ot = new v(_, tt, ot)), tt = B._2, V = P, B = B._1;
+                ot && (Z = new N(l, ot, Z)), ot = H._2, V = P, H = H._1;
                 break;
               case n:
-                tt === null ? (V = X, B = S.right(B._1)) : (V = R, B = B._1);
+                ot === null ? (V = q, H = I.right(H._1)) : (V = B, H = H._1);
                 break;
               case o:
-                V = j, B = E(S.left, S.right, B._1);
+                V = tt, H = L(I.left, I.right, H._1);
                 break;
               case i:
-                V = et, B = I(S.left, B._1, function(It) {
+                V = ct, H = G(I.left, H._1, function(At) {
                   return function() {
-                    K === it && (K++, D.enqueue(function() {
-                      K === it + 1 && (V = j, B = It, ht(K));
+                    M === K && (M++, D.enqueue(function() {
+                      M === K + 1 && (V = tt, H = At, $t(M));
                     }));
                   };
                 });
                 return;
               case e:
-                V = X, nt = S.left(B._1), B = null;
+                V = q, et = I.left(H._1), H = null;
                 break;
               // Enqueue the Catch so that we can call the error handler later on
               // in case of an exception.
               case r:
-                tt === null ? st = new v(_, B, st, M) : st = new v(_, B, new v(_, new v(h, tt, ot), st, M), M), tt = null, ot = null, V = P, B = B._1;
+                ot === null ? at = new N(l, H, at, j) : at = new N(l, H, new N(l, new N(h, ot, Z), at, j), j), ot = null, Z = null, V = P, H = H._1;
                 break;
               // Enqueue the Bracket so that we can call the appropriate handlers
               // after resource acquisition.
               case u:
-                _t++, tt === null ? st = new v(_, B, st, M) : st = new v(_, B, new v(_, new v(h, tt, ot), st, M), M), tt = null, ot = null, V = P, B = B._1;
+                _t++, ot === null ? at = new N(l, H, at, j) : at = new N(l, H, new N(l, new N(h, ot, Z), at, j), j), ot = null, Z = null, V = P, H = H._1;
                 break;
               case c:
-                V = j, ut = x(S, F, B._2), F && F.register(ut), B._1 && ut.run(), B = S.right(ut);
+                V = tt, st = E(I, W, H._2), W && W.register(st), H._1 && st.run(), H = I.right(st);
                 break;
               case a:
-                V = P, B = q(S, F, B._1);
+                V = P, H = O(I, W, H._1);
                 break;
             }
             break;
-          case X:
-            if (tt = null, ot = null, st === null)
-              V = A, B = M || nt || B;
+          case q:
+            if (ot = null, Z = null, at === null)
+              V = R, H = j || et || H;
             else
-              switch (ut = st._3, Nt = st._1, st = st._2, Nt.tag) {
+              switch (st = at._3, dt = at._1, at = at._2, dt.tag) {
                 // We cannot recover from an unmasked interrupt. Otherwise we should
                 // continue stepping, or run the exception handler if an exception
                 // was raised.
                 case r:
-                  M && M !== ut && _t === 0 ? V = X : nt && (V = P, B = Nt._2(S.fromLeft(nt)), nt = null);
+                  j && j !== st && _t === 0 ? V = q : et && (V = P, H = dt._2(I.fromLeft(et)), et = null);
                   break;
                 // We cannot resume from an unmasked interrupt or exception.
                 case h:
-                  M && M !== ut && _t === 0 || nt ? V = X : (tt = Nt._1, ot = Nt._2, V = R, B = S.fromRight(B));
+                  j && j !== st && _t === 0 || et ? V = q : (ot = dt._1, Z = dt._2, V = B, H = I.fromRight(H));
                   break;
                 // If we have a bracket, we should enqueue the handlers,
                 // and continue with the success branch only if the fiber has
                 // not been interrupted. If the bracket acquisition failed, we
                 // should not run either.
                 case u:
-                  _t--, nt === null && ($t = S.fromRight(B), st = new v(_, new v(p, Nt._2, $t), st, ut), (M === ut || _t > 0) && (V = P, B = Nt._3($t)));
+                  _t--, et === null && (gt = I.fromRight(H), at = new N(l, new N($, dt._2, gt), at, st), (j === st || _t > 0) && (V = P, H = dt._3(gt)));
                   break;
                 // Enqueue the appropriate handler. We increase the bracket count
                 // because it should not be cancelled.
-                case p:
-                  st = new v(_, new v(m, B, nt), st, M), V = P, M && M !== ut && _t === 0 ? B = Nt._1.killed(S.fromLeft(M))(Nt._2) : nt ? B = Nt._1.failed(S.fromLeft(nt))(Nt._2) : B = Nt._1.completed(S.fromRight(B))(Nt._2), nt = null, _t++;
-                  break;
                 case $:
-                  _t++, st = new v(_, new v(m, B, nt), st, M), V = P, B = Nt._1;
+                  at = new N(l, new N(m, H, et), at, j), V = P, j && j !== st && _t === 0 ? H = dt._1.killed(I.fromLeft(j))(dt._2) : et ? H = dt._1.failed(I.fromLeft(et))(dt._2) : H = dt._1.completed(I.fromRight(H))(dt._2), et = null, _t++;
+                  break;
+                case p:
+                  _t++, at = new N(l, new N(m, H, et), at, j), V = P, H = dt._1;
                   break;
                 case m:
-                  _t--, V = X, B = Nt._1, nt = Nt._2;
+                  _t--, V = q, H = dt._1, et = dt._2;
                   break;
               }
             break;
-          case A:
-            for (var Rt in Tt)
-              Tt.hasOwnProperty(Rt) && (Vt = Vt && Tt[Rt].rethrow, k(Tt[Rt].handler(B)));
-            Tt = null, M && nt ? setTimeout(function() {
-              throw S.fromLeft(nt);
-            }, 0) : S.isLeft(B) && Vt && setTimeout(function() {
-              if (Vt)
-                throw S.fromLeft(B);
+          case R:
+            for (var Nt in Tt)
+              Tt.hasOwnProperty(Nt) && (Bt = Bt && Tt[Nt].rethrow, k(Tt[Nt].handler(H)));
+            Tt = null, j && et ? setTimeout(function() {
+              throw I.fromLeft(et);
+            }, 0) : I.isLeft(H) && Bt && setTimeout(function() {
+              if (Bt)
+                throw I.fromLeft(H);
             }, 0);
             return;
-          case U:
+          case X:
             V = P;
             break;
-          case et:
+          case ct:
             return;
         }
     }
-    function mt(it) {
+    function xt(K) {
       return function() {
-        if (V === A)
-          return Vt = Vt && it.rethrow, it.handler(B)(), function() {
+        if (V === R)
+          return Bt = Bt && K.rethrow, K.handler(H)(), function() {
           };
-        var ut = At++;
-        return Tt = Tt || {}, Tt[ut] = it, function() {
-          Tt !== null && delete Tt[ut];
+        var st = Qt++;
+        return Tt = Tt || {}, Tt[st] = K, function() {
+          Tt !== null && delete Tt[st];
         };
       };
     }
-    function lt(it, ut) {
+    function mt(K, st) {
       return function() {
-        if (V === A)
-          return ut(S.right(void 0))(), function() {
+        if (V === R)
+          return st(I.right(void 0))(), function() {
           };
-        var $t = mt({
+        var gt = xt({
           rethrow: !1,
           handler: function() {
-            return ut(S.right(void 0));
+            return st(I.right(void 0));
           }
         })();
         switch (V) {
-          case U:
-            M = S.left(it), V = A, B = M, ht(K);
+          case X:
+            j = I.left(K), V = R, H = j, $t(M);
             break;
-          case et:
-            M === null && (M = S.left(it)), _t === 0 && (V === et && (st = new v(_, new v($, B(it)), st, M)), V = X, B = null, nt = null, ht(++K));
+          case ct:
+            j === null && (j = I.left(K)), _t === 0 && (V === ct && (at = new N(l, new N(p, H(K)), at, j)), V = q, H = null, et = null, $t(++M));
             break;
           default:
-            M === null && (M = S.left(it)), _t === 0 && (V = X, B = null, nt = null);
+            j === null && (j = I.left(K)), _t === 0 && (V = q, H = null, et = null);
         }
-        return $t;
+        return gt;
       };
     }
-    function dt(it) {
+    function rt(K) {
       return function() {
-        var ut = mt({
+        var st = xt({
           rethrow: !1,
-          handler: it
+          handler: K
         })();
-        return V === U && ht(K), ut;
+        return V === X && $t(M), st;
       };
     }
     return {
-      kill: lt,
-      join: dt,
-      onComplete: mt,
+      kill: mt,
+      join: rt,
+      onComplete: xt,
       isSuspended: function() {
-        return V === U;
+        return V === X;
       },
       run: function() {
-        V === U && (D.isDraining() ? ht(K) : D.enqueue(function() {
-          ht(K);
+        V === X && (D.isDraining() ? $t(M) : D.enqueue(function() {
+          $t(M);
         }));
       }
     };
   }
-  function C(S, F, W, K) {
-    var V = 0, B = {}, nt = 0, M = {}, tt = new Error("[ParAff] Early exit"), ot = null, st = t;
-    function _t(mt, lt, dt) {
-      var it = lt, ut = null, $t = null, Nt = 0, Rt = {}, It, tn;
+  function S(I, W, Q, M) {
+    var V = 0, H = {}, et = 0, j = {}, ot = new Error("[ParAff] Early exit"), Z = null, at = t;
+    function _t(xt, mt, rt) {
+      var K = mt, st = null, gt = null, dt = 0, Nt = {}, At, Vt;
       t: for (; ; )
-        switch (It = null, it.tag) {
-          case N:
-            if (it._3 === t && (It = B[it._1], Rt[Nt++] = It.kill(mt, function(zn) {
+        switch (At = null, K.tag) {
+          case y:
+            if (K._3 === t && (At = H[K._1], Nt[dt++] = At.kill(xt, function(Pn) {
               return function() {
-                Nt--, Nt === 0 && dt(zn)();
+                dt--, dt === 0 && rt(Pn)();
               };
-            })), ut === null)
+            })), st === null)
               break t;
-            it = ut._2, $t === null ? ut = null : (ut = $t._1, $t = $t._2);
+            K = st._2, gt === null ? st = null : (st = gt._1, gt = gt._2);
             break;
           case g:
-            it = it._2;
+            K = K._2;
             break;
-          case l:
+          case _:
           case d:
-            ut && ($t = new v(_, ut, $t)), ut = it, it = it._1;
+            st && (gt = new N(l, st, gt)), st = K, K = K._1;
             break;
         }
-      if (Nt === 0)
-        dt(S.right(void 0))();
+      if (dt === 0)
+        rt(I.right(void 0))();
       else
-        for (tn = 0, It = Nt; tn < It; tn++)
-          Rt[tn] = Rt[tn]();
-      return Rt;
+        for (Vt = 0, At = dt; Vt < At; Vt++)
+          Nt[Vt] = Nt[Vt]();
+      return Nt;
     }
-    function At(mt, lt, dt) {
-      var it, ut, $t, Nt, Rt, It;
-      for (S.isLeft(mt) ? (it = mt, ut = null) : (ut = mt, it = null); ; ) {
-        if ($t = null, Nt = null, Rt = null, It = null, ot !== null)
+    function Qt(xt, mt, rt) {
+      var K, st, gt, dt, Nt, At;
+      for (I.isLeft(xt) ? (K = xt, st = null) : (st = xt, K = null); ; ) {
+        if (gt = null, dt = null, Nt = null, At = null, Z !== null)
           return;
-        if (lt === null) {
-          K(it || ut)();
+        if (mt === null) {
+          M(K || st)();
           return;
         }
-        if (lt._3 !== t)
+        if (mt._3 !== t)
           return;
-        switch (lt.tag) {
+        switch (mt.tag) {
           case g:
-            it === null ? (lt._3 = S.right(lt._1(S.fromRight(ut))), ut = lt._3) : lt._3 = it;
+            K === null ? (mt._3 = I.right(mt._1(I.fromRight(st))), st = mt._3) : mt._3 = K;
             break;
-          case l:
-            if ($t = lt._1._3, Nt = lt._2._3, it) {
-              if (lt._3 = it, Rt = !0, It = nt++, M[It] = _t(tt, it === $t ? lt._2 : lt._1, function() {
+          case _:
+            if (gt = mt._1._3, dt = mt._2._3, K) {
+              if (mt._3 = K, Nt = !0, At = et++, j[At] = _t(ot, K === gt ? mt._2 : mt._1, function() {
                 return function() {
-                  delete M[It], Rt ? Rt = !1 : dt === null ? At(it, null, null) : At(it, dt._1, dt._2);
+                  delete j[At], Nt ? Nt = !1 : rt === null ? Qt(K, null, null) : Qt(K, rt._1, rt._2);
                 };
-              }), Rt) {
-                Rt = !1;
+              }), Nt) {
+                Nt = !1;
                 return;
               }
             } else {
-              if ($t === t || Nt === t)
+              if (gt === t || dt === t)
                 return;
-              ut = S.right(S.fromRight($t)(S.fromRight(Nt))), lt._3 = ut;
+              st = I.right(I.fromRight(gt)(I.fromRight(dt))), mt._3 = st;
             }
             break;
           case d:
-            if ($t = lt._1._3, Nt = lt._2._3, $t === t && S.isLeft(Nt) || Nt === t && S.isLeft($t))
+            if (gt = mt._1._3, dt = mt._2._3, gt === t && I.isLeft(dt) || dt === t && I.isLeft(gt))
               return;
-            if ($t !== t && S.isLeft($t) && Nt !== t && S.isLeft(Nt))
-              it = ut === $t ? Nt : $t, ut = null, lt._3 = it;
-            else if (lt._3 = ut, Rt = !0, It = nt++, M[It] = _t(tt, ut === $t ? lt._2 : lt._1, function() {
+            if (gt !== t && I.isLeft(gt) && dt !== t && I.isLeft(dt))
+              K = st === gt ? dt : gt, st = null, mt._3 = K;
+            else if (mt._3 = st, Nt = !0, At = et++, j[At] = _t(ot, st === gt ? mt._2 : mt._1, function() {
               return function() {
-                delete M[It], Rt ? Rt = !1 : dt === null ? At(ut, null, null) : At(ut, dt._1, dt._2);
+                delete j[At], Nt ? Nt = !1 : rt === null ? Qt(st, null, null) : Qt(st, rt._1, rt._2);
               };
-            }), Rt) {
-              Rt = !1;
+            }), Nt) {
+              Nt = !1;
               return;
             }
             break;
         }
-        dt === null ? lt = null : (lt = dt._1, dt = dt._2);
+        rt === null ? mt = null : (mt = rt._1, rt = rt._2);
       }
     }
-    function Tt(mt) {
-      return function(lt) {
+    function Tt(xt) {
+      return function(mt) {
         return function() {
-          delete B[mt._1], mt._3 = lt, At(lt, mt._2._1, mt._2._2);
+          delete H[xt._1], xt._3 = mt, Qt(mt, xt._2._1, xt._2._2);
         };
       };
     }
-    function Vt() {
-      var mt = P, lt = W, dt = null, it = null, ut, $t;
+    function Bt() {
+      var xt = P, mt = Q, rt = null, K = null, st, gt;
       t: for (; ; )
-        switch (ut = null, $t = null, mt) {
+        switch (st = null, gt = null, xt) {
           case P:
-            switch (lt.tag) {
+            switch (mt.tag) {
               case g:
-                dt && (it = new v(_, dt, it)), dt = new v(g, lt._1, t, t), lt = lt._2;
+                rt && (K = new N(l, rt, K)), rt = new N(g, mt._1, t, t), mt = mt._2;
                 break;
-              case l:
-                dt && (it = new v(_, dt, it)), dt = new v(l, t, lt._2, t), lt = lt._1;
+              case _:
+                rt && (K = new N(l, rt, K)), rt = new N(_, t, mt._2, t), mt = mt._1;
                 break;
               case d:
-                dt && (it = new v(_, dt, it)), dt = new v(d, t, lt._2, t), lt = lt._1;
+                rt && (K = new N(l, rt, K)), rt = new N(d, t, mt._2, t), mt = mt._1;
                 break;
               default:
-                $t = V++, mt = X, ut = lt, lt = new v(N, $t, new v(_, dt, it), t), ut = x(S, F, ut), ut.onComplete({
+                gt = V++, xt = q, st = mt, mt = new N(y, gt, new N(l, rt, K), t), st = E(I, W, st), st.onComplete({
                   rethrow: !1,
-                  handler: Tt(lt)
-                })(), B[$t] = ut, F && F.register(ut);
+                  handler: Tt(mt)
+                })(), H[gt] = st, W && W.register(st);
             }
             break;
-          case X:
-            if (dt === null)
+          case q:
+            if (rt === null)
               break t;
-            dt._1 === t ? (dt._1 = lt, mt = P, lt = dt._2, dt._2 = t) : (dt._2 = lt, lt = dt, it === null ? dt = null : (dt = it._1, it = it._2));
+            rt._1 === t ? (rt._1 = mt, xt = P, mt = rt._2, rt._2 = t) : (rt._2 = mt, mt = rt, K === null ? rt = null : (rt = K._1, K = K._2));
         }
-      for (st = lt, $t = 0; $t < V; $t++)
-        B[$t].run();
+      for (at = mt, gt = 0; gt < V; gt++)
+        H[gt].run();
     }
-    function ht(mt, lt) {
-      ot = S.left(mt);
-      var dt;
-      for (var it in M)
-        if (M.hasOwnProperty(it)) {
-          dt = M[it];
-          for (it in dt)
-            dt.hasOwnProperty(it) && dt[it]();
+    function $t(xt, mt) {
+      Z = I.left(xt);
+      var rt;
+      for (var K in j)
+        if (j.hasOwnProperty(K)) {
+          rt = j[K];
+          for (K in rt)
+            rt.hasOwnProperty(K) && rt[K]();
         }
-      M = null;
-      var ut = _t(mt, st, lt);
-      return function($t) {
-        return new v(i, function(Nt) {
+      j = null;
+      var st = _t(xt, at, mt);
+      return function(gt) {
+        return new N(i, function(dt) {
           return function() {
-            for (var Rt in ut)
-              ut.hasOwnProperty(Rt) && ut[Rt]();
-            return y;
+            for (var Nt in st)
+              st.hasOwnProperty(Nt) && st[Nt]();
+            return w;
           };
         });
       };
     }
-    return Vt(), function(mt) {
-      return new v(i, function(lt) {
+    return Bt(), function(xt) {
+      return new N(i, function(mt) {
         return function() {
-          return ht(mt, lt);
+          return $t(xt, mt);
         };
       });
     };
   }
-  function q(S, F, W) {
-    return new v(i, function(K) {
+  function O(I, W, Q) {
+    return new N(i, function(M) {
       return function() {
-        return C(S, F, W, K);
+        return S(I, W, Q, M);
       };
     });
   }
-  return v.EMPTY = t, v.Pure = w(n), v.Throw = w(e), v.Catch = w(r), v.Sync = w(o), v.Async = w(i), v.Bind = w(s), v.Bracket = w(u), v.Fork = w(c), v.Seq = w(a), v.ParMap = w(g), v.ParApply = w(l), v.ParAlt = w(d), v.Fiber = x, v.Supervisor = z, v.Scheduler = D, v.nonCanceler = y, v;
+  return N.EMPTY = t, N.Pure = T(n), N.Throw = T(e), N.Catch = T(r), N.Sync = T(o), N.Async = T(i), N.Bind = T(s), N.Bracket = T(u), N.Fork = T(c), N.Seq = T(a), N.ParMap = T(g), N.ParApply = T(_), N.ParAlt = T(d), N.Fiber = E, N.Supervisor = Y, N.Scheduler = D, N.nonCanceler = w, N;
 })();
-let co = null;
-function Bp() {
-  return co || (typeof document > "u" ? null : (co = document.createElement("canvas").getContext("2d"), co));
+let Fs = null;
+function Oy() {
+  return Fs || (typeof document > "u" ? null : Fs = document.createElement("canvas").getContext("2d"));
 }
-const Wu = /* @__PURE__ */ new Map(), Ca = (t) => (n) => (e) => (r) => {
-  const o = `${e} ${n}px ${t}|${r}`, i = Wu.get(o);
-  if (i !== void 0) return i;
-  const s = Bp();
-  if (!s) return r.length * n * 0.62;
-  s.font = `${e} ${n}px ${t}`;
-  const u = s.measureText(r).width;
-  return Wu.set(o, u), u;
-}, Qp = (t) => () => t.clip("evenodd"), Dp = (t) => (n) => () => {
-  const e = Math.max(8, Math.ceil(8 / Math.max(n.tile, 1e-3))), r = Math.max(2, Math.round(n.tile * e)), o = document.createElement("canvas");
-  o.width = r, o.height = r;
-  const i = o.getContext("2d");
-  i.scale(e, e), i.fillStyle = n.bgCss, i.fillRect(0, 0, n.tile, n.tile), i.fillStyle = n.dotCss, i.beginPath(), i.arc(n.tile / 2, n.tile / 2, n.dotR, 0, 2 * Math.PI), i.fill();
-  const s = t.createPattern(o, "repeat");
-  s && typeof s.setTransform == "function" && s.setTransform(new DOMMatrix().scaleSelf(1 / e, 1 / e)), t.save(), t.fillStyle = s, t.fillRect(n.vx, n.vy, n.vw, n.vh), t.restore();
-}, Wp = (t) => (n) => (e) => (r) => (o) => (i) => () => {
-  if (typeof t.roundRect == "function")
-    t.roundRect(n, e, r, o, i);
-  else {
-    const s = Math.min(i, r / 2, o / 2);
-    t.moveTo(n + s, e), t.lineTo(n + r - s, e), t.quadraticCurveTo(n + r, e, n + r, e + s), t.lineTo(n + r, e + o - s), t.quadraticCurveTo(n + r, e + o, n + r - s, e + o), t.lineTo(n + s, e + o), t.quadraticCurveTo(n, e + o, n, e + o - s), t.lineTo(n, e + s), t.quadraticCurveTo(n, e, n + s, e), t.closePath();
-  }
-}, qp = (t) => (n) => {
-  const e = pt.compare(t)(n);
-  if (e === "LT" || e === "EQ")
-    return t;
-  if (e === "GT")
-    return n;
-  f();
-}, Fs = (t) => (n) => (e) => {
-  const r = n.stroke;
-  return () => {
-    const o = r.value, i = Rg(t)(e);
-    if (o !== e)
-      return i(), n.stroke.value = e;
-  };
-}, Hp = (t) => (n) => (e) => {
-  const r = n.font;
-  return () => {
-    const o = r.value, i = Yg(t)(e);
-    if (o !== e)
-      return i(), n.font.value = e;
-  };
-}, Ur = (t) => (n) => (e) => {
-  const r = n.fill;
-  return () => {
-    const o = r.value, i = Ag(t)(e);
-    if (o !== e)
-      return i(), n.fill.value = e;
-  };
-}, Yo = (t) => (n) => {
-  const e = n.length, r = (i) => {
-    if (i >= e)
-      return () => {
-      };
-    const s = i >= 0 && i < n.length ? n[i] : 0;
-    if (s === 1) {
-      const u = Wg(t)((() => {
-        const a = i + 1 | 0;
-        return a >= 0 && a < n.length ? n[a] : 0;
-      })())((() => {
-        const a = i + 2 | 0;
-        return a >= 0 && a < n.length ? n[a] : 0;
-      })()), c = r(i + 3 | 0);
-      return () => (u(), c());
+const Rs = /* @__PURE__ */ new Map();
+function gg(t, n, e, r, o, i) {
+  const s = `${e} ${n}px ${t}`, u = s + "|" + r;
+  if (Rs.has(u)) return Rs.get(u);
+  const c = Oy();
+  if (!c) return i;
+  c.font = s;
+  const a = o(c.measureText(r)), g = typeof document < "u" ? document.fonts : null;
+  if (!g || g.check(s)) Rs.set(u, a);
+  else if (g && g.load)
+    try {
+      g.load(s);
+    } catch {
     }
-    if (s === 2) {
-      const u = Dg(t)((() => {
-        const a = i + 1 | 0;
-        return a >= 0 && a < n.length ? n[a] : 0;
-      })())((() => {
-        const a = i + 2 | 0;
-        return a >= 0 && a < n.length ? n[a] : 0;
-      })()), c = r(i + 3 | 0);
-      return () => (u(), c());
-    }
-    if (s === 3) {
-      const u = Ug(t)({
-        cpx: (() => {
-          const a = i + 1 | 0;
-          return a >= 0 && a < n.length ? n[a] : 0;
-        })(),
-        cpy: (() => {
-          const a = i + 2 | 0;
-          return a >= 0 && a < n.length ? n[a] : 0;
-        })(),
-        x: (() => {
-          const a = i + 3 | 0;
-          return a >= 0 && a < n.length ? n[a] : 0;
-        })(),
-        y: (() => {
-          const a = i + 4 | 0;
-          return a >= 0 && a < n.length ? n[a] : 0;
-        })()
-      }), c = r(i + 5 | 0);
-      return () => (u(), c());
-    }
-    if (s === 4) {
-      const u = Mg(t)({
-        cp1x: (() => {
-          const a = i + 1 | 0;
-          return a >= 0 && a < n.length ? n[a] : 0;
-        })(),
-        cp1y: (() => {
-          const a = i + 2 | 0;
-          return a >= 0 && a < n.length ? n[a] : 0;
-        })(),
-        cp2x: (() => {
-          const a = i + 3 | 0;
-          return a >= 0 && a < n.length ? n[a] : 0;
-        })(),
-        cp2y: (() => {
-          const a = i + 4 | 0;
-          return a >= 0 && a < n.length ? n[a] : 0;
-        })(),
-        x: (() => {
-          const a = i + 5 | 0;
-          return a >= 0 && a < n.length ? n[a] : 0;
-        })(),
-        y: (() => {
-          const a = i + 6 | 0;
-          return a >= 0 && a < n.length ? n[a] : 0;
-        })()
-      }), c = r(i + 7 | 0);
-      return () => (u(), c());
-    }
-    if (s === 5) {
-      const u = qg(t), c = r(i + 1 | 0);
-      return () => (u(), c());
-    }
-    return () => {
-    };
-  }, o = $c(t);
-  return () => (o(), r(0)());
-}, Op = () => ({ font: { value: "" }, fill: { value: "" }, stroke: { value: "" } }), zp = (t) => (n) => {
-  const e = Og(t)({ x: 0, y: 0, width: n.width, height: n.height });
-  return () => {
-    e();
-    const r = Op();
-    return { ctx: t, surface: n, styleCache: r, maskDepth: { value: 0 } };
-  };
-}, Vp = {
-  map: (t) => (n) => (e) => {
-    const r = n(e);
-    return () => {
-      const o = r();
-      return t(o);
-    };
-  }
-}, Yp = (t) => an(t.weight) + " " + ec(t.size) + "px Ilisarniq, ui-sans-serif, system-ui, sans-serif", ee = (t) => {
-  const n = ec(ct(t.a) / 255);
-  return t.a >= 255 ? "rgb(" + an(t.r) + "," + an(t.g) + "," + an(t.b) + ")" : "rgba(" + an(t.r) + "," + an(t.g) + "," + an(t.b) + "," + n + ")";
-}, Xp = (t) => (n) => (e) => (r) => {
-  const o = Ur(t)(e)(ee(r));
-  return () => (o(), Hg(t)({ x: 0, y: 0, width: n.width, height: n.height })());
-}, Up = (t) => (n) => (e) => {
-  const r = n.font;
-  return () => (r.value = "", n.fill.value = "", n.stroke.value = "", Dp(t)({
-    vx: e.viewport.vx,
-    vy: e.viewport.vy,
-    vw: e.viewport.vw,
-    vh: e.viewport.vh,
-    bgCss: ee(e.bgColor),
-    dotCss: ee(e.dotColor),
-    tile: e.tile,
-    dotR: e.dotRadius
-  })());
-}, Mp = (t) => (n) => (e) => (r) => {
-  const o = Ur(t)(n)(ee(r));
-  return () => (o(), Yo(t)(e)(), is(t)());
-}, Kp = (t) => (n) => (e) => (r) => (o) => {
-  const i = Ur(t)(n)(ee(r));
-  return () => (i(), Fs(t)(n)(ee(o.color))(), rs(t)(o.width)(), Do(t)((() => {
-    if (o.lineJoin === "RoundJoin")
-      return Qo;
-    if (o.lineJoin === "BevelJoin")
-      return fs;
-    if (o.lineJoin === "MiterJoin")
-      return gs;
-    f();
-  })())(), hs(t)((() => {
-    if (o.lineCap === "ButtCap")
-      return ds;
-    if (o.lineCap === "RoundCap")
-      return _s;
-    if (o.lineCap === "SquareCap")
-      return ls;
-    f();
-  })())(), Yo(t)(e)(), is(t)(), os(t)());
-}, jp = (t) => (n) => (e) => (r) => (o) => (i) => {
-  const s = $c(t);
-  return () => {
-    if (s(), Wp(t)(e.x)(e.y)(e.w)(e.h)(r)(), o.tag === "Just" ? (Ur(t)(n)(ee(o._1.color))(), is(t)()) : o.tag === "Nothing" || f(), i.tag === "Just")
-      return Fs(t)(n)(ee(i._1.color))(), rs(t)(i._1.width)(), Do(t)((() => {
-        if (i._1.lineJoin === "RoundJoin")
-          return Qo;
-        if (i._1.lineJoin === "BevelJoin")
-          return fs;
-        if (i._1.lineJoin === "MiterJoin")
-          return gs;
-        f();
-      })())(), hs(t)((() => {
-        if (i._1.lineCap === "ButtCap")
-          return ds;
-        if (i._1.lineCap === "RoundCap")
-          return _s;
-        if (i._1.lineCap === "SquareCap")
-          return ls;
-        f();
-      })())(), os(t)();
-    i.tag !== "Nothing" && f();
-  };
-}, Zp = (t) => (n) => (e) => (r) => {
-  const o = Fs(t)(n)(ee(r.color));
-  return () => (o(), rs(t)(r.width)(), Do(t)((() => {
-    if (r.lineJoin === "RoundJoin")
-      return Qo;
-    if (r.lineJoin === "BevelJoin")
-      return fs;
-    if (r.lineJoin === "MiterJoin")
-      return gs;
-    f();
-  })())(), hs(t)((() => {
-    if (r.lineCap === "ButtCap")
-      return ds;
-    if (r.lineCap === "RoundCap")
-      return _s;
-    if (r.lineCap === "SquareCap")
-      return ls;
-    f();
-  })())(), Yo(t)(e)(), os(t)());
-}, t$ = (t) => (n) => (e) => {
-  const r = Ur(t)(n)(ee(e.color));
-  return () => (r(), Hp(t)(n)(Yp(e.font))(), u0(t)((() => {
-    if (e.align === "AlignLeft")
-      return n0;
-    if (e.align === "AlignCenter")
-      return r0;
-    if (e.align === "AlignRight")
-      return e0;
-    f();
-  })())(), s0(t)((() => {
-    if (e.baseline === "BaselineTop")
-      return Kg;
-    if (e.baseline === "BaselineMiddle")
-      return jg;
-    if (e.baseline === "BaselineAlphabetic")
-      return Zg;
-    if (e.baseline === "BaselineBottom")
-      return t0;
-    f();
-  })())(), Xg(t)(e.content)(e.x)(e.y)());
-}, Sa = {
-  apply: (t) => (n) => (e) => {
-    const r = t(e), o = n(e);
-    return () => {
-      const i = r(), s = o();
-      return i(s);
-    };
-  },
-  Functor0: () => Vp
-}, n$ = {
-  bind: (t) => (n) => (e) => {
-    const r = t(e);
-    return () => {
-      const o = r();
-      return n(o)(e)();
-    };
-  },
-  Apply0: () => Sa
-}, e$ = (t) => (n) => (e) => {
-  const r = qp(n.width / e.vw)(n.height / e.vh), o = mc(t)({ translateX: (n.width - e.vw * r) / 2 - e.vx * r, translateY: (n.height - e.vh * r) / 2 - e.vy * r });
-  return () => (o(), ss(t)({ scaleX: r, scaleY: r })(), Do(t)(Qo)());
-}, r$ = { pure: (t) => (n) => () => t, Apply0: () => Sa }, o$ = { Applicative0: () => r$, Bind1: () => n$ }, Ga = {
-  fillPath: (t) => (n) => (e) => {
-    const r = Mp(e.ctx)(e.styleCache)(t)(n.color), o = e.maskDepth;
-    return () => {
-      if (o.value === 0)
-        return r();
-    };
-  },
-  strokePath: (t) => (n) => (e) => {
-    const r = Zp(e.ctx)(e.styleCache)(t)(n), o = e.maskDepth;
-    return () => {
-      if (o.value === 0)
-        return r();
-    };
-  },
-  fillStrokePath: (t) => (n) => (e) => (r) => {
-    const o = Kp(r.ctx)(r.styleCache)(t)(n.color)(e), i = r.maskDepth;
-    return () => {
-      if (i.value === 0)
-        return o();
-    };
-  },
-  drawRoundedRect: (t) => (n) => (e) => (r) => (o) => {
-    const i = jp(o.ctx)(o.styleCache)(t)(n)(e)(r), s = o.maskDepth;
-    return () => {
-      if (s.value === 0)
-        return i();
-    };
-  },
-  drawText: (t) => (n) => {
-    const e = t$(n.ctx)(n.styleCache)(t), r = n.maskDepth;
-    return () => {
-      if (r.value === 0)
-        return e();
-    };
-  },
-  pushTransform: (t) => (n) => {
-    const e = hr(n.ctx), r = n.maskDepth;
-    return () => {
-      if (r.value === 0)
-        return e(), n.styleCache.font.value = "", n.styleCache.fill.value = "", n.styleCache.stroke.value = "", mc(n.ctx)({ translateX: t.tx, translateY: t.ty })(), ss(n.ctx)({ scaleX: t.sx, scaleY: t.sy })();
-    };
-  },
-  popTransform: (t) => {
-    const n = pr(t.ctx), e = t.maskDepth;
-    return () => {
-      if (e.value === 0)
-        return n(), t.styleCache.font.value = "", t.styleCache.fill.value = "", t.styleCache.stroke.value = "";
-    };
-  },
-  pushClip: (t) => (n) => (e) => {
-    const r = hr(e.ctx), o = e.maskDepth;
-    return () => {
-      if (o.value === 0) {
-        if (r(), e.styleCache.font.value = "", e.styleCache.fill.value = "", e.styleCache.stroke.value = "", Yo(e.ctx)(t)(), n === "NonZero")
-          return Qg(e.ctx)();
-        if (n === "EvenOdd")
-          return Qp(e.ctx)();
-        f();
-      }
-    };
-  },
-  popClip: (t) => {
-    const n = pr(t.ctx), e = t.maskDepth;
-    return () => {
-      if (e.value === 0)
-        return n(), t.styleCache.font.value = "", t.styleCache.fill.value = "", t.styleCache.stroke.value = "";
-    };
-  },
-  pushBlend: (t) => (n) => {
-    const e = hr(n.ctx), r = n.maskDepth;
-    return () => {
-      if (r.value === 0) {
-        if (e(), n.styleCache.font.value = "", n.styleCache.fill.value = "", n.styleCache.stroke.value = "", t === "Normal")
-          return js(n.ctx)(o0)();
-        if (t === "Difference")
-          return js(n.ctx)(i0)();
-        f();
-      }
-    };
-  },
-  popBlend: (t) => {
-    const n = pr(t.ctx), e = t.maskDepth;
-    return () => {
-      if (e.value === 0)
-        return n(), t.styleCache.font.value = "", t.styleCache.fill.value = "", t.styleCache.stroke.value = "";
-    };
-  },
-  pushAlpha: (t) => (n) => {
-    const e = hr(n.ctx), r = n.maskDepth;
-    return () => {
-      if (r.value === 0)
-        return e(), n.styleCache.font.value = "", n.styleCache.fill.value = "", n.styleCache.stroke.value = "", Bg(n.ctx)(t)();
-    };
-  },
-  popAlpha: (t) => {
-    const n = pr(t.ctx), e = t.maskDepth;
-    return () => {
-      if (e.value === 0)
-        return n(), t.styleCache.font.value = "", t.styleCache.fill.value = "", t.styleCache.stroke.value = "";
-    };
-  },
-  pushLayer: (t) => (n) => {
-    if (t === "LayerNodeMask") {
-      const e = n.maskDepth;
-      return () => {
-        const r = e.value;
-        e.value = r + 1 | 0;
-      };
-    }
-    return () => {
-    };
-  },
-  popLayer: (t) => {
-    const n = t.maskDepth;
-    return () => {
-      const e = n.value, r = e - 1 | 0;
-      if (e > 0)
-        return t.maskDepth.value = r;
-    };
-  },
-  setViewport: (t) => (n) => {
-    const e = e$(n.ctx)(n.surface)(t), r = n.maskDepth;
-    return () => {
-      if (r.value === 0)
-        return e();
-    };
-  },
-  clearBackground: (t) => (n) => {
-    const e = Xp(n.ctx)(n.surface)(n.styleCache)(t), r = n.maskDepth;
-    return () => {
-      if (r.value === 0)
-        return e();
-    };
-  },
-  backgroundDots: (t) => (n) => {
-    const e = Up(n.ctx)(n.styleCache)(t), r = n.maskDepth;
-    return () => {
-      if (r.value === 0)
-        return e();
-    };
-  },
-  measureText: (t) => (n) => (e) => {
-    const r = Ca(t.family)(t.size)(t.weight)(Pr(n));
-    return () => r;
-  },
-  Monad0: () => o$
-};
-function i$(t, n) {
-  const e = n.x - t.x, r = n.y - t.y;
-  return Math.sqrt(e * e + r * r);
+  return a;
 }
-function s$(t) {
-  const n = t.length, e = new Array(n);
-  for (let r = 0; r < n; r++) {
-    const o = t[r], i = t[(r + 1) % n];
-    e[r] = { a: o, b: i, len: i$(o, i) };
-  }
-  return e;
-}
-function u$(t, n, e) {
-  let r = 0;
-  for (let o = 0; o < t.length; o++) {
-    const i = t[o], s = r, u = s + i.len;
-    if (e <= u) {
-      const c = i.len > 1e-6 ? (e - s) / i.len : 0;
-      return {
-        x: i.a.x + (i.b.x - i.a.x) * c,
-        y: i.a.y + (i.b.y - i.a.y) * c
-      };
-    }
-    r = u;
-  }
-  return n.length > 0 ? n[n.length - 1] : { x: 0, y: 0 };
-}
-function qu(t, n) {
-  if (n.length === 0) return [];
-  const e = s$(n);
-  let r = 0;
-  for (let i = 0; i < e.length; i++) r += e[i].len;
-  const o = new Array(t);
-  for (let i = 0; i < t; i++)
-    o[i] = u$(e, n, i * r / t);
-  return o;
-}
-function c$(t, n) {
-  const e = n.length;
-  if (e === 0) return n;
-  const r = (t % e + e) % e | 0, o = new Array(e);
-  for (let i = 0; i < e; i++) o[i] = n[(i + r) % e];
-  return o;
-}
-function a$(t, n) {
-  const e = n.length;
-  if (e === 0) return n;
-  let r = 0, o = 1 / 0;
-  for (let i = 0; i < e; i++) {
-    let s = 0;
-    for (let u = 0; u < e; u++) {
-      const c = t[u] || { x: 0, y: 0 }, a = n[(u + i) % e] || { x: 0, y: 0 }, g = c.x - a.x, l = c.y - a.y;
-      s += g * g + l * l;
-    }
-    s < o && (o = s, r = i);
-  }
-  return c$(r, n);
-}
-const Hu = (t) => (n) => (e) => {
-  const r = qu(t, n), o = qu(t, e), i = a$(r, o);
-  return { from: r, to: i };
-};
-function Ou(t) {
-  const n = t.length;
-  if (n === 0) return { x: 0, y: 0 };
-  let e = 0, r = 0;
-  for (let o = 0; o < n; o++)
-    e += t[o].x, r += t[o].y;
-  return { x: e / n, y: r / n };
-}
-function f$(t, n) {
-  const e = n.x - t.x, r = n.y - t.y, o = Math.sqrt(e * e + r * r);
-  return o <= 1e-4 ? { x: 1, y: 0 } : { x: e / o, y: r / o };
-}
-function g$(t, n) {
-  const e = n.length;
-  if (e === 0) return n;
-  const r = new Array(e);
-  for (let o = 0; o < e; o++) {
-    const i = n[((o - 1) % e + e) % e], s = n[((o + 1) % e + e) % e], u = n[o];
-    r[o] = {
-      x: u.x + ((i.x + s.x) / 2 - u.x) * t,
-      y: u.y + ((i.y + s.y) / 2 - u.y) * t
-    };
-  }
-  return r;
-}
-function _$(t) {
-  return t < 0 ? 0 : t > 1 ? 1 : t;
-}
-const zu = (t) => (n) => (e) => (r) => {
-  const o = n.length;
-  if (o === 0) return [];
-  const i = Ou(n), s = Ou(e), u = f$(i, s), c = new Array(o);
-  let a = 1 / 0, g = -1 / 0;
-  for (let _ = 0; _ < o; _++) {
-    const h = n[_], p = (h.x - i.x) * u.x + (h.y - i.y) * u.y;
-    c[_] = p, p < a && (a = p), p > g && (g = p);
-  }
-  const l = g - a;
-  let d = new Array(o);
-  for (let _ = 0; _ < o; _++) {
-    const h = n[_], p = e[_];
-    if (p === void 0) {
-      d[_] = h;
-      continue;
-    }
-    const $ = l <= 1e-4 ? 0 : r.maxDelay * (1 - (c[_] - a) / l), m = Math.max(1e-4, 1 - $), N = _$((t - $) / m), v = N * N * (3 - 2 * N);
-    d[_] = {
-      x: h.x + (p.x - h.x) * v,
-      y: h.y + (p.y - h.y) * v
-    };
-  }
-  for (let _ = 0; _ < r.smoothPasses; _++)
-    d = g$(0.5, d);
-  return d;
-}, Ia = (t) => t, Pa = (t) => t, Xo = (t) => t, Aa = (t) => t, l$ = (t) => t, Ra = (t) => t, Fa = (t) => t, Ba = /* @__PURE__ */ Fa("BaselineTop"), Hr = /* @__PURE__ */ Fa("BaselineMiddle"), Io = /* @__PURE__ */ Ra("AlignLeft"), Bs = /* @__PURE__ */ Ra("AlignCenter"), re = /* @__PURE__ */ l$("RoundJoin"), we = /* @__PURE__ */ Aa("ButtCap"), Qa = /* @__PURE__ */ Aa("RoundCap"), d$ = /* @__PURE__ */ Xo("LayerPolyOut"), h$ = /* @__PURE__ */ Xo("LayerPolyIn"), p$ = /* @__PURE__ */ Xo("LayerNodeMask"), $$ = /* @__PURE__ */ Xo("LayerOverlay"), Qi = /* @__PURE__ */ Pa("NonZero"), m$ = /* @__PURE__ */ Pa("EvenOdd"), N$ = /* @__PURE__ */ Ia("Normal"), Di = /* @__PURE__ */ Ia("Difference"), sn = { r: 255, g: 255, b: 255, a: 255 }, ue = { r: 26, g: 26, b: 26, a: 255 }, Ni = (t, n, e) => ({ tag: t, _1: n, _2: e }), le = (t) => (n) => {
-  const e = pt.compare(t)(n);
-  if (e === "LT" || e === "EQ")
-    return t;
-  if (e === "GT")
-    return n;
-  f();
-}, Or = (t) => (n) => {
-  const e = pt.compare(t)(n);
+const zy = (t, n, e, r) => gg(t, n, e, r, (o) => o.width, -1), qy = (t, n, e, r) => gg(
+  t,
+  n,
+  e,
+  r,
+  (o) => ({ ascent: o.actualBoundingBoxAscent, descent: o.actualBoundingBoxDescent }),
+  { ascent: -1, descent: -1 }
+), lg = (t) => (n) => {
+  const e = zy(t.family, t.size, t.weight, Or(n));
+  return e < 0 ? nt(rs(n).length) * t.size * 0.62 : e;
+}, _g = (t) => (n) => {
+  const e = qy(t.family, t.size, t.weight, Or(n));
+  return e.ascent < 0 ? { ascent: t.size * 0.72, descent: t.size * 0.2 } : e;
+}, dg = (t) => t, hg = (t) => t, as = (t) => t, pg = (t) => t, Yy = (t) => t, $g = (t) => t, mg = (t) => t, Xy = /* @__PURE__ */ mg("BaselineTop"), qr = /* @__PURE__ */ mg("BaselineMiddle"), pu = /* @__PURE__ */ $g("AlignLeft"), fs = /* @__PURE__ */ $g("AlignCenter"), Tn = /* @__PURE__ */ Yy("RoundJoin"), le = /* @__PURE__ */ pg("ButtCap"), We = /* @__PURE__ */ pg("RoundCap"), Vy = /* @__PURE__ */ as("LayerPolyOut"), Uy = /* @__PURE__ */ as("LayerPolyIn"), Ky = /* @__PURE__ */ as("LayerNodeMask"), My = /* @__PURE__ */ as("LayerOverlay"), $u = /* @__PURE__ */ hg("NonZero"), jy = /* @__PURE__ */ hg("EvenOdd"), Ga = /* @__PURE__ */ dg("Normal"), ai = /* @__PURE__ */ dg("Difference"), en = { r: 255, g: 255, b: 255, a: 255 }, Ee = { r: 26, g: 26, b: 26, a: 255 }, Zy = (t) => t, yg = (t) => t, tN = (t) => (n) => {
+  const e = ft.compare(t)(n);
   if (e === "LT")
     return n;
   if (e === "EQ" || e === "GT")
     return t;
   f();
-}, Da = (t) => (e) => {
-  let r = e, o = !0, i;
-  for (; o; ) {
-    const s = r;
-    if (s.tag === "Leaf") {
-      o = !1, i = T;
-      continue;
-    }
-    if (s.tag === "Node") {
-      const u = G.compare(t)(s._3);
-      if (u === "LT") {
-        r = s._5;
-        continue;
-      }
-      if (u === "GT") {
-        r = s._6;
-        continue;
-      }
-      if (u === "EQ") {
-        o = !1, i = b("Just", s._4);
-        continue;
-      }
-    }
-    f();
-  }
-  return i;
-}, Fe = (t) => (n) => (e) => {
-  const r = pt.compare(t)(e), o = (() => {
+}, ie = (t) => (n) => {
+  const e = ft.compare(t)(n);
+  if (e === "LT" || e === "EQ")
+    return t;
+  if (e === "GT")
+    return n;
+  f();
+}, Ng = (t) => (n) => (e) => {
+  const r = it.compare(t)(e), o = (() => {
     if (r === "LT")
       return e;
     if (r === "EQ" || r === "GT")
       return t;
     f();
-  })(), i = pt.compare(n)(o);
+  })(), i = it.compare(n)(o);
   if (i === "LT" || i === "EQ")
     return n;
   if (i === "GT")
     return o;
   f();
-}, An = (t) => (e) => {
-  let r = e, o = !0, i;
-  for (; o; ) {
-    const s = r;
-    if (s.tag === "Leaf") {
-      o = !1, i = T;
-      continue;
-    }
-    if (s.tag === "Node") {
-      const u = G.compare(t)(s._3);
-      if (u === "LT") {
-        r = s._5;
-        continue;
-      }
-      if (u === "GT") {
-        r = s._6;
-        continue;
-      }
-      if (u === "EQ") {
-        o = !1, i = b("Just", s._4);
-        continue;
-      }
-    }
-    f();
-  }
-  return i;
-}, he = /* @__PURE__ */ (() => {
-  const t = On.unfoldr(De);
-  return (n) => t(Wn("IterNode", n, Qe));
-})(), Ji = (t) => (n) => {
-  const e = rt.compare(t)(n);
+}, mu = (t) => (n) => {
+  const e = it.compare(t)(n);
   if (e === "LT")
     return n;
   if (e === "EQ" || e === "GT")
     return t;
   f();
-}, Wa = /* @__PURE__ */ jt(G)(Bt), Vu = /* @__PURE__ */ J(ur)(0), Uo = (t) => (e) => {
-  let r = e, o = !0, i;
-  for (; o; ) {
-    const s = r;
-    if (s.tag === "Leaf") {
-      o = !1, i = T;
-      continue;
-    }
-    if (s.tag === "Node") {
-      const u = G.compare(t)(s._3);
-      if (u === "LT") {
-        r = s._5;
-        continue;
-      }
-      if (u === "GT") {
-        r = s._6;
-        continue;
-      }
-      if (u === "EQ") {
-        o = !1, i = b("Just", s._4);
-        continue;
-      }
-    }
+}, nN = (t) => (n) => (e) => {
+  const r = ft.compare(t)(e), o = (() => {
+    if (r === "LT")
+      return e;
+    if (r === "EQ" || r === "GT")
+      return t;
     f();
-  }
-  return i;
-}, qa = (t) => {
-  const n = t.Monad0().Bind1(), e = t.popTransform, r = t.popAlpha;
-  return (o) => (i) => (s) => (u) => (c) => n.bind(t.pushAlpha(o.fadeAlpha))(() => n.bind(t.pushTransform({
-    tx: i * (1 - o.popScale),
-    ty: s * (1 - o.popScale),
-    sx: o.popScale,
-    sy: o.popScale
-  }))(() => n.bind(t.pushTransform({ tx: 0, ty: u.y * (1 - o.flipY), sx: 1, sy: o.flipY }))(() => n.bind(c)(() => n.bind(e)(() => n.bind(e)(() => r))))));
-}, pe = (t) => {
-  const n = t.Apply0();
-  return (e) => J((r) => (o) => n.apply(n.Functor0().map((i) => oc)(r))(e(o)))(t.pure());
-}, J$ = (t) => ({ x: t.x, y: t.y, w: t.w, h: t.h }), v$ = /* @__PURE__ */ J((t) => (n) => t + n.len)(0), T$ = (t) => {
-  const n = Wt((e) => T, (e) => (r) => b("Just", { head: e, tail: r }), t);
-  if (n.tag === "Nothing")
-    return [];
-  if (n.tag === "Just")
-    return [1, n._1.head.x, n._1.head.y, ...bt(Gt(1, t.length, t))((e) => [2, e.x, e.y]), 5];
+  })(), i = ft.compare(n)(o);
+  if (i === "LT" || i === "EQ")
+    return n;
+  if (i === "GT")
+    return o;
   f();
-}, y$ = (t) => (n) => {
-  const e = t.y + t.h - 6, r = t.y + 6, o = t.x + 14, i = t.x + t.w - 14, s = J(Or)(0)(O((u) => o - 10 < u.x + u.w + 12 && i + 10 > u.x - 12 && r - 10 < u.y + u.h + 12 && e + 10 > u.y - 12 ? le((u.x + u.w + 12 - (o - 10)) / 0.7071067811865476)((e + 10 - (u.y - 12)) / 0.7071067811865476) : 0)(n));
-  return { ...t, x: t.x + s * 0.7071067811865476, y: t.y - s * 0.7071067811865476 };
-}, Ha = (t) => (n) => {
-  const e = le(n)(le(t.w / 2)(t.h / 2));
+}, eN = /* @__PURE__ */ yg("FlatLevel"), rN = /* @__PURE__ */ yg("NestedLevel"), xg = /* @__PURE__ */ Zy("GenieSilhouette"), oN = (t) => (n) => (e) => (r) => {
+  if (n)
+    return { prng: t, yLift: 0 };
+  const o = Kr(t);
+  return { prng: o.prng, yLift: o.value * e.yJitter * r };
+}, iN = (t) => (n) => (e) => (r) => {
+  if (n)
+    return { prng: t, dx: 0 };
+  const o = Kr(t);
+  return { prng: o.prng, dx: (o.value * 2 - 1) * e.xJitter * r };
+}, Ia = (t) => (n) => {
+  const e = n.cy - t.cy, r = n.cx - t.cx, o = En(r * r + e * e), i = (t.r * t.r - n.r * n.r + o * o) / (2 * o), s = En(tN(0)(t.r * t.r - i * i)), u = t.cx + i * r / o, c = t.cy + i * e / o, a = { x: u - s * e / o, y: c + s * r / o }, g = { x: u + s * e / o, y: c - s * r / o };
+  return o === 0 || o > t.r + n.r ? { x: (t.cx + n.cx) / 2, y: t.cy } : a.y < g.y ? a : g;
+}, sN = (t) => (n) => {
+  const e = ie(n)(ie(t.w / 2)(t.h / 2));
   return [
     1,
     t.x + e,
@@ -12829,226 +13467,1060 @@ const zu = (t) => (n) => (e) => (r) => {
     t.y,
     5
   ];
-}, w$ = (t) => (n) => (e) => J((r) => (o) => {
-  const i = Da(o)(n);
-  if (i.tag === "Nothing")
-    return r;
-  if (i.tag === "Just") {
-    const s = y$(i._1)(r.obstacles);
-    return { acc: Y(G)(o)(s)(r.acc), obstacles: gn(r.obstacles)(s) };
-  }
-  f();
-})({ acc: Q, obstacles: e })(t).acc, L$ = (t) => {
-  const n = Wt((e) => T, (e) => (r) => b("Just", { head: e, tail: r }), t);
-  if (n.tag === "Nothing")
-    return [];
-  if (n.tag === "Just")
-    return [1, n._1.head.x, n._1.head.y, ...bt(n._1.tail)((e) => [2, e.x, e.y])];
-  f();
-}, Oa = /* @__PURE__ */ (() => {
-  const t = { r: 24, g: 24, b: 27, a: 255 }, n = { r: 244, g: 244, b: 245, a: 255 }, e = { r: 28, g: 101, b: 192, a: 255 };
-  return (r) => {
-    if (r === "Light")
-      return {
-        bg: { r: 255, g: 255, b: 255, a: 255 },
-        bgTransparent: { r: 0, g: 0, b: 0, a: 0 },
-        bgDot: { r: 214, g: 211, b: 209, a: 255 },
-        shadowFill: { r: 255, g: 255, b: 255, a: 255 },
-        shadowDot: { r: 26, g: 26, b: 26, a: 255 },
-        chip: { r: 255, g: 235, b: 130, a: 255 },
-        chipShadow: { r: 214, g: 211, b: 209, a: 255 },
-        chipText: ue,
-        nodeFill: sn,
-        nodeStroke: ue,
-        text: ue,
-        edge: ue,
-        arrowFill: ue,
-        tokenOutsideFill: ue,
-        tokenOutsideStroke: sn,
-        tokenInside: sn,
-        tokenInsideStroke: sn,
-        tokenInsideBlend: Di,
-        tokenInsideAlpha: 1,
-        chipPillFill: ue,
-        chipPillText: sn,
-        chipHairline: { r: 26, g: 26, b: 26, a: 90 },
-        trailDot: ue
-      };
-    if (r === "Dark")
-      return {
-        bg: t,
-        bgTransparent: { r: 0, g: 0, b: 0, a: 0 },
-        bgDot: { r: 63, g: 63, b: 70, a: 255 },
-        shadowFill: t,
-        shadowDot: n,
-        chip: { r: 234, g: 179, b: 8, a: 255 },
-        chipShadow: { r: 0, g: 0, b: 0, a: 120 },
-        chipText: t,
-        nodeFill: ue,
-        nodeStroke: n,
-        text: n,
-        edge: n,
-        arrowFill: n,
-        tokenOutsideFill: sn,
-        tokenOutsideStroke: sn,
-        tokenInside: sn,
-        tokenInsideStroke: sn,
-        tokenInsideBlend: Di,
-        tokenInsideAlpha: 1,
-        chipPillFill: n,
-        chipPillText: t,
-        chipHairline: { r: 244, g: 244, b: 245, a: 120 },
-        trailDot: n
-      };
-    if (r === "Blueprint")
-      return {
-        bg: e,
-        bgTransparent: { r: 0, g: 0, b: 0, a: 0 },
-        bgDot: { r: 90, g: 160, b: 230, a: 255 },
-        shadowFill: e,
-        shadowDot: sn,
-        chip: sn,
-        chipShadow: { r: 0, g: 0, b: 0, a: 120 },
-        chipText: e,
-        nodeFill: e,
-        nodeStroke: sn,
-        text: sn,
-        edge: sn,
-        arrowFill: sn,
-        tokenOutsideFill: sn,
-        tokenOutsideStroke: sn,
-        tokenInside: sn,
-        tokenInsideStroke: sn,
-        tokenInsideBlend: N$,
-        tokenInsideAlpha: 0.35,
-        chipPillFill: sn,
-        chipPillText: e,
-        chipHairline: { r: 255, g: 255, b: 255, a: 120 },
-        trailDot: sn
-      };
-    f();
+}, uN = (t) => (n) => (e) => (r) => (o) => (i) => {
+  if (n)
+    return { prng: t, r: o };
+  if (e)
+    return { prng: t, r: o * (1 + i.rJitter) };
+  if (r)
+    return { prng: t, r: o * i.smallScale };
+  const s = Kr(t);
+  return { prng: s.prng, r: o * (1 + s.value * i.rJitter) };
+}, Jg = (t) => {
+  const n = ie(t.w)(t.h) / 2;
+  return [
+    1,
+    t.x + n,
+    t.y,
+    2,
+    t.x + t.w - n,
+    t.y,
+    4,
+    t.x + t.w - n + 0.5522847498307936 * n,
+    t.y,
+    t.x + t.w,
+    t.y + n - 0.5522847498307936 * n,
+    t.x + t.w,
+    t.y + n,
+    4,
+    t.x + t.w,
+    t.y + n + 0.5522847498307936 * n,
+    t.x + t.w - n + 0.5522847498307936 * n,
+    t.y + t.h,
+    t.x + t.w - n,
+    t.y + t.h,
+    2,
+    t.x + n,
+    t.y + t.h,
+    4,
+    t.x + n - 0.5522847498307936 * n,
+    t.y + t.h,
+    t.x,
+    t.y + n + 0.5522847498307936 * n,
+    t.x,
+    t.y + n,
+    4,
+    t.x,
+    t.y + n - 0.5522847498307936 * n,
+    t.x + n - 0.5522847498307936 * n,
+    t.y,
+    t.x + n,
+    t.y,
+    5
+  ];
+}, cN = (t) => (n) => (e) => {
+  const r = Kr(t), o = n.length;
+  return o === 0 ? { prng: t, idx: -1 } : {
+    prng: r.prng,
+    idx: (() => {
+      const i = Ng(0)(o - 1 | 0)($n(Ne(r.value * nt(e))));
+      return i >= 0 && i < n.length ? n[i] : -1;
+    })()
   };
-})(), Mo = (t) => {
+}, aN = (t) => (n) => {
+  const e = Kr(t), r = n.length;
+  return r === 0 ? { prng: t, idx: -1 } : {
+    prng: e.prng,
+    idx: (() => {
+      const o = Ng(0)(r - 1 | 0)($n(Ne(e.value * nt(r))));
+      return o >= 0 && o < n.length ? n[o] : -1;
+    })()
+  };
+}, Tg = (t) => {
+  const n = ie(t.w * 0.18)(t.h * 0.6);
+  return [1, t.x + n, t.y, 2, t.x + t.w, t.y, 2, t.x + t.w - n, t.y + t.h, 2, t.x, t.y + t.h, 5];
+}, vg = (t) => [
+  1,
+  t.x,
+  t.y,
+  2,
+  t.x + t.w,
+  t.y,
+  2,
+  t.x + t.w,
+  t.y + t.h * 0.85,
+  4,
+  t.x + t.w * 0.66,
+  t.y + t.h * 1.05,
+  t.x + t.w * 0.34,
+  t.y + t.h * 0.65,
+  t.x,
+  t.y + t.h * 0.85,
+  5
+], wg = { rBase: 1.2, stepRatio: 0.7, rJitter: 0.35, yJitter: 0.2, xJitter: 0.2, heroShift: 0.2, smallScale: 0.85, smallShift: 0.15, seed: 7, minN: 3 }, fN = (t) => {
+  const n = ie(t.h * 0.075)(t.w * 0.075), e = t.w / 2, r = t.y + n, o = t.x + e;
+  return [
+    1,
+    t.x,
+    r,
+    4,
+    t.x,
+    r + 0.5522847498 * n,
+    o - 0.5522847498 * e,
+    r + n,
+    o,
+    r + n,
+    4,
+    o + 0.5522847498 * e,
+    r + n,
+    t.x + t.w,
+    r + 0.5522847498 * n,
+    t.x + t.w,
+    r
+  ];
+}, kg = (t) => {
+  const n = ie(t.h * 0.075)(t.w * 0.075), e = t.w / 2, r = t.y + t.h + 5, o = t.y + n, i = r - n, s = t.x + e;
+  return [
+    1,
+    t.x,
+    o,
+    4,
+    t.x,
+    o - 0.5522847498 * n,
+    s - 0.5522847498 * e,
+    t.y,
+    s,
+    t.y,
+    4,
+    s + 0.5522847498 * e,
+    t.y,
+    t.x + t.w,
+    o - 0.5522847498 * n,
+    t.x + t.w,
+    o,
+    2,
+    t.x + t.w,
+    i,
+    4,
+    t.x + t.w,
+    i + 0.5522847498 * n,
+    s + 0.5522847498 * e,
+    r,
+    s,
+    r,
+    4,
+    s - 0.5522847498 * e,
+    r,
+    t.x,
+    i + 0.5522847498 * n,
+    t.x,
+    i,
+    5
+  ];
+}, bg = (t) => (n) => {
+  const e = n.y + n.h, r = x_(t.rBase * n.h)(n.w / (2 * (1 + (nt(t.minN) - 1) * t.stepRatio))), o = n.w - 2 * r, i = 2 * r * t.stepRatio, s = mu(t.minN)(o <= 0 || i <= 0 ? t.minN : $n(sr(o / i)) + 1 | 0), u = s >= 3 ? It(1, s - 2 | 0) : [], c = u.length, a = Ce(c + 1 | 0, 2), g = a < 1 ? [] : bt(0, a, u), _ = aN(t.seed)((() => {
+    const p = c - a | 0;
+    return p < 1 ? u : bt(p, u.length, u);
+  })()), d = _.idx, l = cN(_.prng)(lt((p) => p !== d, g))(mu(1)(g.length - (Hn(Ir)(d)(g) ? 1 : 0) | 0)), h = l.idx, $ = s >= 2 ? o / (nt(s) - 1) : 0;
+  return x((p) => (m) => {
+    const y = m === h, N = m === d, T = m === 0 || m === (s - 1 | 0), w = uN(p.prng)(T)(N)(y)(r)(t), k = oN(w.prng)(T)(t)(n.h), L = iN(k.prng)(T)(t)($);
+    return {
+      prng: L.prng,
+      circles: Dt(p.circles)({
+        cx: n.x + nN(w.r)(n.w - w.r)((s >= 2 ? r + nt(m) / (nt(s) - 1) * o + L.dx : r + 0 * o + L.dx) + (N ? t.heroShift * $ : y ? -1 * t.smallShift * $ : 0)),
+        cy: e - k.yLift,
+        r: w.r
+      })
+    };
+  })({ prng: l.prng, circles: [] })(It(0, s - 1 | 0)).circles;
+}, Lg = (t) => (n) => {
+  const e = t.length;
+  return Ft((r) => (o) => ({
+    c: o,
+    p1: (() => {
+      if (r === 0)
+        return { x: o.cx - o.r, y: n };
+      const i = r - 1 | 0;
+      return i >= 0 && i < t.length ? Ia(t[i])(o) : { x: o.cx - o.r, y: n };
+    })(),
+    p2: (() => {
+      if (r === (e - 1 | 0))
+        return { x: o.cx + o.r, y: n };
+      const i = r + 1 | 0;
+      return i >= 0 && i < t.length ? Ia(o)(t[i]) : { x: o.cx + o.r, y: n };
+    })()
+  }))(t);
+}, Eg = (t) => {
+  const n = ie(t.h * 0.4)(t.w * 0.2);
+  return [
+    1,
+    t.x + n,
+    t.y,
+    2,
+    t.x + t.w - n,
+    t.y,
+    2,
+    t.x + t.w,
+    t.y + t.h / 2,
+    2,
+    t.x + t.w - n,
+    t.y + t.h,
+    2,
+    t.x + n,
+    t.y + t.h,
+    2,
+    t.x,
+    t.y + t.h / 2,
+    5
+  ];
+}, gN = (t) => (n) => (e) => {
+  const r = cr(n.y - t.cy)(n.x - t.cx), o = cr(e.y - t.cy)(e.x - t.cx), i = o > r ? o - r : o + 6.283185307179586 - r, s = mu(1)($n(qi(i / 1.5707963267948966))), u = i / nt(s), c = 1.3333333333333333 * J_(u / 4);
+  return Jt(It(0, s - 1 | 0))((a) => {
+    const g = r + nt(a + 1 | 0) * u, _ = t.cx + t.r * re(g), d = t.cy + t.r * Un(g), l = r + nt(a) * u;
+    return [
+      4,
+      t.cx + t.r * re(l) - c * t.r * Un(l),
+      t.cy + t.r * Un(l) + c * t.r * re(l),
+      _ + c * t.r * Un(g),
+      d - c * t.r * re(g),
+      _,
+      d
+    ];
+  });
+}, Sg = (t) => (n) => {
+  const e = t.h * 0.38, r = Lg(bg(wg)({ x: t.x, y: t.y - e, w: t.w, h: e }))(t.y), o = ie(n)(ie(t.w / 2)(t.h / 2));
+  return 0 < r.length ? [
+    1,
+    r[0].p1.x,
+    r[0].p1.y,
+    ...Jt(r)((i) => gN(i.c)(i.p1)(i.p2)),
+    2,
+    t.x + t.w,
+    t.y + t.h - o,
+    3,
+    t.x + t.w,
+    t.y + t.h,
+    t.x + t.w - o,
+    t.y + t.h,
+    2,
+    t.x + o,
+    t.y + t.h,
+    3,
+    t.x,
+    t.y + t.h,
+    t.x,
+    t.y + t.h - o,
+    2,
+    r[0].p1.x,
+    r[0].p1.y,
+    5
+  ] : sN(t)(n);
+}, Cg = (t) => (n) => (e) => (r) => (o) => (i) => {
+  if (n === "Rectangle")
+    return t.drawRoundedRect(e)(r)(o)(i);
+  if (n === "Cylinder") {
+    const s = kg(e);
+    if (o.tag === "Just") {
+      if (i.tag === "Just")
+        return t.fillStrokePath(s)(o._1)(i._1);
+      if (i.tag === "Nothing")
+        return t.fillPath(s)(o._1);
+      f();
+    }
+    if (o.tag === "Nothing") {
+      if (i.tag === "Just")
+        return t.strokePath(s)(i._1);
+      if (i.tag === "Nothing")
+        return t.Monad0().Applicative0().pure();
+    }
+    f();
+  }
+  if (n === "Parallelogram") {
+    const s = Tg(e);
+    if (o.tag === "Just") {
+      if (i.tag === "Just")
+        return t.fillStrokePath(s)(o._1)(i._1);
+      if (i.tag === "Nothing")
+        return t.fillPath(s)(o._1);
+      f();
+    }
+    if (o.tag === "Nothing") {
+      if (i.tag === "Just")
+        return t.strokePath(s)(i._1);
+      if (i.tag === "Nothing")
+        return t.Monad0().Applicative0().pure();
+    }
+    f();
+  }
+  if (n === "Diamond") {
+    const s = Eg(e);
+    if (o.tag === "Just") {
+      if (i.tag === "Just")
+        return t.fillStrokePath(s)(o._1)(i._1);
+      if (i.tag === "Nothing")
+        return t.fillPath(s)(o._1);
+      f();
+    }
+    if (o.tag === "Nothing") {
+      if (i.tag === "Just")
+        return t.strokePath(s)(i._1);
+      if (i.tag === "Nothing")
+        return t.Monad0().Applicative0().pure();
+    }
+    f();
+  }
+  if (n === "Ellipse") {
+    const s = Jg(e);
+    if (o.tag === "Just") {
+      if (i.tag === "Just")
+        return t.fillStrokePath(s)(o._1)(i._1);
+      if (i.tag === "Nothing")
+        return t.fillPath(s)(o._1);
+      f();
+    }
+    if (o.tag === "Nothing") {
+      if (i.tag === "Just")
+        return t.strokePath(s)(i._1);
+      if (i.tag === "Nothing")
+        return t.Monad0().Applicative0().pure();
+    }
+    f();
+  }
+  if (n === "Document") {
+    const s = vg(e);
+    if (o.tag === "Just") {
+      if (i.tag === "Just")
+        return t.fillStrokePath(s)(o._1)(i._1);
+      if (i.tag === "Nothing")
+        return t.fillPath(s)(o._1);
+      f();
+    }
+    if (o.tag === "Nothing") {
+      if (i.tag === "Just")
+        return t.strokePath(s)(i._1);
+      if (i.tag === "Nothing")
+        return t.Monad0().Applicative0().pure();
+    }
+    f();
+  }
+  if (n === "Cloud") {
+    const s = Sg(e)(r);
+    if (o.tag === "Just") {
+      if (i.tag === "Just")
+        return t.fillStrokePath(s)(o._1)(i._1);
+      if (i.tag === "Nothing")
+        return t.fillPath(s)(o._1);
+      f();
+    }
+    if (o.tag === "Nothing") {
+      if (i.tag === "Just")
+        return t.strokePath(s)(i._1);
+      if (i.tag === "Nothing")
+        return t.Monad0().Applicative0().pure();
+    }
+    f();
+  }
+  return t.drawRoundedRect(e)(r)(o)(i);
+}, lN = (t) => () => t.clip("evenodd"), _N = (t) => (n) => () => {
+  const e = Math.max(8, Math.ceil(8 / Math.max(n.tile, 1e-3))), r = Math.max(2, Math.round(n.tile * e)), o = document.createElement("canvas");
+  o.width = r, o.height = r;
+  const i = o.getContext("2d");
+  i.scale(e, e), i.fillStyle = n.bgCss, i.fillRect(0, 0, n.tile, n.tile), i.fillStyle = n.dotCss, i.beginPath(), i.arc(n.tile / 2, n.tile / 2, n.dotR, 0, 2 * Math.PI), i.fill();
+  const s = t.createPattern(o, "repeat");
+  s && typeof s.setTransform == "function" && s.setTransform(new DOMMatrix().scaleSelf(1 / e, 1 / e)), t.save(), t.fillStyle = s, t.fillRect(n.vx, n.vy, n.vw, n.vh), t.restore();
+}, yu = (t) => (n) => {
+  const e = ft.compare(t)(n);
+  if (e === "LT" || e === "EQ")
+    return t;
+  if (e === "GT")
+    return n;
+  f();
+}, gc = (t) => (n) => (e) => {
+  const r = n.stroke;
+  return () => {
+    const o = r.value, i = Y_(t)(e);
+    if (o !== e)
+      return i(), n.stroke.value = e;
+  };
+}, dN = (t) => (n) => (e) => {
+  const r = n.font;
+  return () => {
+    const o = r.value, i = n1(t)(e);
+    if (o !== e)
+      return i(), n.font.value = e;
+  };
+}, Ho = (t) => (n) => (e) => {
+  const r = n.fill;
+  return () => {
+    const o = r.value, i = q_(t)(e);
+    if (o !== e)
+      return i(), n.fill.value = e;
+  };
+}, gs = (t) => (n) => {
+  const e = n.length, r = (i) => {
+    if (i >= e)
+      return () => {
+      };
+    const s = i >= 0 && i < n.length ? n[i] : 0;
+    if (s === 1) {
+      const u = Af(t)((() => {
+        const a = i + 1 | 0;
+        return a >= 0 && a < n.length ? n[a] : 0;
+      })())((() => {
+        const a = i + 2 | 0;
+        return a >= 0 && a < n.length ? n[a] : 0;
+      })()), c = r(i + 3 | 0);
+      return () => (u(), c());
+    }
+    if (s === 2) {
+      const u = to(t)((() => {
+        const a = i + 1 | 0;
+        return a >= 0 && a < n.length ? n[a] : 0;
+      })())((() => {
+        const a = i + 2 | 0;
+        return a >= 0 && a < n.length ? n[a] : 0;
+      })()), c = r(i + 3 | 0);
+      return () => (u(), c());
+    }
+    if (s === 3) {
+      const u = no(t)({
+        cpx: (() => {
+          const a = i + 1 | 0;
+          return a >= 0 && a < n.length ? n[a] : 0;
+        })(),
+        cpy: (() => {
+          const a = i + 2 | 0;
+          return a >= 0 && a < n.length ? n[a] : 0;
+        })(),
+        x: (() => {
+          const a = i + 3 | 0;
+          return a >= 0 && a < n.length ? n[a] : 0;
+        })(),
+        y: (() => {
+          const a = i + 4 | 0;
+          return a >= 0 && a < n.length ? n[a] : 0;
+        })()
+      }), c = r(i + 5 | 0);
+      return () => (u(), c());
+    }
+    if (s === 4) {
+      const u = r1(t)({
+        cp1x: (() => {
+          const a = i + 1 | 0;
+          return a >= 0 && a < n.length ? n[a] : 0;
+        })(),
+        cp1y: (() => {
+          const a = i + 2 | 0;
+          return a >= 0 && a < n.length ? n[a] : 0;
+        })(),
+        cp2x: (() => {
+          const a = i + 3 | 0;
+          return a >= 0 && a < n.length ? n[a] : 0;
+        })(),
+        cp2y: (() => {
+          const a = i + 4 | 0;
+          return a >= 0 && a < n.length ? n[a] : 0;
+        })(),
+        x: (() => {
+          const a = i + 5 | 0;
+          return a >= 0 && a < n.length ? n[a] : 0;
+        })(),
+        y: (() => {
+          const a = i + 6 | 0;
+          return a >= 0 && a < n.length ? n[a] : 0;
+        })()
+      }), c = r(i + 7 | 0);
+      return () => (u(), c());
+    }
+    if (s === 5) {
+      const u = Ff(t), c = r(i + 1 | 0);
+      return () => (u(), c());
+    }
+    return () => {
+    };
+  }, o = If(t);
+  return () => (o(), r(0)());
+}, hN = (t) => (n) => (e) => (r) => (o) => (i) => {
+  const s = yu(i)(yu(r / 2)(o / 2)), u = Af(t)(n + s)(e);
+  return () => (u(), to(t)(n + r - s)(e)(), no(t)({ cpx: n + r, cpy: e, x: n + r, y: e + s })(), to(t)(n + r)(e + o - s)(), no(t)({ cpx: n + r, cpy: e + o, x: n + r - s, y: e + o })(), to(t)(n + s)(e + o)(), no(t)({ cpx: n, cpy: e + o, x: n, y: e + o - s })(), to(t)(n)(e + s)(), no(t)({ cpx: n, cpy: e, x: n + s, y: e })(), Ff(t)());
+}, pN = () => ({ font: { value: "" }, fill: { value: "" }, stroke: { value: "" } }), $N = (t) => (n) => {
+  const e = M_(t)({ x: 0, y: 0, width: n.width, height: n.height });
+  return () => {
+    e();
+    const r = pN();
+    return { ctx: t, surface: n, styleCache: r, maskDepth: { value: 0 } };
+  };
+}, mN = {
+  map: (t) => (n) => (e) => {
+    const r = n(e);
+    return () => {
+      const o = r();
+      return t(o);
+    };
+  }
+}, yN = (t) => un(t.weight) + " " + _f(t.size) + "px " + t.family, Te = (t) => {
+  const n = _f(nt(t.a) / 255);
+  return t.a >= 255 ? "rgb(" + un(t.r) + "," + un(t.g) + "," + un(t.b) + ")" : "rgba(" + un(t.r) + "," + un(t.g) + "," + un(t.b) + "," + n + ")";
+}, NN = (t) => (n) => (e) => (r) => {
+  const o = Ho(t)(e)(Te(r));
+  return () => (o(), K_(t)({ x: 0, y: 0, width: n.width, height: n.height })());
+}, xN = (t) => (n) => (e) => {
+  const r = n.font;
+  return () => (r.value = "", n.fill.value = "", n.stroke.value = "", _N(t)({
+    vx: e.viewport.vx,
+    vy: e.viewport.vy,
+    vw: e.viewport.vw,
+    vh: e.viewport.vh,
+    bgCss: Te(e.bgColor),
+    dotCss: Te(e.dotColor),
+    tile: e.tile,
+    dotR: e.dotRadius
+  })());
+}, JN = (t) => (n) => (e) => (r) => {
+  const o = Ho(t)(n)(Te(r));
+  return () => (o(), gs(t)(e)(), Iu(t)());
+}, TN = (t) => (n) => (e) => (r) => (o) => {
+  const i = Ho(t)(n)(Te(r));
+  return () => (i(), gc(t)(n)(Te(o.color))(), Pu(t)(o.width)(), Ui(t)((() => {
+    if (o.lineJoin === "RoundJoin")
+      return Vi;
+    if (o.lineJoin === "BevelJoin")
+      return Bu;
+    if (o.lineJoin === "MiterJoin")
+      return Qu;
+    f();
+  })())(), Ou(t)((() => {
+    if (o.lineCap === "ButtCap")
+      return Hu;
+    if (o.lineCap === "RoundCap")
+      return Wu;
+    if (o.lineCap === "SquareCap")
+      return Du;
+    f();
+  })())(), gs(t)(e)(), Iu(t)(), Gu(t)());
+}, vN = (t) => (n) => (e) => (r) => (o) => (i) => {
+  const s = If(t);
+  return () => {
+    if (s(), hN(t)(e.x)(e.y)(e.w)(e.h)(r)(), o.tag === "Just" ? (Ho(t)(n)(Te(o._1.color))(), Iu(t)()) : o.tag === "Nothing" || f(), i.tag === "Just")
+      return gc(t)(n)(Te(i._1.color))(), Pu(t)(i._1.width)(), Ui(t)((() => {
+        if (i._1.lineJoin === "RoundJoin")
+          return Vi;
+        if (i._1.lineJoin === "BevelJoin")
+          return Bu;
+        if (i._1.lineJoin === "MiterJoin")
+          return Qu;
+        f();
+      })())(), Ou(t)((() => {
+        if (i._1.lineCap === "ButtCap")
+          return Hu;
+        if (i._1.lineCap === "RoundCap")
+          return Wu;
+        if (i._1.lineCap === "SquareCap")
+          return Du;
+        f();
+      })())(), Gu(t)();
+    i.tag !== "Nothing" && f();
+  };
+}, wN = (t) => (n) => (e) => (r) => {
+  const o = gc(t)(n)(Te(r.color));
+  return () => (o(), Pu(t)(r.width)(), Ui(t)((() => {
+    if (r.lineJoin === "RoundJoin")
+      return Vi;
+    if (r.lineJoin === "BevelJoin")
+      return Bu;
+    if (r.lineJoin === "MiterJoin")
+      return Qu;
+    f();
+  })())(), Ou(t)((() => {
+    if (r.lineCap === "ButtCap")
+      return Hu;
+    if (r.lineCap === "RoundCap")
+      return Wu;
+    if (r.lineCap === "SquareCap")
+      return Du;
+    f();
+  })())(), gs(t)(e)(), Gu(t)());
+}, Aa = (t) => (n) => (e) => {
+  const r = Ho(t)(n)(Te(e.color));
+  return () => (r(), dN(t)(n)(yN(e.font))(), d1(t)((() => {
+    if (e.align === "AlignLeft")
+      return c1;
+    if (e.align === "AlignCenter")
+      return f1;
+    if (e.align === "AlignRight")
+      return a1;
+    f();
+  })())(), _1(t)((() => {
+    if (e.baseline === "BaselineTop")
+      return o1;
+    if (e.baseline === "BaselineMiddle")
+      return i1;
+    if (e.baseline === "BaselineAlphabetic")
+      return s1;
+    if (e.baseline === "BaselineBottom")
+      return u1;
+    f();
+  })())(), e1(t)(e.content)(e.x)(e.y)());
+}, Pg = {
+  apply: (t) => (n) => (e) => {
+    const r = t(e), o = n(e);
+    return () => {
+      const i = r(), s = o();
+      return i(s);
+    };
+  },
+  Functor0: () => mN
+}, kN = {
+  bind: (t) => (n) => (e) => {
+    const r = t(e);
+    return () => {
+      const o = r();
+      return n(o)(e)();
+    };
+  },
+  Apply0: () => Pg
+}, bN = (t) => (n) => (e) => {
+  const r = yu(n.width / e.vw)(n.height / e.vh), o = qs(t)({ translateX: (n.width - e.vw * r) / 2 - e.vx * r, translateY: (n.height - e.vh * r) / 2 - e.vy * r });
+  return () => (o(), li(t)({ scaleX: r, scaleY: r })(), Ui(t)(Vi)());
+}, LN = { pure: (t) => (n) => () => t, Apply0: () => Pg }, EN = { Applicative0: () => LN, Bind1: () => kN }, Gg = {
+  fillPath: (t) => (n) => (e) => {
+    const r = JN(e.ctx)(e.styleCache)(t)(n.color), o = e.maskDepth;
+    return () => {
+      if (o.value === 0)
+        return r();
+    };
+  },
+  strokePath: (t) => (n) => (e) => {
+    const r = wN(e.ctx)(e.styleCache)(t)(n), o = e.maskDepth;
+    return () => {
+      if (o.value === 0)
+        return r();
+    };
+  },
+  fillStrokePath: (t) => (n) => (e) => (r) => {
+    const o = TN(r.ctx)(r.styleCache)(t)(n.color)(e), i = r.maskDepth;
+    return () => {
+      if (i.value === 0)
+        return o();
+    };
+  },
+  drawRoundedRect: (t) => (n) => (e) => (r) => (o) => {
+    const i = vN(o.ctx)(o.styleCache)(t)(n)(e)(r), s = o.maskDepth;
+    return () => {
+      if (s.value === 0)
+        return i();
+    };
+  },
+  drawText: (t) => (n) => {
+    const e = Aa(n.ctx)(n.styleCache)(t), r = n.maskDepth;
+    return () => {
+      if (r.value === 0)
+        return e();
+    };
+  },
+  drawTextAffine: (t) => (n) => (e) => {
+    const r = or(e.ctx), o = e.maskDepth;
+    return () => {
+      if (o.value === 0)
+        return r(), e.styleCache.font.value = "", e.styleCache.fill.value = "", e.styleCache.stroke.value = "", j_(e.ctx)(t)(), Aa(e.ctx)(e.styleCache)(n)(), ir(e.ctx)(), e.styleCache.font.value = "", e.styleCache.fill.value = "", e.styleCache.stroke.value = "";
+    };
+  },
+  pushTransform: (t) => (n) => {
+    const e = or(n.ctx), r = n.maskDepth;
+    return () => {
+      if (r.value === 0)
+        return e(), n.styleCache.font.value = "", n.styleCache.fill.value = "", n.styleCache.stroke.value = "", qs(n.ctx)({ translateX: t.tx, translateY: t.ty })(), li(n.ctx)({ scaleX: t.sx, scaleY: t.sy })();
+    };
+  },
+  popTransform: (t) => {
+    const n = ir(t.ctx), e = t.maskDepth;
+    return () => {
+      if (e.value === 0)
+        return n(), t.styleCache.font.value = "", t.styleCache.fill.value = "", t.styleCache.stroke.value = "";
+    };
+  },
+  pushBakedTransform: (t) => (n) => {
+    const e = or(n.ctx), r = n.maskDepth;
+    return () => {
+      if (r.value === 0)
+        return e(), n.styleCache.font.value = "", n.styleCache.fill.value = "", n.styleCache.stroke.value = "", qs(n.ctx)({ translateX: t.tx, translateY: t.ty })(), li(n.ctx)({ scaleX: t.sx, scaleY: t.sy })();
+    };
+  },
+  popBakedTransform: (t) => {
+    const n = ir(t.ctx), e = t.maskDepth;
+    return () => {
+      if (e.value === 0)
+        return n(), t.styleCache.font.value = "", t.styleCache.fill.value = "", t.styleCache.stroke.value = "";
+    };
+  },
+  pushClip: (t) => (n) => (e) => {
+    const r = or(e.ctx), o = e.maskDepth;
+    return () => {
+      if (o.value === 0) {
+        if (r(), e.styleCache.font.value = "", e.styleCache.fill.value = "", e.styleCache.stroke.value = "", gs(e.ctx)(t)(), n === "NonZero")
+          return U_(e.ctx)();
+        if (n === "EvenOdd")
+          return lN(e.ctx)();
+        f();
+      }
+    };
+  },
+  popClip: (t) => {
+    const n = ir(t.ctx), e = t.maskDepth;
+    return () => {
+      if (e.value === 0)
+        return n(), t.styleCache.font.value = "", t.styleCache.fill.value = "", t.styleCache.stroke.value = "";
+    };
+  },
+  pushBlend: (t) => (n) => {
+    const e = or(n.ctx), r = n.maskDepth;
+    return () => {
+      if (r.value === 0) {
+        if (e(), n.styleCache.font.value = "", n.styleCache.fill.value = "", n.styleCache.stroke.value = "", t === "Normal")
+          return Ec(n.ctx)(g1)();
+        if (t === "Difference")
+          return Ec(n.ctx)(l1)();
+        f();
+      }
+    };
+  },
+  popBlend: (t) => {
+    const n = ir(t.ctx), e = t.maskDepth;
+    return () => {
+      if (e.value === 0)
+        return n(), t.styleCache.font.value = "", t.styleCache.fill.value = "", t.styleCache.stroke.value = "";
+    };
+  },
+  pushAlpha: (t) => (n) => {
+    const e = or(n.ctx), r = n.maskDepth;
+    return () => {
+      if (r.value === 0)
+        return e(), n.styleCache.font.value = "", n.styleCache.fill.value = "", n.styleCache.stroke.value = "", V_(n.ctx)(t)();
+    };
+  },
+  popAlpha: (t) => {
+    const n = ir(t.ctx), e = t.maskDepth;
+    return () => {
+      if (e.value === 0)
+        return n(), t.styleCache.font.value = "", t.styleCache.fill.value = "", t.styleCache.stroke.value = "";
+    };
+  },
+  pushLayer: (t) => (n) => {
+    if (t === "LayerNodeMask") {
+      const e = n.maskDepth;
+      return () => {
+        const r = e.value;
+        e.value = r + 1 | 0;
+      };
+    }
+    return () => {
+    };
+  },
+  popLayer: (t) => {
+    const n = t.maskDepth;
+    return () => {
+      const e = n.value, r = e - 1 | 0;
+      if (e > 0)
+        return t.maskDepth.value = r;
+    };
+  },
+  setViewport: (t) => (n) => {
+    const e = bN(n.ctx)(n.surface)(t), r = n.maskDepth;
+    return () => {
+      if (r.value === 0)
+        return e();
+    };
+  },
+  clearBackground: (t) => (n) => {
+    const e = NN(n.ctx)(n.surface)(n.styleCache)(t), r = n.maskDepth;
+    return () => {
+      if (r.value === 0)
+        return e();
+    };
+  },
+  backgroundDots: (t) => (n) => {
+    const e = xN(n.ctx)(n.styleCache)(t), r = n.maskDepth;
+    return () => {
+      if (r.value === 0)
+        return e();
+    };
+  },
+  measureText: (t) => (n) => (e) => {
+    const r = lg(t)(n);
+    return () => r;
+  },
+  measureInk: (t) => (n) => (e) => {
+    const r = _g(t)(n);
+    return () => r;
+  },
+  insideTokenStyle: (t) => (n) => () => xg,
+  Monad0: () => EN
+}, SN = (t) => (n) => {
+  const e = ft.compare(t)(n);
+  if (e === "LT")
+    return n;
+  if (e === "EQ" || e === "GT")
+    return t;
+  f();
+}, Yr = (t) => (n) => (e) => {
+  const r = SN(0.05)(1 - t - n);
+  return e < t ? 0 : e > 1 - n ? 1 : (e - t) / r;
+}, Fa = (t) => {
+  const n = ft.compare(0)(t), e = (() => {
+    if (n === "LT")
+      return t;
+    if (n === "EQ" || n === "GT")
+      return 0;
+    f();
+  })(), r = ft.compare(1)(e);
+  if (r === "LT" || r === "EQ")
+    return 1;
+  if (r === "GT")
+    return e;
+  f();
+}, ls = (t) => {
   if (t.tag === "Hidden")
     return { alpha: 0, scale: 0 };
   if (t.tag === "Visible")
     return { alpha: 1, scale: 1 };
   if (t.tag === "PloppingIn")
-    return { alpha: t._1 > 0 ? 1 : 0, scale: Cr(8)(0.6)(Fe(0)(1)(t._1)) };
+    return { alpha: t._1 > 0 ? 1 : 0, scale: Jo(8)(0.6)(Fa(t._1)) };
   if (t.tag === "PloppingOut")
-    return { alpha: t._1 < 1 ? 1 : 0, scale: Cr(8)(0.6)(Fe(0)(1)(1 - t._1)) };
+    return { alpha: t._1 < 1 ? 1 : 0, scale: Jo(8)(0.6)(Fa(1 - t._1)) };
   f();
-}, Wi = (t) => (n) => bt(he(t.nodes))((e) => {
-  const r = An(e._1)(n.nodes);
-  return r.tag === "Just" && Mo(r._1).alpha > 0 ? Ha(e._2)(7) : [];
-}), k$ = (t) => (n) => (e) => [
-  1,
-  t.vx,
-  t.vy,
-  2,
-  t.vx + t.vw,
-  t.vy,
-  2,
-  t.vx + t.vw,
-  t.vy + t.vh,
-  2,
-  t.vx,
-  t.vy + t.vh,
-  5,
-  ...Wi(n)(e)
-], ao = (t) => (n) => (e) => O((r) => {
-  const o = ct(r) / ct(e);
+};
+function CN(t, n) {
+  const e = n.x - t.x, r = n.y - t.y;
+  return Math.sqrt(e * e + r * r);
+}
+function PN(t) {
+  const n = t.length, e = new Array(n);
+  for (let r = 0; r < n; r++) {
+    const o = t[r], i = t[(r + 1) % n];
+    e[r] = { a: o, b: i, len: CN(o, i) };
+  }
+  return e;
+}
+function GN(t, n, e) {
+  let r = 0;
+  for (let o = 0; o < t.length; o++) {
+    const i = t[o], s = r, u = s + i.len;
+    if (e <= u) {
+      const c = i.len > 1e-6 ? (e - s) / i.len : 0;
+      return {
+        x: i.a.x + (i.b.x - i.a.x) * c,
+        y: i.a.y + (i.b.y - i.a.y) * c
+      };
+    }
+    r = u;
+  }
+  return n.length > 0 ? n[n.length - 1] : { x: 0, y: 0 };
+}
+function Ra(t, n) {
+  if (n.length === 0) return [];
+  const e = PN(n);
+  let r = 0;
+  for (let i = 0; i < e.length; i++) r += e[i].len;
+  const o = new Array(t);
+  for (let i = 0; i < t; i++)
+    o[i] = GN(e, n, i * r / t);
+  return o;
+}
+function IN(t, n) {
+  const e = n.length;
+  if (e === 0) return n;
+  const r = (t % e + e) % e | 0, o = new Array(e);
+  for (let i = 0; i < e; i++) o[i] = n[(i + r) % e];
+  return o;
+}
+function AN(t, n) {
+  const e = n.length;
+  if (e === 0) return n;
+  let r = 0, o = 1 / 0;
+  for (let i = 0; i < e; i++) {
+    let s = 0;
+    for (let u = 0; u < e; u++) {
+      const c = t[u] || { x: 0, y: 0 }, a = n[(u + i) % e] || { x: 0, y: 0 }, g = c.x - a.x, _ = c.y - a.y;
+      s += g * g + _ * _;
+    }
+    s < o && (o = s, r = i);
+  }
+  return IN(r, n);
+}
+const Ba = (t) => (n) => (e) => {
+  const r = Ra(t, n), o = Ra(t, e), i = AN(r, o);
+  return { from: r, to: i };
+};
+function Qa(t) {
+  const n = t.length;
+  if (n === 0) return { x: 0, y: 0 };
+  let e = 0, r = 0;
+  for (let o = 0; o < n; o++)
+    e += t[o].x, r += t[o].y;
+  return { x: e / n, y: r / n };
+}
+function FN(t, n) {
+  const e = n.x - t.x, r = n.y - t.y, o = Math.sqrt(e * e + r * r);
+  return o <= 1e-4 ? { x: 1, y: 0 } : { x: e / o, y: r / o };
+}
+function RN(t, n) {
+  const e = n.length;
+  if (e === 0) return n;
+  const r = new Array(e);
+  for (let o = 0; o < e; o++) {
+    const i = n[((o - 1) % e + e) % e], s = n[((o + 1) % e + e) % e], u = n[o];
+    r[o] = {
+      x: u.x + ((i.x + s.x) / 2 - u.x) * t,
+      y: u.y + ((i.y + s.y) / 2 - u.y) * t
+    };
+  }
+  return r;
+}
+function BN(t) {
+  return t < 0 ? 0 : t > 1 ? 1 : t;
+}
+const Wa = (t) => (n) => (e) => (r) => {
+  const o = n.length;
+  if (o === 0) return [];
+  const i = Qa(n), s = Qa(e), u = FN(i, s), c = new Array(o);
+  let a = 1 / 0, g = -1 / 0;
+  for (let l = 0; l < o; l++) {
+    const h = n[l], $ = (h.x - i.x) * u.x + (h.y - i.y) * u.y;
+    c[l] = $, $ < a && (a = $), $ > g && (g = $);
+  }
+  const _ = g - a;
+  let d = new Array(o);
+  for (let l = 0; l < o; l++) {
+    const h = n[l], $ = e[l];
+    if ($ === void 0) {
+      d[l] = h;
+      continue;
+    }
+    const p = _ <= 1e-4 ? 0 : r.maxDelay * (1 - (c[l] - a) / _), m = Math.max(1e-4, 1 - p), y = BN((t - p) / m), N = y * y * (3 - 2 * y);
+    d[l] = {
+      x: h.x + ($.x - h.x) * N,
+      y: h.y + ($.y - h.y) * N
+    };
+  }
+  for (let l = 0; l < r.smoothPasses; l++)
+    d = RN(0.5, d);
+  return d;
+}, ve = (t) => (n) => {
+  const e = ft.compare(t)(n);
+  if (e === "LT" || e === "EQ")
+    return t;
+  if (e === "GT")
+    return n;
+  f();
+}, Da = /* @__PURE__ */ x(Rr)(0), Ha = (t) => (n) => (e) => {
+  const r = ft.compare(t)(e), o = (() => {
+    if (r === "LT")
+      return e;
+    if (r === "EQ" || r === "GT")
+      return t;
+    f();
+  })(), i = ft.compare(n)(o);
+  if (i === "LT" || i === "EQ")
+    return n;
+  if (i === "GT")
+    return o;
+  f();
+}, QN = /* @__PURE__ */ x((t) => (n) => t + n.len)(0), Ig = (t) => {
+  const n = Rt((e) => J, (e) => (r) => v("Just", { head: e, tail: r }), t);
+  if (n.tag === "Nothing")
+    return [];
+  if (n.tag === "Just")
+    return [1, n._1.head.x, n._1.head.y, ...Jt(bt(1, t.length, t))((e) => [2, e.x, e.y]), 5];
+  f();
+}, WN = (t) => (n) => {
+  const e = ve(n)(ve(t.w / 2)(t.h / 2));
+  return [
+    1,
+    t.x + e,
+    t.y,
+    2,
+    t.x + t.w - e,
+    t.y,
+    3,
+    t.x + t.w,
+    t.y,
+    t.x + t.w,
+    t.y + e,
+    2,
+    t.x + t.w,
+    t.y + t.h - e,
+    3,
+    t.x + t.w,
+    t.y + t.h,
+    t.x + t.w - e,
+    t.y + t.h,
+    2,
+    t.x + e,
+    t.y + t.h,
+    3,
+    t.x,
+    t.y + t.h,
+    t.x,
+    t.y + t.h - e,
+    2,
+    t.x,
+    t.y + e,
+    3,
+    t.x,
+    t.y,
+    t.x + e,
+    t.y,
+    5
+  ];
+}, DN = (t) => {
+  const n = Rt((e) => J, (e) => (r) => v("Just", { head: e, tail: r }), t);
+  if (n.tag === "Nothing")
+    return [];
+  if (n.tag === "Just")
+    return [1, n._1.head.x, n._1.head.y, ...Jt(n._1.tail)((e) => [2, e.x, e.y])];
+  f();
+}, HN = (t) => {
+  const n = { x: t.x, y: t.y, w: t.w, h: t.h };
+  if (t.shape === "Cylinder")
+    return kg(n);
+  if (t.shape === "Parallelogram")
+    return Tg(n);
+  if (t.shape === "Diamond")
+    return Eg(n);
+  if (t.shape === "Ellipse")
+    return Jg(n);
+  if (t.shape === "Document")
+    return vg(n);
+  if (t.shape === "Cloud")
+    return Sg(n)(7);
+  if (t.shape === "Rectangle")
+    return WN(n)(7);
+  f();
+}, pn = (t) => (n) => (e) => z((r) => {
+  const o = nt(r) / nt(e);
   return { x: t.x + (n.x - t.x) * o, y: t.y + (n.y - t.y) * o };
-})(Xt(0, e - 1 | 0)), b$ = (t) => (n) => {
-  const e = (o) => (o.x - n.x) * (o.x - n.x) + (o.y - n.y) * (o.y - n.y), r = J((o) => (i) => e(i) < e(o) ? i : o)({ x: t.x, y: t.y })([{ x: t.x, y: t.y }, { x: t.x + t.w, y: t.y }, { x: t.x, y: t.y + t.h }, { x: t.x + t.w, y: t.y + t.h }]);
-  return O((o) => {
-    const i = ct(o) / 5;
-    return { x: r.x + (n.x - r.x) * i, y: r.y + (n.y - r.y) * i };
-  })([1, 2, 3, 4]);
-}, Qs = (t) => {
-  const n = Ls(`
-`)(t);
-  return n.length === 0 ? [""] : n;
-}, qi = (t) => (n) => {
-  const e = le(t)(le(n.w / 2)(n.h / 2));
+})(It(0, e - 1 | 0)), ON = (t) => {
+  const n = ie(t.w * 0.18)(t.h * 0.6);
+  return [
+    ...pn({ x: t.x + n, y: t.y })({ x: t.x + t.w, y: t.y })(16),
+    ...pn({ x: t.x + t.w, y: t.y })({ x: t.x + t.w - n, y: t.y + t.h })(16),
+    ...pn({ x: t.x + t.w - n, y: t.y + t.h })({ x: t.x, y: t.y + t.h })(16),
+    ...pn({ x: t.x, y: t.y + t.h })({ x: t.x + n, y: t.y })(16)
+  ];
+}, Xr = (t) => (n) => {
+  const e = ve(t)(ve(n.w / 2)(n.h / 2));
   return { ...n, x: n.x + e, y: n.y + e, w: n.w - 2 * e, h: n.h - 2 * e };
-}, E$ = (t) => {
-  const n = t.Monad0(), e = n.Applicative0(), r = n.Bind1(), o = t.popClip, i = t.popTransform, s = t.popAlpha;
-  return (u) => (c) => (a) => (g) => {
-    const l = Mo(g), d = { ...a, y: a.y + 5 }, _ = d.x + d.w / 2, h = d.y + d.h / 2, p = r.bind(t.pushAlpha(l.alpha))(() => r.bind(t.pushTransform({
-      tx: _ * (1 - l.scale),
-      ty: h * (1 - l.scale),
-      sx: l.scale,
-      sy: l.scale
-    }))(() => r.bind(t.drawRoundedRect({ x: d.x, y: d.y, w: d.w, h: d.h })(7)(b("Just", { color: u.shadowFill, flat: !0 }))(T))(() => r.bind((() => {
-      const $ = r.bind(t.pushClip(Ha(d)(7))(Qi))(() => r.bind(t.backgroundDots({
-        viewport: { vx: d.x, vy: d.y, vw: d.w, vh: d.h },
-        bgColor: u.bgTransparent,
-        dotColor: u.shadowDot,
-        tile: 1.6,
-        dotRadius: 0.25
-      }))(() => o));
-      return c ? $ : e.pure();
-    })())(() => r.bind(t.drawRoundedRect({ x: d.x, y: d.y, w: d.w, h: d.h })(7)(T)(b(
-      "Just",
-      { color: u.nodeStroke, width: 1.25, lineJoin: re, lineCap: we }
-    )))(() => r.bind(i)(() => s))))));
-    return l.alpha > 0 ? p : e.pure();
-  };
-}, x$ = (t) => {
-  const n = t.Monad0(), e = n.Applicative0(), r = n.Bind1(), o = pe(e), i = t.popTransform, s = t.popAlpha;
-  return (u) => (c) => (a) => (g) => {
-    const l = Ls(`
-`)(a.label === "" ? c : a.label), d = l.length === 0 ? [""] : l, _ = a.y + a.h / 2 - ct(d.length) * 13.2 / 2 + 6.6, h = Mo(g), p = a.x + a.w / 2, $ = a.y + a.h / 2, m = r.bind(t.pushAlpha(h.alpha))(() => r.bind(t.pushTransform({
-      tx: p * (1 - h.scale),
-      ty: $ * (1 - h.scale),
-      sx: h.scale,
-      sy: h.scale
-    }))(() => r.bind(t.drawRoundedRect({ x: a.x, y: a.y, w: a.w, h: a.h })(7)(b("Just", { color: u.nodeFill, flat: !1 }))(b(
-      "Just",
-      { color: u.nodeStroke, width: 1.25, lineJoin: re, lineCap: we }
-    )))(() => r.bind(o((N) => t.drawText({
-      x: a.x + a.w / 2,
-      y: _ + ct(N._1) * 13.2,
-      content: N._2,
-      font: { family: "Ilisarniq, ui-sans-serif, system-ui, sans-serif", size: 11, weight: 500 },
-      color: u.text,
-      align: Bs,
-      baseline: Hr
-    }))(Pt(gr)(d)))(() => r.bind(i)(() => s)))));
-    return h.alpha > 0 ? m : e.pure();
-  };
-}, za = (t) => {
-  const n = x$(t), e = t.Monad0().Applicative0(), r = pe(e);
-  return (o) => (i) => (s) => r((u) => {
-    const c = An(u._1)(s.nodes);
-    if (c.tag === "Just")
-      return n(o)(u._1)(u._2)(c._1);
-    if (c.tag === "Nothing")
-      return e.pure();
-    f();
-  })(he(i.nodes));
-}, Va = (t) => {
-  const n = E$(t), e = t.Monad0().Applicative0(), r = pe(e);
-  return (o) => (i) => (s) => (u) => r((c) => {
-    const a = An(c._1)(u.nodes);
-    if (a.tag === "Just")
-      return n(o)(i)(c._2)(a._1);
-    if (a.tag === "Nothing")
-      return e.pure();
-    f();
-  })(he(s.nodes));
-}, Hi = (t) => (n) => {
+}, Nu = (t) => (n) => {
   const e = n.y - t.y, r = n.x - t.x;
-  return _r(r * r + e * e);
-}, C$ = (t) => $n((n) => (e) => ({ a: n, b: e, len: Hi(n)(e) }), t, Gt(1, t.length, t)), S$ = (t) => (n) => {
-  const e = n.length - 1 | 0, r = e >= 0 && e < n.length ? b("Just", n[e]) : T, o = (() => {
+  return En(r * r + e * e);
+}, zN = (t) => wn((n) => (e) => ({ a: n, b: e, len: Nu(n)(e) }), t, bt(1, t.length, t)), qN = (t) => (n) => {
+  const e = n.length - 1 | 0, r = e >= 0 && e < n.length ? v("Just", n[e]) : J, o = (() => {
     if (r.tag === "Just")
       return [r._1];
     if (r.tag === "Nothing")
       return [];
     f();
-  })(), i = 0 < n.length ? b("Just", n[0]) : T, s = (() => {
+  })(), i = 0 < n.length ? v("Just", n[0]) : J, s = (() => {
     if (i.tag === "Just")
       return i._1;
     if (i.tag === "Nothing")
@@ -13057,131 +14529,34 @@ const zu = (t) => (n) => (e) => (r) => {
   })(), u = n.length;
   return u < 3 ? n : [
     s,
-    ...bt(Xt(1, u - 2 | 0))((c) => {
-      const a = c + 1 | 0, g = a >= 0 && a < n.length ? b("Just", n[a]) : T, l = c >= 0 && c < n.length ? b("Just", n[c]) : T, d = c - 1 | 0, _ = d >= 0 && d < n.length ? b("Just", n[d]) : T;
-      if (_.tag === "Just" && l.tag === "Just" && g.tag === "Just") {
-        const h = l._1, p = Hi(h)(g._1), $ = Hi(_._1)(h), m = le(t)(p / 2), N = le(t)($ / 2), v = p > 0 ? m / p : 0, w = h.x + (g._1.x - h.x) * v, y = h.y + (g._1.y - h.y) * v, k = $ > 0 ? N / $ : 0, E = h.x + (_._1.x - h.x) * k, I = h.y + (_._1.y - h.y) * k;
-        return O((D) => {
-          const z = ct(D) / ct(10), U = 1 - z;
-          return { x: U * U * E + 2 * U * z * h.x + z * z * w, y: U * U * I + 2 * U * z * h.y + z * z * y };
-        })(Xt(0, 10));
+    ...Jt(It(1, u - 2 | 0))((c) => {
+      const a = c + 1 | 0, g = a >= 0 && a < n.length ? v("Just", n[a]) : J, _ = c >= 0 && c < n.length ? v("Just", n[c]) : J, d = c - 1 | 0, l = d >= 0 && d < n.length ? v("Just", n[d]) : J;
+      if (l.tag === "Just" && _.tag === "Just" && g.tag === "Just") {
+        const h = _._1, $ = Nu(h)(g._1), p = Nu(l._1)(h), m = ve(t)($ / 2), y = ve(t)(p / 2), N = $ > 0 ? m / $ : 0, T = h.x + (g._1.x - h.x) * N, w = h.y + (g._1.y - h.y) * N, k = p > 0 ? y / p : 0, L = h.x + (l._1.x - h.x) * k, G = h.y + (l._1.y - h.y) * k;
+        return z((D) => {
+          const Y = nt(D) / nt(10), X = 1 - Y;
+          return { x: X * X * L + 2 * X * Y * h.x + Y * Y * T, y: X * X * G + 2 * X * Y * h.y + Y * Y * w };
+        })(It(0, 10));
       }
       return [];
     }),
     ...o
   ];
-}, G$ = (t) => {
-  const n = t.Monad0(), e = n.Bind1(), r = n.Applicative0(), o = pe(r);
-  return (i) => (s) => (u) => (c) => (a) => (g) => {
-    const l = ks(g).length, d = ct(l + 1 | 0), _ = (m) => {
-      const N = (u * d - ct(m)) / 1.5, v = N < 0 ? 0 : N > 1 ? 1 : N;
-      return v * v * (3 - 2 * v);
-    }, p = ((m) => {
-      let N = m, v = !0, w;
-      for (; v; ) {
-        const y = N;
-        if (y >= l) {
-          v = !1, w = y;
-          continue;
-        }
-        if (_(y) >= 1) {
-          N = y + 1 | 0;
-          continue;
-        }
-        v = !1, w = y;
-      }
-      return w;
-    })(0), $ = p >= l ? [] : Ce((m) => _(m) > 0)(Xt(p, l - 1 | 0)).init;
-    return e.bind((() => {
-      const m = t.drawText({
-        x: c,
-        y: a,
-        content: _n(p)(g),
-        font: i,
-        color: s,
-        align: Io,
-        baseline: Hr
-      });
-      return p > 0 ? m : r.pure();
-    })())(() => o((m) => e.bind(t.measureText(i)(_n(m)(g)))((N) => {
-      const v = _(m);
-      return t.drawText({
-        x: c + N,
-        y: a - (1 - v) * 10,
-        content: _n(1)(Sr(Pe(_n(m)(g)))(g)),
-        font: i,
-        color: { ...s, a: ce(lc(v * ct(s.a))) },
-        align: Io,
-        baseline: Hr
-      });
-    }))($));
-  };
-}, Ko = (t) => (n) => (e) => (r) => {
-  const o = O((p) => ct(Ji(1)(ks(p).length)))(r), i = Or(1)(J(ur)(0)(o)), s = Or(0.05)(1 - n - e), u = t < n ? 0 : t > 1 - e ? 1 : (t - n) / s, c = u * i, a = Ji(1)(r.length), l = ((p) => ($) => (m) => {
-    let N = p, v = $, w = m, y = !0, k;
-    for (; y; ) {
-      const E = N, I = v, z = Wt((U) => T, (U) => (P) => b("Just", { head: U, tail: P }), w);
-      if (z.tag === "Nothing") {
-        y = !1, k = Ji(0)(a - 1 | 0);
-        continue;
-      }
-      if (z.tag === "Just") {
-        if (I + z._1.head >= c) {
-          y = !1, k = E;
-          continue;
-        }
-        N = E + 1 | 0, v = I + z._1.head, w = z._1.tail;
-        continue;
-      }
-      f();
-    }
-    return k;
-  })(0)(0)(o), d = J(ur)(0)(l < 1 ? [] : Gt(0, l, o)), _ = d / i;
-  if (l >= 0 && l < o.length) {
-    const p = (d + o[l]) / i;
-    return {
-      line: l >= 0 && l < r.length ? r[l] : "",
-      phaseInLabel: (() => {
-        if (p <= _)
-          return 1;
-        const $ = (u - _) / (p - _);
-        return $ < 0 ? 0 : $ > 1 ? 1 : $;
-      })()
-    };
-  }
-  const h = (d + 1) / i;
-  return {
-    line: l >= 0 && l < r.length ? r[l] : "",
-    phaseInLabel: (() => {
-      if (h <= _)
-        return 1;
-      const p = (u - _) / (h - _);
-      return p < 0 ? 0 : p > 1 ? 1 : p;
-    })()
-  };
-}, I$ = (t) => {
-  const n = t.Monad0();
-  return (e) => (r) => (o) => n.Bind1().bind(t.measureText({ family: "Ilisarniq, ui-sans-serif, system-ui, sans-serif", size: 11, weight: 500 })(Ko(r)(0)(0)(O(tg)(o)).line))((i) => {
-    const s = i + 28;
-    return n.Applicative0().pure({ x: e.x + e.w / 2 - s / 2, y: e.y - 25.2 - 14, w: s, h: 25.2 });
-  });
-}, P$ = (t) => {
-  const n = t.Monad0(), e = n.Bind1(), r = I$(t), o = n.Applicative0(), i = Yr.traverse(o);
-  return (s) => (u) => e.Apply0().Functor0().map((c) => Wa(vt((a) => a)(c)))(i((c) => {
-    if (c._2.tag === "Filling" && c._2._1.labels.length !== 0) {
-      const a = An(c._2._1.node)(s.nodes);
-      if (a.tag === "Just")
-        return e.bind(r(a._1)(c._2._1.progress)(c._2._1.labels))((g) => o.pure(b("Just", L(c._1, g))));
-      if (a.tag === "Nothing")
-        return o.pure(T);
-      f();
-    }
-    return o.pure(T);
-  })(he(u.tokens)));
-}, Yu = (t) => (n) => O((e) => {
-  const r = 6.283185307179586 * ct(e) / ct(64);
-  return { x: t.x + n * Zi(r), y: t.y + n * ts(r) };
-})(Xt(0, 63)), Ds = (t) => (n) => {
+}, YN = (t) => (n) => (e) => (r) => (o) => z((i) => {
+  const s = nt(i) / nt(o), u = 1 - s, c = s * s * s, a = 3 * u * s * s, g = 3 * u * u * s, _ = u * u * u;
+  return { x: _ * t.x + g * n.x + a * e.x + c * r.x, y: _ * t.y + g * n.y + a * e.y + c * r.y };
+})(It(0, o - 1 | 0)), XN = (t) => [
+  ...pn({ x: t.x, y: t.y })({ x: t.x + t.w, y: t.y })(12),
+  ...pn({ x: t.x + t.w, y: t.y })({ x: t.x + t.w, y: t.y + t.h * 0.85 })(12),
+  ...YN({ x: t.x + t.w, y: t.y + t.h * 0.85 })({ x: t.x + t.w * 0.66, y: t.y + t.h * 1.05 })({ x: t.x + t.w * 0.34, y: t.y + t.h * 0.65 })({
+    x: t.x,
+    y: t.y + t.h * 0.85
+  })(32),
+  ...pn({ x: t.x, y: t.y + t.h * 0.85 })({ x: t.x, y: t.y })(12)
+], Oa = (t) => (n) => z((e) => {
+  const r = 6.283185307179586 * nt(e) / nt(64);
+  return { x: t.x + n * re(r), y: t.y + n * Un(r) };
+})(It(0, 63)), _s = (t) => (n) => {
   const e = 0.5522847498 * n;
   return [
     1,
@@ -13217,34 +14592,1264 @@ const zu = (t) => (n) => (e) => (r) => {
     t.y,
     5
   ];
-}, A$ = (t) => {
+}, VN = (t) => {
+  const n = t.y + t.h / 2, e = ie(t.h * 0.4)(t.w * 0.2);
+  return [
+    ...pn({ x: t.x + e, y: t.y })({ x: t.x + t.w - e, y: t.y })(10),
+    ...pn({ x: t.x + t.w - e, y: t.y })({ x: t.x + t.w, y: n })(8),
+    ...pn({ x: t.x + t.w, y: n })({ x: t.x + t.w - e, y: t.y + t.h })(8),
+    ...pn({ x: t.x + t.w - e, y: t.y + t.h })({ x: t.x + e, y: t.y + t.h })(10),
+    ...pn({ x: t.x + e, y: t.y + t.h })({ x: t.x, y: n })(8),
+    ...pn({ x: t.x, y: n })({ x: t.x + e, y: t.y })(8)
+  ];
+}, Ag = (t) => {
+  const n = t.length;
+  return n === 0 ? { x: 0, y: 0 } : { x: Da(z((e) => e.x)(t)) / nt(n), y: Da(z((e) => e.y)(t)) / nt(n) };
+}, oi = (t) => (n) => (e) => (r) => (o) => z((i) => {
+  const s = e + (r - e) * (nt(i) / nt(o));
+  return { x: t.x + n * re(s), y: t.y + n * Un(s) };
+})(It(0, o - 1 | 0)), za = (t) => (n) => {
+  const e = ve(t)(ve(n.w / 2)(n.h / 2));
+  return [
+    ...pn({ x: n.x + e, y: n.y })({ x: n.x + n.w - e, y: n.y })(6),
+    ...oi({ x: n.x + n.w - e, y: n.y + e })(e)(4.71238898038469)(6.283185307179586)(12),
+    ...pn({ x: n.x + n.w, y: n.y + e })({ x: n.x + n.w, y: n.y + n.h - e })(6),
+    ...oi({ x: n.x + n.w - e, y: n.y + n.h - e })(e)(0)(1.5707963267948966)(12),
+    ...pn({ x: n.x + n.w - e, y: n.y + n.h })({ x: n.x + e, y: n.y + n.h })(6),
+    ...oi({ x: n.x + e, y: n.y + n.h - e })(e)(1.5707963267948966)(3.141592653589793)(12),
+    ...pn({ x: n.x, y: n.y + n.h - e })({ x: n.x, y: n.y + e })(6),
+    ...oi({ x: n.x + e, y: n.y + e })(e)(3.141592653589793)(4.71238898038469)(12)
+  ];
+}, Gi = (t) => (n) => (e) => (r) => (o) => (i) => z((s) => {
+  const u = r + (o - r) * (nt(s) / nt(i));
+  return { x: t.x + n * re(u), y: t.y + e * Un(u) };
+})(It(0, i - 1 | 0)), UN = (t) => {
+  const n = t.h * 0.38;
+  return [
+    ...Jt(Lg(bg(wg)({
+      x: t.x,
+      y: t.y - n,
+      w: t.w,
+      h: n
+    }))(t.y))((e) => {
+      const r = cr(e.p2.y - e.c.cy)(e.p2.x - e.c.cx), o = cr(e.p1.y - e.c.cy)(e.p1.x - e.c.cx);
+      return Gi({ x: e.c.cx, y: e.c.cy })(e.c.r)(e.c.r)(o)(r > o ? r : r + 6.283185307179586)(16);
+    }),
+    ...pn({ x: t.x + t.w, y: t.y })({ x: t.x + t.w, y: t.y + t.h })(8),
+    ...pn({ x: t.x + t.w, y: t.y + t.h })({ x: t.x, y: t.y + t.h })(12),
+    ...pn({ x: t.x, y: t.y + t.h })({ x: t.x, y: t.y })(8)
+  ];
+}, KN = (t) => {
+  const n = ve(t.h * 0.075)(t.w * 0.075), e = t.w / 2, r = t.y + n, o = t.y + t.h + 5 - n - 2, i = t.x + e;
+  return [
+    ...Gi({ x: i, y: r })(e)(n)(3.141592653589793)(6.283185307179586)(24),
+    ...pn({ x: t.x + t.w, y: r })({ x: t.x + t.w, y: o })(12),
+    ...Gi({ x: i, y: o })(e)(n)(0)(3.141592653589793)(24),
+    ...pn({ x: t.x, y: o })({ x: t.x, y: r })(12)
+  ];
+}, Ii = (t) => (n) => n.shape === "Cylinder" ? KN(n) : n.shape === "Parallelogram" ? ON(n) : n.shape === "Diamond" ? VN(n) : n.shape === "Ellipse" ? za(ie(n.w)(n.h) / 2)(n) : n.shape === "Document" ? XN(n) : n.shape === "Cloud" ? UN(n) : za(t)(n), MN = (t) => {
+  const n = ve(t.h * 0.075)(t.w * 0.075), e = t.w / 2;
+  return Gi({ x: t.x + e, y: t.y + n })(e)(n)(0)(3.141592653589793)(24);
+}, jN = (t) => (n) => (e) => x((r) => (o) => {
+  const i = r.pos + o.len, s = e < i ? (e - r.pos) / o.len : 1, u = { x: o.a.x + (o.b.x - o.a.x) * s, y: o.a.y + (o.b.y - o.a.y) * s }, c = n > r.pos ? (n - r.pos) / o.len : 0, a = { x: o.a.x + (o.b.x - o.a.x) * c, y: o.a.y + (o.b.y - o.a.y) * c }, g = r.points.length - 1 | 0, _ = g >= 0 && g < r.points.length ? (() => {
+    const d = r.points[g].x - a.x;
+    return (d < 0 ? -d < 1e-4 : d < 1e-4) && (() => {
+      const l = r.points[g].y - a.y;
+      return l < 0 ? -l < 1e-4 : l < 1e-4;
+    })();
+  })() ? Dt(r.points)(u) : [...r.points, a, u] : [a, u];
+  return o.len <= 0 || i <= n || r.pos >= e ? { ...r, pos: i } : { pos: i, points: _ };
+})({ pos: 0, points: [] })(t).points, ZN = (t) => (n) => (e) => {
+  const r = Rt((o) => J, (o) => (i) => v("Just", { head: o, tail: i }), t);
+  if (r.tag === "Nothing")
+    return [];
+  if (r.tag === "Just") {
+    const o = zN(t), i = QN(o), s = Ha(0)(i)(n * i), u = Ha(0)(i)(e * i);
+    return u <= s ? [] : jN(o)(s)(u);
+  }
+  f();
+}, lc = (t) => t, Se = (t) => (n) => {
+  const e = ft.compare(t)(n);
+  if (e === "LT")
+    return n;
+  if (e === "EQ" || e === "GT")
+    return t;
+  f();
+}, gr = (t) => (n) => {
+  const e = ft.compare(t)(n);
+  if (e === "LT" || e === "EQ")
+    return t;
+  if (e === "GT")
+    return n;
+  f();
+}, tx = /* @__PURE__ */ Sl(Nf)(Ht), nx = (t) => (n) => {
+  const e = it.compare(t)(n);
+  if (e === "LT")
+    return n;
+  if (e === "EQ" || e === "GT")
+    return t;
+  f();
+}, ex = (t) => (n) => {
+  const e = it.compare(t)(n);
+  if (e === "LT" || e === "EQ")
+    return t;
+  if (e === "GT")
+    return n;
+  f();
+}, qa = /* @__PURE__ */ lc("SegMove"), rx = /* @__PURE__ */ lc("SegLine"), ox = /* @__PURE__ */ lc("SegQuad"), Ya = { offset: 0.4, passes: 1, rMax: 1.5 }, Fg = (t) => $n(Ne(t.x * 7919 + t.y * 3001 + t.w * 113 + t.h * 17 + 1)) * -1640531535 | 0, Ai = (t) => (n) => (e) => () => {
+  t.push(3), t.push(n.x), t.push(n.y), t.push(e.x), t.push(e.y);
+}, ds = (t) => (n) => () => {
+  t.push(1), t.push(n.x), t.push(n.y);
+}, Ie = (t) => (n) => () => {
+  t.push(2), t.push(n.x), t.push(n.y);
+}, Io = /* @__PURE__ */ (() => {
+  const t = x((n) => (e) => ((n * 31 | 0) + $n(Ne(e.x * 100)) | 0) + $n(Ne(e.y * 100)) | 0)(1);
+  return (n) => t(n) * -1640531535 | 0;
+})(), ix = (t) => {
+  const n = [];
+  let e = 0, r = { x: 0, y: 0 };
+  for (; e < t.length; ) {
+    const o = e, i = r, s = o >= 0 && o < t.length ? v("Just", t[o]) : J;
+    if (s.tag === "Nothing") {
+      e = t.length;
+      continue;
+    }
+    if (s.tag === "Just") {
+      if (s._1 === 1) {
+        const u = {
+          x: (() => {
+            const c = o + 1 | 0;
+            return c >= 0 && c < t.length ? t[c] : 0;
+          })(),
+          y: (() => {
+            const c = o + 2 | 0;
+            return c >= 0 && c < t.length ? t[c] : 0;
+          })()
+        };
+        n.push({ kind: qa, m: i, c: i, p: u, len: 0 }), r = u, e = o + 3 | 0;
+        continue;
+      }
+      if (s._1 === 2) {
+        const u = {
+          x: (() => {
+            const g = o + 1 | 0;
+            return g >= 0 && g < t.length ? t[g] : 0;
+          })(),
+          y: (() => {
+            const g = o + 2 | 0;
+            return g >= 0 && g < t.length ? t[g] : 0;
+          })()
+        }, c = u.x - i.x, a = u.y - i.y;
+        n.push({ kind: rx, m: i, c: i, p: u, len: En(c * c + a * a) }), r = u, e = o + 3 | 0;
+        continue;
+      }
+      if (s._1 === 3) {
+        const u = {
+          x: (() => {
+            const g = o + 3 | 0;
+            return g >= 0 && g < t.length ? t[g] : 0;
+          })(),
+          y: (() => {
+            const g = o + 4 | 0;
+            return g >= 0 && g < t.length ? t[g] : 0;
+          })()
+        }, c = u.x - i.x, a = u.y - i.y;
+        n.push({
+          kind: ox,
+          m: i,
+          c: {
+            x: (() => {
+              const g = o + 1 | 0;
+              return g >= 0 && g < t.length ? t[g] : 0;
+            })(),
+            y: (() => {
+              const g = o + 2 | 0;
+              return g >= 0 && g < t.length ? t[g] : 0;
+            })()
+          },
+          p: u,
+          len: En(c * c + a * a) * 1.05
+        }), r = u, e = o + 5 | 0;
+        continue;
+      }
+      if (s._1 === 5) {
+        n.push({ kind: qa, m: i, c: i, p: i, len: 0 }), e = o + 1 | 0;
+        continue;
+      }
+      e = t.length;
+      continue;
+    }
+    f();
+  }
+  return n;
+}, sx = (t) => (n) => {
+  const e = n.length - 1 | 0, r = e < 1 ? [] : bt(0, e, n), o = (() => {
+    const s = r.length - 1 | 0;
+    return s >= 0 && s < r.length ? v("Just", r[s]) : J;
+  })(), i = n.length - 1 | 0;
+  if (i >= 0 && i < n.length && o.tag === "Just") {
+    const s = n[i].y - o._1.y, u = n[i].x - o._1.x, c = En(u * u + s * s);
+    return c <= 1e-4 ? n : Dt((() => {
+      const a = n.length - 1 | 0;
+      return a < 1 ? [] : bt(0, a, n);
+    })())({ x: n[i].x + u / c * t, y: n[i].y + s / c * t });
+  }
+  return n;
+}, ux = (t) => (n) => (e) => Ln(x((r) => (o) => {
+  const i = fn(0)(t)(r.prng), s = fn(0)(6.283185307179586)(i.prng);
+  return { prng: s.prng, out: [{ x: o.x + i.value * re(s.value), y: o.y + i.value * Un(s.value) }, ...r.out] };
+})({ prng: n, out: [] })(e).out), cx = (t) => (n) => (e) => {
+  if (n.kind === "SegMove")
+    return ds(t)(n.p);
+  if (n.kind === "SegLine")
+    return Ie(t)({ x: n.m.x + (n.p.x - n.m.x) * e, y: n.m.y + (n.p.y - n.m.y) * e });
+  if (n.kind === "SegQuad")
+    return Ie(t)({ x: n.m.x + (n.p.x - n.m.x) * e, y: n.m.y + (n.p.y - n.m.y) * e });
+  f();
+}, ax = (t) => (n) => {
+  if (n.kind === "SegMove")
+    return ds(t)(n.p);
+  if (n.kind === "SegLine")
+    return Ie(t)(n.p);
+  if (n.kind === "SegQuad")
+    return Ai(t)(n.c)(n.p);
+  f();
+}, Rg = (t) => (n) => {
+  const e = ix(n), r = x((u) => (c) => u + c.len)(0)(e) * Se(0)(gr(1)(t)), o = [];
+  let i = 0, s = 0;
+  for (; s < e.length; ) {
+    const u = s, c = i;
+    if (u >= 0 && u < e.length) {
+      if (c + e[u].len <= r) {
+        const a = e[u];
+        ax(o)(a)(), i = c + a.len, s = u + 1 | 0;
+        continue;
+      }
+      if (c >= r) {
+        s = e.length;
+        continue;
+      }
+      cx(o)(e[u])((r - c) / Se(e[u].len)(1e-4))();
+    }
+    s = e.length;
+  }
+  return o;
+}, Xa = { offset: 1.5, passes: 2, rMax: 14, overshoot: 2.5 }, Bg = (t) => (n) => (e) => (r) => {
+  const o = r.y - e.y, i = e.y - n.y, s = r.x - e.x, u = En(s * s + o * o), c = e.x - n.x, a = En(c * c + i * i), g = gr(t.rMax * (N_(a > 0 && u > 0 ? Se(-1)(gr(1)((c * s + i * o) / (a * u))) : 1) / 3.141592653589793))(0.4 * gr(a)(u));
+  return { inP: a > 0 ? { x: e.x - c / a * g, y: e.y - i / a * g } : e, curr: e, outP: u > 0 ? { x: e.x + s / u * g, y: e.y + o / u * g } : e };
+}, Qg = (t) => (n) => {
+  const e = n.length, r = [], o = 0 < n.length ? v("Just", n[0]) : J;
+  if (o.tag === "Just" ? ds(r)(o._1)() : o.tag === "Nothing" || f(), e >= 3) {
+    let s = 1;
+    for (; s <= (e - 2 | 0); ) {
+      const u = s, c = u + 1 | 0;
+      if (c >= 0 && c < n.length) {
+        if (u >= 0 && u < n.length) {
+          const a = u - 1 | 0;
+          if (a >= 0 && a < n.length) {
+            const g = Bg(t)(n[a])(n[u])(n[c]);
+            Ie(r)(g.inP)(), Ai(r)(g.curr)(g.outP)();
+          }
+        }
+        s = u + 1 | 0;
+        continue;
+      }
+      s = u + 1 | 0;
+    }
+  }
+  const i = n.length - 1 | 0;
+  return i >= 0 && i < n.length && e >= 2 && Ie(r)(n[i])(), r;
+}, fx = (t) => (n) => (e) => (r) => (o) => {
+  if (o.length < 4)
+    return Qg(t)(o);
+  const i = 0 < o.length ? v("Just", o[0]) : J, s = (() => {
+    if (i.tag === "Nothing")
+      return { x: 0, y: 0 };
+    if (i.tag === "Just")
+      return i._1;
+    f();
+  })(), u = o.length - 1 | 0, c = ze(ze(n)(u) + u | 0)(u), a = (l) => {
+    const h = ze(l + u | 0)(u);
+    return h >= 0 && h < o.length ? o[h] : s;
+  }, g = z((l) => Bg(t)(a((c + l | 0) - 1 | 0))(a(c + l | 0))(a((c + l | 0) + 1 | 0)))(It(
+    0,
+    u - 1 | 0
+  )), _ = [], d = 0 < g.length ? v("Just", g[0]) : J;
+  if (d.tag === "Just")
+    if (ds(_)(d._1.outP)(), tx((() => {
+      const l = Rt((h) => J, (h) => ($) => v("Just", $), g);
+      if (l.tag === "Nothing")
+        return [];
+      if (l.tag === "Just")
+        return l._1;
+      f();
+    })())((l) => {
+      const h = Ie(_)(l.inP);
+      return () => (h(), Ai(_)(l.curr)(l.outP)());
+    })(), e)
+      Ie(_)(d._1.inP)(), Ai(_)(d._1.curr)(d._1.outP)(), _.push(5);
+    else {
+      const l = g.length - 1 | 0;
+      l >= 0 && l < g.length ? Ie(_)((() => {
+        const h = 1 - r;
+        return { x: g[l].outP.x + (d._1.inP.x - g[l].outP.x) * h, y: g[l].outP.y + (d._1.inP.y - g[l].outP.y) * h };
+      })())() : Ie(_)(d._1.inP)();
+    }
+  else d.tag === "Nothing" || f();
+  return _;
+}, Cr = (t) => (n) => (e) => (r) => {
+  const o = nx(1)(r.length - 1 | 0), i = fn(0)(nt(o))(tu("shape")(n)), s = ex(o - 1 | 0)($n(Ne(i.value))), u = i.prng;
+  return z((c) => {
+    const a = fn(0)(1)(tu(un(c))(u)), g = fn(-0.18)(0.3)(a.prng), _ = a.value < 0.7, d = fn(0.5)(0.85)(g.prng), l = ux(t.offset)(d.prng)(r);
+    return { path: e ? fx(t)(s)(_)(g.value)(l) : Qg(t)(l), alpha: d.value };
+  })(It(0, t.passes - 1 | 0));
+}, gx = (t) => (n) => (e) => Cr(t)(n)(!0)([
+  { x: e.x, y: e.y },
+  { x: e.x + e.w, y: e.y },
+  { x: e.x + e.w, y: e.y + e.h },
+  { x: e.x, y: e.y + e.h },
+  { x: e.x, y: e.y }
+]), lx = (t) => (n) => (e) => {
+  const r = Se(0)(gr(1)(e)), o = n.h / nt(4), i = Se(6)(o * 1.4);
+  return yt((s) => s)(z((s) => {
+    if (r < Se(0)(nt(s) / nt(4) - 0.05))
+      return J;
+    const u = tu(un(s))(t), c = Se(0)(nt(s) / nt(4) - 0.05), a = ze(s)(2) === 0, g = a ? n.x - 2 : n.x + n.w + 2, _ = a ? n.x + n.w + 2 : n.x - 2, d = n.y + (nt(s) + 0.5) * o;
+    return v(
+      "Just",
+      {
+        path: Rg(Se(0)(gr(1)((r - c) / Se(1e-4)(gr(1)(nt(s + 1 | 0) / nt(4) + 0.05) - c))))((() => {
+          const l = { rMax: 2, offset: 0.6, passes: 1 }, h = Ln(x((p) => (m) => {
+            const y = fn(-o * 0.08)(o * 0.08)(p.prng);
+            return { prng: y.prng, out: [{ x: g + (_ - g) * (nt(m) / nt(4)), y: d + y.value }, ...p.out] };
+          })({ prng: u, out: [] })(It(0, 4)).out), $ = h.length < 2 ? [] : Cr(l)(u)(!1)(h);
+          return 0 < $.length ? $[0].path : [];
+        })()),
+        width: i,
+        alpha: 1
+      }
+    );
+  })(It(0, 3)));
+}, Bs = (t, n, e) => ({ tag: t, _1: n, _2: e }), Wg = (t) => t, Qs = (t, n, e) => ({ tag: t, _1: n, _2: e }), Fi = (t) => (n) => (e) => {
+  const r = ft.compare(t)(e), o = (() => {
+    if (r === "LT")
+      return e;
+    if (r === "EQ" || r === "GT")
+      return t;
+    f();
+  })(), i = ft.compare(n)(o);
+  if (i === "LT" || i === "EQ")
+    return n;
+  if (i === "GT")
+    return o;
+  f();
+}, Dg = (t) => (n) => {
+  const e = ft.compare(t)(n);
+  if (e === "LT" || e === "EQ")
+    return t;
+  if (e === "GT")
+    return n;
+  f();
+}, Ao = (t) => (n) => {
+  const e = ft.compare(t)(n);
+  if (e === "LT")
+    return n;
+  if (e === "EQ" || e === "GT")
+    return t;
+  f();
+}, Hg = (t) => (e) => {
+  let r = e, o = !0, i;
+  for (; o; ) {
+    const s = r;
+    if (s.tag === "Leaf") {
+      o = !1, i = J;
+      continue;
+    }
+    if (s.tag === "Node") {
+      const u = C.compare(t)(s._3);
+      if (u === "LT") {
+        r = s._5;
+        continue;
+      }
+      if (u === "GT") {
+        r = s._6;
+        continue;
+      }
+      if (u === "EQ") {
+        o = !1, i = v("Just", s._4);
+        continue;
+      }
+    }
+    f();
+  }
+  return i;
+}, _n = (t) => (e) => {
+  let r = e, o = !0, i;
+  for (; o; ) {
+    const s = r;
+    if (s.tag === "Leaf") {
+      o = !1, i = J;
+      continue;
+    }
+    if (s.tag === "Node") {
+      const u = C.compare(t)(s._3);
+      if (u === "LT") {
+        r = s._5;
+        continue;
+      }
+      if (u === "GT") {
+        r = s._6;
+        continue;
+      }
+      if (u === "EQ") {
+        o = !1, i = v("Just", s._4);
+        continue;
+      }
+    }
+    f();
+  }
+  return i;
+}, Wn = /* @__PURE__ */ (() => {
+  const t = te.unfoldr(ke);
+  return (n) => t(Kn("IterNode", n, we));
+})(), pr = (t) => (e) => {
+  let r = e, o = !0, i;
+  for (; o; ) {
+    const s = r;
+    if (s.tag === "Leaf") {
+      o = !1, i = J;
+      continue;
+    }
+    if (s.tag === "Node") {
+      const u = C.compare(t)(s._3);
+      if (u === "LT") {
+        r = s._5;
+        continue;
+      }
+      if (u === "GT") {
+        r = s._6;
+        continue;
+      }
+      if (u === "EQ") {
+        o = !1, i = v("Just", s._4);
+        continue;
+      }
+    }
+    f();
+  }
+  return i;
+}, _x = Ht.foldMap(A_), fi = (t) => (n) => {
+  const e = it.compare(t)(n);
+  if (e === "LT")
+    return n;
+  if (e === "EQ" || e === "GT")
+    return t;
+  f();
+}, Og = /* @__PURE__ */ nn(C)(Ht), dx = /* @__PURE__ */ Sf(C), hx = (t) => (e) => {
+  let r = e, o = !0, i;
+  for (; o; ) {
+    const s = r;
+    if (s.tag === "Leaf") {
+      o = !1, i = !1;
+      continue;
+    }
+    if (s.tag === "Node") {
+      const u = C.compare(t)(s._3);
+      if (u === "LT") {
+        r = s._5;
+        continue;
+      }
+      if (u === "GT") {
+        r = s._6;
+        continue;
+      }
+      if (u === "EQ") {
+        o = !1, i = !0;
+        continue;
+      }
+    }
+    f();
+  }
+  return i;
+}, _c = /* @__PURE__ */ Wg("LabelsShown"), px = /* @__PURE__ */ Wg("LabelsHidden"), zg = (t) => {
+  const n = t.Monad0().Bind1(), e = t.popTransform, r = t.popAlpha;
+  return (o) => (i) => (s) => (u) => (c) => n.bind(t.pushAlpha(o.fadeAlpha))(() => n.bind(t.pushTransform({
+    tx: i * (1 - o.popScale),
+    ty: s * (1 - o.popScale),
+    sx: o.popScale,
+    sy: o.popScale
+  }))(() => n.bind(t.pushTransform({ tx: 0, ty: u.y * (1 - o.flipY), sx: 1, sy: o.flipY }))(() => n.bind(c)(() => n.bind(e)(() => n.bind(e)(() => r))))));
+}, se = (t) => {
+  const n = t.Apply0();
+  return (e) => x((r) => (o) => n.apply(n.Functor0().map((i) => lf)(r))(e(o)))(t.pure());
+}, qg = (t) => (n) => (e) => (r) => (o) => (i) => {
+  const s = { x: e.x + e.w / 2, y: e.y + e.h / 2 }, u = { x: n.x + n.w / 2, y: n.y + n.h / 2 }, c = Yr(o)(i)(r), a = 0 < t.length ? v("Just", t[0]) : J, g = (() => {
+    if (a.tag === "Just")
+      return a._1;
+    if (a.tag === "Nothing")
+      return u;
+    f();
+  })(), _ = t.length - 1 | 0, d = _ >= 0 && _ < t.length ? v("Just", t[_]) : J, l = (() => {
+    if (d.tag === "Just")
+      return d._1;
+    if (d.tag === "Nothing")
+      return s;
+    f();
+  })(), h = Ba(128)(Ii(4)(Xr(2)(n)))(Oa(g)(6)), $ = g.x - u.x, p = 2 * (() => {
+    const B = g.y - u.y;
+    return ($ < 0 ? -$ : $) + (B < 0 ? -B : B);
+  })(), m = l.x - s.x, y = 2 * (() => {
+    const B = l.y - s.y;
+    return (m < 0 ? -m : m) + (B < 0 ? -B : B);
+  })(), N = p + Wo(t) + y, T = N <= 1e-4 ? 1 : 1 - y / N, w = N <= 1e-4 ? 0 : p / N, k = T - w, L = Ba(128)(Oa(l)(6))(Ii(4)(Xr(2)(e))), G = { maxDelay: 0.4, smoothPasses: 2 }, D = Br(t)(Fi(0)(1)(k <= 1e-4 ? 0 : (c - w) / k)), Y = (() => {
+    if (D.tag === "Just")
+      return D._1;
+    if (D.tag === "Nothing")
+      return g;
+    f();
+  })(), X = (() => {
+    if (T >= 1)
+      return 0;
+    const B = (c - T) / (1 - T), tt = B < 0 ? 0 : B > 1 ? 1 : B;
+    return tt * tt * (3 - 2 * tt);
+  })(), P = (() => {
+    if (w <= 1e-4)
+      return 1;
+    const B = c / w, tt = B < 0 ? 0 : B > 1 ? 1 : B;
+    return tt * tt * (3 - 2 * tt);
+  })();
+  return c < w ? Qs("PolyShape", Wa(P)(h.from)(h.to)(G)) : c >= T ? Qs("PolyShape", Wa(X)(L.from)(L.to)(G)) : Qs("CircleShape", Y, 6);
+}, Yg = (t) => (n) => (e) => (r) => (o) => (i) => {
+  const s = qg(t)(n)(e)(r)(o)(i);
+  if (s.tag === "PolyShape")
+    return Ag(s._1);
+  if (s.tag === "CircleShape")
+    return s._1;
+  f();
+}, $x = (t) => (n) => {
+  const e = t.y + t.h - 6, r = t.y + 6, o = t.x + 14, i = t.x + t.w - 14, s = x(Ao)(0)(z((u) => o - 10 < u.x + u.w + 12 && i + 10 > u.x - 12 && r - 10 < u.y + u.h + 12 && e + 10 > u.y - 12 ? Dg((u.x + u.w + 12 - (o - 10)) / 0.7071067811865476)((e + 10 - (u.y - 12)) / 0.7071067811865476) : 0)(n));
+  return { ...t, x: t.x + s * 0.7071067811865476, y: t.y - s * 0.7071067811865476 };
+}, mx = (t) => (n) => (e) => x((r) => (o) => {
+  const i = Hg(o)(n);
+  if (i.tag === "Nothing")
+    return r;
+  if (i.tag === "Just") {
+    const s = $x(i._1)(r.obstacles);
+    return { acc: U(C)(o)(s)(r.acc), obstacles: Dt(r.obstacles)(s) };
+  }
+  f();
+})({ acc: A, obstacles: e })(t).acc, dc = /* @__PURE__ */ (() => {
+  const t = { r: 24, g: 24, b: 27, a: 255 }, n = { r: 244, g: 244, b: 245, a: 255 }, e = { r: 248, g: 249, b: 246, a: 255 }, r = { r: 26, g: 26, b: 26, a: 255 }, o = { r: 28, g: 101, b: 192, a: 255 }, i = { r: 247, g: 248, b: 250, a: 255 }, s = { r: 42, g: 48, b: 60, a: 255 }, u = { r: 120, g: 130, b: 146, a: 255 };
+  return (c) => {
+    if (c === "Light")
+      return {
+        bg: { r: 255, g: 255, b: 255, a: 255 },
+        bgTransparent: { r: 0, g: 0, b: 0, a: 0 },
+        bgDot: { r: 214, g: 211, b: 209, a: 255 },
+        shadowFill: { r: 255, g: 255, b: 255, a: 255 },
+        shadowDot: { r: 26, g: 26, b: 26, a: 255 },
+        chip: { r: 255, g: 235, b: 130, a: 255 },
+        chipShadow: { r: 214, g: 211, b: 209, a: 255 },
+        chipText: Ee,
+        nodeFill: en,
+        nodeStroke: Ee,
+        text: Ee,
+        edge: Ee,
+        arrowFill: Ee,
+        tokenOutsideFill: Ee,
+        tokenOutsideStroke: en,
+        tokenInside: en,
+        tokenInsideStroke: en,
+        tokenInsideBlend: ai,
+        tokenInsideAlpha: 1,
+        chipPillFill: Ee,
+        chipPillText: en,
+        chipHairline: { r: 26, g: 26, b: 26, a: 90 },
+        trailDot: Ee,
+        wobble: !1,
+        fontFamily: "Ilisarniq, ui-sans-serif, system-ui, sans-serif"
+      };
+    if (c === "Dark")
+      return {
+        bg: t,
+        bgTransparent: { r: 0, g: 0, b: 0, a: 0 },
+        bgDot: { r: 63, g: 63, b: 70, a: 255 },
+        shadowFill: t,
+        shadowDot: n,
+        chip: { r: 234, g: 179, b: 8, a: 255 },
+        chipShadow: { r: 0, g: 0, b: 0, a: 120 },
+        chipText: t,
+        nodeFill: Ee,
+        nodeStroke: n,
+        text: n,
+        edge: n,
+        arrowFill: n,
+        tokenOutsideFill: en,
+        tokenOutsideStroke: en,
+        tokenInside: en,
+        tokenInsideStroke: en,
+        tokenInsideBlend: ai,
+        tokenInsideAlpha: 1,
+        chipPillFill: n,
+        chipPillText: t,
+        chipHairline: { r: 244, g: 244, b: 245, a: 120 },
+        trailDot: n,
+        wobble: !1,
+        fontFamily: "Ilisarniq, ui-sans-serif, system-ui, sans-serif"
+      };
+    if (c === "Blueprint")
+      return {
+        bg: o,
+        bgTransparent: { r: 0, g: 0, b: 0, a: 0 },
+        bgDot: { r: 90, g: 160, b: 230, a: 255 },
+        shadowFill: o,
+        shadowDot: en,
+        chip: en,
+        chipShadow: { r: 0, g: 0, b: 0, a: 120 },
+        chipText: o,
+        nodeFill: o,
+        nodeStroke: en,
+        text: en,
+        edge: en,
+        arrowFill: en,
+        tokenOutsideFill: en,
+        tokenOutsideStroke: en,
+        tokenInside: en,
+        tokenInsideStroke: en,
+        tokenInsideBlend: Ga,
+        tokenInsideAlpha: 0.35,
+        chipPillFill: en,
+        chipPillText: o,
+        chipHairline: { r: 255, g: 255, b: 255, a: 120 },
+        trailDot: en,
+        wobble: !1,
+        fontFamily: "Ilisarniq, ui-sans-serif, system-ui, sans-serif"
+      };
+    if (c === "Whiteboard")
+      return {
+        bg: e,
+        bgTransparent: { r: 0, g: 0, b: 0, a: 0 },
+        bgDot: { r: 0, g: 0, b: 0, a: 0 },
+        shadowFill: e,
+        shadowDot: r,
+        chip: { r: 217, g: 74, b: 56, a: 255 },
+        chipShadow: { r: 26, g: 26, b: 26, a: 60 },
+        chipText: e,
+        nodeFill: e,
+        nodeStroke: r,
+        text: r,
+        edge: r,
+        arrowFill: r,
+        tokenOutsideFill: r,
+        tokenOutsideStroke: e,
+        tokenInside: e,
+        tokenInsideStroke: e,
+        tokenInsideBlend: Ga,
+        tokenInsideAlpha: 1,
+        chipPillFill: r,
+        chipPillText: e,
+        chipHairline: { r: 26, g: 26, b: 26, a: 90 },
+        trailDot: r,
+        wobble: !0,
+        fontFamily: "Supermarker, Ilisarniq, ui-sans-serif, system-ui, sans-serif"
+      };
+    if (c === "Isometric")
+      return {
+        bg: i,
+        bgTransparent: { r: 0, g: 0, b: 0, a: 0 },
+        bgDot: { r: 214, g: 218, b: 224, a: 255 },
+        shadowFill: i,
+        shadowDot: s,
+        chip: { r: 255, g: 235, b: 130, a: 255 },
+        chipShadow: { r: 100, g: 110, b: 125, a: 90 },
+        chipText: s,
+        nodeFill: { r: 236, g: 239, b: 244, a: 255 },
+        nodeStroke: s,
+        text: s,
+        edge: u,
+        arrowFill: u,
+        tokenOutsideFill: s,
+        tokenOutsideStroke: en,
+        tokenInside: en,
+        tokenInsideStroke: en,
+        tokenInsideBlend: ai,
+        tokenInsideAlpha: 1,
+        chipPillFill: s,
+        chipPillText: en,
+        chipHairline: { r: 60, g: 66, b: 78, a: 90 },
+        trailDot: s,
+        wobble: !1,
+        fontFamily: "Ilisarniq, ui-sans-serif, system-ui, sans-serif"
+      };
+    f();
+  };
+})(), xu = (t) => (n) => Jt(Wn(t.nodes))((e) => {
+  const r = _n(e._1)(n.nodes);
+  return r.tag === "Just" && ls(r._1).alpha > 0 ? HN(e._2) : [];
+}), yx = (t) => (n) => (e) => [
+  1,
+  t.vx,
+  t.vy,
+  2,
+  t.vx + t.vw,
+  t.vy,
+  2,
+  t.vx + t.vw,
+  t.vy + t.vh,
+  2,
+  t.vx,
+  t.vy + t.vh,
+  5,
+  ...xu(n)(e)
+], Nx = (t) => {
+  const n = t.Monad0(), e = n.Bind1(), r = n.Applicative0(), o = $r.traverse(r);
+  return (i) => (s) => {
+    const u = Ze(s), c = 0.32 * i.size;
+    return o((a) => e.bind(a === 0 ? r.pure(0) : t.measureText(i)(mn(a)(s)))((g) => e.bind(t.measureText(i)(mn(a + 1 | 0)(s)))((_) => e.bind(t.measureInk(i)(a >= 0 && a < u.length ? Ki(u[a]) : " "))((d) => r.pure({ x: g, w: _ - g, up: d.ascent - c, down: d.descent + c })))))(It(
+      0,
+      u.length - 1 | 0
+    ));
+  };
+}, xx = (t) => (n) => {
+  const e = (o) => (o.x - n.x) * (o.x - n.x) + (o.y - n.y) * (o.y - n.y), r = x((o) => (i) => e(i) < e(o) ? i : o)({ x: t.x, y: t.y })([{ x: t.x, y: t.y }, { x: t.x + t.w, y: t.y }, { x: t.x, y: t.y + t.h }, { x: t.x + t.w, y: t.y + t.h }]);
+  return z((o) => {
+    const i = nt(o) / 5;
+    return { x: r.x + (n.x - r.x) * i, y: r.y + (n.y - r.y) * i };
+  })([1, 2, 3, 4]);
+}, hc = (t) => {
+  const n = ts(`
+`)(t);
+  return n.length === 0 ? [""] : n;
+}, Jx = (t) => (n) => (e) => (r) => (o) => (i) => {
+  const s = { x: e.x + e.w / 2, y: e.y + e.h / 2 }, u = { x: n.x + n.w / 2, y: n.y + n.h / 2 }, c = Yr(o)(i)(r), a = 0 < t.length ? v("Just", t[0]) : J, g = (() => {
+    if (a.tag === "Just")
+      return a._1;
+    if (a.tag === "Nothing")
+      return u;
+    f();
+  })(), _ = t.length - 1 | 0, d = _ >= 0 && _ < t.length ? v("Just", t[_]) : J, l = (() => {
+    if (d.tag === "Just")
+      return d._1;
+    if (d.tag === "Nothing")
+      return s;
+    f();
+  })(), h = g.x - u.x, $ = 2 * (() => {
+    const G = g.y - u.y;
+    return (h < 0 ? -h : h) + (G < 0 ? -G : G);
+  })(), p = l.x - s.x, m = 2 * (() => {
+    const G = l.y - s.y;
+    return (p < 0 ? -p : p) + (G < 0 ? -G : G);
+  })(), y = $ + Wo(t) + m, N = y <= 1e-4 ? 1 : 1 - m / y, T = y <= 1e-4 ? 0 : $ / y, w = N - T, k = Br(t)(Fi(0)(1)(w <= 1e-4 ? 0 : (c - T) / w)), L = (() => {
+    if (k.tag === "Just")
+      return k._1;
+    if (k.tag === "Nothing")
+      return g;
+    f();
+  })();
+  return c < T ? Bs("InsideRect", Xr(2)(n)) : c >= N ? Bs("InsideRect", Xr(2)(e)) : Bs("InsideBall", L, 6);
+}, Tx = { offset: 0.8, passes: 2, rMax: 5 }, vx = (t) => {
+  const n = t.Monad0().Applicative0(), e = se(n);
+  return (r) => (o) => (i) => (s) => {
+    const u = { color: s, width: 1, lineJoin: Tn, lineCap: le }, c = { color: i, flat: !0 }, a = (g) => t.drawRoundedRect({ x: g.x, y: g.y, w: g.w, h: g.h })(4)(v("Just", c))(v("Just", u));
+    return e((g) => {
+      if (g._2.tag === "Travelling") {
+        const _ = pr(g._2._1.edge)(r.edges), d = _n(g._2._1.target)(r.nodes), l = _n(g._2._1.source)(r.nodes);
+        if (l.tag === "Just" && d.tag === "Just" && _.tag === "Just") {
+          const h = Jx((() => {
+            if (g._2._1.direction === "Forward")
+              return _._1;
+            if (g._2._1.direction === "Backward")
+              return Ln(_._1);
+            f();
+          })())(l._1)(d._1)(g._2._1.progress)(g._2._1.holdPre)(g._2._1.holdPost);
+          if (h.tag === "InsideRect")
+            return a(h._1);
+          if (h.tag === "InsideBall")
+            return t.fillStrokePath(_s(h._1)(h._2))(c)(u);
+          f();
+        }
+        return n.pure();
+      }
+      if (g._2.tag === "Filling") {
+        const _ = _n(g._2._1.node)(r.nodes);
+        if (_.tag === "Just")
+          return a(Xr(2)(_._1));
+        if (_.tag === "Nothing")
+          return n.pure();
+        f();
+      }
+      return n.pure();
+    })(Wn(o.tokens));
+  };
+}, Va = (t) => (n) => (e) => (r) => t.strokePath((() => {
+  const o = Rt(
+    (i) => J,
+    (i) => (s) => v("Just", { head: i, tail: s }),
+    z((i) => i.pt)(d_(
+      (i) => (s) => {
+        const u = nt(s) / nt(72), c = fn(-0.18)(0.18)(i.prng), a = fn(-0.1)(0.1)(c.prng), g = fn(-0.07)(0.07)(a.prng), _ = e * (0.05 + 0.55 * u) * (1 + a.value), d = u * 28.274333882308138 + c.value;
+        return { prng: g.prng, pt: { x: n.x + re(d) * _ + g.value * e, y: n.y + Un(d) * _ + g.value * e } };
+      },
+      { prng: 137, pt: { x: n.x, y: n.y } },
+      It(0, 72)
+    ))
+  );
+  if (o.tag === "Just")
+    return [1, o._1.head.x, o._1.head.y, ..._x((i) => [2, i.x, i.y])(o._1.tail)];
+  if (o.tag === "Nothing")
+    return [];
+  f();
+})())({ color: r, width: 5.5, lineJoin: Tn, lineCap: We }), wx = (t) => {
+  const n = t.Monad0(), e = n.Bind1(), r = t.popAlpha, o = se(n.Applicative0());
+  return (i) => (s) => (u) => o((c) => e.bind(t.pushAlpha(c.alpha))(() => e.bind(t.strokePath(c.path)({
+    color: i.nodeFill,
+    width: c.width,
+    lineJoin: Tn,
+    lineCap: We
+  }))(() => r)))(lx(Fg(s) + 7777 | 0)(s)(u));
+}, Xg = (t) => {
+  const n = t.Monad0(), e = n.Bind1(), r = t.popAlpha, o = n.Applicative0(), i = se(o), s = se(o), u = $r.traverse(o), c = Nx(t), a = wx(t), g = t.popTransform;
+  return (_) => (d) => (l) => (h) => ($) => (p) => (m) => {
+    const y = (q) => e.bind(t.pushAlpha(q.alpha))(() => e.bind(t.strokePath(q.path)({
+      color: d.nodeStroke,
+      width: 2,
+      lineJoin: Tn,
+      lineCap: We
+    }))(() => r)), N = { family: d.fontFamily, size: d.wobble ? 15 : 11, weight: d.wobble ? 800 : 500 }, T = ts(`
+`)(p.label === "" ? $ : p.label), w = T.length === 0 ? [""] : T, k = N.size * 1.2, L = p.shape === "Cylinder" ? t.strokePath(fN({ x: p.x, y: p.y, w: p.w, h: p.h }))({
+      color: d.nodeStroke,
+      width: 1.25,
+      lineJoin: Tn,
+      lineCap: le
+    }) : o.pure(), G = (p.shape === "Cylinder" ? (p.y + (p.y + p.h + 5 - 2 * ie(p.h * 0.075)(p.w * 0.075))) / 2 : (p.y + p.y + p.h) / 2) - nt(w.length) * k / 2 + k / 2, D = m.tag === "PloppingOut" && d.wobble ? m._1 : -1, Y = D >= 0, X = ls(m), P = Y ? { alpha: 1, scale: 1 } : X, B = p.x + p.w / 2, tt = p.y + p.h / 2, ct = e.bind(t.pushAlpha(P.alpha * l))(() => e.bind(t.pushTransform({
+      tx: B * (1 - P.scale),
+      ty: tt * (1 - P.scale),
+      sx: P.scale,
+      sy: P.scale
+    }))(() => {
+      const q = { x: p.x, y: p.y, w: p.w, h: p.h }, R = {
+        color: d.nodeStroke,
+        width: d.wobble ? 2 : 1.25,
+        lineJoin: Tn,
+        lineCap: d.wobble ? We : le
+      };
+      return e.bind((() => {
+        if (d.wobble) {
+          if (p.shape === "Rectangle")
+            return i(y)(gx(Xa)(Fg(q))(q));
+          const E = Ii(7)(p);
+          return e.bind(i(y)((() => {
+            const S = Io(E);
+            return E.length < 4 ? [] : Cr(Ya)(S)(!0)(E);
+          })()))(() => s((S) => i(y)((() => {
+            const O = Io(S);
+            return S.length < 2 ? [] : Cr(Ya)(O)(!1)(S);
+          })()))(p.shape === "Cylinder" ? [MN(p)] : []));
+        }
+        return e.bind(Cg(t)(p.shape)(q)(7)(v("Just", { color: d.nodeFill, flat: !1 }))(v(
+          "Just",
+          R
+        )))(() => L);
+      })())(() => e.bind((() => {
+        if (h.tag === "Just" && d.wobble && !Y) {
+          const E = h._1;
+          return e.bind(u(c(N))(w))((S) => {
+            const O = kt((rt) => (K) => ft.compare(rt.x)(K.x)), I = $n(Ne(p.x * 7919 + p.y * 3001)) * -1640531535 | 0, W = fn(5)(7.5)(I), Q = fn(0)(W.value)(W.prng), M = -(1 + 2 * fn(-1)(1)(Q.prng).value * 3.141592653589793 / 180), V = (rt, K, st, gt, dt) => O(yt((Nt) => Nt)([
+              M * K + rt >= gt && M * K + rt <= dt ? v("Just", { x: K, y: M * K + rt }) : J,
+              M * st + rt >= gt && M * st + rt <= dt ? v("Just", { x: st, y: M * st + rt }) : J,
+              (() => {
+                const Nt = (gt - rt) / M;
+                return Nt >= K && Nt <= st ? v("Just", { x: Nt, y: gt }) : J;
+              })(),
+              (() => {
+                const Nt = (dt - rt) / M;
+                return Nt >= K && Nt <= st ? v("Just", { x: Nt, y: dt }) : J;
+              })()
+            ])), H = W.value, et = ze(E.frameHash)(3), j = et === 0 ? { r: 200, g: 35, b: 30, a: 220 } : et === 1 ? { r: 35, g: 150, b: 80, a: 220 } : { r: 30, g: 80, b: 200, a: 220 }, ot = p.x + p.w / 2, Z = zn(Ft((rt) => (K) => Ft((() => {
+              const st = G + nt(rt) * k, gt = ot - x((dt) => (Nt) => dt + Nt.w)(0)(K) / 2;
+              return (dt) => (Nt) => {
+                const At = N.size * 0.1, Vt = dt - 1 | 0, Pn = Vt >= 0 && Vt < K.length && dt > 0 ? (K[Vt].x + K[Vt].w + Nt.x) / 2 : Nt.x - At;
+                return {
+                  x: gt + Pn - 1,
+                  y: st - Nt.up - 1,
+                  w: Ao(0)((() => {
+                    const ne = dt + 1 | 0;
+                    return ne >= 0 && ne < K.length && dt < (K.length - 1 | 0) ? (Nt.x + Nt.w + K[ne].x) / 2 - Pn : Nt.x + Nt.w + At - Pn;
+                  })()) + 2,
+                  h: Nt.up + Nt.down + 2
+                };
+              };
+            })())(K))(S)), at = p.y + 4, _t = p.x + p.w - 4, Qt = p.x + 4, Tt = at - M * Qt + Q.value, Bt = p.y + p.h - 4, $t = Jt(Jt(Ft((rt) => (K) => {
+              const st = (K.from.x + K.to.x) / 2, gt = (K.from.y + K.to.y) / 2, dt = fn(-1)(1)(I + (911 * (rt + 1 | 0) | 0) | 0), Nt = fn(-3)(5)(dt.prng), At = dt.value * 3.141592653589793 / 180, Vt = re(At), Pn = Un(At), ne = (kn) => ({ x: st + (kn.x - st) * Vt - (kn.y - gt) * Pn, y: gt + (kn.x - st) * Pn + (kn.y - gt) * Vt });
+              return {
+                from: (() => {
+                  const kn = ne(K.from), Qn = kn.y - gt, St = kn.x - st, Pt = En(St * St + Qn * Qn), Xn = Pt < 1e-4 ? 1 : (Pt + Nt.value) / Pt;
+                  return { x: st + St * Xn, y: gt + Qn * Xn };
+                })(),
+                to: (() => {
+                  const kn = ne(K.to), Qn = fn(-3)(5)(Nt.prng).value, St = kn.y - gt, Pt = kn.x - st, Xn = En(Pt * Pt + St * St), _e = Xn < 1e-4 ? 1 : (Xn + Qn) / Xn;
+                  return { x: st + Pt * _e, y: gt + St * _e };
+                })()
+              };
+            })(yt((rt) => {
+              const K = V(Tt + nt(rt) * H, Qt, _t, at, Bt);
+              return K.length === 2 ? v("Just", { from: K[0], to: K[1] }) : J;
+            })(It(0, fi(1)($n(Ne((Bt - M * _t - Tt) / H)))))))((rt) => lt(
+              (K) => K.to.x - K.from.x > 1,
+              x((K) => (st) => Jt(K)((gt) => {
+                const dt = V(gt.from.y - M * gt.from.x, st.x, st.x + st.w, st.y, st.y + st.h);
+                return dt.length === 2 ? dt[0].x > gt.from.x + 1e-3 && dt[1].x < gt.to.x - 1e-3 ? [{ from: gt.from, to: dt[0] }, { from: dt[1], to: gt.to }] : dt[0].x <= gt.from.x + 1e-3 && dt[1].x < gt.to.x - 1e-3 ? [{ from: dt[1], to: gt.to }] : dt[0].x > gt.from.x + 1e-3 && dt[1].x >= gt.to.x - 1e-3 ? [{ from: gt.from, to: dt[0] }] : [] : [gt];
+              }))([rt])(Z)
+            )))((rt) => (() => {
+              const K = rt.to.x - rt.from.x;
+              return En(2) * (K >= 0 ? K : -K) <= 28;
+            })() ? [rt] : [
+              { from: rt.from, to: { x: rt.from.x + (rt.to.x - rt.from.x) * 0.495, y: rt.from.y + (rt.to.y - rt.from.y) * 0.495 } },
+              { from: { x: rt.from.x + (rt.to.x - rt.from.x) * 0.505, y: rt.from.y + (rt.to.y - rt.from.y) * 0.505 }, to: rt.to }
+            ]), xt = $t.length, mt = (rt) => Ao(0)(Dg(1)(E.t * nt(xt) - nt(rt)));
+            return i((rt) => {
+              const K = rt._1, st = fn(1.4)(1.9)(I + (1303 * (K + 1 | 0) | 0) | 0), gt = fn(0.35)(0.8)(st.prng), dt = i((Nt) => e.bind(t.pushAlpha(Nt.alpha * gt.value))(() => e.bind(t.strokePath(Rg(mt(K))(Nt.path))({
+                color: j,
+                width: st.value,
+                lineJoin: Tn,
+                lineCap: We
+              }))(() => r)))(Cr({ ...Xa, rMax: 0, offset: 0.5 })(I + (53 * (K + 1 | 0) | 0) | 0)(!1)([rt._2.from, rt._2.to]));
+              return mt(K) > 0 ? dt : o.pure();
+            })(Ft(Xe)($t));
+          });
+        }
+        return o.pure();
+      })())(() => e.bind((() => {
+        if (_ === "LabelsShown")
+          return i((E) => t.drawText({
+            x: p.x + p.w / 2,
+            y: G + nt(E._1) * k,
+            content: E._2,
+            font: N,
+            color: d.text,
+            align: fs,
+            baseline: qr
+          }))(Ft(Xe)(w));
+        if (_ === "LabelsHidden")
+          return o.pure();
+        f();
+      })())(() => e.bind((() => {
+        const E = a(d)(q)(D);
+        return Y ? E : o.pure();
+      })())(() => e.bind(g)(() => r)))));
+    }));
+    return P.alpha * l > 0 ? ct : o.pure();
+  };
+}, kx = (t) => {
+  const n = t.Monad0(), e = n.Applicative0(), r = n.Bind1(), o = Xg(t), i = t.popAlpha, s = se(e);
+  return (u) => (c) => (a) => {
+    const g = { ...u, nodeFill: u.text, text: u.nodeFill, nodeStroke: u.nodeFill };
+    return s((_) => {
+      const d = _n(_._1)(a.nodes), l = _n(_._1)(c.nodes), h = (() => {
+        if (l.tag === "Just" && d.tag === "Just") {
+          const $ = d._1, p = l._1;
+          return r.bind(t.pushAlpha(_._2))(() => r.bind(o(_c)(g)(1)(J)(_._1)(p)($))(() => i));
+        }
+        return e.pure();
+      })();
+      return _._2 > 0 ? h : e.pure();
+    })(Wn(a.nodeInvert));
+  };
+}, Vg = (t) => {
+  const n = t.Monad0().Bind1();
+  return (e) => (r) => (o) => (i) => r ? n.bind(t.clearBackground(e.bgTransparent))(() => t.setViewport(i)) : e.wobble ? n.bind(t.setViewport(i))(() => t.clearBackground(e.bg)) : n.bind(t.setViewport(i))(() => t.backgroundDots({
+    viewport: i,
+    bgColor: e.bg,
+    dotColor: e.bgDot,
+    tile: 12 * o,
+    dotRadius: 0.7 * o
+  }));
+}, bx = (t) => {
+  const n = t.Monad0(), e = n.Applicative0(), r = n.Bind1(), o = t.popAlpha;
+  return (i) => (s) => (u) => (c) => (a) => (g) => (_) => (d) => (l) => {
+    const h = (() => {
+      if (l > 1e-4 && _ > 1 - l) {
+        const p = (1 - _) / l;
+        return p < 0 ? 0 : p > 1 ? 1 : p;
+      }
+      if (d > 1e-4 && _ < d) {
+        const p = _ / d;
+        return p < 0 ? 0 : p > 1 ? 1 : p;
+      }
+      return 1;
+    })(), $ = qg(c)(a)(g)(_)(d)(l);
+    if ($.tag === "CircleShape")
+      return i ? Va(t)($._1)($._2)({ r: 200, g: 35, b: 30, a: 220 }) : t.fillStrokePath(_s($._1)($._2))({ color: s, flat: !0 })({
+        color: u,
+        width: 1,
+        lineJoin: Tn,
+        lineCap: le
+      });
+    if ($.tag === "PolyShape" && i && $._1.length >= 3)
+      return r.bind(t.pushAlpha(h))(() => r.bind(Va(t)(Ag($._1))(6)({
+        r: 200,
+        g: 35,
+        b: 30,
+        a: 220
+      }))(() => o));
+    if ($.tag === "PolyShape")
+      return i ? e.pure() : $._1.length >= 3 ? t.fillStrokePath(Ig($._1))({ color: s, flat: !0 })({
+        color: u,
+        width: 1,
+        lineJoin: Tn,
+        lineCap: le
+      }) : e.pure();
+    f();
+  };
+}, Lx = (t) => {
   const n = t.Monad0().Bind1(), e = t.popAlpha;
   return (r) => (o) => (i) => (s) => (u) => (c) => (a) => {
-    const g = { x: i.x + i.w / 2, y: i.y + i.h / 2 }, l = Or(0.05)(1 - c - a), d = u < c ? 0 : u > 1 - a ? 1 : (u - c) / l, _ = { x: s.x + s.w / 2, y: s.y + s.h / 2 }, h = (p, $) => n.bind(t.pushAlpha($))(() => n.bind(t.fillStrokePath(Ds(p)(6))({ color: r, flat: !0 })({
-      color: o,
-      width: 1,
-      lineJoin: re,
-      lineCap: we
-    }))(() => e));
-    return d < 0.5 ? h(
-      g,
-      (() => {
-        const p = d * 2;
-        return 1 - (p < 0 ? 0 : p > 1 ? 1 : p) * (p < 0 ? 0 : p > 1 ? 1 : p) * (p < 0 ? 3 : p > 1 ? 1 : 3 - 2 * p);
-      })()
-    ) : h(
+    const g = Yr(c)(a)(u), _ = { x: i.x + i.w / 2, y: i.y + i.h / 2 }, d = { x: s.x + s.w / 2, y: s.y + s.h / 2 }, l = (h, $) => n.bind(t.pushAlpha($))(() => n.bind(t.fillStrokePath(_s(h)(6))({
+      color: r,
+      flat: !0
+    })({ color: o, width: 1, lineJoin: Tn, lineCap: le }))(() => e));
+    return g < 0.5 ? l(
       _,
       (() => {
-        const p = (d - 0.5) * 2;
-        return (p < 0 ? 0 : p > 1 ? 1 : p) * (p < 0 ? 0 : p > 1 ? 1 : p) * (p < 0 ? 3 : p > 1 ? 1 : 3 - 2 * p);
+        const h = g * 2;
+        return 1 - (h < 0 ? 0 : h > 1 ? 1 : h) * (h < 0 ? 0 : h > 1 ? 1 : h) * (h < 0 ? 3 : h > 1 ? 1 : 3 - 2 * h);
+      })()
+    ) : l(
+      d,
+      (() => {
+        const h = (g - 0.5) * 2;
+        return (h < 0 ? 0 : h > 1 ? 1 : h) * (h < 0 ? 0 : h > 1 ? 1 : h) * (h < 0 ? 3 : h > 1 ? 1 : 3 - 2 * h);
       })()
     );
   };
-}, R$ = (t) => {
-  const n = t.length;
-  return n === 0 ? { x: 0, y: 0 } : { x: Vu(O((e) => e.x)(t)) / ct(n), y: Vu(O((e) => e.y)(t)) / ct(n) };
-}, Ya = (t) => (n) => (e) => {
-  const r = Cr(6)(0.55)(Fe(0)(1)((1 - t) / 0.06)), o = t > 0.94, i = o && e > 1e-4, s = Cr(6)(0.55)(Fe(0)(1)(t / 0.06)), u = t < 0.06, c = u && n > 1e-4, a = o && e <= 1e-4;
+}, Ri = (t) => {
+  const n = bx(t), e = Lx(t), r = t.Monad0().Applicative0(), o = se(r);
+  return (i) => (s) => (u) => (c) => (a) => o((g) => {
+    if (g._2.tag === "Travelling") {
+      const _ = _n(g._2._1.target)(s.nodes), d = _n(g._2._1.source)(s.nodes);
+      if (d.tag === "Just" && _.tag === "Just") {
+        const l = pr(g._2._1.edge)(s.edges);
+        if (l.tag === "Just")
+          return n(i)(c)(a)((() => {
+            if (g._2._1.direction === "Forward")
+              return l._1;
+            if (g._2._1.direction === "Backward")
+              return Ln(l._1);
+            f();
+          })())(d._1)(_._1)(g._2._1.progress)(g._2._1.holdPre)(g._2._1.holdPost);
+        if (l.tag === "Nothing")
+          return e(c)(a)(d._1)(_._1)(g._2._1.progress)(g._2._1.holdPre)(g._2._1.holdPost);
+        f();
+      }
+      return r.pure();
+    }
+    if (g._2.tag === "Filling") {
+      if (i)
+        return r.pure();
+      const _ = _n(g._2._1.node)(s.nodes);
+      if (_.tag === "Just")
+        return t.fillStrokePath(Ig(Ii(4)(Xr(2)(_._1))))({
+          color: c,
+          flat: !0
+        })({ color: a, width: 1, lineJoin: Tn, lineCap: le });
+      if (_.tag === "Nothing")
+        return r.pure();
+      f();
+    }
+    return r.pure();
+  })(Wn(u.tokens));
+}, Ug = (t) => {
+  const n = Ri(t), e = t.Monad0(), r = e.Bind1(), o = Ri(t), i = vx(t), s = t.popClip, u = t.popBlend, c = t.popLayer, a = e.Applicative0(), g = se(a), _ = t.popAlpha;
+  return (d) => (l) => (h) => ($) => {
+    const p = l.wobble ? n(!0)(h)($)(l.tokenInside)(l.tokenInsideStroke) : r.bind(t.insideTokenStyle(d))((m) => {
+      if (m === "GenieSilhouette")
+        return o(!1)(h)($)(l.tokenInside)(l.tokenInsideStroke);
+      if (m === "ConvexAbsorb")
+        return i(h)($)(l.tokenInside)(l.tokenInsideStroke);
+      f();
+    });
+    if (l.tokenInsideBlend === "Difference")
+      return r.bind(t.pushLayer(Uy))(() => r.bind(t.pushBlend(ai))(() => r.bind(t.pushClip(xu(h)($))($u))(() => r.bind(p)(() => r.bind(s)(() => r.bind(u)(() => r.bind(c)(() => r.bind(t.pushLayer(Ky))(() => r.bind(g((m) => {
+        const y = _n(m._1)($.nodes);
+        return y.tag === "Just" && ls(y._1).alpha > 0 ? Cg(t)(m._2.shape)({ x: m._2.x, y: m._2.y, w: m._2.w, h: m._2.h })(7)(v(
+          "Just",
+          { color: en, flat: !1 }
+        ))(J) : a.pure();
+      })(Wn(h.nodes)))(() => c)))))))));
+    if (l.tokenInsideBlend === "Normal")
+      return r.bind(t.pushClip(xu(h)($))($u))(() => r.bind(t.pushAlpha(l.tokenInsideAlpha))(() => r.bind(p)(() => r.bind(_)(() => s))));
+    f();
+  };
+}, Kg = (t) => {
+  const n = t.Monad0().Bind1(), e = Ri(t), r = Ri(t), o = t.popClip, i = t.popLayer;
+  return (s) => (u) => (c) => (a) => n.bind(t.pushLayer(Vy))(() => n.bind(t.pushClip(yx(u)(c)(a))(jy))(() => n.bind(s.wobble ? e(!0)(c)(a)(s.tokenOutsideFill)(s.tokenOutsideStroke) : r(!1)(c)(a)(s.tokenOutsideFill)(s.tokenOutsideStroke))(() => n.bind(o)(() => i))));
+}, Ex = (t) => {
+  const n = t.Monad0(), e = n.Bind1(), r = n.Applicative0(), o = se(r);
+  return (i) => (s) => (u) => (c) => (a) => (g) => {
+    const _ = rs(g).length, d = nt(_ + 1 | 0), l = (m) => {
+      const y = (u * d - nt(m)) / 1.5, N = y < 0 ? 0 : y > 1 ? 1 : y;
+      return N * N * (3 - 2 * N);
+    }, $ = ((m) => {
+      let y = m, N = !0, T;
+      for (; N; ) {
+        const w = y;
+        if (w >= _) {
+          N = !1, T = w;
+          continue;
+        }
+        if (l(w) >= 1) {
+          y = w + 1 | 0;
+          continue;
+        }
+        N = !1, T = w;
+      }
+      return T;
+    })(0), p = $ >= _ ? [] : ur((m) => l(m) > 0)(It($, _ - 1 | 0)).init;
+    return e.bind((() => {
+      const m = t.drawText({
+        x: c,
+        y: a,
+        content: mn($)(g),
+        font: i,
+        color: s,
+        align: pu,
+        baseline: qr
+      });
+      return $ > 0 ? m : r.pure();
+    })())(() => o((m) => e.bind(t.measureText(i)(mn(m)(g)))((y) => {
+      const N = l(m);
+      return t.drawText({
+        x: c + y,
+        y: a - (1 - N) * 10,
+        content: mn(1)(mo(Me(mn(m)(g)))(g)),
+        font: i,
+        color: { ...s, a: $n(Ne(N * nt(s.a))) },
+        align: pu,
+        baseline: qr
+      });
+    }))(p));
+  };
+}, hs = (t) => (n) => (e) => (r) => {
+  const o = z((h) => nt(fi(1)(rs(h).length)))(r), i = Ao(1)(x(Rr)(0)(o)), s = Yr(n)(e)(t), u = s * i, c = fi(1)(r.length), g = ((h) => ($) => (p) => {
+    let m = h, y = $, N = p, T = !0, w;
+    for (; T; ) {
+      const k = m, L = y, D = Rt((Y) => J, (Y) => (X) => v("Just", { head: Y, tail: X }), N);
+      if (D.tag === "Nothing") {
+        T = !1, w = fi(0)(c - 1 | 0);
+        continue;
+      }
+      if (D.tag === "Just") {
+        if (L + D._1.head >= u) {
+          T = !1, w = k;
+          continue;
+        }
+        m = k + 1 | 0, y = L + D._1.head, N = D._1.tail;
+        continue;
+      }
+      f();
+    }
+    return w;
+  })(0)(0)(o), _ = x(Rr)(0)(g < 1 ? [] : bt(0, g, o)), d = _ / i;
+  if (g >= 0 && g < o.length) {
+    const h = (_ + o[g]) / i;
+    return {
+      line: g >= 0 && g < r.length ? r[g] : "",
+      phaseInLabel: (() => {
+        if (h <= d)
+          return 1;
+        const $ = (s - d) / (h - d);
+        return $ < 0 ? 0 : $ > 1 ? 1 : $;
+      })()
+    };
+  }
+  const l = (_ + 1) / i;
+  return {
+    line: g >= 0 && g < r.length ? r[g] : "",
+    phaseInLabel: (() => {
+      if (l <= d)
+        return 1;
+      const h = (s - d) / (l - d);
+      return h < 0 ? 0 : h > 1 ? 1 : h;
+    })()
+  };
+}, Sx = (t) => {
+  const n = t.Monad0();
+  return (e) => (r) => (o) => n.Bind1().bind(t.measureText({ family: "Ilisarniq, ui-sans-serif, system-ui, sans-serif", size: 11, weight: 500 })(hs(r)(0)(0)(z(c_)(o)).line))((i) => {
+    const s = i + 28;
+    return n.Applicative0().pure({ x: e.x + e.w / 2 - s / 2, y: e.y - 25.2 - 14, w: s, h: 25.2 });
+  });
+}, Cx = (t) => {
+  const n = t.Monad0(), e = n.Bind1(), r = Sx(t), o = n.Applicative0(), i = $r.traverse(o);
+  return (s) => (u) => e.Apply0().Functor0().map((c) => Og(yt((a) => a)(c)))(i((c) => {
+    if (c._2.tag === "Filling" && c._2._1.labels.length !== 0) {
+      const a = _n(c._2._1.node)(s.nodes);
+      if (a.tag === "Just")
+        return e.bind(r(a._1)(c._2._1.progress)(c._2._1.labels))((g) => o.pure(v("Just", b(c._1, g))));
+      if (a.tag === "Nothing")
+        return o.pure(J);
+      f();
+    }
+    return o.pure(J);
+  })(Wn(u.tokens)));
+}, Px = (t) => {
+  const n = t.Monad0();
+  return (e) => (r) => (o) => (i) => (s) => (u) => (c) => {
+    const a = Yg(e)(r)(o)(i)(s)(u);
+    return n.Bind1().bind(t.measureText({ family: "Ilisarniq, ui-sans-serif, system-ui, sans-serif", size: 11, weight: 500 })(hs(i)(s)(u)(Jt(c)(hc)).line))((g) => n.Applicative0().pure({
+      x: a.x + 14 + g / 2 - g / 2 - 14,
+      y: a.y - 6 - 8 - 6.6 - 6,
+      w: g + 28,
+      h: 25.2
+    }));
+  };
+}, Gx = (t) => {
+  const n = t.Monad0(), e = n.Bind1(), r = Px(t), o = n.Applicative0(), i = $r.traverse(o);
+  return (s) => (u) => e.Apply0().Functor0().map((c) => Og(yt((a) => a)(c)))(i((c) => {
+    if (c._2.tag === "Travelling" && c._2._1.labels.length !== 0) {
+      const a = _n(c._2._1.target)(s.nodes), g = _n(c._2._1.source)(s.nodes), _ = pr(c._2._1.edge)(s.edges);
+      if (_.tag === "Just" && g.tag === "Just" && a.tag === "Just")
+        return e.bind(r((() => {
+          if (c._2._1.direction === "Forward")
+            return _._1;
+          if (c._2._1.direction === "Backward")
+            return Ln(_._1);
+          f();
+        })())(g._1)(a._1)(c._2._1.progress)(c._2._1.holdPre)(c._2._1.holdPost)(c._2._1.labels))((d) => o.pure(v(
+          "Just",
+          b(c._1, d)
+        )));
+    }
+    return o.pure(J);
+  })(Wn(u.tokens)));
+}, pc = (t) => {
+  const n = t.Monad0(), e = n.Bind1(), r = Gx(t), o = Cx(t);
+  return (i) => (s) => e.bind(r(i)(s))((u) => e.bind(o(i)(s))((c) => n.Applicative0().pure(mx((() => {
+    const a = (g) => {
+      if (g.tag === "Leaf")
+        return A;
+      if (g.tag === "Node")
+        return Ot("Node", g._1, g._2, g._3, void 0, a(g._5), a(g._6));
+      f();
+    };
+    return kt(C.compare)(Lt(On.foldr, a(u)));
+  })())(u)([
+    ...yt((a) => {
+      const g = _n(a._1)(s.nodes);
+      return g.tag === "Just" && ls(g._1).alpha > 0 ? v("Just", { x: a._2.x, y: a._2.y, w: a._2.w, h: a._2.h }) : J;
+    })(Wn(i.nodes)),
+    ...(() => {
+      const a = (g, _) => {
+        if (g.tag === "Leaf")
+          return _;
+        if (g.tag === "Node")
+          return a(g._5, zt("Cons", g._4, a(g._6, _)));
+        f();
+      };
+      return Lt(Xt.foldr, a(c, Yt));
+    })()
+  ]))));
+}, Mg = (t) => (n) => (e) => {
+  const r = Jo(6)(0.55)(Fi(0)(1)((1 - t) / 0.06)), o = t > 0.94, i = o && e > 1e-4, s = Jo(6)(0.55)(Fi(0)(1)(t / 0.06)), u = t < 0.06, c = u && n > 1e-4, a = o && e <= 1e-4;
   return {
     popScale: c ? s : i ? r : 1,
     flipY: u && n <= 1e-4 ? s : a ? r : 1,
@@ -13260,95 +15865,108 @@ const zu = (t) => (n) => (e) => (r) => {
       return 1;
     })()
   };
-}, F$ = (t) => {
-  const n = t.Monad0().Bind1(), e = qa(t);
+}, Ix = (t) => {
+  const n = t.Monad0().Bind1(), e = zg(t);
   return (r) => (o) => (i) => (s) => (u) => {
-    const c = Ya(s)(0)(0), a = { family: "Ilisarniq, ui-sans-serif, system-ui, sans-serif", size: 11, weight: 500 }, g = Ko(s)(0)(0)(bt(u)(Qs));
-    return n.bind(t.measureText(a)(g.line))((l) => {
-      const d = i.x + i.w / 2, _ = l + 28, h = i.y - 25.2 - 14, p = d - _ / 2, $ = [1, d, h + 25.2, 2, d, i.y], m = { x: d, y: h + 12.6 };
-      return e(c)(d - _ / 2)(h + 25.2)(m)(n.bind(t.drawRoundedRect({ x: d - _ / 2, y: h + 1.5, w: _, h: 25.2 })(6)(b(
+    const c = Mg(s)(0)(0), a = { family: r.fontFamily, size: 11, weight: 500 }, g = hs(s)(0)(0)(Jt(u)(hc));
+    return n.bind(t.measureText(a)(g.line))((_) => {
+      const d = i.x + i.w / 2, l = _ + 28, h = i.y - 25.2 - 14, $ = d - l / 2, p = [1, d, h + 25.2, 2, d, i.y], m = { x: d, y: h + 12.6 };
+      return e(c)(d - l / 2)(h + 25.2)(m)(n.bind(t.drawRoundedRect({ x: d - l / 2, y: h + 1.5, w: l, h: 25.2 })(6)(v(
         "Just",
         { color: r.chipShadow, flat: !0 }
-      ))(T))(() => n.bind(t.drawRoundedRect({ x: p, y: h, w: _, h: 25.2 })(6)(b("Just", { color: r.chip, flat: !0 }))(b(
+      ))(J))(() => n.bind(t.drawRoundedRect({ x: $, y: h, w: l, h: 25.2 })(6)(v("Just", { color: r.chip, flat: !0 }))(v(
         "Just",
-        { color: r.chipHairline, width: 1, lineJoin: re, lineCap: we }
-      )))(() => n.bind(t.strokePath($)({
+        { color: r.chipHairline, width: 1, lineJoin: Tn, lineCap: le }
+      )))(() => n.bind(t.strokePath(p)({
         color: r.chipHairline,
         width: 1,
-        lineJoin: re,
-        lineCap: we
+        lineJoin: Tn,
+        lineCap: le
       }))(() => t.drawText({
         x: d,
         y: m.y,
         content: g.line,
         font: a,
         color: r.chipText,
-        align: Bs,
-        baseline: Hr
+        align: fs,
+        baseline: qr
       })))));
     });
   };
-}, B$ = (t) => {
-  const n = t.Monad0().Applicative0();
-  return (e) => (r) => {
-    const o = r.length - 1 | 0, i = o < 1 ? [] : Gt(0, o, r), s = i.length - 1 | 0, u = s >= 0 && s < i.length ? b("Just", i[s]) : T, c = r.length - 1 | 0;
-    if (c >= 0 && c < r.length && u.tag === "Just") {
-      const a = r[c].y - u._1.y, g = r[c].x - u._1.x, l = _r(g * g + a * a), d = a / l, _ = -d, h = g / l, p = r[c].x + h * 0.875, $ = r[c].y + d * 0.875, m = $ - d * 8.75, N = p - h * 8.75, v = [1, p, $, 2, N + _ * 4.375, m + h * 4.375, 2, N - _ * 4.375, m - h * 4.375, 5];
-      return l <= 1e-4 ? n.pure() : t.fillPath(v)({ color: e.arrowFill, flat: !0 });
+}, Ax = (t) => {
+  const n = zg(t), e = t.Monad0(), r = e.Bind1(), o = se(e.Applicative0()), i = Ex(t);
+  return (s) => (u) => (c) => (a) => (g) => (_) => (d) => (l) => (h) => {
+    const $ = hs(g)(_)(d)(Jt(l)(hc)), p = $.line, m = $.phaseInLabel / 0.45, y = m < 0 ? 0 : m > 1 ? 1 : m, N = h.w, T = h.y, w = h.x, k = w + 14, L = h.h, G = T + L / 2;
+    return n(Mg(g)(_)(d))(w)(T + L)({ x: w + N / 2, y: G })(r.bind(o((D) => t.fillPath(_s(D)(1.5))({
+      color: s.trailDot,
+      flat: !0
+    }))(xx(h)(Yg(u)(c)(a)(g)(_)(d))))(() => r.bind(t.drawRoundedRect({ x: w, y: T, w: N, h: L })(3)(v(
+      "Just",
+      { color: s.chipPillFill, flat: !0 }
+    ))(J))(() => i({ family: s.fontFamily, size: 11, weight: 500 })(s.chipPillText)(y)(k)(G)(p))));
+  };
+}, $c = (t) => {
+  const n = Ax(t), e = t.Monad0(), r = e.Applicative0(), o = Ix(t), i = e.Bind1(), s = se(r), u = t.popLayer;
+  return (c) => (a) => (g) => (_) => i.bind(t.pushLayer(My))(() => i.bind(s((d) => {
+    if (d._2.tag === "Travelling") {
+      if (d._2._1.labels.length !== 0) {
+        const l = _n(d._2._1.target)(a.nodes), h = _n(d._2._1.source)(a.nodes), $ = pr(d._2._1.edge)(a.edges), p = Hg(d._1)(_);
+        if (p.tag === "Just" && $.tag === "Just" && h.tag === "Just" && l.tag === "Just")
+          return n(c)((() => {
+            if (d._2._1.direction === "Forward")
+              return $._1;
+            if (d._2._1.direction === "Backward")
+              return Ln($._1);
+            f();
+          })())(h._1)(l._1)(d._2._1.progress)(d._2._1.holdPre)(d._2._1.holdPost)(d._2._1.labels)(p._1);
+      }
+      return r.pure();
     }
-    return n.pure();
+    if (d._2.tag === "Filling" && d._2._1.labels.length !== 0) {
+      const l = _n(d._2._1.node)(a.nodes);
+      if (l.tag === "Just")
+        return o(c)(a)(l._1)(d._2._1.progress)(d._2._1.labels);
+      if (l.tag === "Nothing")
+        return r.pure();
+      f();
+    }
+    return r.pure();
+  })(Wn(g.tokens)))(() => u));
+}, jg = (t) => {
+  const n = pc(t), e = $c(t);
+  return (r) => (o) => (i) => t.Monad0().Bind1().bind(n(o)(i))((s) => e(r)(o)(i)(s));
+}, Fx = (t) => {
+  const n = t.Monad0(), e = n.Applicative0();
+  return (r) => (o) => {
+    const i = o.length - 1 | 0, s = i < 1 ? [] : bt(0, i, o), u = s.length - 1 | 0, c = u >= 0 && u < s.length ? v("Just", s[u]) : J, a = o.length - 1 | 0, g = a >= 0 && a < o.length ? v("Just", o[a]) : J;
+    if (g.tag === "Just" && c.tag === "Just") {
+      const _ = fn(0.78)(1.18)(Io(o) + 19 | 0), d = fn(0.4)(0.62)(_.prng), l = r.wobble ? 8.75 * d.value : 4.375, h = fn(0.4)(0.62)(d.prng), $ = r.wobble ? 8.75 * h.value : 4.375, p = g._1.y - c._1.y, m = g._1.x - c._1.x, y = En(m * m + p * p), N = p / y, T = -N, w = m / y, k = g._1.x + w * 0.875, L = g._1.y + N * 0.875, G = r.wobble ? 8.75 * _.value : 8.75, D = k - w * G, Y = L - N * G, X = D + T * l, P = Y + w * l, B = [1, k, L, 2, D + T * 4.375, Y + w * 4.375, 2, D - T * 4.375, Y - w * 4.375, 5], tt = D - T * $, ct = Y - w * $, q = { color: r.arrowFill, width: 2, lineJoin: Tn, lineCap: We };
+      return y <= 1e-4 ? e.pure() : r.wobble ? n.Bind1().bind(t.strokePath([1, X, P, 2, k, L])(q))(() => t.strokePath([1, tt, ct, 2, k, L])(q)) : t.fillPath(B)({ color: r.arrowFill, flat: !0 });
+    }
+    return e.pure();
   };
-}, fo = (t) => (n) => (e) => (r) => (o) => O((i) => {
-  const s = e + (r - e) * (ct(i) / ct(o));
-  return { x: t.x + n * Zi(s), y: t.y + n * ts(s) };
-})(Xt(0, o - 1 | 0)), Xu = (t) => (n) => {
-  const e = le(t)(le(n.w / 2)(n.h / 2));
-  return [
-    ...ao({ x: n.x + e, y: n.y })({ x: n.x + n.w - e, y: n.y })(6),
-    ...fo({ x: n.x + n.w - e, y: n.y + e })(e)(4.71238898038469)(6.283185307179586)(12),
-    ...ao({ x: n.x + n.w, y: n.y + e })({ x: n.x + n.w, y: n.y + n.h - e })(6),
-    ...fo({ x: n.x + n.w - e, y: n.y + n.h - e })(e)(0)(1.5707963267948966)(12),
-    ...ao({ x: n.x + n.w - e, y: n.y + n.h })({ x: n.x + e, y: n.y + n.h })(6),
-    ...fo({ x: n.x + e, y: n.y + n.h - e })(e)(1.5707963267948966)(3.141592653589793)(12),
-    ...ao({ x: n.x, y: n.y + n.h - e })({ x: n.x, y: n.y + e })(6),
-    ...fo({ x: n.x + e, y: n.y + e })(e)(3.141592653589793)(4.71238898038469)(12)
-  ];
-}, Q$ = (t) => (n) => (e) => J((r) => (o) => {
-  const i = r.pos + o.len, s = e < i ? (e - r.pos) / o.len : 1, u = { x: o.a.x + (o.b.x - o.a.x) * s, y: o.a.y + (o.b.y - o.a.y) * s }, c = n > r.pos ? (n - r.pos) / o.len : 0, a = { x: o.a.x + (o.b.x - o.a.x) * c, y: o.a.y + (o.b.y - o.a.y) * c }, g = r.points.length - 1 | 0, l = g >= 0 && g < r.points.length ? (() => {
-    const d = r.points[g].x - a.x;
-    return (d < 0 ? -d < 1e-4 : d < 1e-4) && (() => {
-      const _ = r.points[g].y - a.y;
-      return _ < 0 ? -_ < 1e-4 : _ < 1e-4;
-    })();
-  })() ? gn(r.points)(u) : [...r.points, a, u] : [a, u];
-  return o.len <= 0 || i <= n || r.pos >= e ? { ...r, pos: i } : { pos: i, points: l };
-})({ pos: 0, points: [] })(t).points, D$ = (t) => (n) => (e) => {
-  const r = Wt((o) => T, (o) => (i) => b("Just", { head: o, tail: i }), t);
-  if (r.tag === "Nothing")
-    return [];
-  if (r.tag === "Just") {
-    const o = C$(t), i = v$(o), s = Fe(0)(i)(n * i), u = Fe(0)(i)(e * i);
-    return u <= s ? [] : Q$(o)(s)(u);
-  }
-  f();
-}, W$ = (t) => {
-  const n = t.Monad0(), e = n.Applicative0(), r = B$(t);
-  return (o) => (i) => (s) => (u) => {
-    const c = S$(8)(s);
-    if (u.hi <= u.lo)
+}, Rx = (t) => {
+  const n = t.Monad0(), e = n.Applicative0(), r = n.Bind1(), o = se(e), i = t.popAlpha, s = Fx(t);
+  return (u) => (c) => (a) => (g) => {
+    const _ = qN(8)(a);
+    if (g.hi <= g.lo)
       return e.pure();
-    const a = D$(c)(u.lo)(u.hi);
-    return a.length === 0 ? e.pure() : n.Bind1().bind(t.strokePath(L$(a))({
-      color: o.edge,
-      width: 0.9375,
-      lineJoin: re,
-      lineCap: Qa
-    }))(() => r(o)(a));
+    const d = ZN(_)(g.lo)(g.hi);
+    if (d.length === 0)
+      return e.pure();
+    const l = { color: u.edge, width: u.wobble ? 2 : 0.9375, lineJoin: Tn, lineCap: We }, h = u.wobble ? fn(-10)(4)(Io(d)).value : 0, $ = u.wobble ? sx(h)(d) : d;
+    return r.bind(u.wobble ? o((p) => r.bind(t.pushAlpha(p.alpha))(() => r.bind(t.strokePath(p.path)(l))(() => i)))((() => {
+      const p = Io(d);
+      return $.length < 2 ? [] : Cr(Tx)(p)(!1)($);
+    })()) : t.strokePath(DN(d))(l))(() => {
+      const p = s(u)($);
+      return g.hi >= 0.999 ? p : e.pure();
+    });
   };
-}, Xa = (t) => {
-  const n = W$(t), e = t.Monad0().Applicative0(), r = pe(e);
+}, Zg = (t) => {
+  const n = Rx(t), e = t.Monad0().Applicative0(), r = se(e);
   return (o) => (i) => (s) => r((u) => {
-    const c = Uo(u._1)(s.edges);
+    const c = pr(u._1)(s.edges);
     if (c.tag === "Just")
       return n(o)(u._1)(u._2)((() => {
         if (c._1.tag === "Retracted")
@@ -13370,375 +15988,711 @@ const zu = (t) => (n) => (e) => (r) => {
     if (c.tag === "Nothing")
       return e.pure();
     f();
-  })(he(i.edges));
-}, Ua = (t) => (n) => (e) => (r) => (o) => (i) => {
-  const s = { x: e.x + e.w / 2, y: e.y + e.h / 2 }, u = { x: n.x + n.w / 2, y: n.y + n.h / 2 }, c = 0 < t.length ? b("Just", t[0]) : T, a = (() => {
-    if (c.tag === "Just")
-      return c._1;
-    if (c.tag === "Nothing")
-      return u;
-    f();
-  })(), g = t.length - 1 | 0, l = g >= 0 && g < t.length ? b("Just", t[g]) : T, d = (() => {
-    if (l.tag === "Just")
-      return l._1;
-    if (l.tag === "Nothing")
-      return s;
-    f();
-  })(), _ = Hu(128)(Xu(4)(qi(2)(n)))(Yu(a)(6)), h = Or(0.05)(1 - o - i), p = r < o ? 0 : r > 1 - i ? 1 : (r - o) / h, $ = a.x - u.x, m = 2 * (() => {
-    const j = a.y - u.y;
-    return ($ < 0 ? -$ : $) + (j < 0 ? -j : j);
-  })(), N = d.x - s.x, v = 2 * (() => {
-    const j = d.y - s.y;
-    return (N < 0 ? -N : N) + (j < 0 ? -j : j);
-  })(), w = m + $s(t) + v, y = w <= 1e-4 ? 1 : 1 - v / w, k = w <= 1e-4 ? 0 : m / w, E = y - k, I = Hu(128)(Yu(d)(6))(Xu(4)(qi(2)(e))), D = { maxDelay: 0.4, smoothPasses: 2 }, z = vc(t)(Fe(0)(1)(E <= 1e-4 ? 0 : (p - k) / E)), U = (() => {
-    if (z.tag === "Just")
-      return z._1;
-    if (z.tag === "Nothing")
-      return a;
-    f();
-  })(), P = (() => {
-    if (y >= 1)
-      return 0;
-    const j = (p - y) / (1 - y), et = j < 0 ? 0 : j > 1 ? 1 : j;
-    return et * et * (3 - 2 * et);
-  })(), R = (() => {
-    if (k <= 1e-4)
-      return 1;
-    const j = p / k, et = j < 0 ? 0 : j > 1 ? 1 : j;
-    return et * et * (3 - 2 * et);
-  })();
-  return p < k ? Ni("PolyShape", zu(R)(_.from)(_.to)(D)) : p >= y ? Ni("PolyShape", zu(P)(I.from)(I.to)(D)) : Ni("CircleShape", U, 6);
-}, q$ = (t) => (n) => (e) => (r) => (o) => (i) => (s) => (u) => (c) => {
-  const a = Ua(r)(o)(i)(s)(u)(c);
-  if (a.tag === "CircleShape")
-    return t.fillStrokePath(Ds(a._1)(a._2))({ color: n, flat: !0 })({
-      color: e,
-      width: 1,
-      lineJoin: re,
-      lineCap: we
-    });
-  if (a.tag === "PolyShape")
-    return a._1.length >= 3 ? t.fillStrokePath(T$(a._1))({ color: n, flat: !0 })({
-      color: e,
-      width: 1,
-      lineJoin: re,
-      lineCap: we
-    }) : t.Monad0().Applicative0().pure();
-  f();
-}, Ma = (t) => {
-  const n = A$(t), e = t.Monad0().Applicative0(), r = pe(e);
-  return (o) => (i) => (s) => (u) => r((c) => {
-    if (c._2.tag === "Travelling") {
-      const a = An(c._2._1.target)(o.nodes), g = An(c._2._1.source)(o.nodes);
-      if (g.tag === "Just" && a.tag === "Just") {
-        const l = Uo(c._2._1.edge)(o.edges);
-        if (l.tag === "Just")
-          return q$(t)(s)(u)((() => {
-            if (c._2._1.direction === "Forward")
-              return l._1;
-            if (c._2._1.direction === "Backward")
-              return vn(l._1);
-            f();
-          })())(g._1)(a._1)(c._2._1.progress)(c._2._1.holdPre)(c._2._1.holdPost);
-        if (l.tag === "Nothing")
-          return n(s)(u)(g._1)(a._1)(c._2._1.progress)(c._2._1.holdPre)(c._2._1.holdPost);
-        f();
-      }
-      return e.pure();
+  })(Wn(i.edges));
+}, Bx = (t) => (n) => {
+  const e = (i) => {
+    const s = _n(i)(t.nodes);
+    if (s.tag === "Nothing")
+      return !1;
+    if (s.tag === "Just") {
+      const u = s._1;
+      return !qn(
+        (c) => 0 < c._2.length && c._2[0].x >= u.x && c._2[0].x <= u.x + u.w && c._2[0].y >= u.y && c._2[0].y <= u.y + u.h,
+        Wn(t.edges)
+      );
     }
-    if (c._2.tag === "Filling") {
-      const a = An(c._2._1.node)(o.nodes);
-      if (a.tag === "Just")
-        return t.drawRoundedRect((() => {
-          const g = qi(2)(a._1);
-          return { x: g.x, y: g.y, w: g.w, h: g.h };
-        })())(4)(b("Just", { color: s, flat: !0 }))(b(
+    f();
+  }, r = x((i) => (s) => (i * 31 | 0) + Re(s) | 0)(5381)(Ze(n.frameTitle)), o = (i) => {
+    const s = _n(i)(t.nodes);
+    if (s.tag === "Nothing")
+      return !1;
+    if (s.tag === "Just") {
+      const u = s._1;
+      return !qn(
+        (c) => {
+          const a = c._2.length - 1 | 0;
+          return a >= 0 && a < c._2.length && c._2[a].x >= u.x && c._2[a].x <= u.x + u.w && c._2[a].y >= u.y && c._2[a].y <= u.y + u.h;
+        },
+        Wn(t.edges)
+      );
+    }
+    f();
+  };
+  return x((i) => (s) => {
+    const u = s._2;
+    return dx((c) => {
+      if (c.tag === "Nothing")
+        return v("Just", u);
+      if (c.tag === "Just")
+        return v(
           "Just",
-          { color: u, width: 1, lineJoin: re, lineCap: we }
-        ));
-      if (a.tag === "Nothing")
+          { t: Ao(c._1.t)(u.t), angle: u.t >= c._1.t ? u.angle : c._1.angle, bigCircle: c._1.bigCircle || u.bigCircle, frameHash: c._1.frameHash }
+        );
+      f();
+    })(s._1)(i);
+  })(A)(Jt(Wn(n.tokens))((i) => {
+    if (i._2.tag === "Filling") {
+      const s = i._2._1.node;
+      return [
+        b(
+          s,
+          {
+            t: 1,
+            angle: (() => {
+              const u = yt((c) => (() => {
+                const a = _n(s)(t.nodes), g = c._2.length - 1 | 0;
+                return g >= 0 && g < c._2.length && a.tag === "Just" && c._2[g].x >= a._1.x && c._2[g].x <= a._1.x + a._1.w && c._2[g].y >= a._1.y && c._2[g].y <= a._1.y + a._1.h;
+              })() ? v("Just", c._2) : J)(Wn(t.edges));
+              if (0 < u.length) {
+                const c = u[0].length - 1 | 0, a = c < 1 ? [] : bt(0, c, u[0]), g = a.length - 1 | 0;
+                if (g >= 0 && g < a.length) {
+                  const _ = u[0].length - 1 | 0;
+                  return _ >= 0 && _ < u[0].length ? cr(u[0][_].y - a[g].y)(u[0][_].x - a[g].x) : 0;
+                }
+                u[0].length - 1 | 0;
+              }
+              return 0;
+            })(),
+            bigCircle: e(s) || o(s),
+            frameHash: r
+          }
+        )
+      ];
+    }
+    if (i._2.tag === "Travelling") {
+      if (i._2._1.progress >= 0.75)
+        return [
+          b(
+            i._2._1.target,
+            {
+              t: (i._2._1.progress - 0.75) / 0.25,
+              angle: (() => {
+                const s = pr(i._2._1.edge)(t.edges);
+                if (s.tag === "Just") {
+                  const u = s._1.length - 1 | 0, c = u < 1 ? [] : bt(0, u, s._1), a = c.length - 1 | 0;
+                  if (a >= 0 && a < c.length) {
+                    const g = s._1.length - 1 | 0;
+                    return g >= 0 && g < s._1.length ? cr(s._1[g].y - c[a].y)(s._1[g].x - c[a].x) : 0;
+                  }
+                  return s._1.length - 1 | 0, 0;
+                }
+                if (s.tag === "Nothing")
+                  return 0;
+                f();
+              })(),
+              bigCircle: e(i._2._1.target) || o(i._2._1.target),
+              frameHash: r
+            }
+          )
+        ];
+      if (i._2._1.progress < 0.25)
+        return [
+          b(
+            i._2._1.source,
+            {
+              t: i._2._1.progress / 0.25,
+              angle: (() => {
+                const s = pr(i._2._1.edge)(t.edges);
+                if (s.tag === "Just")
+                  return 1 < s._1.length && 0 < s._1.length ? cr(s._1[1].y - s._1[0].y)(s._1[1].x - s._1[0].x) : 0;
+                if (s.tag === "Nothing")
+                  return 0;
+                f();
+              })(),
+              bigCircle: e(i._2._1.source) || o(i._2._1.source),
+              frameHash: r
+            }
+          )
+        ];
+    }
+    return [];
+  }));
+}, Qx = (t) => x((n) => (e) => (n * 31 | 0) + Re(e) | 0)(5381)(Ze(t.frameTitle)), tl = (t) => {
+  const n = Xg(t), e = t.Monad0().Applicative0(), r = se(e);
+  return (o) => (i) => (s) => (u) => {
+    const c = Qx(u), a = Bx(s)(u);
+    return r((g) => {
+      const _ = _n(g._1)(u.nodes);
+      if (_.tag === "Just")
+        return n(o)(i)((() => {
+          const d = _n(g._1)(u.nodeFadeAlpha);
+          if (d.tag === "Nothing")
+            return 1;
+          if (d.tag === "Just")
+            return d._1;
+          f();
+        })())((() => {
+          const d = _n(g._1)(a);
+          return d.tag === "Just" ? v("Just", d._1) : d.tag === "Nothing" && hx(g._1)(u.visited) ? v("Just", { t: 1, angle: 0, bigCircle: !1, frameHash: c }) : J;
+        })())(g._1)(g._2)(_._1);
+      if (_.tag === "Nothing")
         return e.pure();
       f();
-    }
-    return e.pure();
-  })(he(i.tokens));
-}, Ka = (t) => {
-  const n = t.Monad0(), e = n.Bind1(), r = Ma(t), o = t.popClip, i = t.popBlend, s = t.popLayer, u = n.Applicative0(), c = pe(u), a = t.popAlpha;
-  return (g) => (l) => (d) => {
-    if (g.tokenInsideBlend === "Difference")
-      return e.bind(t.pushLayer(h$))(() => e.bind(t.pushBlend(Di))(() => e.bind(t.pushClip(Wi(l)(d))(Qi))(() => e.bind(r(l)(d)(g.tokenInside)(g.tokenInsideStroke))(() => e.bind(o)(() => e.bind(i)(() => e.bind(s)(() => e.bind(t.pushLayer(p$))(() => e.bind(c((_) => {
-        const h = An(_._1)(d.nodes);
-        return h.tag === "Just" && Mo(h._1).alpha > 0 ? t.drawRoundedRect({ x: _._2.x, y: _._2.y, w: _._2.w, h: _._2.h })(7)(b(
-          "Just",
-          { color: sn, flat: !1 }
-        ))(T) : u.pure();
-      })(he(l.nodes)))(() => s)))))))));
-    if (g.tokenInsideBlend === "Normal")
-      return e.bind(t.pushClip(Wi(l)(d))(Qi))(() => e.bind(t.pushAlpha(g.tokenInsideAlpha))(() => e.bind(r(l)(d)(g.tokenInside)(g.tokenInsideStroke))(() => e.bind(a)(() => o))));
-    f();
+    })(Wn(s.nodes));
   };
-}, ja = (t) => {
-  const n = t.Monad0().Bind1(), e = Ma(t), r = t.popClip, o = t.popLayer;
-  return (i) => (s) => (u) => (c) => n.bind(t.pushLayer(d$))(() => n.bind(t.pushClip(k$(s)(u)(c))(m$))(() => n.bind(e(u)(c)(i.tokenOutsideFill)(i.tokenOutsideStroke))(() => n.bind(r)(() => o))));
-}, Za = (t) => (n) => (e) => (r) => (o) => (i) => {
-  const s = Ua(t)(n)(e)(r)(o)(i);
-  if (s.tag === "PolyShape")
-    return R$(s._1);
-  if (s.tag === "CircleShape")
+}, nl = (t) => t, el = (t) => (n) => {
+  const e = n.vw / n.vh, r = n.vh * t, o = { ...n, vx: n.vx - (r - n.vw) / 2, vw: r }, i = n.vw / t, s = { ...n, vy: n.vy - (i - n.vh) / 2, vh: i };
+  return t <= 0 || n.vw <= 0 || n.vh <= 0 ? n : t > e ? o : t < e ? s : n;
+}, Wx = (t) => (n) => (e) => {
+  const r = it.compare(t)(e), o = (() => {
+    if (r === "LT")
+      return e;
+    if (r === "EQ" || r === "GT")
+      return t;
+    f();
+  })(), i = it.compare(n)(o);
+  if (i === "LT" || i === "EQ")
+    return n;
+  if (i === "GT")
+    return o;
+  f();
+}, Ua = (t) => (n) => (e) => {
+  const r = ft.compare(t)(e), o = (() => {
+    if (r === "LT")
+      return e;
+    if (r === "EQ" || r === "GT")
+      return t;
+    f();
+  })(), i = ft.compare(n)(o);
+  if (i === "LT" || i === "EQ")
+    return n;
+  if (i === "GT")
+    return o;
+  f();
+}, Ka = (t) => (n) => {
+  const e = ft.compare(t)(n);
+  if (e === "LT" || e === "EQ")
+    return t;
+  if (e === "GT")
+    return n;
+  f();
+}, Ju = (t) => (n) => {
+  const e = ft.compare(t)(n);
+  if (e === "LT")
+    return n;
+  if (e === "EQ" || e === "GT")
+    return t;
+  f();
+}, Dx = (t) => (e) => {
+  let r = e, o = !0, i;
+  for (; o; ) {
+    const s = r;
+    if (s.tag === "Leaf") {
+      o = !1, i = J;
+      continue;
+    }
+    if (s.tag === "Node") {
+      const u = C.compare(t)(s._3);
+      if (u === "LT") {
+        r = s._5;
+        continue;
+      }
+      if (u === "GT") {
+        r = s._6;
+        continue;
+      }
+      if (u === "EQ") {
+        o = !1, i = v("Just", s._4);
+        continue;
+      }
+    }
+    f();
+  }
+  return i;
+}, Hx = (t) => (e) => {
+  let r = e, o = !0, i;
+  for (; o; ) {
+    const s = r;
+    if (s.tag === "Leaf") {
+      o = !1, i = J;
+      continue;
+    }
+    if (s.tag === "Node") {
+      const u = C.compare(t)(s._3);
+      if (u === "LT") {
+        r = s._5;
+        continue;
+      }
+      if (u === "GT") {
+        r = s._6;
+        continue;
+      }
+      if (u === "EQ") {
+        o = !1, i = v("Just", s._4);
+        continue;
+      }
+    }
+    f();
+  }
+  return i;
+}, Ox = (t) => (n) => {
+  const e = Un(t.angle), r = re(t.angle);
+  return { a: r, b: e, c: 0, d: 1, e: -n * r, f: n * e - t.boxHeight / 2 };
+}, zx = (t) => [t.box.ground.a, t.box.ground.b, t.box.ground.c, t.box.ground.d, t.box.top.a, t.box.top.b, t.box.top.c, t.box.top.d], Pr = (t) => (n) => {
+  const e = (r) => Wx(0)(255)($n(sr(nt(r) * t)));
+  return { r: e(n.r), g: e(n.g), b: e(n.b), a: n.a };
+}, bn = (t) => (n) => (e) => (r) => ({ x: (n - e) * re(t.angle), y: (n + e) * Un(t.angle) - r }), lr = (t) => {
+  const n = Rt((e) => J, (e) => (r) => v("Just", { head: e, tail: r }), t);
+  if (n.tag === "Nothing")
+    return [];
+  if (n.tag === "Just")
+    return [1, n._1.head.x, n._1.head.y, ...Jt(n._1.tail)((e) => [2, e.x, e.y]), 5];
+  f();
+}, qx = (t) => (n) => (e) => (r) => (o) => {
+  const i = (() => {
+    if (t === "Forward")
+      return o;
+    if (t === "Backward")
+      return Ln(o);
+    f();
+  })();
+  if (0 < i.length) {
+    const u = Br(i)(Ua(0)(1)(Yr(e)(r)(n)));
+    if (u.tag === "Nothing")
+      return i[0];
+    if (u.tag === "Just")
+      return u._1;
+    f();
+  }
+  const s = Br(i)(Ua(0)(1)(Yr(e)(r)(n)));
+  if (s.tag === "Nothing")
+    return { x: 0, y: 0 };
+  if (s.tag === "Just")
     return s._1;
   f();
-}, H$ = (t) => {
-  const n = qa(t), e = t.Monad0(), r = e.Bind1(), o = pe(e.Applicative0()), i = G$(t);
-  return (s) => (u) => (c) => (a) => (g) => (l) => (d) => (_) => (h) => {
-    const p = Ko(g)(l)(d)(bt(_)(Qs)), $ = p.line, m = p.phaseInLabel / 0.45, N = m < 0 ? 0 : m > 1 ? 1 : m, v = h.w, w = h.y, y = h.x, k = y + 14, E = h.h, I = w + E / 2;
-    return n(Ya(g)(l)(d))(y)(w + E)({ x: y + v / 2, y: I })(r.bind(o((D) => t.fillPath(Ds(D)(1.5))({
-      color: s.trailDot,
+}, Yx = (t) => {
+  const n = Rt((e) => J, (e) => (r) => v("Just", { head: e, tail: r }), t);
+  if (n.tag === "Nothing")
+    return [];
+  if (n.tag === "Just")
+    return [1, n._1.head.x, n._1.head.y, ...Jt(n._1.tail)((e) => [2, e.x, e.y])];
+  f();
+}, Xx = (t) => {
+  const n = Rt((e) => J, (e) => (r) => v("Just", { head: e, tail: r }), t);
+  if (n.tag === "Nothing")
+    return { vx: 0, vy: 0, vw: 0, vh: 0 };
+  if (n.tag === "Just") {
+    const e = x((r) => (o) => ({ minX: Ka(r.minX)(o.x), minY: Ka(r.minY)(o.y), maxX: Ju(r.maxX)(o.x), maxY: Ju(r.maxY)(o.y) }))({
+      minX: n._1.head.x,
+      minY: n._1.head.y,
+      maxX: n._1.head.x,
+      maxY: n._1.head.y
+    })(n._1.tail);
+    return { vx: e.minX - 40, vy: e.minY - 40, vw: e.maxX - e.minX + 80, vh: e.maxY - e.minY + 80 };
+  }
+  f();
+}, Vx = (t) => {
+  const n = t.Monad0().Bind1();
+  return (e) => (r) => (o) => {
+    const i = o.box, s = o.np, u = { color: r.nodeStroke, width: 1, lineJoin: Tn, lineCap: le };
+    return n.bind(t.fillStrokePath(lr([i.ground.d, i.ground.c, i.top.c, i.top.d]))({ color: Pr(0.66)(r.nodeFill), flat: !0 })(u))(() => n.bind(t.fillStrokePath(lr([
+      i.ground.b,
+      i.ground.c,
+      i.top.c,
+      i.top.b
+    ]))({ color: Pr(0.82)(r.nodeFill), flat: !0 })(u))(() => n.bind(t.fillStrokePath(lr([i.top.a, i.top.b, i.top.c, i.top.d]))({
+      color: Pr(1)(r.nodeFill),
       flat: !0
-    }))(b$(h)(Za(u)(c)(a)(g)(l)(d))))(() => r.bind(t.drawRoundedRect({ x: y, y: w, w: v, h: E })(3)(b(
-      "Just",
-      { color: s.chipPillFill, flat: !0 }
-    ))(T))(() => i({ family: "Ilisarniq, ui-sans-serif, system-ui, sans-serif", size: 11, weight: 500 })(s.chipPillText)(N)(k)(I)($))));
+    })(u))(() => t.drawTextAffine(Ox(e)(s.y + s.h))({
+      x: s.x + s.w / 2,
+      y: 0,
+      content: s.label,
+      font: { family: r.fontFamily, size: 11, weight: 600 },
+      color: r.text,
+      align: fs,
+      baseline: qr
+    }))));
   };
-}, tf = (t) => {
-  const n = H$(t), e = t.Monad0(), r = e.Applicative0(), o = F$(t), i = e.Bind1(), s = pe(r), u = t.popLayer;
-  return (c) => (a) => (g) => (l) => i.bind(t.pushLayer($$))(() => i.bind(s((d) => {
-    if (d._2.tag === "Travelling") {
-      if (d._2._1.labels.length !== 0) {
-        const _ = An(d._2._1.target)(a.nodes), h = An(d._2._1.source)(a.nodes), p = Uo(d._2._1.edge)(a.edges), $ = Da(d._1)(l);
-        if ($.tag === "Just" && p.tag === "Just" && h.tag === "Just" && _.tag === "Just")
-          return n(c)((() => {
-            if (d._2._1.direction === "Forward")
-              return p._1;
-            if (d._2._1.direction === "Backward")
-              return vn(p._1);
-            f();
-          })())(h._1)(_._1)(d._2._1.progress)(d._2._1.holdPre)(d._2._1.holdPost)(d._2._1.labels)($._1);
-      }
-      return r.pure();
-    }
-    if (d._2.tag === "Filling" && d._2._1.labels.length !== 0) {
-      const _ = An(d._2._1.node)(a.nodes);
-      if (_.tag === "Just")
-        return o(c)(a)(_._1)(d._2._1.progress)(d._2._1.labels);
-      if (_.tag === "Nothing")
-        return r.pure();
-      f();
-    }
-    return r.pure();
-  })(he(g.tokens)))(() => u));
-}, O$ = (t) => {
-  const n = t.Monad0();
-  return (e) => (r) => (o) => (i) => (s) => (u) => (c) => {
-    const a = Za(e)(r)(o)(i)(s)(u);
-    return n.Bind1().bind(t.measureText({ family: "Ilisarniq, ui-sans-serif, system-ui, sans-serif", size: 11, weight: 500 })(Ko(i)(s)(u)(bt(c)(Qs)).line))((g) => n.Applicative0().pure({
-      x: a.x + 14 + g / 2 - g / 2 - 14,
-      y: a.y - 6 - 8 - 6.6 - 6,
-      w: g + 28,
-      h: 25.2
-    }));
+}, Ux = (t) => {
+  const n = t.Monad0().Bind1();
+  return (e) => (r) => (o) => (i) => {
+    const s = { color: r.tokenOutsideStroke, width: 1, lineJoin: Tn, lineCap: le }, u = i.x - 5.5, c = i.x + 5.5, a = i.y - 5.5, g = i.y + 5.5, _ = o + 11, d = bn(e)(u)(a)(_), l = bn(e)(c)(a)(_), h = bn(e)(c)(g)(_), $ = bn(e)(u)(g)(_), p = bn(e)(c)(g)(o), m = bn(e)(c)(a)(o);
+    return n.bind(t.fillStrokePath(lr([bn(e)(u)(g)(o), p, h, $]))({ color: Pr(0.66)(r.tokenOutsideFill), flat: !0 })(s))(() => n.bind(t.fillStrokePath(lr([
+      m,
+      p,
+      h,
+      l
+    ]))({ color: Pr(0.82)(r.tokenOutsideFill), flat: !0 })(s))(() => t.fillStrokePath(lr([d, l, h, $]))({
+      color: Pr(1)(r.tokenOutsideFill),
+      flat: !0
+    })(s)));
   };
-}, z$ = (t) => {
-  const n = t.Monad0(), e = n.Bind1(), r = O$(t), o = n.Applicative0(), i = Yr.traverse(o);
-  return (s) => (u) => e.Apply0().Functor0().map((c) => Wa(vt((a) => a)(c)))(i((c) => {
-    if (c._2.tag === "Travelling" && c._2._1.labels.length !== 0) {
-      const a = An(c._2._1.target)(s.nodes), g = An(c._2._1.source)(s.nodes), l = Uo(c._2._1.edge)(s.edges);
-      if (l.tag === "Just" && g.tag === "Just" && a.tag === "Just")
-        return e.bind(r((() => {
-          if (c._2._1.direction === "Forward")
-            return l._1;
-          if (c._2._1.direction === "Backward")
-            return vn(l._1);
-          f();
-        })())(g._1)(a._1)(c._2._1.progress)(c._2._1.holdPre)(c._2._1.holdPost)(c._2._1.labels))((d) => o.pure(b(
+}, Kx = (t) => {
+  const n = Ux(t);
+  return (e) => (r) => (o) => (i) => {
+    if (i.tag === "Travelling") {
+      const s = Dx(i._1.edge)(o.edges);
+      return s.tag === "Just" ? v(
+        "Just",
+        (() => {
+          const u = qx(i._1.direction)(i._1.progress)(i._1.holdPre)(i._1.holdPost)(s._1);
+          return { depth: u.x + u.y, draw: n(e)(r)(0)(u) };
+        })()
+      ) : J;
+    }
+    if (i.tag === "Filling") {
+      const s = Hx(i._1.node)(o.nodes);
+      if (s.tag === "Just")
+        return v(
           "Just",
-          L(c._1, d)
-        )));
+          (() => {
+            const u = { x: s._1.x + s._1.w / 2, y: s._1.y + s._1.h / 2 };
+            return { depth: u.x + u.y, draw: n(e)(r)(e.boxHeight)(u) };
+          })()
+        );
     }
-    return o.pure(T);
-  })(he(u.tokens)));
-}, nf = (t) => {
-  const n = t.Monad0(), e = n.Bind1(), r = z$(t), o = P$(t);
-  return (i) => (s) => e.bind(r(i)(s))((u) => e.bind(o(i)(s))((c) => n.Applicative0().pure(w$((() => {
-    const a = (g) => {
-      if (g.tag === "Leaf")
-        return Q;
-      if (g.tag === "Node")
-        return Dt("Node", g._1, g._2, g._3, void 0, a(g._5), a(g._6));
+    return J;
+  };
+}, Mx = { angle: 0.5235987755982988, boxHeight: 26, transparentBg: !0 }, jx = (t) => (n) => {
+  const e = n.y + n.h, r = n.x + n.w;
+  return {
+    ground: { a: bn(t)(n.x)(n.y)(0), b: bn(t)(r)(n.y)(0), c: bn(t)(r)(e)(0), d: bn(t)(n.x)(e)(0) },
+    top: { a: bn(t)(n.x)(n.y)(t.boxHeight), b: bn(t)(r)(n.y)(t.boxHeight), c: bn(t)(r)(e)(t.boxHeight), d: bn(t)(n.x)(e)(t.boxHeight) },
+    depth: (n.x + r) / 2 + (n.y + e) / 2
+  };
+}, rl = (t) => (n) => z((e) => ({ np: e, box: jx(t)(e) }))((() => {
+  const e = (r, o) => {
+    if (r.tag === "Leaf")
+      return o;
+    if (r.tag === "Node")
+      return e(r._5, zt("Cons", r._4, e(r._6, o)));
+    f();
+  };
+  return Lt(Xt.foldr, e(n.nodes, Yt));
+})()), Zx = (t) => (n) => [
+  ...Jt(rl(t)(n))(zx),
+  ...(() => {
+    const e = (r, o) => {
+      if (r.tag === "Leaf")
+        return o;
+      if (r.tag === "Node")
+        return e(r._5, zt("Cons", r._4, e(r._6, o)));
       f();
     };
-    return Lt(G.compare)(Et(Pn.foldr, a(u)));
-  })())(u)([
-    ...O(J$)((() => {
-      const a = (g, l) => {
-        if (g.tag === "Leaf")
-          return l;
-        if (g.tag === "Node")
-          return a(g._5, qt("Cons", g._4, a(g._6, l)));
-        f();
-      };
-      return Et(Mt.foldr, a(i.nodes, zt));
-    })()),
-    ...(() => {
-      const a = (g, l) => {
-        if (g.tag === "Leaf")
-          return l;
-        if (g.tag === "Node")
-          return a(g._5, qt("Cons", g._4, a(g._6, l)));
-        f();
-      };
-      return Et(Mt.foldr, a(c, zt));
-    })()
-  ]))));
-}, V$ = (t) => {
-  const n = nf(t), e = tf(t);
-  return (r) => (o) => (i) => t.Monad0().Bind1().bind(n(o)(i))((s) => e(r)(o)(i)(s));
-}, jo = (t) => (n) => (e) => {
-  const r = Sc(n)(e.camera);
-  return { vx: r.x - t.padding, vy: r.y - t.padding - 40, vw: r.w + 2 * t.padding, vh: r.h + 2 * t.padding + 40 };
-}, ef = (t) => {
+    return Jt(Lt(Xt.foldr, e(n.edges, Yt)))(z((r) => bn(t)(r.x)(r.y)(0)));
+  })()
+], tJ = (t) => {
+  const n = t.to.y - t.from.y, e = t.to.x - t.from.x, r = Ju(1e-4)(En(e * e + n * n)), o = n / r, i = e / r, s = t.to.y - o * 7, u = t.to.x - i * 7;
+  return lr([t.to, { x: u - o * 3, y: s + i * 3 }, { x: u + o * 3, y: s - i * 3 }]);
+}, nJ = (t) => {
+  const n = t.Monad0(), e = n.Applicative0();
+  return (r) => (o) => (i) => (s) => (u) => {
+    const c = bn(r)(u.x)(u.y)(0), a = bn(r)(s.x)(s.y)(0);
+    return n.Bind1().bind(t.strokePath(Yx([a, c]))({
+      color: o.edge,
+      width: 1.5,
+      lineJoin: Tn,
+      lineCap: We
+    }))(() => {
+      const g = t.fillPath(tJ({ from: a, to: c }))({ color: o.arrowFill, flat: !0 });
+      return i ? g : e.pure();
+    });
+  };
+}, eJ = (t) => {
+  const n = nJ(t);
+  return (e) => (r) => (o) => {
+    const i = wn(Xe, o, bt(1, o.length, o)), s = i.length - 1 | 0;
+    return Ft((u) => (c) => ({ depth: (c._1.x + c._1.y + c._2.x + c._2.y) / 2, draw: n(e)(r)(u === s)(c._1)(c._2) }))(i);
+  };
+}, rJ = (t) => {
+  const n = Vx(t), e = Kx(t), r = eJ(t), o = t.Monad0(), i = Vg(t), s = Wi(o.Applicative0())(Ht);
+  return (u) => (c) => (a) => (g) => {
+    const _ = dc(c), d = [
+      ...(() => {
+        const l = (h, $) => {
+          if (h.tag === "Leaf")
+            return $;
+          if (h.tag === "Node")
+            return l(h._5, zt("Cons", h._4, l(h._6, $)));
+          f();
+        };
+        return Jt(Lt(Xt.foldr, l(a.edges, Yt)))(r(u)(_));
+      })(),
+      ...z((l) => ({ depth: l.box.depth, draw: n(u)(_)(l) }))(rl(u)(a)),
+      ...yt(e(u)(_)(a))((() => {
+        const l = (h, $) => {
+          if (h.tag === "Leaf")
+            return $;
+          if (h.tag === "Node")
+            return l(h._5, zt("Cons", h._4, l(h._6, $)));
+          f();
+        };
+        return Lt(Xt.foldr, l(g.tokens, Yt));
+      })())
+    ];
+    return o.Bind1().bind(i(_)(u.transparentBg)(1)(Xx(Zx(u)(a))))(() => s((l) => l.draw)(kt((l) => (h) => ft.compare(l.depth)(h.depth))(d)));
+  };
+}, ol = (t, n) => ({ tag: t, _1: n }), oJ = (t) => (e) => {
+  let r = e, o = !0, i;
+  for (; o; ) {
+    const s = r;
+    if (s.tag === "Leaf") {
+      o = !1, i = J;
+      continue;
+    }
+    if (s.tag === "Node") {
+      const u = C.compare(t)(s._3);
+      if (u === "LT") {
+        r = s._5;
+        continue;
+      }
+      if (u === "GT") {
+        r = s._6;
+        continue;
+      }
+      if (u === "EQ") {
+        o = !1, i = v("Just", s._4);
+        continue;
+      }
+    }
+    f();
+  }
+  return i;
+}, iJ = (t) => (n) => {
+  const e = ft.compare(t)(n);
+  if (e === "LT")
+    return n;
+  if (e === "EQ" || e === "GT")
+    return t;
+  f();
+}, sJ = /* @__PURE__ */ ol("ResolvedLabels"), uJ = (t) => {
+  const n = jt((e) => e.role === "FlyThrough")(t.levels);
+  if (n.tag === "Just")
+    return n._1;
+  if (n.tag === "Nothing")
+    return Ni(t);
+  f();
+}, cJ = (t) => (n) => (e) => {
+  const r = e.frameTitle === "" ? 0 : 40, o = Xu(n)(e.camera);
+  return (() => {
+    if (t.outputAspect.tag === "Nothing")
+      return nl;
+    if (t.outputAspect.tag === "Just")
+      return el(t.outputAspect._1);
+    f();
+  })()({ vx: o.x - t.padding, vy: o.y - t.padding - r, vw: o.w + 2 * t.padding, vh: o.h + 2 * t.padding + r });
+}, aJ = (t) => (n) => {
+  if (n.tag === "Nothing")
+    return [];
+  if (n.tag === "Just") {
+    const e = oJ(n._1)(t.segment.layout.nodes);
+    if (e.tag === "Nothing")
+      return [];
+    if (e.tag === "Just") {
+      const r = e._1.x * t.segment.placement.scale + t.segment.placement.tx, o = e._1.y * t.segment.placement.scale + t.segment.placement.ty, i = e._1.w * t.segment.placement.scale, s = e._1.h * t.segment.placement.scale;
+      return [1, r, o, 2, r + i, o, 2, r + i, o + s, 2, r, o + s, 5];
+    }
+  }
+  f();
+}, fJ = (t) => {
   const n = t.Monad0(), e = n.Bind1();
   return (r) => (o) => {
     if (r === "")
       return n.Applicative0().pure();
     const i = o.vh / 720, s = 15 * i, u = { family: "Ilisarniq, ui-sans-serif, system-ui, sans-serif", size: s, weight: 600 };
     return e.bind(t.measureText(u)(r))((c) => {
-      const a = o.vy + 12 * i, g = s + 6 * i * 2, l = c + 11 * i * 2, d = o.vx + o.vw / 2;
-      return e.bind(t.drawRoundedRect({ x: d - l / 2, y: a, w: l, h: g })(g / 2)(b(
+      const a = o.vy + 12 * i, g = s + 6 * i * 2, _ = c + 11 * i * 2, d = o.vx + o.vw / 2;
+      return e.bind(t.drawRoundedRect({ x: d - _ / 2, y: a, w: _, h: g })(g / 2)(v(
         "Just",
         { color: { r: 255, g: 255, b: 255, a: 240 }, flat: !0 }
-      ))(b(
+      ))(v(
         "Just",
-        { color: { r: 0, g: 0, b: 0, a: 255 }, width: 1 * i, lineJoin: re, lineCap: Qa }
+        { color: { r: 0, g: 0, b: 0, a: 255 }, width: 1 * i, lineJoin: Tn, lineCap: We }
       )))(() => t.drawText({
         x: d,
         y: a + g / 2,
         content: r,
         font: u,
         color: { r: 28, g: 30, b: 36, a: 255 },
-        align: Bs,
-        baseline: Hr
+        align: fs,
+        baseline: qr
       }));
     });
   };
-}, Y$ = (t) => {
-  const n = t.Monad0().Bind1(), e = t.Monad0().Bind1(), r = Xa(t), o = Va(t), i = za(t), s = ja(t), u = Ka(t), c = V$(t), a = ef(t);
-  return (g) => (l) => (d) => {
-    const _ = jo(g)(l)(d), h = Oa(g.theme);
-    return n.bind(g.transparentBg ? e.bind(t.clearBackground(h.bgTransparent))(() => t.setViewport(_)) : e.bind(t.setViewport(_))(() => t.backgroundDots({ viewport: _, bgColor: h.bg, dotColor: h.bgDot, tile: 12, dotRadius: 0.7 })))(() => n.bind(r(h)(l)(d))(() => n.bind(o(h)(g.halftoneShadows)(l)(d))(() => n.bind(i(h)(l)(d))(() => n.bind(s(h)(_)(l)(d))(() => n.bind(u(h)(l)(d))(() => n.bind(c(h)(l)(d))(() => n.bind(g.watermark === "" ? t.Monad0().Applicative0().pure() : t.drawText({
-      x: _.vx + 6,
-      y: _.vy + 6,
-      content: g.watermark,
+}, gJ = (t) => {
+  const n = jg(t), e = $c(t), r = t.Monad0(), o = r.Bind1(), i = Vg(t), s = r.Applicative0(), u = Zg(t), c = tl(t)(_c), a = kx(t), g = Kg(t), _ = Ug(t), d = fJ(t);
+  return (l) => (h) => ($) => (p) => (m) => (y) => (N) => {
+    const T = dc(l.theme), w = (() => {
+      if (N.tag === "ResolvedLabels")
+        return n(T)(m)(y);
+      if (N.tag === "SpringLabels")
+        return e(T)(m)(y)(N._1);
+      f();
+    })();
+    return o.bind(i(T)(l.transparentBg)(h)(p))(() => o.bind((() => {
+      const k = o.bind(u(T)(m)(y))(() => o.bind(c(T)(m)(y))(() => o.bind(a(T)(m)(y))(() => o.bind(g(T)(p)(m)(y))(() => o.bind(_(eN)(T)(m)(y))(() => w)))));
+      return $ ? k : s.pure();
+    })())(() => o.bind(l.watermark === "" ? t.Monad0().Applicative0().pure() : t.drawText({
+      x: p.vx + 6,
+      y: p.vy + 6,
+      content: l.watermark,
       font: { family: "Ilisarniq, ui-sans-serif, system-ui, sans-serif", size: 9, weight: 600 },
       color: { r: 180, g: 180, b: 180, a: 255 },
-      align: Io,
-      baseline: Ba
-    }))(() => a(d.frameTitle)(_)))))))));
+      align: pu,
+      baseline: Xy
+    }))(() => d(y.frameTitle)(p))));
   };
-}, X$ = (t) => {
-  const n = t.Monad0().Bind1(), e = t.Monad0().Bind1(), r = Xa(t), o = Va(t), i = za(t), s = ja(t), u = Ka(t), c = tf(t), a = ef(t);
-  return (g) => (l) => (d) => (_) => {
-    const h = jo(g)(l)(d), p = Oa(g.theme);
-    return n.bind(g.transparentBg ? e.bind(t.clearBackground(p.bgTransparent))(() => t.setViewport(h)) : e.bind(t.setViewport(h))(() => t.backgroundDots({ viewport: h, bgColor: p.bg, dotColor: p.bgDot, tile: 12, dotRadius: 0.7 })))(() => n.bind(r(p)(l)(d))(() => n.bind(o(p)(g.halftoneShadows)(l)(d))(() => n.bind(i(p)(l)(d))(() => n.bind(s(p)(h)(l)(d))(() => n.bind(u(p)(l)(d))(() => n.bind(c(p)(l)(d)(_))(() => n.bind(g.watermark === "" ? t.Monad0().Applicative0().pure() : t.drawText({
-      x: h.vx + 6,
-      y: h.vy + 6,
-      content: g.watermark,
-      font: { family: "Ilisarniq, ui-sans-serif, system-ui, sans-serif", size: 9, weight: 600 },
-      color: { r: 180, g: 180, b: 180, a: 255 },
-      align: Io,
-      baseline: Ba
-    }))(() => a(d.frameTitle)(h)))))))));
+}, lJ = (t) => {
+  const n = t.Monad0(), e = jg(t), r = $c(t), o = n.Bind1(), i = Zg(t), s = tl(t), u = Kg(t), c = t.popTransform, a = Ug(t), g = t.popBakedTransform, _ = t.popClip, d = t.popAlpha;
+  return (l) => (h) => ($) => (p) => (m) => {
+    const y = m.state, N = { tx: m.segment.placement.tx, ty: m.segment.placement.ty, sx: m.segment.placement.scale, sy: m.segment.placement.scale }, T = dc(l.theme), w = m.segment.layout, k = Mn(w), L = { vx: k.x - 1e3, vy: k.y - 1e3, vw: k.w + 2e3, vh: k.h + 2e3 }, G = 11 * m.segment.placement.scale * h >= 5 ? _c : px, D = (() => {
+      if (G === "LabelsHidden")
+        return n.Applicative0().pure();
+      if (G === "LabelsShown")
+        return $.tag === "Leaf" ? e(T)(w)(y) : r(T)(w)(y)($);
+      f();
+    })(), Y = aJ(p)((() => {
+      const X = m.segment.path.length - 1 | 0;
+      return X >= 0 && X < m.segment.path.length ? v("Just", m.segment.path[X]) : J;
+    })());
+    return o.bind(t.pushAlpha(m.bgAlpha))(() => o.bind(t.pushClip(Y)($u))(() => o.bind(t.pushTransform(N))(() => o.bind(i(T)(w)(y))(() => o.bind(s(G)(T)(w)(y))(() => o.bind(u(T)(L)(w)(y))(() => o.bind(c)(() => o.bind(t.pushBakedTransform(N))(() => o.bind(a(rN)(T)(w)(y))(() => o.bind(g)(() => o.bind(t.pushTransform(N))(() => o.bind(D)(() => o.bind(c)(() => o.bind(_)(() => d))))))))))))));
   };
-}, Uu = (t) => (n) => (e) => {
-  const r = pt.compare(t)(e), o = (() => {
+}, _J = (t) => (n) => {
+  const e = Xu(t)(n);
+  return { vx: e.x, vy: e.y, vw: e.w, vh: e.h };
+}, Vr = (t) => (n) => n.diving || n.levels.length > 1 ? (() => {
+  if (t.outputAspect.tag === "Nothing")
+    return nl;
+  if (t.outputAspect.tag === "Just")
+    return el(t.outputAspect._1);
+  f();
+})()(_J(n.rootLayout)(n.camera)) : cJ(t)(n.rootLayout)({ ...Ni(n).state, camera: n.camera }), il = (t) => {
+  const n = rJ(t), e = t.Monad0(), r = e.Applicative0(), o = e.Bind1(), i = lJ(t), s = gJ(t);
+  return (u) => (c) => (a) => {
+    if (u.theme === "Isometric")
+      return n({ ...Mx, transparentBg: u.transparentBg })(u.theme)(Ni(a).segment.layout)(Ni(a).state);
+    const g = Vr(u)(a), _ = (l) => (h) => {
+      if (h.length === 0)
+        return r.pure();
+      const $ = Rt((p) => J, (p) => (m) => v("Just", { head: p, tail: m }), h);
+      if ($.tag === "Nothing")
+        return r.pure();
+      if ($.tag === "Just") {
+        const p = $._1.head, m = $._1.tail;
+        return o.bind((() => {
+          const y = i(u)(a.camera.zoom)(p.role === "Active" ? c : A)(l)(p);
+          return a.diving || p.role === "Active" ? y : r.pure();
+        })())(() => _(p)(m));
+      }
+      f();
+    }, d = Rt((l) => J, (l) => (h) => v("Just", { head: l, tail: h }), a.levels);
+    if (d.tag === "Nothing")
+      return r.pure();
+    if (d.tag === "Just") {
+      const l = d._1.tail, h = d._1.head;
+      return o.bind(s(u)(a.hasDives ? g.vw / iJ(1)(Mn(a.rootLayout).w) : 1)(h.role === "Active" || h.role === "FlyThrough")(g)(h.segment.layout)(uJ(a).state)(l.length === 0 && c.tag !== "Leaf" ? ol("SpringLabels", c) : sJ))(() => _(h)(l));
+    }
+    f();
+  };
+}, Ma = (t) => (n) => (e) => {
+  const r = ft.compare(t)(e), o = (() => {
     if (r === "LT")
       return e;
     if (r === "EQ" || r === "GT")
       return t;
     f();
-  })(), i = pt.compare(n)(o);
+  })(), i = ft.compare(n)(o);
   if (i === "LT" || i === "EQ")
     return n;
   if (i === "GT")
     return o;
   f();
-}, U$ = /* @__PURE__ */ nf(Ga), M$ = /* @__PURE__ */ X$(Ga), K$ = (t) => {
+}, dJ = /* @__PURE__ */ pc(Gg), ja = /* @__PURE__ */ il(Gg), Za = (t) => {
   const n = t.vx + t.vw - 4, e = t.vy + t.vh - 4, r = t.vx + 4, o = t.vy + 4, i = (s) => {
     if (s.tag === "Leaf")
-      return Q;
+      return A;
     if (s.tag === "Node")
-      return Dt("Node", s._1, s._2, s._3, { ...s._4, x: Uu(r)(n - s._4.w)(s._4.x), y: Uu(o)(e - s._4.h)(s._4.y) }, i(s._5), i(s._6));
+      return Ot("Node", s._1, s._2, s._3, { ...s._4, x: Ma(r)(n - s._4.w)(s._4.x), y: Ma(o)(e - s._4.h)(s._4.y) }, i(s._5), i(s._6));
     f();
   };
   return i;
-}, j$ = (t) => (n) => (e) => (r) => (o) => (i) => (s) => (u) => {
-  const c = { padding: 24, transparentBg: n, halftoneShadows: !0, watermark: "", theme: t }, a = zp(e)(r);
+}, hJ = (t) => (n) => (e) => (r) => (o) => (i) => (s) => {
+  const u = {
+    padding: 8,
+    transparentBg: (() => {
+      if (n === "TransparentBackground")
+        return !0;
+      if (n === "PaintBackground")
+        return !1;
+      f();
+    })(),
+    halftoneShadows: !0,
+    watermark: "",
+    theme: t,
+    outputAspect: r.width <= 0 || r.height <= 0 ? J : v("Just", r.width / r.height)
+  }, c = $N(e)(r);
   return () => {
-    const g = a(), l = U$(o)(i)(g)(), d = Fp(s)(K$(jo(c)(o)(i))(l))(u);
-    return M$(c)(o)(i)(d.applied)(g)(), d.springs;
+    const a = c(), g = o.levels.length - 1 | 0;
+    if (g >= 0 && g < o.levels.length) {
+      const d = dJ(o.levels[g].segment.layout)(o.levels[g].state)(a)(), l = hu(i)(Za(Vr(u)(o))(d))(s);
+      return ja(u)(l.applied)(o)(a)(), l.springs;
+    }
+    const _ = hu(i)(Za(Vr(u)(o))(A))(s);
+    return ja(u)(_.applied)(o)(a)(), _.springs;
   };
-}, Le = (t) => "rgb(" + an(t.r) + "," + an(t.g) + "," + an(t.b) + ")", go = /* @__PURE__ */ Mn(/* @__PURE__ */ Xn("Fixed", /* @__PURE__ */ Un(0)(20)(4))), Z$ = (t) => "translate(" + go(t.tx) + "," + go(t.ty) + ") scale(" + go(t.sx) + "," + go(t.sy) + ")", Jt = /* @__PURE__ */ Mn(/* @__PURE__ */ Xn("Fixed", /* @__PURE__ */ Un(0)(20)(2))), Ws = (t) => {
+}, sl = (t) => t, Oo = (t) => t, tf = /* @__PURE__ */ Oo("Light"), pJ = /* @__PURE__ */ Oo("Dark"), $J = /* @__PURE__ */ Oo("Blueprint"), mJ = /* @__PURE__ */ Oo("Whiteboard"), yJ = /* @__PURE__ */ Oo("Isometric"), NJ = /* @__PURE__ */ sl("PaintBackground"), xJ = /* @__PURE__ */ sl("TransparentBackground"), je = (t) => "rgb(" + un(t.r) + "," + un(t.g) + "," + un(t.b) + ")", me = /* @__PURE__ */ Gf(/* @__PURE__ */ Cf("Fixed", /* @__PURE__ */ Pf(0)(20)(4))), JJ = (t) => "translate(" + me(t.tx) + "," + me(t.ty) + ") scale(" + me(t.sx) + "," + me(t.sy) + ")", wt = /* @__PURE__ */ Gf(/* @__PURE__ */ Cf("Fixed", /* @__PURE__ */ Pf(0)(20)(2))), mc = (t) => {
   const n = [];
   let e = 0;
   for (; e < t.length; ) {
-    const r = e, o = r >= 0 && r < t.length ? b("Just", t[r]) : T;
+    const r = e, o = r >= 0 && r < t.length ? v("Just", t[r]) : J;
     if (o.tag === "Nothing") {
       e = t.length;
       continue;
     }
     if (o.tag === "Just") {
       if (o._1 === 1) {
-        n.push("M"), n.push(Jt((() => {
+        n.push("M"), n.push(wt((() => {
           const i = r + 1 | 0;
           return i >= 0 && i < t.length ? t[i] : 0;
-        })())), n.push(Jt((() => {
+        })())), n.push(wt((() => {
           const i = r + 2 | 0;
           return i >= 0 && i < t.length ? t[i] : 0;
         })())), e = r + 3 | 0;
         continue;
       }
       if (o._1 === 2) {
-        n.push("L"), n.push(Jt((() => {
+        n.push("L"), n.push(wt((() => {
           const i = r + 1 | 0;
           return i >= 0 && i < t.length ? t[i] : 0;
-        })())), n.push(Jt((() => {
+        })())), n.push(wt((() => {
           const i = r + 2 | 0;
           return i >= 0 && i < t.length ? t[i] : 0;
         })())), e = r + 3 | 0;
         continue;
       }
       if (o._1 === 3) {
-        n.push("Q"), n.push(Jt((() => {
+        n.push("Q"), n.push(wt((() => {
           const i = r + 1 | 0;
           return i >= 0 && i < t.length ? t[i] : 0;
-        })())), n.push(Jt((() => {
+        })())), n.push(wt((() => {
           const i = r + 2 | 0;
           return i >= 0 && i < t.length ? t[i] : 0;
-        })())), n.push(Jt((() => {
+        })())), n.push(wt((() => {
           const i = r + 3 | 0;
           return i >= 0 && i < t.length ? t[i] : 0;
-        })())), n.push(Jt((() => {
+        })())), n.push(wt((() => {
           const i = r + 4 | 0;
           return i >= 0 && i < t.length ? t[i] : 0;
         })())), e = r + 5 | 0;
         continue;
       }
       if (o._1 === 4) {
-        n.push("C"), n.push(Jt((() => {
+        n.push("C"), n.push(wt((() => {
           const i = r + 1 | 0;
           return i >= 0 && i < t.length ? t[i] : 0;
-        })())), n.push(Jt((() => {
+        })())), n.push(wt((() => {
           const i = r + 2 | 0;
           return i >= 0 && i < t.length ? t[i] : 0;
-        })())), n.push(Jt((() => {
+        })())), n.push(wt((() => {
           const i = r + 3 | 0;
           return i >= 0 && i < t.length ? t[i] : 0;
-        })())), n.push(Jt((() => {
+        })())), n.push(wt((() => {
           const i = r + 4 | 0;
           return i >= 0 && i < t.length ? t[i] : 0;
-        })())), n.push(Jt((() => {
+        })())), n.push(wt((() => {
           const i = r + 5 | 0;
           return i >= 0 && i < t.length ? t[i] : 0;
-        })())), n.push(Jt((() => {
+        })())), n.push(wt((() => {
           const i = r + 6 | 0;
           return i >= 0 && i < t.length ? t[i] : 0;
         })())), e = r + 7 | 0;
@@ -13753,8 +16707,8 @@ const zu = (t) => (n) => (e) => (r) => {
     }
     f();
   }
-  return Ho(" ")(n);
-}, tm = {
+  return ns(" ")(n);
+}, TJ = {
   map: (t) => (n) => (e) => {
     const r = n(e);
     return () => {
@@ -13762,27 +16716,82 @@ const zu = (t) => (n) => (e) => (r) => {
       return t(o);
     };
   }
-}, Oi = /* @__PURE__ */ (() => {
-  const t = $e("&")("&amp;"), n = $e("<")("&lt;"), e = (() => {
-    const r = $e(">")("&gt;"), o = (() => {
-      const i = $e('"')("&quot;");
+}, Tu = /* @__PURE__ */ (() => {
+  const t = Oe("&")("&amp;"), n = Oe("<")("&lt;"), e = (() => {
+    const r = Oe(">")("&gt;"), o = (() => {
+      const i = Oe('"')("&quot;");
       return (s) => i(r(s));
     })();
     return (i) => o(n(i));
   })();
   return (r) => e(t(r));
-})(), nm = (t) => {
+})(), vJ = (t) => {
   if (t.style === "RunText")
-    return "<tspan>" + Oi(t.text) + "</tspan>";
+    return "<tspan>" + Tu(t.text) + "</tspan>";
   if (t.style === "RunCode")
-    return `<tspan font-family="'CommitMono', ui-monospace, SFMono-Regular, Menlo, monospace" font-weight="400">` + Oi(t.text) + "</tspan>";
+    return `<tspan font-family="'CommitMono', ui-monospace, SFMono-Regular, Menlo, monospace" font-weight="400">` + Tu(t.text) + "</tspan>";
   f();
-}, Tn = (t) => (n) => {
+}, Fn = (t) => (n) => {
   const e = n.maskDepth;
   return () => {
     e.value === 0 && n.out.push(t);
   };
-}, rf = {
+}, wJ = (t) => (n) => {
+  const e = [];
+  let r = 0;
+  const o = (i) => {
+    const s = i >= 0 && i < n.length ? t.sx * n[i] + t.tx : t.sx * 0 + t.tx;
+    return () => {
+      e.push(s), e.push((() => {
+        const u = i + 1 | 0;
+        return u >= 0 && u < n.length ? t.sy * n[u] + t.ty : t.sy * 0 + t.ty;
+      })());
+    };
+  };
+  for (; r < n.length; ) {
+    const i = r, s = i >= 0 && i < n.length ? v("Just", n[i]) : J;
+    if (s.tag === "Nothing") {
+      r = n.length;
+      continue;
+    }
+    if (s.tag === "Just") {
+      if (s._1 === 1) {
+        e.push(s._1), o(i + 1 | 0)(), r = i + 3 | 0;
+        continue;
+      }
+      if (s._1 === 2) {
+        e.push(s._1), o(i + 1 | 0)(), r = i + 3 | 0;
+        continue;
+      }
+      if (s._1 === 3) {
+        e.push(s._1), o(i + 1 | 0)(), o(i + 3 | 0)(), r = i + 5 | 0;
+        continue;
+      }
+      if (s._1 === 4) {
+        e.push(s._1), o(i + 1 | 0)(), o(i + 3 | 0)(), o(i + 5 | 0)(), r = i + 7 | 0;
+        continue;
+      }
+      if (s._1 === 5) {
+        e.push(s._1), r = i + 1 | 0;
+        continue;
+      }
+      r = n.length;
+      continue;
+    }
+    f();
+  }
+  return e;
+}, ii = (t) => (n) => {
+  const e = t.bake;
+  return () => {
+    const r = e.value;
+    if (r.tag === "Nothing")
+      return n;
+    if (r.tag === "Just")
+      return wJ(r._1)(n);
+    f();
+  };
+}, ul = {
   apply: (t) => (n) => (e) => {
     const r = t(e), o = n(e);
     return () => {
@@ -13790,8 +16799,8 @@ const zu = (t) => (n) => (e) => (r) => {
       return i(s);
     };
   },
-  Functor0: () => tm
-}, em = {
+  Functor0: () => TJ
+}, kJ = {
   bind: (t) => (n) => (e) => {
     const r = t(e);
     return () => {
@@ -13799,16 +16808,16 @@ const zu = (t) => (n) => (e) => (r) => {
       return n(o)(e)();
     };
   },
-  Apply0: () => rf
-}, rm = { pure: (t) => (n) => () => t, Apply0: () => rf }, om = { Applicative0: () => rm, Bind1: () => em }, im = (t) => (n) => '<defs><pattern id="' + t + '" x="0" y="0" width="' + Jt(n.tile) + '" height="' + Jt(n.tile) + '" patternUnits="userSpaceOnUse">' + (n.bgColor.a === 0 ? "" : '<rect width="' + Jt(n.tile) + '" height="' + Jt(n.tile) + '" fill="' + Le(n.bgColor) + '" fill-opacity="' + Jt(ct(n.bgColor.a) / 255) + '"/>') + '<circle cx="' + Jt(n.tile / 2) + '" cy="' + Jt(n.tile / 2) + '" r="' + Jt(n.dotRadius) + '" fill="' + Le(n.dotColor) + '"/></pattern></defs><rect x="' + Jt(n.viewport.vx) + '" y="' + Jt(n.viewport.vy) + '" width="' + Jt(n.viewport.vw) + '" height="' + Jt(n.viewport.vh) + '" fill="url(#' + t + ')"/>', Mu = (t) => (n) => '<path d="' + Ws(t) + '" fill="' + Le(n) + '" fill-opacity="' + Jt(ct(n.a) / 255) + '"/>', sm = (t) => (n) => (e) => (r) => '<rect x="' + Jt(t.x) + '" y="' + Jt(t.y) + '" width="' + Jt(t.w) + '" height="' + Jt(t.h) + '" rx="' + Jt(n) + '"' + (() => {
+  Apply0: () => ul
+}, bJ = { pure: (t) => (n) => () => t, Apply0: () => ul }, LJ = { Applicative0: () => bJ, Bind1: () => kJ }, EJ = (t) => (n) => '<defs><pattern id="' + t + '" x="0" y="0" width="' + wt(n.tile) + '" height="' + wt(n.tile) + '" patternUnits="userSpaceOnUse">' + (n.bgColor.a === 0 ? "" : '<rect width="' + wt(n.tile) + '" height="' + wt(n.tile) + '" fill="' + je(n.bgColor) + '" fill-opacity="' + wt(nt(n.bgColor.a) / 255) + '"/>') + '<circle cx="' + wt(n.tile / 2) + '" cy="' + wt(n.tile / 2) + '" r="' + wt(n.dotRadius) + '" fill="' + je(n.dotColor) + '"/></pattern></defs><rect x="' + wt(n.viewport.vx) + '" y="' + wt(n.viewport.vy) + '" width="' + wt(n.viewport.vw) + '" height="' + wt(n.viewport.vh) + '" fill="url(#' + t + ')"/>', nf = (t) => (n) => '<path d="' + mc(t) + '" fill="' + je(n) + '" fill-opacity="' + wt(nt(n.a) / 255) + '"/>', SJ = (t) => (n) => (e) => (r) => '<rect x="' + wt(t.x) + '" y="' + wt(t.y) + '" width="' + wt(t.w) + '" height="' + wt(t.h) + '" rx="' + wt(n) + '"' + (() => {
   if (e.tag === "Just")
-    return ' fill="' + Le(e._1.color) + '" fill-opacity="' + Jt(ct(e._1.color.a) / 255) + '"';
+    return ' fill="' + je(e._1.color) + '" fill-opacity="' + wt(nt(e._1.color.a) / 255) + '"';
   if (e.tag === "Nothing")
     return ' fill="none"';
   f();
 })() + (() => {
   if (r.tag === "Just")
-    return ' stroke="' + Le(r._1.color) + '" stroke-opacity="' + Jt(ct(r._1.color.a) / 255) + '" stroke-width="' + Jt(r._1.width) + '" stroke-linejoin="' + (() => {
+    return ' stroke="' + je(r._1.color) + '" stroke-opacity="' + wt(nt(r._1.color.a) / 255) + '" stroke-width="' + wt(r._1.width) + '" stroke-linejoin="' + (() => {
       if (r._1.lineJoin === "RoundJoin")
         return "round";
       if (r._1.lineJoin === "BevelJoin")
@@ -13828,7 +16837,7 @@ const zu = (t) => (n) => (e) => (r) => {
   if (r.tag === "Nothing")
     return "";
   f();
-})() + "/>", Ku = (t) => (n) => '<path d="' + Ws(t) + '" fill="none" stroke="' + Le(n.color) + '" stroke-opacity="' + Jt(ct(n.color.a) / 255) + '" stroke-width="' + Jt(n.width) + '" stroke-linejoin="' + (() => {
+})() + "/>", ef = (t) => (n) => '<path d="' + mc(t) + '" fill="none" stroke="' + je(n.color) + '" stroke-opacity="' + wt(nt(n.color.a) / 255) + '" stroke-width="' + wt(n.width) + '" stroke-linejoin="' + (() => {
   if (n.lineJoin === "RoundJoin")
     return "round";
   if (n.lineJoin === "BevelJoin")
@@ -13844,9 +16853,9 @@ const zu = (t) => (n) => (e) => (r) => {
   if (n.lineCap === "SquareCap")
     return "square";
   f();
-})() + '"/>', um = (t) => {
-  const n = Vc(Pr(t.content));
-  return '<text x="' + Jt(t.x) + '" y="' + Jt(t.y) + '"' + (() => {
+})() + '"/>', rf = (t) => {
+  const n = $0(Or(t.content));
+  return '<text x="' + wt(t.x) + '" y="' + wt(t.y) + '"' + (() => {
     if (t.baseline === "BaselineTop")
       return ' dy="0.8em"';
     if (t.baseline === "BaselineMiddle")
@@ -13854,7 +16863,7 @@ const zu = (t) => (n) => (e) => (r) => {
     if (t.baseline === "BaselineAlphabetic" || t.baseline === "BaselineBottom")
       return "";
     f();
-  })() + ' fill="' + Le(t.color) + '" fill-opacity="' + Jt(ct(t.color.a) / 255) + '" font-size="' + Jt(t.font.size) + '" font-family="Ilisarniq, ui-sans-serif, system-ui, sans-serif" font-weight="' + an(t.font.weight) + '" text-anchor="' + (() => {
+  })() + ' fill="' + je(t.color) + '" fill-opacity="' + wt(nt(t.color.a) / 255) + '" font-size="' + wt(t.font.size) + '" font-family="Ilisarniq, ui-sans-serif, system-ui, sans-serif" font-weight="' + un(t.font.weight) + '" text-anchor="' + (() => {
     if (t.align === "AlignLeft")
       return "start";
     if (t.align === "AlignCenter")
@@ -13862,38 +16871,123 @@ const zu = (t) => (n) => (e) => (r) => {
     if (t.align === "AlignRight")
       return "end";
     f();
-  })() + '">' + (n.length === 1 && n[0].style === "RunText" ? Oi(n[0].text) : Ho("")(O(nm)(n))) + "</text>";
-}, cm = {
-  fillPath: (t) => (n) => Tn(Mu(t)(n.color)),
-  strokePath: (t) => (n) => Tn(Ku(t)(n)),
-  fillStrokePath: (t) => (n) => (e) => Tn(Mu(t)(n.color) + Ku(t)(e)),
-  drawRoundedRect: (t) => (n) => (e) => (r) => Tn(sm(t)(n)(e)(r)),
-  drawText: (t) => Tn(um(t)),
-  pushTransform: (t) => Tn((() => {
-    const n = 'transform="' + Z$(t) + '"';
+  })() + '">' + (n.length === 1 && n[0].style === "RunText" ? Tu(n[0].text) : ns("")(z(vJ)(n))) + "</text>";
+}, CJ = (t) => "matrix(" + me(t.a) + " " + me(t.b) + " " + me(t.c) + " " + me(t.d) + " " + me(t.e) + " " + me(t.f) + ")", cl = {
+  fillPath: (t) => (n) => (e) => {
+    const r = ii(e)(t);
+    return () => {
+      const o = r();
+      return Fn(nf(o)(n.color))(e)();
+    };
+  },
+  strokePath: (t) => (n) => (e) => {
+    const r = ii(e)(t);
+    return () => {
+      const o = r(), i = e.bake.value;
+      return Fn(ef(o)((() => {
+        if (i.tag === "Nothing")
+          return n;
+        if (i.tag === "Just")
+          return { ...n, width: i._1.sx * n.width };
+        f();
+      })()))(e)();
+    };
+  },
+  fillStrokePath: (t) => (n) => (e) => (r) => {
+    const o = ii(r)(t);
+    return () => {
+      const i = o(), s = r.bake.value;
+      return Fn(nf(i)(n.color) + ef(i)((() => {
+        if (s.tag === "Nothing")
+          return e;
+        if (s.tag === "Just")
+          return { ...e, width: s._1.sx * e.width };
+        f();
+      })()))(r)();
+    };
+  },
+  drawRoundedRect: (t) => (n) => (e) => (r) => (o) => {
+    const i = o.bake;
+    return () => {
+      const s = i.value;
+      return Fn(SJ((() => {
+        if (s.tag === "Nothing")
+          return t;
+        if (s.tag === "Just")
+          return { x: s._1.sx * t.x + s._1.tx, y: s._1.sy * t.y + s._1.ty, w: s._1.sx * t.w, h: s._1.sy * t.h };
+        f();
+      })())((() => {
+        if (s.tag === "Nothing")
+          return n;
+        if (s.tag === "Just")
+          return s._1.sx * n;
+        f();
+      })())(e)(r.tag === "Just" ? v(
+        "Just",
+        (() => {
+          if (s.tag === "Nothing")
+            return r._1;
+          if (s.tag === "Just")
+            return { ...r._1, width: s._1.sx * r._1.width };
+          f();
+        })()
+      ) : J))(o)();
+    };
+  },
+  drawText: (t) => (n) => {
+    const e = n.bake;
+    return () => {
+      const r = e.value;
+      return Fn(rf((() => {
+        if (r.tag === "Nothing")
+          return t;
+        if (r.tag === "Just")
+          return { ...t, x: r._1.sx * t.x + r._1.tx, y: r._1.sy * t.y + r._1.ty, font: { ...t.font, size: r._1.sx * t.font.size } };
+        f();
+      })()))(n)();
+    };
+  },
+  drawTextAffine: (t) => (n) => Fn((() => {
+    const e = 'transform="' + CJ(t) + '"';
+    return (e === "" ? "<g>" : "<g " + e + ">") + rf(n) + "</g>";
+  })()),
+  pushTransform: (t) => Fn((() => {
+    const n = 'transform="' + JJ(t) + '"';
     return n === "" ? "<g>" : "<g " + n + ">";
   })()),
-  popTransform: /* @__PURE__ */ Tn("</g>"),
+  popTransform: /* @__PURE__ */ Fn("</g>"),
+  pushBakedTransform: (t) => (n) => {
+    const e = n.bake;
+    return () => {
+      e.value = v("Just", t);
+    };
+  },
+  popBakedTransform: (t) => {
+    const n = t.bake;
+    return () => {
+      n.value = J;
+    };
+  },
   pushClip: (t) => (n) => (e) => {
     const r = e.clipCounter;
     return () => {
       const o = r.value;
       e.clipCounter.value = o + 1 | 0;
-      const i = "clip" + an(o);
-      return Tn((() => {
-        const s = 'clip-path="url(#' + i + ')"';
-        return '<defs><clipPath id="' + i + '"><path d="' + Ws(t) + '"' + (() => {
+      const i = ii(e)(t)(), s = "clip" + un(o);
+      return Fn((() => {
+        const u = 'clip-path="url(#' + s + ')"';
+        return '<defs><clipPath id="' + s + '"><path d="' + mc(i) + '"' + (() => {
           if (n === "EvenOdd")
             return ' clip-rule="evenodd"';
           if (n === "NonZero")
             return "";
           f();
-        })() + "/></clipPath></defs>" + (s === "" ? "<g>" : "<g " + s + ">");
+        })() + "/></clipPath></defs>" + (u === "" ? "<g>" : "<g " + u + ">");
       })())(e)();
     };
   },
-  popClip: /* @__PURE__ */ Tn("</g>"),
-  pushBlend: (t) => Tn((() => {
+  popClip: /* @__PURE__ */ Fn("</g>"),
+  pushBlend: (t) => Fn((() => {
     const n = (() => {
       if (t === "Normal")
         return 'style="mix-blend-mode: normal"';
@@ -13903,12 +16997,12 @@ const zu = (t) => (n) => (e) => (r) => {
     })();
     return n === "" ? "<g>" : "<g " + n + ">";
   })()),
-  popBlend: /* @__PURE__ */ Tn("</g>"),
-  pushAlpha: (t) => Tn((() => {
-    const n = 'opacity="' + Jt(t) + '"';
+  popBlend: /* @__PURE__ */ Fn("</g>"),
+  pushAlpha: (t) => Fn((() => {
+    const n = 'opacity="' + wt(t) + '"';
     return n === "" ? "<g>" : "<g " + n + ">";
   })()),
-  popAlpha: /* @__PURE__ */ Tn("</g>"),
+  popAlpha: /* @__PURE__ */ Fn("</g>"),
   pushLayer: (t) => (n) => {
     const e = (() => {
       if (t === "LayerNodeMask") {
@@ -13934,45 +17028,86 @@ const zu = (t) => (n) => (e) => (r) => {
   },
   setViewport: (t) => (n) => () => {
   },
-  clearBackground: (t) => (n) => Tn('<rect x="' + Jt(n.viewport.vx) + '" y="' + Jt(n.viewport.vy) + '" width="' + Jt(n.viewport.vw) + '" height="' + Jt(n.viewport.vh) + '" fill="' + Le(t) + '" opacity="' + Jt(ct(t.a) / 255) + '"/>')(n),
+  clearBackground: (t) => (n) => Fn('<rect x="' + wt(n.viewport.vx) + '" y="' + wt(n.viewport.vy) + '" width="' + wt(n.viewport.vw) + '" height="' + wt(n.viewport.vh) + '" fill="' + je(t) + '" opacity="' + wt(nt(t.a) / 255) + '"/>')(n),
   backgroundDots: (t) => (n) => {
     const e = n.patternCounter;
     return () => {
       const r = e.value;
-      return n.patternCounter.value = r + 1 | 0, Tn(im("bg-dots-" + an(r))(t))(n)();
+      return n.patternCounter.value = r + 1 | 0, Fn(EJ("bg-dots-" + un(r))(t))(n)();
     };
   },
   measureText: (t) => (n) => (e) => {
-    const r = Ca(t.family)(t.size)(t.weight)(Pr(n));
+    const r = lg(t)(n);
     return () => r;
   },
-  Monad0: () => om
-}, am = /* @__PURE__ */ Y$(cm), fm = (t) => (n) => (e) => (r) => {
-  const o = { padding: 24, transparentBg: n, halftoneShadows: !0, watermark: "", theme: t }, i = jo(o)(e)(r);
-  return {
-    viewBox: Jt(i.vx) + " " + Jt(i.vy) + " " + Jt(i.vw) + " " + Jt(i.vh),
-    body: (() => {
-      const s = [], u = { value: 0 }, c = { value: 0 }, a = { value: 0 };
-      return am(o)(e)(r)({ out: s, maskDepth: u, clipCounter: c, patternCounter: a, viewport: i })(), Ho("")(s);
+  measureInk: (t) => (n) => (e) => {
+    const r = _g(t)(n);
+    return () => r;
+  },
+  insideTokenStyle: (t) => (n) => () => xg,
+  Monad0: () => LJ
+}, PJ = /* @__PURE__ */ il(cl), GJ = /* @__PURE__ */ pc(cl), IJ = (t) => (n) => (e) => (r) => (o) => {
+  const i = {
+    padding: 24,
+    transparentBg: (() => {
+      if (r === "TransparentBackground")
+        return !0;
+      if (r === "PaintBackground")
+        return !1;
+      f();
     })(),
-    vx: i.vx,
-    vy: i.vy,
-    vw: i.vw,
-    vh: i.vh
+    halftoneShadows: !0,
+    watermark: "",
+    theme: e,
+    outputAspect: t
+  }, s = Vr(i)(o);
+  return {
+    viewBox: wt(s.vx) + " " + wt(s.vy) + " " + wt(s.vw) + " " + wt(s.vh),
+    body: (() => {
+      const u = [], c = { value: 0 }, a = { value: 0 }, g = { value: 0 }, _ = { value: J };
+      return PJ(i)(n)(o)({ out: u, maskDepth: c, clipCounter: a, patternCounter: g, viewport: s, bake: _ })(), ns("")(u);
+    })(),
+    vx: s.vx,
+    vy: s.vy,
+    vw: s.vw,
+    vh: s.vh
   };
-}, qs = (t) => t, gm = /* @__PURE__ */ qs("Light"), _m = /* @__PURE__ */ qs("Dark"), lm = /* @__PURE__ */ qs("Blueprint"), Mr = (t) => ({ bind: (n) => (e) => (r) => t.Bind1().bind(n(r))((o) => e(o._1)(o._2)), Apply0: () => of(t) }), of = (t) => {
-  const n = t.Bind1().Apply0().Functor0(), e = { map: (r) => (o) => (i) => n.map((s) => L(r(s._1), s._2))(o(i)) };
+}, AJ = (t) => (n) => (e) => (r) => (o) => (i) => {
+  const s = {
+    padding: 24,
+    transparentBg: (() => {
+      if (e === "TransparentBackground")
+        return !0;
+      if (e === "PaintBackground")
+        return !1;
+      f();
+    })(),
+    outputAspect: t
+  }, u = hu(o)((() => {
+    const c = [], a = { value: 0 }, g = { value: 0 }, _ = { value: 0 }, d = { value: J }, l = r.levels.length - 1 | 0;
+    return l >= 0 && l < r.levels.length ? GJ(r.levels[l].segment.layout)(r.levels[l].state)({
+      out: c,
+      maskDepth: a,
+      clipCounter: g,
+      patternCounter: _,
+      viewport: Vr(s)(r),
+      bake: d
+    })() : A;
+  })())(i);
+  return { parts: IJ(t)(u.applied)(n)(e)(r), springs: u.springs };
+}, zo = (t) => ({ bind: (n) => (e) => (r) => t.Bind1().bind(n(r))((o) => e(o._1)(o._2)), Apply0: () => al(t) }), al = (t) => {
+  const n = t.Bind1().Apply0().Functor0(), e = { map: (r) => (o) => (i) => n.map((s) => b(r(s._1), s._2))(o(i)) };
   return {
     apply: (() => {
-      const r = Mr(t);
-      return (o) => (i) => r.bind(o)((s) => r.bind(i)((u) => Kr(t).pure(s(u))));
+      const r = zo(t);
+      return (o) => (i) => r.bind(o)((s) => r.bind(i)((u) => qo(t).pure(s(u))));
     })(),
     Functor0: () => e
   };
-}, Kr = (t) => ({ pure: (n) => (e) => t.Applicative0().pure(L(n, e)), Apply0: () => of(t) }), dm = (t) => {
-  const n = { Applicative0: () => Kr(t), Bind1: () => Mr(t) };
+}, qo = (t) => ({ pure: (n) => (e) => t.Applicative0().pure(b(n, e)), Apply0: () => al(t) }), FJ = (t) => {
+  const n = { Applicative0: () => qo(t), Bind1: () => zo(t) };
   return { state: (e) => (r) => t.Applicative0().pure(e(r)), Monad0: () => n };
-}, Hs = (t, n) => ({ tag: t, _1: n }), Be = (t, n) => ({ tag: t, _1: n }), xn = /* @__PURE__ */ dm(Te), Qt = /* @__PURE__ */ Mr(Te), Gn = xn.state((t) => L(t, t)), fe = (t) => (e) => {
+}, yc = (t, n) => ({ tag: t, _1: n }), De = (t, n) => ({ tag: t, _1: n }), xn = /* @__PURE__ */ FJ(Ve), Wt = /* @__PURE__ */ zo(Ve), Bn = xn.state((t) => b(t, t)), sn = /* @__PURE__ */ qo(Ve), Ae = (t) => (e) => {
   let r = e, o = !0, i;
   for (; o; ) {
     const s = r;
@@ -13981,7 +17116,7 @@ const zu = (t) => (n) => (e) => (r) => {
       continue;
     }
     if (s.tag === "Node") {
-      const u = G.compare(t)(s._3);
+      const u = C.compare(t)(s._3);
       if (u === "LT") {
         r = s._5;
         continue;
@@ -13998,7 +17133,7 @@ const zu = (t) => (n) => (e) => (r) => {
     f();
   }
   return i;
-}, me = (t) => (e) => {
+}, fl = (t) => (e) => {
   let r = e, o = !0, i;
   for (; o; ) {
     const s = r;
@@ -14007,7 +17142,7 @@ const zu = (t) => (n) => (e) => (r) => {
       continue;
     }
     if (s.tag === "Node") {
-      const u = G.compare(t)(s._3);
+      const u = C.compare(t)(s._3);
       if (u === "LT") {
         r = s._5;
         continue;
@@ -14024,16 +17159,16 @@ const zu = (t) => (n) => (e) => (r) => {
     f();
   }
   return i;
-}, pn = /* @__PURE__ */ Kr(Te), hm = (t) => (e) => {
+}, ps = /* @__PURE__ */ Wi(sn)(Ht), Fe = (t) => (e) => {
   let r = e, o = !0, i;
   for (; o; ) {
     const s = r;
     if (s.tag === "Leaf") {
-      o = !1, i = T;
+      o = !1, i = !1;
       continue;
     }
     if (s.tag === "Node") {
-      const u = G.compare(t)(s._3);
+      const u = C.compare(t)(s._3);
       if (u === "LT") {
         r = s._5;
         continue;
@@ -14043,19 +17178,45 @@ const zu = (t) => (n) => (e) => (r) => {
         continue;
       }
       if (u === "EQ") {
-        o = !1, i = b("Just", s._4);
+        o = !1, i = !0;
         continue;
       }
     }
     f();
   }
   return i;
-}, pm = /* @__PURE__ */ (() => {
-  const t = On.unfoldr((n) => {
+}, RJ = (t) => (e) => {
+  let r = e, o = !0, i;
+  for (; o; ) {
+    const s = r;
+    if (s.tag === "Leaf") {
+      o = !1, i = J;
+      continue;
+    }
+    if (s.tag === "Node") {
+      const u = C.compare(t)(s._3);
+      if (u === "LT") {
+        r = s._5;
+        continue;
+      }
+      if (u === "GT") {
+        r = s._6;
+        continue;
+      }
+      if (u === "EQ") {
+        o = !1, i = v("Just", s._4);
+        continue;
+      }
+    }
+    f();
+  }
+  return i;
+}, BJ = /* @__PURE__ */ (() => {
+  const t = te.unfoldr((n) => {
     if (n.tag === "Nil")
-      return T;
+      return J;
     if (n.tag === "Cons")
-      return b("Just", L(n._1, n._2));
+      return v("Just", b(n._1, n._2));
     f();
   });
   return (n) => t((() => {
@@ -14063,12 +17224,12 @@ const zu = (t) => (n) => (e) => (r) => {
       if (r.tag === "Leaf")
         return o;
       if (r.tag === "Node")
-        return e(r._5, qt("Cons", r._3, e(r._6, o)));
+        return e(r._5, zt("Cons", r._3, e(r._6, o)));
       f();
     };
-    return e(n, zt);
+    return e(n, Yt);
   })());
-})(), $m = (t) => (e) => {
+})(), QJ = (t) => (e) => {
   let r = e, o = !0, i;
   for (; o; ) {
     const s = r;
@@ -14077,7 +17238,7 @@ const zu = (t) => (n) => (e) => (r) => {
       continue;
     }
     if (s.tag === "Node") {
-      const u = G.compare(t)(s._3);
+      const u = C.compare(t)(s._3);
       if (u === "LT") {
         r = s._5;
         continue;
@@ -14094,7 +17255,7 @@ const zu = (t) => (n) => (e) => (r) => {
     f();
   }
   return i;
-}, Os = (t) => (n) => (e) => J((r) => (o) => t.Bind1().bind(r)((i) => n(i)(o)))(t.Applicative0().pure(e)), mm = /* @__PURE__ */ J((t) => (n) => Y(G)(n)()(t))(Q), Nm = /* @__PURE__ */ (() => {
+}, $s = (t) => (n) => (e) => x((r) => (o) => t.Bind1().bind(r)((i) => n(i)(o)))(t.Applicative0().pure(e)), WJ = /* @__PURE__ */ x((t) => (n) => U(C)(n)()(t))(A), DJ = /* @__PURE__ */ (() => {
   const n = ((e) => (r) => {
     let o = e, i = r, s = !0, u;
     for (; s; ) {
@@ -14104,27 +17265,27 @@ const zu = (t) => (n) => (e) => (r) => {
         continue;
       }
       if (a.tag === "Cons") {
-        o = Y(G)(a._1)()(c), i = a._2;
+        o = U(C)(a._1)()(c), i = a._2;
         continue;
       }
       f();
     }
     return u;
-  })(Q);
+  })(A);
   return (e) => n((() => {
     const r = (o, i) => {
       if (o.tag === "Leaf")
         return i;
       if (o.tag === "Node")
-        return r(o._5, qt("Cons", o._3, r(o._6, i)));
+        return r(o._5, zt("Cons", o._3, r(o._6, i)));
       f();
     };
-    return r(e, zt);
+    return r(e, Yt);
   })());
-})(), sf = /* @__PURE__ */ Vf(pn)(Bt), Jm = (t) => Hs("Par", t), uf = (t) => Hs("Seq", t), vm = (t) => (n) => (e) => {
-  const r = er(Yt, T, (o) => o._1 === t, e);
+})(), HJ = /* @__PURE__ */ De("Exit"), OJ = (t) => yc("Par", t), gl = (t) => yc("Seq", t), zJ = (t) => (n) => (e) => {
+  const r = _r(qt, J, (o) => o._1 === t, e);
   if (r.tag === "Just") {
-    const o = rr(Yt, T, r._1, L(t, n), e);
+    const o = Ue(qt, J, r._1, b(t, n), e);
     if (o.tag === "Nothing")
       return e;
     if (o.tag === "Just")
@@ -14132,34 +17293,70 @@ const zu = (t) => (n) => (e) => (r) => {
     f();
   }
   if (r.tag === "Nothing")
-    return gn(e)(L(t, n));
+    return Dt(e)(b(t, n));
   f();
-}, Tm = (t) => (n) => O((e) => e._1 === t ? L(e._1, { ...e._2, label: b("Just", n) }) : L(e._1, e._2)), Dn = (t) => xn.state((n) => L(
+}, qJ = (t) => (n) => z((e) => e._1 === t ? b(e._1, { ...e._2, label: v("Just", n) }) : b(e._1, e._2)), Jn = (t) => xn.state((n) => b(
   void 0,
   (() => {
     if (n.error.tag === "Just")
       return n;
     if (n.error.tag === "Nothing")
-      return { ...n, error: b("Just", { msg: t, line: n.currentLine, column: n.currentColumn }) };
+      return { ...n, error: v("Just", { msg: t, line: n.currentLine, column: n.currentColumn }) };
     f();
   })()
-)), ym = (t) => Qt.bind(Gn)((n) => {
-  const e = t.tag === "Just" && t._1 !== "" ? t._1 : "kf-" + an(n.kfCounter);
-  if (de((o) => o.id === e, n.keyframes))
-    return Dn("duplicate frame name " + e);
+)), YJ = (t) => Wt.bind(xn.state((n) => b(void 0, { ...n, currentLine: t.line, currentColumn: t.column })))(() => Wt.bind(Bn)((n) => {
+  if (n.error.tag === "Just")
+    return sn.pure();
+  if (n.error.tag === "Nothing") {
+    if (t.op.tag === "Enter") {
+      if (!Ae(t.op._1.id)(n.currNodes))
+        return Jn("cannot enter node " + t.op._1.id + ": does not exist");
+      if (!fl(t.op._1.id)(n.interiorOf))
+        return Jn("cannot enter node " + t.op._1.id + ": it has no `inside` block");
+      if (Hn(ge)(t.op._1.id)(n.enterStack))
+        return Jn("cannot enter node " + t.op._1.id + ": already entered");
+      const e = t.op._1;
+      return xn.state((r) => b(
+        void 0,
+        { ...r, enterStack: Dt(r.enterStack)(e.id), scenes: Dt(r.scenes)(ji("EnterNode", e.id)) }
+      ));
+    }
+    if (t.op.tag === "Exit") {
+      const e = zi(n.enterStack);
+      if (e.tag === "Nothing")
+        return Jn("`exit` without a matching `enter`");
+      if (e.tag === "Just") {
+        const r = e._1.init;
+        return xn.state((o) => b(void 0, { ...o, enterStack: r, scenes: Dt(o.scenes)(H1) }));
+      }
+      f();
+    }
+    return sn.pure();
+  }
+  f();
+})), XJ = (t) => Wt.bind(Bn)((n) => {
+  const e = t.tag === "Just" && t._1 !== "" ? t._1 : "kf-" + un(n.kfCounter);
+  if (qn((o) => o.id === e, n.keyframes))
+    return Jn("duplicate frame name " + e);
   const r = {
     ...n,
-    keyframes: gn(n.keyframes)({ id: e, nodes: n.currNodes, edges: n.currEdges }),
+    keyframes: Dt(n.keyframes)({ id: e, nodes: n.currNodes, edges: n.currEdges }),
     kfCounter: n.kfCounter + 1 | 0,
-    currentKf: b("Just", e)
+    currentKf: v("Just", e)
   };
-  return xn.state((o) => L(void 0, r));
-}), wm = (t) => (n) => {
-  const e = n.from + "->" + n.to, r = n.newFrom + "->" + n.newTo, o = kt("Left", "cannot repoint " + n.from + "→" + n.to + ": edge does not exist"), i = fe(e)(t.currEdges) ? kt("Right", void 0) : o;
+  return xn.state((o) => b(void 0, r));
+}), VJ = /* @__PURE__ */ ps((t) => Wt.bind(Bn)((n) => {
+  if (n.error.tag === "Just")
+    return sn.pure();
+  if (n.error.tag === "Nothing")
+    return fl(t.node)(n.interiorOf) ? Jn("node " + t.node + " has more than one `inside` block") : xn.state((e) => b(void 0, { ...e, interiorOf: U(C)(t.node)(t.doc)(e.interiorOf) }));
+  f();
+})), UJ = (t) => (n) => {
+  const e = n.from + "->" + n.to, r = n.newFrom + "->" + n.newTo, o = Et("Left", "cannot repoint " + n.from + "→" + n.to + ": edge does not exist"), i = Fe(e)(t.currEdges) ? Et("Right", void 0) : o;
   return (() => {
     if (i.tag === "Left") {
       const s = i._1;
-      return (u) => kt("Left", s);
+      return (u) => Et("Left", s);
     }
     if (i.tag === "Right") {
       const s = i._1;
@@ -14168,87 +17365,95 @@ const zu = (t) => (n) => (e) => (r) => {
     f();
   })()(() => {
     const s = "cannot repoint " + n.from + "→" + n.to + " to " + n.newFrom + "→" + n.newTo + ": unknown node " + n.newFrom;
-    if (!me(n.newFrom)(t.currNodes))
-      return kt("Left", s);
+    if (!Ae(n.newFrom)(t.currNodes))
+      return Et("Left", s);
     const u = "cannot repoint " + n.from + "→" + n.to + " to " + n.newFrom + "→" + n.newTo + ": unknown node " + n.newTo;
-    if (!me(n.newTo)(t.currNodes))
-      return kt("Left", u);
+    if (!Ae(n.newTo)(t.currNodes))
+      return Et("Left", u);
     const c = "cannot repoint " + n.from + "→" + n.to + " to " + n.newFrom + "→" + n.newTo + ": target edge already exists";
-    return e !== r && fe(r)(t.currEdges) ? kt("Left", c) : kt(
+    return e !== r && Fe(r)(t.currEdges) ? Et("Left", c) : Et(
       "Right",
       {
-        nextCurrEdges: Y(G)(r)()(xr(G)(e)(t.currEdges)),
+        nextCurrEdges: U(C)(r)()($o(C)(e)(t.currEdges)),
         newId: r,
-        newEdge: { id: r, from: { node: n.newFrom, port: T }, to: { node: n.newTo, port: T } }
+        newEdge: { id: r, from: { node: n.newFrom, port: J }, to: { node: n.newTo, port: J } }
       }
     );
   });
-}, Lm = {
+}, ll = {
   graphNodes: [],
-  graphEdges: Q,
-  currNodes: Q,
-  currEdges: Q,
+  graphEdges: A,
+  currNodes: A,
+  currEdges: A,
   keyframes: [],
   scenes: [],
   kfCounter: 0,
   eventCounter: 0,
-  currentKf: T,
+  currentKf: J,
   currentLine: 0,
   currentColumn: 0,
-  error: T
-}, ju = (t) => (n) => Qt.bind(Gn)((e) => {
-  const r = "ev-" + an(e.eventCounter);
-  return Qt.bind((() => {
+  error: J,
+  enterStack: [],
+  interiorOf: A
+}, of = (t) => (n) => Wt.bind(Bn)((e) => {
+  const r = "ev-" + un(e.eventCounter);
+  return Wt.bind((() => {
     const o = { ...e, eventCounter: e.eventCounter + 1 | 0 };
-    return xn.state((i) => L(void 0, o));
-  })())(() => pn.pure({ events: [{ id: r, kind: n, when: t }], firstId: b("Just", r), lastId: b("Just", r) }));
-}), km = (t) => (n) => {
+    return xn.state((i) => b(void 0, o));
+  })())(() => sn.pure({ events: [{ id: r, kind: n, when: t }], firstId: v("Just", r), lastId: v("Just", r) }));
+}), KJ = (t) => (n) => {
   if (n.tag === "Token") {
     const e = n._1;
-    return Qt.bind(Gn)((r) => {
-      const o = !me(e.from)(r.currNodes), i = !me(e.to)(r.currNodes);
+    return Wt.bind(Bn)((r) => {
+      const o = !Ae(e.from)(r.currNodes), i = !Ae(e.to)(r.currNodes);
       if (o || i)
-        return Qt.bind(Dn(o ? i ? "token references unknown node: " + e.from + ", " + e.to : "token references unknown node: " + e.from : i ? "token references unknown node: " + e.to : "token references unknown node: "))(() => pn.pure({ events: [], firstId: T, lastId: T }));
+        return Wt.bind(Jn(o ? i ? "token references unknown node: " + e.from + ", " + e.to : "token references unknown node: " + e.from : i ? "token references unknown node: " + e.to : "token references unknown node: "))(() => sn.pure({ events: [], firstId: J, lastId: J }));
       const s = e.to + "->" + e.from, u = e.from + "->" + e.to;
-      return fe(u)(r.currEdges) ? ju(t)(ou(
+      return Fe(u)(r.currEdges) ? of(t)(Fc(
         "SendToken",
-        { from: e.from, to: e.to, edge: u, direction: E0, labels: e.labels }
-      )) : fe(s)(r.currEdges) ? ju(t)(ou(
+        { from: e.from, to: e.to, edge: u, direction: W1, labels: e.labels }
+      )) : Fe(s)(r.currEdges) ? of(t)(Fc(
         "SendToken",
-        { from: e.from, to: e.to, edge: s, direction: x0, labels: e.labels }
-      )) : Qt.bind(Dn("token " + e.from + "→" + e.to + ": no edge between " + e.from + " and " + e.to))(() => pn.pure({
+        { from: e.from, to: e.to, edge: s, direction: D1, labels: e.labels }
+      )) : Wt.bind(Jn("token " + e.from + "→" + e.to + ": no edge between " + e.from + " and " + e.to))(() => sn.pure({
         events: [],
-        firstId: T,
-        lastId: T
+        firstId: J,
+        lastId: J
       }));
     });
   }
-  return pn.pure({ events: [], firstId: T, lastId: T });
-}, bm = (t) => vt((n) => hm(n)(t.graphEdges))(Et(br, pm(t.currEdges))), Em = (t) => (n) => {
-  const e = gt((o) => o.from.node === n.id || o.to.node === n.id, bm(t)), r = Os(Sf)((o) => (i) => {
+  return sn.pure({ events: [], firstId: J, lastId: J });
+}, MJ = (t) => (n) => {
+  if (0 < t.length) {
+    const e = t[0];
+    return Wt.bind(xn.state((r) => b(void 0, { ...r, currentLine: e.line, currentColumn: e.column })))(() => Jn(n));
+  }
+  return Jn(n);
+}, jJ = (t) => yt((n) => RJ(n)(t.graphEdges))(Lt(po, BJ(t.currEdges))), ZJ = (t) => (n) => {
+  const e = lt((o) => o.from.node === n.id || o.to.node === n.id, jJ(t)), r = $s($f)((o) => (i) => {
     const s = i.from + "->" + n.id, u = n.id + "->" + i.to, c = i.from + "->" + i.to, a = "via " + i.from + " " + i.to + ": no edge " + i.from + "→" + n.id;
-    if (!fe(s)(t.currEdges))
-      return kt("Left", a);
+    if (!Fe(s)(t.currEdges))
+      return Et("Left", a);
     const g = "via " + i.from + " " + i.to + ": no edge " + n.id + "→" + i.to;
-    if (!fe(u)(t.currEdges))
-      return kt("Left", g);
-    const l = "via " + i.from + " " + i.to + ": would create " + i.from + "→" + i.to + " but it already exists";
-    return fe(c)(t.currEdges) || $m(c)(o.synthesized) ? kt("Left", l) : kt(
+    if (!Fe(u)(t.currEdges))
+      return Et("Left", g);
+    const _ = "via " + i.from + " " + i.to + ": would create " + i.from + "→" + i.to + " but it already exists";
+    return Fe(c)(t.currEdges) || QJ(c)(o.synthesized) ? Et("Left", _) : Et(
       "Right",
       {
-        consumed: Y(G)(s)()(Y(G)(u)()(o.consumed)),
-        synthesized: Y(G)(c)({
+        consumed: U(C)(s)()(U(C)(u)()(o.consumed)),
+        synthesized: U(C)(c)({
           id: c,
-          from: { node: i.from, port: T },
-          to: { node: i.to, port: T }
+          from: { node: i.from, port: J },
+          to: { node: i.to, port: J }
         })(o.synthesized)
       }
     );
-  })({ consumed: Q, synthesized: Q })(n.via);
+  })({ consumed: A, synthesized: A })(n.via);
   return (() => {
     if (r.tag === "Left") {
       const o = r._1;
-      return (i) => kt("Left", o);
+      return (i) => Et("Left", o);
     }
     if (r.tag === "Right") {
       const o = r._1;
@@ -14256,20 +17461,20 @@ const zu = (t) => (n) => (e) => (r) => {
     }
     f();
   })()((o) => {
-    const i = o.consumed, s = gt((u) => !fe(u.id)(i), e);
-    return s.length === 0 ? kt(
+    const i = o.consumed, s = lt((u) => !Fe(u.id)(i), e);
+    return s.length === 0 ? Et(
       "Right",
       {
-        nextCurrEdges: bn(
-          G.compare,
-          Ln,
-          ae(G.compare, t.currEdges, mm(O((u) => u.id)(e))),
-          Nm((() => {
+        nextCurrEdges: Cn(
+          C.compare,
+          Sn,
+          Pe(C.compare, t.currEdges, WJ(z((u) => u.id)(e))),
+          DJ((() => {
             const u = (c) => {
               if (c.tag === "Leaf")
-                return Q;
+                return A;
               if (c.tag === "Node")
-                return Dt("Node", c._1, c._2, c._3, void 0, u(c._5), u(c._6));
+                return Ot("Node", c._1, c._2, c._3, void 0, u(c._5), u(c._6));
               f();
             };
             return u(o.synthesized);
@@ -14277,59 +17482,67 @@ const zu = (t) => (n) => (e) => (r) => {
         ),
         synthesized: o.synthesized
       }
-    ) : kt(
+    ) : Et(
       "Left",
-      "cannot delete node " + n.id + ": still connected (" + Ho(", ")(O((u) => u.from.node + "→" + u.to.node)(s)) + "). Use -edge to drop them or `via a b` to merge " + n.id + "'s endpoints."
+      "cannot delete node " + n.id + ": still connected (" + ns(", ")(z((u) => u.from.node + "→" + u.to.node)(s)) + "). Use -edge to drop them or `via a b` to merge " + n.id + "'s endpoints."
     );
   });
-}, zi = (t) => {
+}, vu = (t) => {
   if (t.tag === "Leaf")
     return [t._1];
   if (t.tag === "Par" || t.tag === "Seq")
-    return bt(t._1)(zi);
+    return Jt(t._1)(vu);
   f();
-}, xm = (t) => ({
-  nodes: O(Ro)(t.graphNodes),
+}, tT = Wt.bind(Bn)((t) => {
+  if (t.error.tag === "Just")
+    return sn.pure();
+  if (t.error.tag === "Nothing") {
+    const n = t.enterStack.length - 1 | 0;
+    return n >= 0 && n < t.enterStack.length ? Jn("entered node " + t.enterStack[n] + " was never exited") : sn.pure();
+  }
+  f();
+}), nT = (t) => ({
+  nodes: z(Di)(t.graphNodes),
   edges: (() => {
     const n = (e, r) => {
       if (e.tag === "Leaf")
         return r;
       if (e.tag === "Node")
-        return n(e._5, qt("Cons", e._4, n(e._6, r)));
+        return n(e._5, zt("Cons", e._4, n(e._6, r)));
       f();
     };
-    return Et(Mt.foldr, n(t.graphEdges, zt));
+    return Lt(Xt.foldr, n(t.graphEdges, Yt));
   })(),
   constraints: []
-}), Cm = (t) => {
+}), eT = (t) => {
   if (t.tag === "AddNode") {
     const n = t._1;
-    return xn.state((e) => L(
+    return xn.state((e) => b(
       void 0,
       {
         ...e,
-        graphNodes: vm(n.id)({ id: n.id, size: L(1, 1), ports: [], label: b("Just", n.label) })(e.graphNodes),
-        currNodes: Y(G)(n.id)()(e.currNodes)
+        graphNodes: zJ(n.id)({ id: n.id, size: b(1, 1), ports: [], label: v("Just", n.label), shape: n.shape })(e.graphNodes),
+        currNodes: U(C)(n.id)()(e.currNodes)
       }
     ));
   }
   if (t.tag === "DelNode") {
     const n = t._1;
-    return Qt.bind(Gn)((e) => {
-      if (!me(n.id)(e.currNodes))
-        return Dn("cannot delete node " + n.id + ": does not exist");
-      const r = Em(e)(n);
+    return Wt.bind(Bn)((e) => {
+      if (!Ae(n.id)(e.currNodes))
+        return Jn("cannot delete node " + n.id + ": does not exist");
+      const r = ZJ(e)(n);
       if (r.tag === "Left")
-        return Dn(r._1);
+        return Jn(r._1);
       if (r.tag === "Right") {
         const o = r._1;
-        return xn.state((i) => L(
+        return xn.state((i) => b(
           void 0,
           {
             ...i,
-            currNodes: xr(G)(n.id)(i.currNodes),
+            currNodes: $o(C)(n.id)(i.currNodes),
             currEdges: o.nextCurrEdges,
-            graphEdges: bn(G.compare, Ln, o.synthesized, i.graphEdges)
+            graphEdges: Cn(C.compare, Sn, o.synthesized, i.graphEdges)
           }
         ));
       }
@@ -14338,129 +17551,129 @@ const zu = (t) => (n) => (e) => (r) => {
   }
   if (t.tag === "ModNode") {
     const n = t._1;
-    return Qt.bind(Gn)((e) => {
-      if (!me(n.id)(e.currNodes))
-        return Dn("cannot modify node " + n.id + ": does not exist");
+    return Wt.bind(Bn)((e) => {
+      if (!Ae(n.id)(e.currNodes))
+        return Jn("cannot modify node " + n.id + ": does not exist");
       if (n.label.tag === "Just") {
         const r = n.label._1;
-        return xn.state((o) => L(void 0, { ...o, graphNodes: Tm(n.id)(r)(o.graphNodes) }));
+        return xn.state((o) => b(void 0, { ...o, graphNodes: qJ(n.id)(r)(o.graphNodes) }));
       }
       if (n.label.tag === "Nothing")
-        return pn.pure();
+        return sn.pure();
       f();
     });
   }
   if (t.tag === "AddEdge") {
     const n = t._1;
-    return Qt.bind(Gn)((e) => {
-      const r = !me(n.from)(e.currNodes), o = !me(n.to)(e.currNodes);
+    return Wt.bind(Bn)((e) => {
+      const r = !Ae(n.from)(e.currNodes), o = !Ae(n.to)(e.currNodes);
       if (r || o)
-        return Dn("cannot add edge " + n.from + "→" + n.to + ": unknown node " + (r ? o ? n.from + ", " + n.to : n.from : o ? n.to : ""));
+        return Jn("cannot add edge " + n.from + "→" + n.to + ": unknown node " + (r ? o ? n.from + ", " + n.to : n.from : o ? n.to : ""));
       const i = n.from + "->" + n.to;
-      return xn.state((s) => L(
+      return xn.state((s) => b(
         void 0,
         {
           ...s,
-          graphEdges: Y(G)(i)({ id: i, from: { node: n.from, port: T }, to: { node: n.to, port: T } })(s.graphEdges),
-          currEdges: Y(G)(i)()(s.currEdges)
+          graphEdges: U(C)(i)({ id: i, from: { node: n.from, port: J }, to: { node: n.to, port: J } })(s.graphEdges),
+          currEdges: U(C)(i)()(s.currEdges)
         }
       ));
     });
   }
   if (t.tag === "DelEdge") {
     const n = t._1;
-    return Qt.bind(Gn)((e) => {
+    return Wt.bind(Bn)((e) => {
       const r = n.from + "->" + n.to;
-      return fe(r)(e.currEdges) ? xn.state((o) => L(void 0, { ...o, currEdges: xr(G)(r)(o.currEdges) })) : Dn("cannot delete edge " + n.from + "→" + n.to + ": does not exist");
+      return Fe(r)(e.currEdges) ? xn.state((o) => b(void 0, { ...o, currEdges: $o(C)(r)(o.currEdges) })) : Jn("cannot delete edge " + n.from + "→" + n.to + ": does not exist");
     });
   }
   if (t.tag === "RepointEdge") {
     const n = t._1;
-    return Qt.bind(Gn)((e) => {
-      const r = wm(e)(n);
+    return Wt.bind(Bn)((e) => {
+      const r = UJ(e)(n);
       if (r.tag === "Left")
-        return Dn(r._1);
+        return Jn(r._1);
       if (r.tag === "Right") {
         const o = r._1;
-        return xn.state((i) => L(
+        return xn.state((i) => b(
           void 0,
-          { ...i, currEdges: o.nextCurrEdges, graphEdges: Y(G)(o.newId)(o.newEdge)(i.graphEdges) }
+          { ...i, currEdges: o.nextCurrEdges, graphEdges: U(C)(o.newId)(o.newEdge)(i.graphEdges) }
         ));
       }
       f();
     });
   }
-  return pn.pure();
-}, Sm = (t) => Qt.bind(xn.state((n) => L(void 0, { ...n, currentLine: t.line, currentColumn: t.column })))(() => Cm(t.op)), Gm = (t) => (n) => Qt.bind(sf(Sm)(n))(() => Qt.bind(Gn)((e) => {
-  const r = t.tag === "Just" && t._1 !== "" ? t._1 : "kf-" + an(e.kfCounter);
-  if (de((i) => i.id === r, e.keyframes))
-    return Dn("duplicate frame name " + r);
+  return sn.pure();
+}, rT = (t) => Wt.bind(xn.state((n) => b(void 0, { ...n, currentLine: t.line, currentColumn: t.column })))(() => eT(t.op)), oT = (t) => (n) => Wt.bind(ps(rT)(n))(() => Wt.bind(Bn)((e) => {
+  const r = t.tag === "Just" && t._1 !== "" ? t._1 : "kf-" + un(e.kfCounter);
+  if (qn((i) => i.id === r, e.keyframes))
+    return Jn("duplicate frame name " + r);
   const o = {
     ...e,
-    keyframes: gn(e.keyframes)({ id: r, nodes: e.currNodes, edges: e.currEdges }),
+    keyframes: Dt(e.keyframes)({ id: r, nodes: e.currNodes, edges: e.currEdges }),
     kfCounter: e.kfCounter + 1 | 0,
-    currentKf: b("Just", r),
+    currentKf: v("Just", r),
     scenes: (() => {
       if (e.currentKf.tag === "Nothing")
         return e.scenes;
       if (e.currentKf.tag === "Just")
-        return gn(e.scenes)(kc("Structural", { from: e.currentKf._1, to: r, focus: T }));
+        return Dt(e.scenes)(ji("Structural", { from: e.currentKf._1, to: r, focus: J }));
       f();
     })()
   };
-  return xn.state((i) => L(void 0, o));
-})), Im = (t) => (n) => {
-  const e = Wt((r) => T, (r) => (o) => b("Just", { head: r, tail: o }), n);
+  return xn.state((i) => b(void 0, o));
+})), iT = (t) => (n) => {
+  const e = Rt((r) => J, (r) => (o) => v("Just", { head: r, tail: o }), n);
   if (e.tag === "Nothing")
-    return pn.pure({ events: [], firstId: T, lastId: T });
+    return sn.pure({ events: [], firstId: J, lastId: J });
   if (e.tag === "Just") {
     const r = e._1.tail;
-    return Qt.bind(zr(t)(e._1.head))((o) => Qt.bind(Os({
-      Applicative0: () => Kr(Te),
-      Bind1: () => Mr(Te)
-    })((i) => (s) => Qt.bind(zr((() => {
+    return Wt.bind(Fo(t)(e._1.head))((o) => Wt.bind($s({
+      Applicative0: () => qo(Ve),
+      Bind1: () => zo(Ve)
+    })((i) => (s) => Wt.bind(Fo((() => {
       if (i.lastId.tag === "Just")
-        return vs("After", i.lastId._1);
+        return Yu("After", i.lastId._1);
       if (i.lastId.tag === "Nothing")
         return t;
       f();
-    })())(s))((u) => pn.pure({
+    })())(s))((u) => sn.pure({
       events: [...i.events, ...u.events],
       firstId: (() => {
         if (i.firstId.tag === "Just")
-          return b("Just", i.firstId._1);
+          return v("Just", i.firstId._1);
         if (i.firstId.tag === "Nothing")
           return u.firstId;
         f();
       })(),
       lastId: (() => {
         if (u.lastId.tag === "Just")
-          return b("Just", u.lastId._1);
+          return v("Just", u.lastId._1);
         if (u.lastId.tag === "Nothing")
           return i.lastId;
         f();
       })()
-    })))(o)(r))((i) => pn.pure(i)));
+    })))(o)(r))((i) => sn.pure(i)));
   }
   f();
-}, Pm = (t) => (n) => {
-  const e = Wt((r) => T, (r) => (o) => b("Just", { head: r, tail: o }), n);
+}, sT = (t) => (n) => {
+  const e = Rt((r) => J, (r) => (o) => v("Just", { head: r, tail: o }), n);
   if (e.tag === "Nothing")
-    return pn.pure({ events: [], firstId: T, lastId: T });
+    return sn.pure({ events: [], firstId: J, lastId: J });
   if (e.tag === "Just") {
     const r = e._1.tail;
-    return Qt.bind(zr(t)(e._1.head))((o) => Qt.bind(Am((() => {
+    return Wt.bind(Fo(t)(e._1.head))((o) => Wt.bind(uT((() => {
       if (o.firstId.tag === "Just")
-        return vs("With", o.firstId._1);
+        return Yu("With", o.firstId._1);
       if (o.firstId.tag === "Nothing")
         return t;
       f();
-    })())(r))((i) => pn.pure({
+    })())(r))((i) => sn.pure({
       events: [...o.events, ...i.events],
       firstId: o.firstId,
       lastId: (() => {
         if (o.lastId.tag === "Just")
-          return b("Just", o.lastId._1);
+          return v("Just", o.lastId._1);
         if (o.lastId.tag === "Nothing")
           return i.lastId;
         f();
@@ -14468,91 +17681,121 @@ const zu = (t) => (n) => (e) => (r) => {
     })));
   }
   f();
-}, zr = (t) => (n) => {
+}, Fo = (t) => (n) => {
   if (n.tag === "Leaf") {
     const e = n._1;
-    return Qt.bind(xn.state((r) => L(void 0, { ...r, currentLine: e.line, currentColumn: e.column })))(() => km(t)(e.op));
+    return Wt.bind(xn.state((r) => b(void 0, { ...r, currentLine: e.line, currentColumn: e.column })))(() => KJ(t)(e.op));
   }
   if (n.tag === "Seq")
-    return Im(t)(n._1);
+    return iT(t)(n._1);
   if (n.tag === "Par")
-    return Pm(t)(n._1);
+    return sT(t)(n._1);
   f();
-}, Am = (t) => Os({
-  Applicative0: () => Kr(Te),
-  Bind1: () => Mr(Te)
-})((n) => (e) => Qt.bind(zr(t)(e))((r) => pn.pure({
+}, uT = (t) => $s({
+  Applicative0: () => qo(Ve),
+  Bind1: () => zo(Ve)
+})((n) => (e) => Wt.bind(Fo(t)(e))((r) => sn.pure({
   events: [...n.events, ...r.events],
   firstId: (() => {
     if (n.firstId.tag === "Just")
-      return b("Just", n.firstId._1);
+      return v("Just", n.firstId._1);
     if (n.firstId.tag === "Nothing")
       return r.firstId;
     f();
   })(),
   lastId: (() => {
     if (r.lastId.tag === "Just")
-      return b("Just", r.lastId._1);
+      return v("Just", r.lastId._1);
     if (r.lastId.tag === "Nothing")
       return n.lastId;
     f();
   })()
-})))({ events: [], firstId: T, lastId: T }), Rm = (t) => Qt.bind(Gn)((n) => {
+})))({ events: [], firstId: J, lastId: J }), cT = (t) => Wt.bind(Bn)((n) => {
   if (n.currentKf.tag === "Nothing")
-    return Dn("flow ops before any structural frame");
+    return Jn("flow ops before any structural frame");
   if (n.currentKf.tag === "Just") {
     const e = n.currentKf._1;
-    return Qt.bind(zr(b0)(t))((r) => Qt.bind(Gn)((o) => {
-      const i = { ...o, scenes: gn(o.scenes)(kc("DataFlow", { keyframe: e, events: r.events, focus: T })) };
-      return xn.state((s) => L(void 0, i));
+    return Wt.bind(Fo(Q1)(t))((r) => Wt.bind(Bn)((o) => {
+      const i = { ...o, scenes: Dt(o.scenes)(ji("DataFlow", { keyframe: e, events: r.events, focus: J })) };
+      return xn.state((s) => b(void 0, i));
     }));
   }
   f();
-}), Fm = (t) => Qt.bind(Gn)((n) => {
+}), aT = (t) => Wt.bind(Bn)((n) => {
   if (n.error.tag === "Just")
-    return pn.pure();
+    return sn.pure();
   if (n.error.tag === "Nothing") {
-    const e = zi(t.ops), r = gt(
-      (i) => i.op.tag === "AddNode" || i.op.tag === "DelNode" || i.op.tag === "ModNode" || i.op.tag === "AddEdge" || i.op.tag === "DelEdge" || i.op.tag === "RepointEdge",
+    const e = vu(t.ops), r = lt(
+      (s) => s.op.tag === "AddNode" || s.op.tag === "DelNode" || s.op.tag === "ModNode" || s.op.tag === "AddEdge" || s.op.tag === "DelEdge" || s.op.tag === "RepointEdge",
       e
-    ), o = gt(
-      (i) => !(i.op.tag === "AddNode" || i.op.tag === "DelNode" || i.op.tag === "ModNode" || i.op.tag === "AddEdge" || i.op.tag === "DelEdge" || i.op.tag === "RepointEdge"),
+    ), o = lt((s) => s.op.tag === "Enter" || s.op.tag === "Exit", e), i = lt(
+      (s) => !(s.op.tag === "AddNode" || s.op.tag === "DelNode" || s.op.tag === "ModNode" || s.op.tag === "AddEdge" || s.op.tag === "DelEdge" || s.op.tag === "RepointEdge") && !(s.op.tag === "Enter" || s.op.tag === "Exit"),
       e
     );
-    return Qt.bind((() => {
-      const i = Gm(t.name)(r);
-      return r.length !== 0 ? i : pn.pure();
-    })())(() => Qt.bind((() => {
-      const i = ym(t.name);
-      return r.length === 0 && o.length !== 0 ? i : pn.pure();
-    })())(() => {
-      const i = Rm(t.ops);
-      return o.length !== 0 ? i : pn.pure();
-    }));
+    return o.length !== 0 && i.length !== 0 ? MJ(o)("`enter`/`exit` cannot be mixed with flow tokens in the same frame") : Wt.bind((() => {
+      const s = oT(t.name)(r);
+      return r.length !== 0 ? s : sn.pure();
+    })())(() => Wt.bind((() => {
+      const s = XJ(t.name);
+      return r.length === 0 && i.length !== 0 ? s : sn.pure();
+    })())(() => Wt.bind((() => {
+      const s = cT(t.ops);
+      return i.length !== 0 ? s : sn.pure();
+    })())(() => ps(YJ)(o))));
   }
   f();
-}), Bm = (t) => Qt.bind(sf(Fm)(t.frames))(() => Qt.bind(Gn)((n) => pn.pure((() => {
+}), _l = (t) => Wt.bind(VJ(t.interiors))(() => Wt.bind(ps(aT)(t.frames))(() => Wt.bind(tT)(() => Wt.bind(Bn)((n) => {
   if (n.error.tag === "Just")
-    return kt("Left", n.error._1);
-  if (n.error.tag === "Nothing")
-    return kt("Right", { seed: t.seed, graph: xm(n), keyframes: n.keyframes, scenes: n.scenes });
+    return sn.pure(Et("Left", n.error._1));
+  if (n.error.tag === "Nothing") {
+    const e = fT(t.interiors);
+    if (e.tag === "Left")
+      return sn.pure(Et("Left", e._1));
+    if (e.tag === "Right")
+      return sn.pure(Et("Right", { seed: t.seed, graph: nT(n), keyframes: n.keyframes, scenes: n.scenes, interiors: e._1 }));
+  }
   f();
-})())))(Lm)._1, nr = (t, n) => ({ tag: "ParseError", _1: t, _2: n }), H = (t, n, e) => ({ tag: "ParseState", _1: t, _2: n, _3: e }), Po = (t, n, e) => ({ tag: t, _1: n, _2: e }), Qm = (t) => Po("More", t), Dm = (t) => Po("Lift", t), cf = { map: (t) => (n) => (e, r, o, i, s) => r((u) => n(e, r, o, i, (c, a) => r((g) => s(c, t(a))))) }, Wm = {
+})))), fT = (t) => {
+  const n = $s($f)((e) => (r) => {
+    const o = _l(r.doc)(ll)._1;
+    return (() => {
+      if (o.tag === "Left") {
+        const i = o._1;
+        return (s) => Et("Left", i);
+      }
+      if (o.tag === "Right") {
+        const i = o._1;
+        return (s) => s(i);
+      }
+      f();
+    })()((i) => Et("Right", U(C)(r.node)(i)(e)));
+  })(A)(t);
+  if (n.tag === "Left")
+    return Et("Left", n._1);
+  if (n.tag === "Right")
+    return Et("Right", n._1);
+  f();
+}, Gr = (t, n) => ({ tag: "ParseError", _1: t, _2: n }), F = (t, n, e) => ({ tag: "ParseState", _1: t, _2: n, _3: e }), Bi = (t, n, e) => ({ tag: t, _1: n, _2: e }), gT = (t) => Bi("More", t), lT = (t) => Bi("Lift", t), _T = {
+  defer: (t) => {
+    const n = m1(t);
+    return (e, r, o, i, s) => y1(n)(e, r, o, i, s);
+  }
+}, dl = { map: (t) => (n) => (e, r, o, i, s) => r((u) => n(e, r, o, i, (c, a) => r((g) => s(c, t(a))))) }, dT = {
   alt: (t) => (n) => (e, r, o, i, s) => {
     const u = e._1, c = e._2;
     return r((a) => t(
-      H(u, c, !1),
+      F(u, c, !1),
       r,
       o,
-      (g, l) => {
+      (g, _) => {
         const d = g._3;
-        return r((_) => d ? i(g, l) : n(e, r, o, i, s));
+        return r((l) => d ? i(g, _) : n(e, r, o, i, s));
       },
       s
     ));
   },
-  Functor0: () => cf
-}, qm = (t) => {
+  Functor0: () => dl
+}, hT = (t) => {
   const n = t.Monad0();
   return (e) => (r) => {
     const o = (i) => {
@@ -14564,11 +17807,11 @@ const zu = (t) => (n) => (e) => (r) => {
           continue;
         }
         if (g.tag === "Lift") {
-          u = !1, c = n.Bind1().Apply0().Functor0().map(uc)(g._1);
+          u = !1, c = n.Bind1().Apply0().Functor0().map(yf)(g._1);
           continue;
         }
         if (g.tag === "Stop") {
-          u = !1, c = n.Applicative0().pure(vr("Done", L(g._2, g._1)));
+          u = !1, c = n.Applicative0().pure(io("Done", b(g._2, g._1)));
           continue;
         }
         f();
@@ -14577,306 +17820,332 @@ const zu = (t) => (n) => (e) => (r) => {
     };
     return t.tailRecM(o)((i) => r(
       e,
-      Qm,
-      Dm,
-      (s, u) => Po("Stop", s, kt("Left", u)),
-      (s, u) => Po("Stop", s, kt("Right", u))
+      gT,
+      lT,
+      (s, u) => Bi("Stop", s, Et("Left", u)),
+      (s, u) => Bi("Stop", s, Et("Right", u))
     ));
   };
-}, af = (t, n, e, r, o) => o(t, t._2), Hm = { index: 0, line: 1, column: 1 }, Om = (t) => {
-  const n = qm(t);
-  return (e) => (r) => t.Monad0().Bind1().Apply0().Functor0().map(Fo)(n(H(e, Hm, !1))(r));
-}, zm = /* @__PURE__ */ Om(Qf), ff = {
+}, hl = (t, n, e, r, o) => o(t, t._2), pT = { index: 0, line: 1, column: 1 }, $T = (t) => {
+  const n = hT(t);
+  return (e) => (r) => t.Monad0().Bind1().Apply0().Functor0().map(Hi)(n(F(e, pT, !1))(r));
+}, mT = /* @__PURE__ */ $T(ql), pl = {
   apply: (t) => (n) => (e, r, o, i, s) => r((u) => t(
     e,
     r,
     o,
     i,
     (c, a) => r((g) => {
-      const l = e._3 && !c._3 ? H(c._1, c._2, !0) : c;
-      return n(l, r, o, i, (d, _) => r((h) => s(l._3 && !d._3 ? H(d._1, d._2, !0) : d, a(_))));
+      const _ = e._3 && !c._3 ? F(c._1, c._2, !0) : c;
+      return n(_, r, o, i, (d, l) => r((h) => s(_._3 && !d._3 ? F(d._1, d._2, !0) : d, a(l))));
     })
   )),
-  Functor0: () => cf
-}, gf = { pure: (t) => (n, e, r, o, i) => i(n, t), Apply0: () => ff }, Vm = {
+  Functor0: () => dl
+}, $l = { pure: (t) => (n, e, r, o, i) => i(n, t), Apply0: () => pl }, yT = {
   bind: (t) => (n) => (e, r, o, i, s) => r((u) => t(
     e,
     r,
     o,
     i,
-    (c, a) => r((g) => n(a)(e._3 && !c._3 ? H(c._1, c._2, !0) : c, r, o, i, s))
+    (c, a) => r((g) => n(a)(e._3 && !c._3 ? F(c._1, c._2, !0) : c, r, o, i, s))
   )),
-  Apply0: () => ff
-}, Ym = { Applicative0: () => gf, Bind1: () => Vm }, Zo = (t) => (n, e, r, o, i) => e((s) => af(
+  Apply0: () => pl
+}, NT = { Applicative0: () => $l, Bind1: () => yT }, ms = (t) => (n, e, r, o, i) => e((s) => hl(
   n,
   e,
   r,
   o,
-  (u, c) => e((a) => o(n._3 && !u._3 ? H(u._1, u._2, !0) : u, nr(t, c)))
-)), Xm = { empty: /* @__PURE__ */ Zo("No alternative"), Alt0: () => Wm }, Um = { Applicative0: () => gf, Plus1: () => Xm }, Mm = {
+  (u, c) => e((a) => o(n._3 && !u._3 ? F(u._1, u._2, !0) : u, Gr(t, c)))
+)), xT = { empty: /* @__PURE__ */ ms("No alternative"), Alt0: () => dT }, JT = { Applicative0: () => $l, Plus1: () => xT }, TT = {
   tailRecM: (t) => (n) => (e, r, o, i, s) => {
     const u = (c, a, g) => t(a)(
       c,
       r,
       o,
       i,
-      (l, d) => {
-        const _ = c._3 && !l._3 ? H(l._1, l._2, !0) : l;
+      (_, d) => {
+        const l = c._3 && !_._3 ? F(_._1, _._2, !0) : _;
         if (d.tag === "Loop")
-          return g === 0 ? r((h) => u(_, d._1, 30)) : u(_, d._1, g - 1 | 0);
+          return g === 0 ? r((h) => u(l, d._1, 30)) : u(l, d._1, g - 1 | 0);
         if (d.tag === "Done")
-          return s(_, d._1);
+          return s(l, d._1);
         f();
       }
     );
     return u(e, n, 30);
   },
-  Monad0: () => Ym
-}, Km = (t) => (n) => {
+  Monad0: () => NT
+}, vT = (t) => (n) => {
   const e = n.Plus1().Alt0(), r = n.Applicative0();
-  return (o) => t.tailRecM((i) => t.Monad0().Bind1().bind(e.alt(e.Functor0().map(uc)(o))(r.pure(vr(
+  return (o) => t.tailRecM((i) => t.Monad0().Bind1().bind(e.alt(e.Functor0().map(yf)(o))(r.pure(io(
     "Done",
     void 0
   ))))((s) => r.pure((() => {
     if (s.tag === "Loop")
-      return vr("Loop", qt("Cons", s._1, i));
+      return io("Loop", zt("Cons", s._1, i));
     if (s.tag === "Done")
-      return vr(
+      return io(
         "Done",
         ((c) => (a) => {
-          let g = c, l = a, d = !0, _;
+          let g = c, _ = a, d = !0, l;
           for (; d; ) {
-            const h = g, p = l;
-            if (p.tag === "Nil") {
-              d = !1, _ = h;
+            const h = g, $ = _;
+            if ($.tag === "Nil") {
+              d = !1, l = h;
               continue;
             }
-            if (p.tag === "Cons") {
-              g = qt("Cons", p._1, h), l = p._2;
+            if ($.tag === "Cons") {
+              g = zt("Cons", $._1, h), _ = $._2;
               continue;
             }
             f();
           }
-          return _;
-        })(zt)(i)
+          return l;
+        })(Yt)(i)
       );
     f();
-  })())))(zt);
-}, Qn = /* @__PURE__ */ Km(Mm)(Um), xt = (t) => (n) => {
-  const e = Zo("Expected " + n);
+  })())))(Yt);
+}, ue = /* @__PURE__ */ vT(TT)(JT), Ct = (t) => (n) => {
+  const e = ms("Expected " + n);
   return (r, o, i, s, u) => {
     const c = r._1, a = r._2;
     return o((g) => t(
-      H(c, a, !1),
+      F(c, a, !1),
       o,
       i,
-      (l, d) => {
-        const _ = l._3;
-        return o((h) => _ ? s(l, d) : e(r, o, i, s, u));
+      (_, d) => {
+        const l = _._3;
+        return o((h) => l ? s(_, d) : e(r, o, i, s, u));
       },
       u
     ));
   };
-}, zs = (t) => (n, e, r, o, i) => {
+}, Nc = (t) => (n, e, r, o, i) => {
   const s = n._3, u = n._1, c = n._2;
   return e((a) => {
-    const g = (l, d) => {
-      const _ = l._3;
-      return e((h) => _ ? o(H(l._1, l._2, s), d) : i(n, void 0));
+    const g = (_, d) => {
+      const l = _._3;
+      return e((h) => l ? o(F(_._1, _._2, s), d) : i(n, void 0));
     };
-    return e((l) => e((d) => t(
-      H(u, c, !1),
+    return e((_) => e((d) => t(
+      F(u, c, !1),
       e,
       r,
-      (_, h) => g(H(_._1, _._2, !1), h),
-      (_, h) => e((p) => e(($) => Zo("Negated parser succeeded")(
-        _,
+      (l, h) => g(F(l._1, l._2, !1), h),
+      (l, h) => e(($) => e((p) => ms("Negated parser succeeded")(
+        l,
         e,
         r,
         g,
-        (m, N) => e((v) => i(_._3 && !m._3 ? H(m._1, m._2, !0) : m, N))
+        (m, y) => e((N) => i(l._3 && !m._3 ? F(m._1, m._2, !0) : m, y))
       )))
     )));
   });
-}, jm = (t) => {
+}, wT = (t) => {
   const n = t.foldr((e) => (r) => {
     if (r.tag === "Nothing")
-      return b("Just", e);
+      return v("Just", e);
     if (r.tag === "Just")
-      return b(
+      return v(
         "Just",
         (o, i, s, u, c) => {
           const a = o._1, g = o._2;
-          return i((l) => e(
-            H(a, g, !1),
+          return i((_) => e(
+            F(a, g, !1),
             i,
             s,
-            (d, _) => {
+            (d, l) => {
               const h = d._3;
-              return i((p) => h ? u(d, _) : r._1(o, i, s, u, c));
+              return i(($) => h ? u(d, l) : r._1(o, i, s, u, c));
             },
             c
           ));
         }
       );
     f();
-  })(T);
+  })(J);
   return (e) => {
     const r = n(e);
     if (r.tag === "Nothing")
-      return Zo("No alternative");
+      return ms("No alternative");
     if (r.tag === "Just")
       return r._1;
     f();
   };
-}, Zm = (t) => (n) => (e) => (r, o, i, s, u) => o((c) => o((a) => o((g) => o((l) => t(
+}, kT = (t) => (n) => (e) => (r, o, i, s, u) => o((c) => o((a) => o((g) => o((_) => t(
   r,
   o,
   i,
   s,
-  (d, _) => o((h) => o((p) => {
-    const $ = r._3 && !d._3 ? H(d._1, d._2, !0) : d;
+  (d, l) => o((h) => o(($) => {
+    const p = r._3 && !d._3 ? F(d._1, d._2, !0) : d;
     return e(
-      $,
+      p,
       o,
       i,
       s,
-      (m, N) => o((v) => {
-        const w = $._3 && !m._3 ? H(m._1, m._2, !0) : m;
-        return o((y) => o((k) => {
-          const E = r._3 && !w._3 ? H(w._1, w._2, !0) : w;
+      (m, y) => o((N) => {
+        const T = p._3 && !m._3 ? F(m._1, m._2, !0) : m;
+        return o((w) => o((k) => {
+          const L = r._3 && !T._3 ? F(T._1, T._2, !0) : T;
           return n(
-            E,
+            L,
             o,
             i,
             s,
-            (I, D) => o((z) => u(E._3 && !I._3 ? H(I._1, I._2, !0) : I, N))
+            (G, D) => o((Y) => u(L._3 && !G._3 ? F(G._1, G._2, !0) : G, y))
           );
         }));
       })
     );
   }))
-))))), Vi = (t) => (n) => (e) => {
+))))), wu = (t) => (n) => (e) => {
   if (n === 10)
     return { index: t.index + 1 | 0, line: t.line + 1 | 0, column: 1 };
   if (n === 13) {
-    const r = h_()(e);
+    const r = Pd()(e);
     return r.tag === "Just" && r._1 === 10 ? { index: t.index + 1 | 0, line: t.line, column: t.column } : { index: t.index + 1 | 0, line: t.line + 1 | 0, column: 1 };
   }
-  return n === 9 ? { index: t.index + 1 | 0, line: t.line, column: (t.column + 8 | 0) - ns(t.column - 1 | 0)(8) | 0 } : { index: t.index + 1 | 0, line: t.line, column: t.column + 1 | 0 };
-}, tN = (t) => (n) => (e) => {
+  return n === 9 ? { index: t.index + 1 | 0, line: t.line, column: (t.column + 8 | 0) - ze(t.column - 1 | 0)(8) | 0 } : { index: t.index + 1 | 0, line: t.line, column: t.column + 1 | 0 };
+}, bT = (t) => (n) => (e) => {
   let r = t, o = n, i = e, s = !0, u;
   for (; s; ) {
-    const c = r, a = o, g = i, l = Oo(a);
-    if (l.tag === "Nothing") {
+    const c = r, a = o, g = i, _ = es(a);
+    if (_.tag === "Nothing") {
       s = !1, u = c;
       continue;
     }
-    if (l.tag === "Just") {
-      r = l._1.tail === "" ? Vi(c)(l._1.head)(g) : Vi(c)(l._1.head)(l._1.tail), o = l._1.tail, i = g;
+    if (_.tag === "Just") {
+      r = _._1.tail === "" ? wu(c)(_._1.head)(g) : wu(c)(_._1.head)(_._1.tail), o = _._1.tail, i = g;
       continue;
     }
     f();
   }
   return u;
-}, Kt = (t) => (n, e, r, o, i) => {
-  const s = Oo(n._1);
+}, Mt = (t) => (n, e, r, o, i) => {
+  const s = es(n._1);
   if (s.tag === "Nothing")
-    return o(n, nr("Unexpected EOF", n._2));
+    return o(n, Gr("Unexpected EOF", n._2));
   if (s.tag === "Just") {
     if (s._1.head < 0 || s._1.head > 65535)
-      return o(n, nr("Expected Char", n._2));
+      return o(n, Gr("Expected Char", n._2));
     if (s._1.head >= 0 && s._1.head <= 65535) {
-      const u = Gc(s._1.head);
-      return t(u) ? i(H(s._1.tail, Vi(n._2)(s._1.head)(s._1.tail), !0), u) : o(n, nr("Predicate unsatisfied", n._2));
+      const u = Uf(s._1.head);
+      return t(u) ? i(F(s._1.tail, wu(n._2)(s._1.head)(s._1.tail), !0), u) : o(n, Gr("Predicate unsatisfied", n._2));
     }
   }
   f();
-}, _f = (t, n, e, r, o) => t._1 === "" ? o(H(t._1, t._2, !0), void 0) : r(t, nr("Expected EOF", t._2)), nN = (t) => (n, e, r, o, i) => {
+}, xc = (t, n, e, r, o) => t._1 === "" ? o(F(t._1, t._2, !0), void 0) : r(t, Gr("Expected EOF", t._2)), LT = (t) => (n, e, r, o, i) => {
   const s = t(n._1);
   if (s.tag === "Left")
-    return o(n, nr(s._1, n._2));
+    return o(n, Gr(s._1, n._2));
   if (s.tag === "Right")
-    return i(H(s._1.remainder, tN(n._2)(s._1.consumed)(s._1.remainder), s._1.consumed !== ""), s._1.value);
+    return i(F(s._1.remainder, bT(n._2)(s._1.consumed)(s._1.remainder), s._1.consumed !== ""), s._1.value);
   f();
-}, fr = (t) => nN((n) => {
-  const e = p0(t)(n);
-  return e.tag === "Just" ? kt("Right", { value: t, consumed: t, remainder: e._1 }) : kt("Left", "Expected " + Tf(t));
-}), eN = /* @__PURE__ */ Kt((t) => !0), lf = /* @__PURE__ */ jm(Bt), df = /* @__PURE__ */ (() => {
-  const t = Kt((n) => n === " " || n === "	" || n === `
+}, Ur = (t) => LT((n) => {
+  const e = $1(t)(n);
+  return e.tag === "Just" ? Et("Right", { value: t, consumed: t, remainder: e._1 }) : Et("Left", "Expected " + Os(t));
+}), ET = /* @__PURE__ */ Mt((t) => !0), sf = (t, n) => ({ tag: t, _1: n }), ST = /* @__PURE__ */ nn(C)(Ht), CT = (t) => (e) => {
+  let r = e, o = !0, i;
+  for (; o; ) {
+    const s = r;
+    if (s.tag === "Leaf") {
+      o = !1, i = J;
+      continue;
+    }
+    if (s.tag === "Node") {
+      const u = C.compare(t)(s._3);
+      if (u === "LT") {
+        r = s._5;
+        continue;
+      }
+      if (u === "GT") {
+        r = s._6;
+        continue;
+      }
+      if (u === "EQ") {
+        o = !1, i = v("Just", s._4);
+        continue;
+      }
+    }
+    f();
+  }
+  return i;
+}, ml = /* @__PURE__ */ wT(Ht), yl = /* @__PURE__ */ (() => {
+  const t = Mt((n) => n === " " || n === "	" || n === `
 ` || n === "\r");
   return (n, e, r, o, i) => e((s) => t(
     n,
     e,
     r,
     o,
-    (u, c) => e((a) => i(n._3 && !u._3 ? H(u._1, u._2, !0) : u, void 0))
+    (u, c) => e((a) => i(n._3 && !u._3 ? F(u._1, u._2, !0) : u, void 0))
   ));
-})(), Vs = (t, n, e, r, o) => n((i) => fr("#")(
+})(), Jc = (t, n, e, r, o) => n((i) => Ur("#")(
   t,
   n,
   e,
   r,
   (s, u) => n((c) => {
-    const a = Qn(Kt((l) => l !== `
-`)), g = t._3 && !s._3 ? H(s._1, s._2, !0) : s;
-    return n((l) => a(
+    const a = ue(Mt((_) => _ !== `
+`)), g = t._3 && !s._3 ? F(s._1, s._2, !0) : s;
+    return n((_) => a(
       g,
       n,
       e,
       r,
-      (d, _) => n((h) => o(g._3 && !d._3 ? H(d._1, d._2, !0) : d, void 0))
+      (d, l) => n((h) => o(g._3 && !d._3 ? F(d._1, d._2, !0) : d, void 0))
     ));
   })
-)), rN = /* @__PURE__ */ xt(/* @__PURE__ */ (() => {
-  const t = xt(Kt((e) => e === "}"))("'}'"), n = Kt((e) => e === `
+)), PT = /* @__PURE__ */ Ct(/* @__PURE__ */ (() => {
+  const t = Ct(Mt((e) => e === "}"))("'}'"), n = Mt((e) => e === `
 ` || e === "\r");
   return (e, r, o, i, s) => {
     const u = e._1, c = e._2;
     return r((a) => r((g) => t(
-      H(u, c, !1),
+      F(u, c, !1),
       r,
       o,
-      (l, d) => r((_) => {
-        const h = e._1, p = e._2;
-        return r(($) => r((m) => Vs(
-          H(h, p, !1),
+      (_, d) => r((l) => {
+        const h = e._1, $ = e._2;
+        return r((p) => r((m) => Jc(
+          F(h, $, !1),
           r,
           o,
-          (N, v) => {
-            const w = N._3;
-            return r((y) => {
-              if (w)
-                return i(N, v);
-              const k = e._1, E = e._2;
-              return r((I) => r((D) => n(
-                H(k, E, !1),
+          (y, N) => {
+            const T = y._3;
+            return r((w) => {
+              if (T)
+                return i(y, N);
+              const k = e._1, L = e._2;
+              return r((G) => r((D) => n(
+                F(k, L, !1),
                 r,
                 o,
-                (z, U) => {
-                  const P = z._3;
-                  return r((R) => P ? i(z, U) : _f(e, r, o, i, s));
+                (Y, X) => {
+                  const P = Y._3;
+                  return r((B) => P ? i(Y, X) : xc(e, r, o, i, s));
                 },
-                (z, U) => r((P) => s(z, void 0))
+                (Y, X) => r((P) => s(Y, void 0))
               )));
             });
           },
-          (N, v) => r((w) => s(N, void 0))
+          (y, N) => r((T) => s(y, void 0))
         )));
       }),
-      (l, d) => r((_) => s(H(u, c, !1), void 0))
+      (_, d) => r((l) => s(F(u, c, !1), void 0))
     )));
   };
-})())("newline or '}' (statements end at the end of the line)"), Bn = /* @__PURE__ */ (() => {
-  const t = Qn((n, e, r, o, i) => {
+})())("newline or '}' (statements end at the end of the line)"), Zn = /* @__PURE__ */ (() => {
+  const t = ue((n, e, r, o, i) => {
     const s = n._1, u = n._2;
-    return e((c) => df(
-      H(s, u, !1),
+    return e((c) => yl(
+      F(s, u, !1),
       e,
       r,
       (a, g) => {
-        const l = a._3;
-        return e((d) => l ? o(a, g) : Vs(n, e, r, o, i));
+        const _ = a._3;
+        return e((d) => _ ? o(a, g) : Jc(n, e, r, o, i));
       },
       i
     ));
@@ -14886,353 +18155,319 @@ const zu = (t) => (n) => (e) => (r) => {
     e,
     r,
     o,
-    (u, c) => e((a) => i(n._3 && !u._3 ? H(u._1, u._2, !0) : u, void 0))
+    (u, c) => e((a) => i(n._3 && !u._3 ? F(u._1, u._2, !0) : u, void 0))
   ));
-})(), qn = (t, n, e, r, o) => n((i) => {
-  const s = (a, g) => n((l) => Bn(t._3 && !a._3 ? H(a._1, a._2, !0) : a, n, e, r, o)), u = t._1, c = t._2;
-  return n((a) => df(
-    H(u, c, !1),
+})(), fe = (t, n, e, r, o) => n((i) => {
+  const s = (a, g) => n((_) => Zn(t._3 && !a._3 ? F(a._1, a._2, !0) : a, n, e, r, o)), u = t._1, c = t._2;
+  return n((a) => yl(
+    F(u, c, !1),
     n,
     e,
-    (g, l) => {
+    (g, _) => {
       const d = g._3;
-      return n((_) => d ? r(g, l) : Vs(t, n, e, r, s));
+      return n((l) => d ? r(g, _) : Jc(t, n, e, r, s));
     },
     s
   ));
-}), hf = /* @__PURE__ */ (() => {
-  const t = xt(Kt((n) => n === "|"))("'|'");
+}), Nl = /* @__PURE__ */ (() => {
+  const t = Ct(Mt((n) => n === "|"))("'|'");
   return (n, e, r, o, i) => e((s) => t(
     n,
     e,
     r,
     o,
     (u, c) => e((a) => {
-      const g = Qn(Kt((d) => d !== "|")), l = n._3 && !u._3 ? H(u._1, u._2, !0) : u;
+      const g = ue(Mt((d) => d !== "|")), _ = n._3 && !u._3 ? F(u._1, u._2, !0) : u;
       return e((d) => g(
-        l,
+        _,
         e,
         r,
         o,
-        (_, h) => e((p) => {
-          const $ = xt(xt(Kt((N) => N === "|"))("'|'"))("closing '|'"), m = l._3 && !_._3 ? H(_._1, _._2, !0) : _;
-          return e((N) => $(
+        (l, h) => e(($) => {
+          const p = Ct(Ct(Mt((y) => y === "|"))("'|'"))("closing '|'"), m = _._3 && !l._3 ? F(l._1, l._2, !0) : l;
+          return e((y) => p(
             m,
             e,
             r,
             o,
-            (v, w) => e((y) => i(
-              m._3 && !v._3 ? H(v._1, v._2, !0) : v,
-              We(Et(Mt.foldr, h))
+            (N, T) => e((w) => i(
+              m._3 && !N._3 ? F(N._1, N._2, !0) : N,
+              mr(Lt(Xt.foldr, h))
             ))
           ));
         })
       ));
     })
   ));
-})(), Ao = /* @__PURE__ */ Kt((t) => t >= "a" && t <= "z" || t >= "A" && t <= "Z"), Ie = /* @__PURE__ */ (() => {
-  const t = Qn(Kt((n) => n === " " || n === "	"));
+})(), Qi = /* @__PURE__ */ Mt((t) => t >= "a" && t <= "z" || t >= "A" && t <= "Z"), Dn = /* @__PURE__ */ (() => {
+  const t = ue(Mt((n) => n === " " || n === "	"));
   return (n, e, r, o, i) => e((s) => t(
     n,
     e,
     r,
     o,
-    (u, c) => e((a) => i(n._3 && !u._3 ? H(u._1, u._2, !0) : u, void 0))
+    (u, c) => e((a) => i(n._3 && !u._3 ? F(u._1, u._2, !0) : u, void 0))
   ));
-})(), oN = /* @__PURE__ */ (() => {
-  const t = xt(Kt((n) => n === "\\"))("'\\\\'");
+})(), GT = /* @__PURE__ */ (() => {
+  const t = Ct(Mt((n) => n === "\\"))("'\\\\'");
   return (n, e, r, o, i) => e((s) => t(
     n,
     e,
     r,
     o,
     (u, c) => e((a) => {
-      const g = n._3 && !u._3 ? H(u._1, u._2, !0) : u;
-      return e((l) => eN(
+      const g = n._3 && !u._3 ? F(u._1, u._2, !0) : u;
+      return e((_) => ET(
         g,
         e,
         r,
         o,
-        (d, _) => e((h) => i(
-          g._3 && !d._3 ? H(d._1, d._2, !0) : d,
-          _ === "n" ? `
-` : _ === "t" ? "	" : _ === "r" ? "\r" : _
+        (d, l) => e((h) => i(
+          g._3 && !d._3 ? F(d._1, d._2, !0) : d,
+          l === "n" ? `
+` : l === "t" ? "	" : l === "r" ? "\r" : l
         ))
       ));
     })
   ));
-})(), iN = /* @__PURE__ */ (() => {
-  const t = Kt((n) => n !== '"' && n !== "\\" && n !== `
+})(), IT = /* @__PURE__ */ (() => {
+  const t = Mt((n) => n !== '"' && n !== "\\" && n !== `
 `);
   return (n, e, r, o, i) => {
     const s = n._1, u = n._2;
-    return e((c) => oN(H(s, u, !1), e, r, (a, g) => e((l) => t(n, e, r, o, i)), i));
+    return e((c) => GT(F(s, u, !1), e, r, (a, g) => e((_) => t(n, e, r, o, i)), i));
   };
-})(), Ys = /* @__PURE__ */ (() => {
-  const t = xt(Kt((n) => n === '"'))(`'"'`);
+})(), Tc = /* @__PURE__ */ (() => {
+  const t = Ct(Mt((n) => n === '"'))(`'"'`);
   return (n, e, r, o, i) => e((s) => t(
     n,
     e,
     r,
     o,
     (u, c) => e((a) => {
-      const g = Qn(iN), l = n._3 && !u._3 ? H(u._1, u._2, !0) : u;
+      const g = ue(IT), _ = n._3 && !u._3 ? F(u._1, u._2, !0) : u;
       return e((d) => g(
-        l,
+        _,
         e,
         r,
         o,
-        (_, h) => e((p) => {
-          const $ = xt(xt(Kt((N) => N === '"'))(`'"'`))(`closing '"' (unterminated string)`), m = l._3 && !_._3 ? H(_._1, _._2, !0) : _;
-          return e((N) => $(
+        (l, h) => e(($) => {
+          const p = Ct(Ct(Mt((y) => y === '"'))(`'"'`))(`closing '"' (unterminated string)`), m = _._3 && !l._3 ? F(l._1, l._2, !0) : l;
+          return e((y) => p(
             m,
             e,
             r,
             o,
-            (v, w) => e((y) => i(
-              m._3 && !v._3 ? H(v._1, v._2, !0) : v,
-              We(Et(Mt.foldr, h))
+            (N, T) => e((w) => i(
+              m._3 && !N._3 ? F(N._1, N._2, !0) : N,
+              mr(Lt(Xt.foldr, h))
             ))
           ));
         })
       ));
     })
   ));
-})(), sN = /* @__PURE__ */ (() => {
-  const t = xt(Kt((n) => n === ":"))("':'");
-  return (n, e, r, o, i) => e((s) => Ie(
+})(), AT = /* @__PURE__ */ (() => {
+  const t = Ct(Mt((n) => n === ":"))("':'");
+  return (n, e, r, o, i) => e((s) => Dn(
     n,
     e,
     r,
     o,
-    (u, c) => e((a) => xt((g, l, d, _, h) => {
-      const p = g._1, $ = g._2;
-      return l((m) => {
-        const N = (v, w) => {
-          const y = v._3;
-          return l((k) => {
-            if (y)
-              return _(v, w);
-            const E = g._1, I = g._2;
-            return l((D) => hf(
-              H(E, I, !1),
-              l,
+    (u, c) => e((a) => Ct((g, _, d, l, h) => {
+      const $ = g._1, p = g._2;
+      return _((m) => {
+        const y = (N, T) => {
+          const w = N._3;
+          return _((k) => {
+            if (w)
+              return l(N, T);
+            const L = g._1, G = g._2;
+            return _((D) => Nl(
+              F(L, G, !1),
+              _,
               d,
-              (z, U) => {
-                const P = z._3;
-                return l((R) => P ? _(z, U) : Ys(g, l, d, _, h));
+              (Y, X) => {
+                const P = Y._3;
+                return _((B) => P ? l(Y, X) : Tc(g, _, d, l, h));
               },
               h
             ));
           });
         };
-        return l((v) => t(
-          H(p, $, !1),
-          l,
+        return _((N) => t(
+          F($, p, !1),
+          _,
           d,
-          N,
-          (w, y) => l((k) => l((E) => Ie(
-            w,
-            l,
+          y,
+          (T, w) => _((k) => _((L) => Dn(
+            T,
+            _,
             d,
-            N,
-            (I, D) => l((z) => {
-              const U = Qn(Kt((R) => R !== `
-` && R !== "\r" && R !== "#" && R !== "}")), P = w._3 && !I._3 ? H(I._1, I._2, !0) : I;
-              return l((R) => U(
+            y,
+            (G, D) => _((Y) => {
+              const X = ue(Mt((B) => B !== `
+` && B !== "\r" && B !== "#" && B !== "}")), P = T._3 && !G._3 ? F(G._1, G._2, !0) : G;
+              return _((B) => X(
                 P,
-                l,
+                _,
                 d,
-                N,
-                (j, et) => l((X) => h(
-                  P._3 && !j._3 ? H(j._1, j._2, !0) : j,
-                  n_(We(Et(Mt.foldr, et)))
+                y,
+                (tt, ct) => _((q) => h(
+                  P._3 && !tt._3 ? F(tt._1, tt._2, !0) : tt,
+                  md(mr(Lt(Xt.foldr, ct)))
                 ))
               ));
             })
           )))
         ));
       });
-    })('label ("…", : rest-of-line, or |…|)')(n._3 && !u._3 ? H(u._1, u._2, !0) : u, e, r, o, i))
+    })('label ("…", : rest-of-line, or |…|)')(n._3 && !u._3 ? F(u._1, u._2, !0) : u, e, r, o, i))
   ));
-})(), uN = (t, n, e, r, o) => {
+})(), FT = (t, n, e, r, o) => {
   const i = t._1, s = t._2;
-  return n((u) => hf(
-    H(i, s, !1),
+  return n((u) => Nl(
+    F(i, s, !1),
     n,
     e,
     (c, a) => {
       const g = c._3;
-      return n((l) => g ? r(c, a) : Ys(t, n, e, r, o));
+      return n((_) => g ? r(c, a) : Tc(t, n, e, r, o));
     },
     o
   ));
-}, Vr = /* @__PURE__ */ Kt((t) => t >= "0" && t <= "9"), wn = /* @__PURE__ */ (() => {
-  const t = xt(Kt((n) => n === "_"))("'_'");
+}, Ro = /* @__PURE__ */ Mt((t) => t >= "0" && t <= "9"), vn = /* @__PURE__ */ (() => {
+  const t = Ct(Mt((n) => n === "_"))("'_'");
   return (n, e, r, o, i) => e((s) => {
-    const u = (g, l) => e((d) => {
-      const _ = Qn((() => {
-        const p = xt(Kt((m) => m === "_"))("'_'"), $ = xt(Kt((m) => m === "-"))("'-'");
-        return (m, N, v, w, y) => {
-          const k = m._1, E = m._2;
-          return N((I) => Ao(
-            H(k, E, !1),
+    const u = (g, _) => e((d) => {
+      const l = ue((() => {
+        const $ = Ct(Mt((m) => m === "_"))("'_'"), p = Ct(Mt((m) => m === "-"))("'-'");
+        return (m, y, N, T, w) => {
+          const k = m._1, L = m._2;
+          return y((G) => Qi(
+            F(k, L, !1),
+            y,
             N,
-            v,
-            (D, z) => {
-              const U = D._3;
-              return N((P) => {
-                if (U)
-                  return w(D, z);
-                const R = m._1, j = m._2;
-                return N((et) => Vr(
-                  H(R, j, !1),
+            (D, Y) => {
+              const X = D._3;
+              return y((P) => {
+                if (X)
+                  return T(D, Y);
+                const B = m._1, tt = m._2;
+                return y((ct) => Ro(
+                  F(B, tt, !1),
+                  y,
                   N,
-                  v,
-                  (X, A) => {
-                    const x = X._3;
-                    return N((C) => {
-                      if (x)
-                        return w(X, A);
-                      const q = m._1, S = m._2;
-                      return N((F) => p(
-                        H(q, S, !1),
+                  (q, R) => {
+                    const E = q._3;
+                    return y((S) => {
+                      if (E)
+                        return T(q, R);
+                      const O = m._1, I = m._2;
+                      return y((W) => $(
+                        F(O, I, !1),
+                        y,
                         N,
-                        v,
-                        (W, K) => {
-                          const V = W._3;
-                          return N((B) => V ? w(W, K) : $(m, N, v, w, y));
+                        (Q, M) => {
+                          const V = Q._3;
+                          return y((H) => V ? T(Q, M) : p(m, y, N, T, w));
                         },
-                        y
+                        w
                       ));
                     });
                   },
-                  y
+                  w
                 ));
               });
             },
-            y
+            w
           ));
         };
-      })()), h = n._3 && !g._3 ? H(g._1, g._2, !0) : g;
-      return e((p) => _(
+      })()), h = n._3 && !g._3 ? F(g._1, g._2, !0) : g;
+      return e(($) => l(
         h,
         e,
         r,
         o,
-        ($, m) => e((N) => i(
-          h._3 && !$._3 ? H($._1, $._2, !0) : $,
-          Ns(l) + We(Et(Mt.foldr, m))
+        (p, m) => e((y) => i(
+          h._3 && !p._3 ? F(p._1, p._2, !0) : p,
+          Ki(_) + mr(Lt(Xt.foldr, m))
         ))
       ));
     }), c = n._1, a = n._2;
-    return e((g) => Ao(
-      H(c, a, !1),
+    return e((g) => Qi(
+      F(c, a, !1),
       e,
       r,
-      (l, d) => {
-        const _ = l._3;
-        return e((h) => _ ? o(l, d) : t(n, e, r, o, u));
+      (_, d) => {
+        const l = _._3;
+        return e((h) => l ? o(_, d) : t(n, e, r, o, u));
       },
       u
     ));
   });
-})(), cN = /* @__PURE__ */ xt((t, n, e, r, o) => {
+})(), RT = /* @__PURE__ */ Ct((t, n, e, r, o) => {
   const i = t._1, s = t._2;
-  return n((u) => Ys(
-    H(i, s, !1),
+  return n((u) => Tc(
+    F(i, s, !1),
     n,
     e,
     (c, a) => {
       const g = c._3;
-      return n((l) => g ? r(c, a) : wn(t, n, e, r, o));
+      return n((_) => g ? r(c, a) : vn(t, n, e, r, o));
     },
     o
   ));
-})("frame name (identifier or quoted string)"), aN = (t, n, e, r, o) => n((i) => wn(
+})("frame name (identifier or quoted string)"), uf = (t, n, e, r, o) => n((i) => Dn(
   t,
   n,
   e,
   r,
   (s, u) => n((c) => {
-    const a = t._3 && !s._3 ? H(s._1, s._2, !0) : s;
-    return n((g) => Ie(
-      a,
+    const a = Ct(vn)("attribute key"), g = t._3 && !s._3 ? F(s._1, s._2, !0) : s;
+    return n((_) => a(
+      g,
       n,
       e,
       r,
-      (l, d) => n((_) => {
-        const h = xt(($, m, N, v, w) => {
-          const y = $._1, k = $._2;
-          return m((E) => fr("->")(
-            H(y, k, !1),
-            m,
-            N,
-            (I, D) => {
-              const z = I._3;
-              return m((U) => z ? v(I, D) : fr("<-")($, m, N, v, w));
-            },
-            w
-          ));
-        })("'->' or '<-'"), p = a._3 && !l._3 ? H(l._1, l._2, !0) : l;
-        return n(($) => h(
-          p,
+      (d, l) => n((h) => {
+        const $ = g._3 && !d._3 ? F(d._1, d._2, !0) : d;
+        return n((p) => Dn(
+          $,
           n,
           e,
           r,
-          (m, N) => n((v) => {
-            const w = p._3 && !m._3 ? H(m._1, m._2, !0) : m;
-            return n((y) => Ie(
+          (m, y) => n((N) => {
+            const T = Ct(Ct(Mt((k) => k === ":"))("':'"))("':'"), w = $._3 && !m._3 ? F(m._1, m._2, !0) : m;
+            return n((k) => T(
               w,
               n,
               e,
               r,
-              (k, E) => n((I) => {
-                const D = xt(wn)("target node identifier"), z = w._3 && !k._3 ? H(k._1, k._2, !0) : k;
-                return n((U) => D(
-                  z,
+              (L, G) => n((D) => {
+                const Y = w._3 && !L._3 ? F(L._1, L._2, !0) : L;
+                return n((X) => Dn(
+                  Y,
                   n,
                   e,
                   r,
-                  (P, R) => n((j) => {
-                    const et = Qn((A, x, C, q, S) => {
-                      const F = A._3;
-                      return x((W) => x((K) => Ie(
-                        A,
-                        x,
-                        C,
-                        (V, B) => q(H(V._1, V._2, F), B),
-                        (V, B) => x((nt) => x((M) => {
-                          const tt = A._3 && !V._3 ? H(V._1, V._2, !0) : V;
-                          return uN(
-                            tt,
-                            x,
-                            C,
-                            (ot, st) => q(H(ot._1, ot._2, F), st),
-                            (ot, st) => x((_t) => S(tt._3 && !ot._3 ? H(ot._1, ot._2, !0) : ot, st))
-                          );
-                        }))
-                      )));
-                    }), X = z._3 && !P._3 ? H(P._1, P._2, !0) : P;
-                    return n((A) => et(
-                      X,
+                  (P, B) => n((tt) => {
+                    const ct = Ct(vn)("attribute value"), q = Y._3 && !P._3 ? F(P._1, P._2, !0) : P;
+                    return n((R) => ct(
+                      q,
                       n,
                       e,
                       r,
-                      (x, C) => n((q) => (() => {
-                        if (N === "<-") {
-                          const F = Be(
-                            "Token",
-                            { from: R, to: u, labels: O(ru)(Et(Mt.foldr, C)) }
-                          );
-                          return (W, K, V, B, nt) => nt(W, F);
-                        }
-                        const S = Be(
-                          "Token",
-                          { from: u, to: R, labels: O(ru)(Et(Mt.foldr, C)) }
-                        );
-                        return (F, W, K, V, B) => B(F, S);
-                      })()(X._3 && !x._3 ? H(x._1, x._2, !0) : x, n, e, r, o))
+                      (E, S) => n((O) => {
+                        const I = q._3 && !E._3 ? F(E._1, E._2, !0) : E;
+                        return n((W) => Dn(
+                          I,
+                          n,
+                          e,
+                          r,
+                          (Q, M) => n((V) => o(I._3 && !Q._3 ? F(Q._1, Q._2, !0) : Q, b(l, S)))
+                        ));
+                      })
                     ));
                   })
                 ));
@@ -15243,139 +18478,233 @@ const zu = (t) => (n) => (e) => (r) => {
       })
     ));
   })
-)), fN = (t, n, e, r, o) => n((i) => Vr(
+)), BT = (t, n, e, r, o) => n((i) => vn(
   t,
   n,
   e,
   r,
   (s, u) => n((c) => {
-    const a = Qn(Vr), g = t._3 && !s._3 ? H(s._1, s._2, !0) : s;
-    return n((l) => a(
+    const a = t._3 && !s._3 ? F(s._1, s._2, !0) : s;
+    return n((g) => Dn(
+      a,
+      n,
+      e,
+      r,
+      (_, d) => n((l) => {
+        const h = Ct((p, m, y, N, T) => {
+          const w = p._1, k = p._2;
+          return m((L) => Ur("->")(
+            F(w, k, !1),
+            m,
+            y,
+            (G, D) => {
+              const Y = G._3;
+              return m((X) => Y ? N(G, D) : Ur("<-")(p, m, y, N, T));
+            },
+            T
+          ));
+        })("'->' or '<-'"), $ = a._3 && !_._3 ? F(_._1, _._2, !0) : _;
+        return n((p) => h(
+          $,
+          n,
+          e,
+          r,
+          (m, y) => n((N) => {
+            const T = $._3 && !m._3 ? F(m._1, m._2, !0) : m;
+            return n((w) => Dn(
+              T,
+              n,
+              e,
+              r,
+              (k, L) => n((G) => {
+                const D = Ct(vn)("target node identifier"), Y = T._3 && !k._3 ? F(k._1, k._2, !0) : k;
+                return n((X) => D(
+                  Y,
+                  n,
+                  e,
+                  r,
+                  (P, B) => n((tt) => {
+                    const ct = ue((R, E, S, O, I) => {
+                      const W = R._3;
+                      return E((Q) => E((M) => Dn(
+                        R,
+                        E,
+                        S,
+                        (V, H) => O(F(V._1, V._2, W), H),
+                        (V, H) => E((et) => E((j) => {
+                          const ot = R._3 && !V._3 ? F(V._1, V._2, !0) : V;
+                          return FT(
+                            ot,
+                            E,
+                            S,
+                            (Z, at) => O(F(Z._1, Z._2, W), at),
+                            (Z, at) => E((_t) => I(ot._3 && !Z._3 ? F(Z._1, Z._2, !0) : Z, at))
+                          );
+                        }))
+                      )));
+                    }), q = Y._3 && !P._3 ? F(P._1, P._2, !0) : P;
+                    return n((R) => ct(
+                      q,
+                      n,
+                      e,
+                      r,
+                      (E, S) => n((O) => (() => {
+                        if (y === "<-") {
+                          const W = De(
+                            "Token",
+                            { from: B, to: u, labels: z(Ic)(Lt(Xt.foldr, S)) }
+                          );
+                          return (Q, M, V, H, et) => et(Q, W);
+                        }
+                        const I = De(
+                          "Token",
+                          { from: u, to: B, labels: z(Ic)(Lt(Xt.foldr, S)) }
+                        );
+                        return (W, Q, M, V, H) => H(W, I);
+                      })()(q._3 && !E._3 ? F(E._1, E._2, !0) : E, n, e, r, o))
+                    ));
+                  })
+                ));
+              })
+            ));
+          })
+        ));
+      })
+    ));
+  })
+)), QT = (t, n, e, r, o) => n((i) => Ro(
+  t,
+  n,
+  e,
+  r,
+  (s, u) => n((c) => {
+    const a = ue(Ro), g = t._3 && !s._3 ? F(s._1, s._2, !0) : s;
+    return n((_) => a(
       g,
       n,
       e,
       r,
-      (d, _) => n((h) => {
-        const p = mg(Ns(u) + We(Et(
-          Mt.foldr,
-          _
+      (d, l) => n((h) => {
+        const $ = k_(Ki(u) + mr(Lt(
+          Xt.foldr,
+          l
         )));
         return (() => {
-          if (p.tag === "Just") {
-            const $ = p._1;
-            return (m, N, v, w, y) => y(m, $);
+          if ($.tag === "Just") {
+            const p = $._1;
+            return (m, y, N, T, w) => w(m, p);
           }
-          if (p.tag === "Nothing")
-            return ($, m, N, v, w) => w($, 0);
+          if ($.tag === "Nothing")
+            return (p, m, y, N, T) => T(p, 0);
           f();
-        })()(g._3 && !d._3 ? H(d._1, d._2, !0) : d, n, e, r, o);
+        })()(g._3 && !d._3 ? F(d._1, d._2, !0) : d, n, e, r, o);
       })
     ));
   })
-)), ti = (t) => (n, e, r, o, i) => {
+)), Yo = (t) => (n, e, r, o, i) => {
   const s = n._3;
-  return e((u) => fr(t)(
+  return e((u) => Ur(t)(
     n,
     e,
     r,
-    (c, a) => o(H(c._1, c._2, s), a),
+    (c, a) => o(F(c._1, c._2, s), a),
     (c, a) => e((g) => {
-      const l = zs((() => {
-        const _ = xt(Kt((p) => p === "_"))("'_'"), h = xt(Kt((p) => p === "-"))("'-'");
-        return (p, $, m, N, v) => {
-          const w = p._1, y = p._2;
-          return $((k) => Ao(
-            H(w, y, !1),
-            $,
+      const _ = Nc((() => {
+        const l = Ct(Mt(($) => $ === "_"))("'_'"), h = Ct(Mt(($) => $ === "-"))("'-'");
+        return ($, p, m, y, N) => {
+          const T = $._1, w = $._2;
+          return p((k) => Qi(
+            F(T, w, !1),
+            p,
             m,
-            (E, I) => {
-              const D = E._3;
-              return $((z) => {
+            (L, G) => {
+              const D = L._3;
+              return p((Y) => {
                 if (D)
-                  return N(E, I);
-                const U = p._1, P = p._2;
-                return $((R) => Vr(
-                  H(U, P, !1),
-                  $,
+                  return y(L, G);
+                const X = $._1, P = $._2;
+                return p((B) => Ro(
+                  F(X, P, !1),
+                  p,
                   m,
-                  (j, et) => {
-                    const X = j._3;
-                    return $((A) => {
-                      if (X)
-                        return N(j, et);
-                      const x = p._1, C = p._2;
-                      return $((q) => _(
-                        H(x, C, !1),
-                        $,
+                  (tt, ct) => {
+                    const q = tt._3;
+                    return p((R) => {
+                      if (q)
+                        return y(tt, ct);
+                      const E = $._1, S = $._2;
+                      return p((O) => l(
+                        F(E, S, !1),
+                        p,
                         m,
-                        (S, F) => {
-                          const W = S._3;
-                          return $((K) => W ? N(S, F) : h(p, $, m, N, v));
+                        (I, W) => {
+                          const Q = I._3;
+                          return p((M) => Q ? y(I, W) : h($, p, m, y, N));
                         },
-                        v
+                        N
                       ));
                     });
                   },
-                  v
+                  N
                 ));
               });
             },
-            v
+            N
           ));
         };
-      })()), d = n._3 && !c._3 ? H(c._1, c._2, !0) : c;
-      return e((_) => l(
+      })()), d = n._3 && !c._3 ? F(c._1, c._2, !0) : c;
+      return e((l) => _(
         d,
         e,
         r,
-        (h, p) => o(H(h._1, h._2, s), p),
-        (h, p) => e(($) => {
-          const m = d._3 && !h._3 ? H(h._1, h._2, !0) : h;
-          return e((N) => Bn(
+        (h, $) => o(F(h._1, h._2, s), $),
+        (h, $) => e((p) => {
+          const m = d._3 && !h._3 ? F(h._1, h._2, !0) : h;
+          return e((y) => Zn(
             m,
             e,
             r,
-            (v, w) => o(H(v._1, v._2, s), w),
-            (v, w) => e((y) => i(m._3 && !v._3 ? H(v._1, v._2, !0) : v, t))
+            (N, T) => o(F(N._1, N._2, s), T),
+            (N, T) => e((w) => i(m._3 && !N._3 ? F(N._1, N._2, !0) : N, t))
           ));
         })
       ));
     })
   ));
-}, gN = (t, n, e, r, o) => n((i) => qn(
+}, WT = (t, n, e, r, o) => n((i) => fe(
   t,
   n,
   e,
   r,
   (s, u) => n((c) => {
-    const a = t._3 && !s._3 ? H(s._1, s._2, !0) : s;
-    return n((g) => ti("via")(
+    const a = t._3 && !s._3 ? F(s._1, s._2, !0) : s;
+    return n((g) => Yo("via")(
       a,
       n,
       e,
       r,
-      (l, d) => n((_) => {
-        const h = a._3 && !l._3 ? H(l._1, l._2, !0) : l;
-        return n((p) => wn(
+      (_, d) => n((l) => {
+        const h = a._3 && !_._3 ? F(_._1, _._2, !0) : _;
+        return n(($) => vn(
           h,
           n,
           e,
           r,
-          ($, m) => n((N) => {
-            const v = h._3 && !$._3 ? H($._1, $._2, !0) : $;
-            return n((w) => qn(
-              v,
+          (p, m) => n((y) => {
+            const N = h._3 && !p._3 ? F(p._1, p._2, !0) : p;
+            return n((T) => fe(
+              N,
               n,
               e,
               r,
-              (y, k) => n((E) => {
-                const I = v._3 && !y._3 ? H(y._1, y._2, !0) : y;
-                return n((D) => wn(
-                  I,
+              (w, k) => n((L) => {
+                const G = N._3 && !w._3 ? F(w._1, w._2, !0) : w;
+                return n((D) => vn(
+                  G,
                   n,
                   e,
                   r,
-                  (z, U) => n((P) => o(I._3 && !z._3 ? H(z._1, z._2, !0) : z, { from: m, to: U }))
+                  (Y, X) => n((P) => o(G._3 && !Y._3 ? F(Y._1, Y._2, !0) : Y, { from: m, to: X }))
                 ));
               })
             ));
@@ -15384,103 +18713,103 @@ const zu = (t) => (n) => (e) => (r) => {
       })
     ));
   })
-)), lr = (t) => (n, e, r, o, i) => {
+)), tr = (t) => (n, e, r, o, i) => {
   const s = n._3;
-  return e((u) => fr(t)(
+  return e((u) => Ur(t)(
     n,
     e,
     r,
-    (c, a) => o(H(c._1, c._2, s), a),
+    (c, a) => o(F(c._1, c._2, s), a),
     (c, a) => e((g) => {
-      const l = zs((() => {
-        const _ = xt(Kt((p) => p === "_"))("'_'"), h = xt(Kt((p) => p === "-"))("'-'");
-        return (p, $, m, N, v) => {
-          const w = p._1, y = p._2;
-          return $((k) => Ao(
-            H(w, y, !1),
-            $,
+      const _ = Nc((() => {
+        const l = Ct(Mt(($) => $ === "_"))("'_'"), h = Ct(Mt(($) => $ === "-"))("'-'");
+        return ($, p, m, y, N) => {
+          const T = $._1, w = $._2;
+          return p((k) => Qi(
+            F(T, w, !1),
+            p,
             m,
-            (E, I) => {
-              const D = E._3;
-              return $((z) => {
+            (L, G) => {
+              const D = L._3;
+              return p((Y) => {
                 if (D)
-                  return N(E, I);
-                const U = p._1, P = p._2;
-                return $((R) => Vr(
-                  H(U, P, !1),
-                  $,
+                  return y(L, G);
+                const X = $._1, P = $._2;
+                return p((B) => Ro(
+                  F(X, P, !1),
+                  p,
                   m,
-                  (j, et) => {
-                    const X = j._3;
-                    return $((A) => {
-                      if (X)
-                        return N(j, et);
-                      const x = p._1, C = p._2;
-                      return $((q) => _(
-                        H(x, C, !1),
-                        $,
+                  (tt, ct) => {
+                    const q = tt._3;
+                    return p((R) => {
+                      if (q)
+                        return y(tt, ct);
+                      const E = $._1, S = $._2;
+                      return p((O) => l(
+                        F(E, S, !1),
+                        p,
                         m,
-                        (S, F) => {
-                          const W = S._3;
-                          return $((K) => W ? N(S, F) : h(p, $, m, N, v));
+                        (I, W) => {
+                          const Q = I._3;
+                          return p((M) => Q ? y(I, W) : h($, p, m, y, N));
                         },
-                        v
+                        N
                       ));
                     });
                   },
-                  v
+                  N
                 ));
               });
             },
-            v
+            N
           ));
         };
-      })()), d = n._3 && !c._3 ? H(c._1, c._2, !0) : c;
-      return e((_) => l(
+      })()), d = n._3 && !c._3 ? F(c._1, c._2, !0) : c;
+      return e((l) => _(
         d,
         e,
         r,
-        (h, p) => o(H(h._1, h._2, s), p),
-        (h, p) => e(($) => i(d._3 && !h._3 ? H(h._1, h._2, !0) : h, void 0))
+        (h, $) => o(F(h._1, h._2, s), $),
+        (h, $) => e((p) => i(d._3 && !h._3 ? F(h._1, h._2, !0) : h, void 0))
       ));
     })
   ));
-}, _N = (t, n, e, r, o) => n((i) => lr("+edge")(
+}, DT = (t, n, e, r, o) => n((i) => tr("+edge")(
   t,
   n,
   e,
   r,
   (s, u) => n((c) => {
-    const a = t._3 && !s._3 ? H(s._1, s._2, !0) : s;
-    return n((g) => qn(
+    const a = t._3 && !s._3 ? F(s._1, s._2, !0) : s;
+    return n((g) => fe(
       a,
       n,
       e,
       r,
-      (l, d) => n((_) => {
-        const h = xt(wn)("source node identifier"), p = a._3 && !l._3 ? H(l._1, l._2, !0) : l;
-        return n(($) => h(
-          p,
+      (_, d) => n((l) => {
+        const h = Ct(vn)("source node identifier"), $ = a._3 && !_._3 ? F(_._1, _._2, !0) : _;
+        return n((p) => h(
+          $,
           n,
           e,
           r,
-          (m, N) => n((v) => {
-            const w = p._3 && !m._3 ? H(m._1, m._2, !0) : m;
-            return n((y) => qn(
-              w,
+          (m, y) => n((N) => {
+            const T = $._3 && !m._3 ? F(m._1, m._2, !0) : m;
+            return n((w) => fe(
+              T,
               n,
               e,
               r,
-              (k, E) => n((I) => {
-                const D = xt(wn)("target node identifier"), z = w._3 && !k._3 ? H(k._1, k._2, !0) : k;
-                return n((U) => D(
-                  z,
+              (k, L) => n((G) => {
+                const D = Ct(vn)("target node identifier"), Y = T._3 && !k._3 ? F(k._1, k._2, !0) : k;
+                return n((X) => D(
+                  Y,
                   n,
                   e,
                   r,
-                  (P, R) => n((j) => o(
-                    z._3 && !P._3 ? H(P._1, P._2, !0) : P,
-                    Be("AddEdge", { from: N, to: R })
+                  (P, B) => n((tt) => o(
+                    Y._3 && !P._3 ? F(P._1, P._2, !0) : P,
+                    De("AddEdge", { from: y, to: B })
                   ))
                 ));
               })
@@ -15490,78 +18819,42 @@ const zu = (t) => (n) => (e) => (r) => {
       })
     ));
   })
-)), lN = (t, n, e, r, o) => n((i) => lr("+node")(
+)), HT = (t, n, e, r, o) => n((i) => tr("-edge")(
   t,
   n,
   e,
   r,
   (s, u) => n((c) => {
-    const a = t._3 && !s._3 ? H(s._1, s._2, !0) : s;
-    return n((g) => qn(
+    const a = t._3 && !s._3 ? F(s._1, s._2, !0) : s;
+    return n((g) => fe(
       a,
       n,
       e,
       r,
-      (l, d) => n((_) => {
-        const h = xt(wn)("node identifier"), p = a._3 && !l._3 ? H(l._1, l._2, !0) : l;
-        return n(($) => h(
-          p,
+      (_, d) => n((l) => {
+        const h = Ct(vn)("source node identifier"), $ = a._3 && !_._3 ? F(_._1, _._2, !0) : _;
+        return n((p) => h(
+          $,
           n,
           e,
           r,
-          (m, N) => n((v) => {
-            const w = p._3 && !m._3 ? H(m._1, m._2, !0) : m;
-            return n((y) => sN(
-              w,
+          (m, y) => n((N) => {
+            const T = $._3 && !m._3 ? F(m._1, m._2, !0) : m;
+            return n((w) => fe(
+              T,
               n,
               e,
               r,
-              (k, E) => n((I) => o(
-                w._3 && !k._3 ? H(k._1, k._2, !0) : k,
-                Be("AddNode", { id: N, label: E })
-              ))
-            ));
-          })
-        ));
-      })
-    ));
-  })
-)), dN = (t, n, e, r, o) => n((i) => lr("-edge")(
-  t,
-  n,
-  e,
-  r,
-  (s, u) => n((c) => {
-    const a = t._3 && !s._3 ? H(s._1, s._2, !0) : s;
-    return n((g) => qn(
-      a,
-      n,
-      e,
-      r,
-      (l, d) => n((_) => {
-        const h = xt(wn)("source node identifier"), p = a._3 && !l._3 ? H(l._1, l._2, !0) : l;
-        return n(($) => h(
-          p,
-          n,
-          e,
-          r,
-          (m, N) => n((v) => {
-            const w = p._3 && !m._3 ? H(m._1, m._2, !0) : m;
-            return n((y) => qn(
-              w,
-              n,
-              e,
-              r,
-              (k, E) => n((I) => {
-                const D = xt(wn)("target node identifier"), z = w._3 && !k._3 ? H(k._1, k._2, !0) : k;
-                return n((U) => D(
-                  z,
+              (k, L) => n((G) => {
+                const D = Ct(vn)("target node identifier"), Y = T._3 && !k._3 ? F(k._1, k._2, !0) : k;
+                return n((X) => D(
+                  Y,
                   n,
                   e,
                   r,
-                  (P, R) => n((j) => o(
-                    z._3 && !P._3 ? H(P._1, P._2, !0) : P,
-                    Be("DelEdge", { from: N, to: R })
+                  (P, B) => n((tt) => o(
+                    Y._3 && !P._3 ? F(P._1, P._2, !0) : P,
+                    De("DelEdge", { from: y, to: B })
                   ))
                 ));
               })
@@ -15571,38 +18864,38 @@ const zu = (t) => (n) => (e) => (r) => {
       })
     ));
   })
-)), hN = (t, n, e, r, o) => n((i) => lr("-node")(
+)), OT = (t, n, e, r, o) => n((i) => tr("-node")(
   t,
   n,
   e,
   r,
   (s, u) => n((c) => {
-    const a = t._3 && !s._3 ? H(s._1, s._2, !0) : s;
-    return n((g) => qn(
+    const a = t._3 && !s._3 ? F(s._1, s._2, !0) : s;
+    return n((g) => fe(
       a,
       n,
       e,
       r,
-      (l, d) => n((_) => {
-        const h = xt(wn)("node identifier"), p = a._3 && !l._3 ? H(l._1, l._2, !0) : l;
-        return n(($) => h(
-          p,
+      (_, d) => n((l) => {
+        const h = Ct(vn)("node identifier"), $ = a._3 && !_._3 ? F(_._1, _._2, !0) : _;
+        return n((p) => h(
+          $,
           n,
           e,
           r,
-          (m, N) => n((v) => {
-            const w = Qn((k, E, I, D, z) => {
-              const U = k._3;
-              return gN(k, E, I, (P, R) => D(H(P._1, P._2, U), R), z);
-            }), y = p._3 && !m._3 ? H(m._1, m._2, !0) : m;
-            return n((k) => w(
-              y,
+          (m, y) => n((N) => {
+            const T = ue((k, L, G, D, Y) => {
+              const X = k._3;
+              return WT(k, L, G, (P, B) => D(F(P._1, P._2, X), B), Y);
+            }), w = $._3 && !m._3 ? F(m._1, m._2, !0) : m;
+            return n((k) => T(
+              w,
               n,
               e,
               r,
-              (E, I) => n((D) => o(
-                y._3 && !E._3 ? H(E._1, E._2, !0) : E,
-                Be("DelNode", { id: N, via: Et(Mt.foldr, I) })
+              (L, G) => n((D) => o(
+                w._3 && !L._3 ? F(L._1, L._2, !0) : L,
+                De("DelNode", { id: y, via: Lt(Xt.foldr, G) })
               ))
             ));
           })
@@ -15610,84 +18903,117 @@ const zu = (t) => (n) => (e) => (r) => {
       })
     ));
   })
-)), pN = (t, n, e, r, o) => n((i) => lr("~edge")(
+)), zT = (t, n, e, r, o) => n((i) => tr("enter")(
   t,
   n,
   e,
   r,
   (s, u) => n((c) => {
-    const a = t._3 && !s._3 ? H(s._1, s._2, !0) : s;
-    return n((g) => qn(
+    const a = t._3 && !s._3 ? F(s._1, s._2, !0) : s;
+    return n((g) => fe(
       a,
       n,
       e,
       r,
-      (l, d) => n((_) => {
-        const h = xt(wn)("source node identifier"), p = a._3 && !l._3 ? H(l._1, l._2, !0) : l;
-        return n(($) => h(
-          p,
+      (_, d) => n((l) => {
+        const h = Ct(vn)("node identifier"), $ = a._3 && !_._3 ? F(_._1, _._2, !0) : _;
+        return n((p) => h(
+          $,
           n,
           e,
           r,
-          (m, N) => n((v) => {
-            const w = p._3 && !m._3 ? H(m._1, m._2, !0) : m;
-            return n((y) => qn(
-              w,
+          (m, y) => n((N) => o(
+            $._3 && !m._3 ? F(m._1, m._2, !0) : m,
+            De("Enter", { id: y })
+          ))
+        ));
+      })
+    ));
+  })
+)), qT = (t, n, e, r, o) => n((i) => tr("exit")(
+  t,
+  n,
+  e,
+  r,
+  (s, u) => n((c) => o(t._3 && !s._3 ? F(s._1, s._2, !0) : s, HJ))
+)), YT = (t, n, e, r, o) => n((i) => tr("~edge")(
+  t,
+  n,
+  e,
+  r,
+  (s, u) => n((c) => {
+    const a = t._3 && !s._3 ? F(s._1, s._2, !0) : s;
+    return n((g) => fe(
+      a,
+      n,
+      e,
+      r,
+      (_, d) => n((l) => {
+        const h = Ct(vn)("source node identifier"), $ = a._3 && !_._3 ? F(_._1, _._2, !0) : _;
+        return n((p) => h(
+          $,
+          n,
+          e,
+          r,
+          (m, y) => n((N) => {
+            const T = $._3 && !m._3 ? F(m._1, m._2, !0) : m;
+            return n((w) => fe(
+              T,
               n,
               e,
               r,
-              (k, E) => n((I) => {
-                const D = xt(wn)("target node identifier"), z = w._3 && !k._3 ? H(k._1, k._2, !0) : k;
-                return n((U) => D(
-                  z,
+              (k, L) => n((G) => {
+                const D = Ct(vn)("target node identifier"), Y = T._3 && !k._3 ? F(k._1, k._2, !0) : k;
+                return n((X) => D(
+                  Y,
                   n,
                   e,
                   r,
-                  (P, R) => n((j) => {
-                    const et = z._3 && !P._3 ? H(P._1, P._2, !0) : P;
-                    return n((X) => Bn(
-                      et,
+                  (P, B) => n((tt) => {
+                    const ct = Y._3 && !P._3 ? F(P._1, P._2, !0) : P;
+                    return n((q) => Zn(
+                      ct,
                       n,
                       e,
                       r,
-                      (A, x) => n((C) => {
-                        const q = xt(fr("->"))("'->'"), S = et._3 && !A._3 ? H(A._1, A._2, !0) : A;
-                        return n((F) => q(
-                          S,
+                      (R, E) => n((S) => {
+                        const O = Ct(Ur("->"))("'->'"), I = ct._3 && !R._3 ? F(R._1, R._2, !0) : R;
+                        return n((W) => O(
+                          I,
                           n,
                           e,
                           r,
-                          (W, K) => n((V) => {
-                            const B = S._3 && !W._3 ? H(W._1, W._2, !0) : W;
-                            return n((nt) => Bn(
-                              B,
+                          (Q, M) => n((V) => {
+                            const H = I._3 && !Q._3 ? F(Q._1, Q._2, !0) : Q;
+                            return n((et) => Zn(
+                              H,
                               n,
                               e,
                               r,
-                              (M, tt) => n((ot) => {
-                                const st = xt(wn)("new source node identifier"), _t = B._3 && !M._3 ? H(M._1, M._2, !0) : M;
-                                return n((At) => st(
+                              (j, ot) => n((Z) => {
+                                const at = Ct(vn)("new source node identifier"), _t = H._3 && !j._3 ? F(j._1, j._2, !0) : j;
+                                return n((Qt) => at(
                                   _t,
                                   n,
                                   e,
                                   r,
-                                  (Tt, Vt) => n((ht) => {
-                                    const mt = _t._3 && !Tt._3 ? H(Tt._1, Tt._2, !0) : Tt;
-                                    return n((lt) => qn(
-                                      mt,
+                                  (Tt, Bt) => n(($t) => {
+                                    const xt = _t._3 && !Tt._3 ? F(Tt._1, Tt._2, !0) : Tt;
+                                    return n((mt) => fe(
+                                      xt,
                                       n,
                                       e,
                                       r,
-                                      (dt, it) => n((ut) => {
-                                        const $t = xt(wn)("new target node identifier"), Nt = mt._3 && !dt._3 ? H(dt._1, dt._2, !0) : dt;
-                                        return n((Rt) => $t(
-                                          Nt,
+                                      (rt, K) => n((st) => {
+                                        const gt = Ct(vn)("new target node identifier"), dt = xt._3 && !rt._3 ? F(rt._1, rt._2, !0) : rt;
+                                        return n((Nt) => gt(
+                                          dt,
                                           n,
                                           e,
                                           r,
-                                          (It, tn) => n((zn) => o(
-                                            Nt._3 && !It._3 ? H(It._1, It._2, !0) : It,
-                                            Be("RepointEdge", { from: N, to: R, newFrom: Vt, newTo: tn })
+                                          (At, Vt) => n((Pn) => o(
+                                            dt._3 && !At._3 ? F(At._1, At._2, !0) : At,
+                                            De("RepointEdge", { from: y, to: B, newFrom: Bt, newTo: Vt })
                                           ))
                                         ));
                                       })
@@ -15709,167 +19035,346 @@ const zu = (t) => (n) => (e) => (r) => {
       })
     ));
   })
-)), $N = (t, n, e, r, o) => n((i) => af(
+)), XT = (t, n, e, r, o) => n((i) => tr("seed")(
   t,
   n,
   e,
   r,
   (s, u) => n((c) => {
-    const a = xt(lf([lN, hN, pN, _N, dN, aN]))("statement (+node, -node, +edge, -edge, ~edge, or 'a -> b')"), g = t._3 && !s._3 ? H(s._1, s._2, !0) : s;
-    return n((l) => a(
-      g,
-      n,
-      e,
-      r,
-      (d, _) => n((h) => o(
-        g._3 && !d._3 ? H(d._1, d._2, !0) : d,
-        Hs("Leaf", { op: _, line: u.line, column: u.column })
-      ))
-    ));
-  })
-)), mN = (t, n, e, r, o) => n((i) => lr("seed")(
-  t,
-  n,
-  e,
-  r,
-  (s, u) => n((c) => {
-    const a = t._3 && !s._3 ? H(s._1, s._2, !0) : s;
-    return n((g) => Ie(
+    const a = t._3 && !s._3 ? F(s._1, s._2, !0) : s;
+    return n((g) => Dn(
       a,
       n,
       e,
       r,
-      (l, d) => n((_) => {
-        const h = xt(fN)("integer (seed value)"), p = a._3 && !l._3 ? H(l._1, l._2, !0) : l;
-        return n(($) => h(
-          p,
+      (_, d) => n((l) => {
+        const h = Ct(QT)("integer (seed value)"), $ = a._3 && !_._3 ? F(_._1, _._2, !0) : _;
+        return n((p) => h(
+          $,
           n,
           e,
           r,
-          (m, N) => n((v) => {
-            const w = p._3 && !m._3 ? H(m._1, m._2, !0) : m;
-            return n((y) => Bn(
-              w,
+          (m, y) => n((N) => {
+            const T = $._3 && !m._3 ? F(m._1, m._2, !0) : m;
+            return n((w) => Zn(
+              T,
               n,
               e,
               r,
-              (k, E) => n((I) => o(w._3 && !k._3 ? H(k._1, k._2, !0) : k, N))
+              (k, L) => n((G) => o(T._3 && !k._3 ? F(k._1, k._2, !0) : k, y))
             ));
           })
         ));
       })
     ));
   })
-)), Xs = /* @__PURE__ */ Zm(/* @__PURE__ */ (() => {
-  const t = xt(Kt((n) => n === "{"))("'{'");
+)), Xo = /* @__PURE__ */ kT(/* @__PURE__ */ (() => {
+  const t = Ct(Mt((n) => n === "{"))("'{'");
   return (n, e, r, o, i) => e((s) => e((u) => t(
     n,
     e,
     r,
     o,
-    (c, a) => e((g) => e((l) => {
-      const d = n._3 && !c._3 ? H(c._1, c._2, !0) : c;
-      return Bn(d, e, r, o, (_, h) => e((p) => i(d._3 && !_._3 ? H(_._1, _._2, !0) : _, h)));
+    (c, a) => e((g) => e((_) => {
+      const d = n._3 && !c._3 ? F(c._1, c._2, !0) : c;
+      return Zn(d, e, r, o, (l, h) => e(($) => i(d._3 && !l._3 ? F(l._1, l._2, !0) : l, h)));
     }))
   )));
-})())(/* @__PURE__ */ xt(/* @__PURE__ */ (() => {
-  const t = xt(Kt((n) => n === "}"))("'}'");
-  return (n, e, r, o, i) => e((s) => e((u) => Bn(
+})())(/* @__PURE__ */ Ct(/* @__PURE__ */ (() => {
+  const t = Ct(Mt((n) => n === "}"))("'}'");
+  return (n, e, r, o, i) => e((s) => e((u) => Zn(
     n,
     e,
     r,
     o,
-    (c, a) => e((g) => e((l) => {
-      const d = n._3 && !c._3 ? H(c._1, c._2, !0) : c;
-      return t(d, e, r, o, (_, h) => e((p) => i(d._3 && !_._3 ? H(_._1, _._2, !0) : _, h)));
+    (c, a) => e((g) => e((_) => {
+      const d = n._3 && !c._3 ? F(c._1, c._2, !0) : c;
+      return t(d, e, r, o, (l, h) => e(($) => i(d._3 && !l._3 ? F(l._1, l._2, !0) : l, h)));
     }))
   )));
-})())("closing '}'")), NN = (t, n, e, r, o) => n((i) => ti("seq")(
+})())("closing '}'")), VT = /* @__PURE__ */ Xo((t, n, e, r, o) => n((i) => {
+  const s = (a, g) => n((_) => (() => {
+    if (g.tag === "Nothing")
+      return (d, l, h, $, p) => p(d, A);
+    if (g.tag === "Just") {
+      const d = g._1, l = ue((() => {
+        const h = Ct(Mt(($) => $ === ","))("','");
+        return ($, p, m, y, N) => {
+          const T = $._3;
+          return p((w) => p((k) => p((L) => p((G) => p((D) => p((Y) => Dn(
+            $,
+            p,
+            m,
+            (X, P) => y(F(X._1, X._2, T), P),
+            (X, P) => p((B) => p((tt) => {
+              const ct = $._3 && !X._3 ? F(X._1, X._2, !0) : X;
+              return h(
+                ct,
+                p,
+                m,
+                (q, R) => y(F(q._1, q._2, T), R),
+                (q, R) => p((E) => {
+                  const S = ct._3 && !q._3 ? F(q._1, q._2, !0) : q;
+                  return p((O) => p((I) => {
+                    const W = $._3 && !S._3 ? F(S._1, S._2, !0) : S;
+                    return Dn(
+                      W,
+                      p,
+                      m,
+                      (Q, M) => y(F(Q._1, Q._2, T), M),
+                      (Q, M) => p((V) => {
+                        const H = W._3 && !Q._3 ? F(Q._1, Q._2, !0) : Q;
+                        return p((et) => p((j) => {
+                          const ot = $._3 && !H._3 ? F(H._1, H._2, !0) : H;
+                          return uf(
+                            ot,
+                            p,
+                            m,
+                            (Z, at) => y(F(Z._1, Z._2, T), at),
+                            (Z, at) => p((_t) => N(ot._3 && !Z._3 ? F(Z._1, Z._2, !0) : Z, at))
+                          );
+                        }));
+                      })
+                    );
+                  }));
+                })
+              );
+            }))
+          )))))));
+        };
+      })());
+      return (h, $, p, m, y) => $((N) => l(
+        h,
+        $,
+        p,
+        m,
+        (T, w) => $((k) => y(
+          h._3 && !T._3 ? F(T._1, T._2, !0) : T,
+          ST([d, ...Lt(Xt.foldr, w)])
+        ))
+      ));
+    }
+    f();
+  })()(t._3 && !a._3 ? F(a._1, a._2, !0) : a, n, e, r, o)), u = t._1, c = t._2;
+  return n((a) => n((g) => uf(
+    F(u, c, !1),
+    n,
+    e,
+    (_, d) => n((l) => s(t, J)),
+    (_, d) => n((l) => s(_, v("Just", d)))
+  )));
+})), UT = (t, n, e, r, o) => n((i) => tr("+node")(
   t,
   n,
   e,
   r,
-  (s, u) => n((c) => Xs(Us(uf))(
-    t._3 && !s._3 ? H(s._1, s._2, !0) : s,
+  (s, u) => n((c) => {
+    const a = t._3 && !s._3 ? F(s._1, s._2, !0) : s;
+    return n((g) => fe(
+      a,
+      n,
+      e,
+      r,
+      (_, d) => n((l) => {
+        const h = Ct(vn)("node identifier"), $ = a._3 && !_._3 ? F(_._1, _._2, !0) : _;
+        return n((p) => h(
+          $,
+          n,
+          e,
+          r,
+          (m, y) => n((N) => {
+            const T = $._3 && !m._3 ? F(m._1, m._2, !0) : m;
+            return n((w) => n((k) => Dn(
+              T,
+              n,
+              e,
+              r,
+              (L, G) => n((D) => {
+                const Y = Mt((P) => P === `
+` || P === "\r" || P === "#" || P === "}" || P === "{"), X = T._3 && !L._3 ? F(L._1, L._2, !0) : L;
+                return n((P) => {
+                  const B = (q, R) => n((E) => (R ? ((S, O, I, W, Q) => Q(S, "")) : AT)(
+                    X._3 && !q._3 ? F(q._1, q._2, !0) : q,
+                    n,
+                    e,
+                    r,
+                    (S, O) => n((I) => {
+                      const W = T._3 && !S._3 ? F(S._1, S._2, !0) : S;
+                      return n((Q) => {
+                        const M = (et, j) => n((ot) => o(
+                          W._3 && !et._3 ? F(et._1, et._2, !0) : et,
+                          De(
+                            "AddNode",
+                            {
+                              id: y,
+                              label: O,
+                              shape: (() => {
+                                const Z = CT("shape")(j);
+                                if (Z.tag === "Just")
+                                  return Z._1 === "rectangle" || Z._1 === "rect" ? Ge : Z._1 === "cylinder" || Z._1 === "cyl" ? Pc : Z._1 === "parallelogram" ? S1 : Z._1 === "diamond" ? C1 : Z._1 === "ellipse" ? P1 : Z._1 === "document" || Z._1 === "doc" ? Gc : Z._1 === "cloud" ? G1 : Ge;
+                                if (Z.tag === "Nothing")
+                                  return Ge;
+                                f();
+                              })()
+                            }
+                          )
+                        )), V = W._1, H = W._2;
+                        return n((et) => {
+                          const j = (ot, Z) => {
+                            const at = ot._3;
+                            return n((_t) => at ? r(ot, Z) : M(W, A));
+                          };
+                          return n((ot) => n((Z) => Dn(
+                            F(V, H, !1),
+                            n,
+                            e,
+                            (at, _t) => j(F(at._1, at._2, !1), _t),
+                            (at, _t) => n((Qt) => n((Tt) => VT(
+                              at,
+                              n,
+                              e,
+                              (Bt, $t) => j(F(Bt._1, Bt._2, !1), $t),
+                              (Bt, $t) => n((xt) => M(at._3 && !Bt._3 ? F(Bt._1, Bt._2, !0) : Bt, $t))
+                            )))
+                          )));
+                        });
+                      });
+                    })
+                  )), tt = X._1, ct = X._2;
+                  return n((q) => {
+                    const R = (E, S) => {
+                      const O = E._3;
+                      return n((I) => O ? r(E, S) : B(X, !1));
+                    };
+                    return n((E) => n((S) => n((O) => xc(
+                      F(tt, ct, !1),
+                      n,
+                      e,
+                      (I, W) => {
+                        const Q = I._3;
+                        return n((M) => Q ? R(F(tt, ct, !1), W) : n((V) => Y(
+                          F(tt, ct, !1),
+                          n,
+                          e,
+                          (H, et) => R(F(tt, ct, !1), et),
+                          (H, et) => n((j) => n((ot) => B(F(tt, ct, !1), !0)))
+                        )));
+                      },
+                      (I, W) => n((Q) => n((M) => B(F(tt, ct, !1), !0)))
+                    ))));
+                  });
+                });
+              })
+            )));
+          })
+        ));
+      })
+    ));
+  })
+)), KT = (t, n, e, r, o) => n((i) => hl(
+  t,
+  n,
+  e,
+  r,
+  (s, u) => n((c) => {
+    const a = Ct(ml([UT, OT, YT, DT, HT, zT, qT, BT]))("statement (+node, -node, +edge, -edge, ~edge, enter, exit, or 'a -> b')"), g = t._3 && !s._3 ? F(s._1, s._2, !0) : s;
+    return n((_) => a(
+      g,
+      n,
+      e,
+      r,
+      (d, l) => n((h) => o(
+        g._3 && !d._3 ? F(d._1, d._2, !0) : d,
+        yc("Leaf", { op: l, line: u.line, column: u.column })
+      ))
+    ));
+  })
+)), MT = (t, n, e, r, o) => n((i) => Yo("seq")(
+  t,
+  n,
+  e,
+  r,
+  (s, u) => n((c) => Xo(vc(gl))(
+    t._3 && !s._3 ? F(s._1, s._2, !0) : s,
     n,
     e,
     r,
     o
   ))
-)), JN = (t, n, e, r, o) => n((i) => ti("par")(
+)), jT = (t, n, e, r, o) => n((i) => Yo("par")(
   t,
   n,
   e,
   r,
-  (s, u) => n((c) => Xs(Us(Jm))(
-    t._3 && !s._3 ? H(s._1, s._2, !0) : s,
+  (s, u) => n((c) => Xo(vc(OJ))(
+    t._3 && !s._3 ? F(s._1, s._2, !0) : s,
     n,
     e,
     r,
     o
   ))
-)), Us = (t) => {
-  const n = Qn(vN());
+)), vc = (t) => {
+  const n = ue(ZT());
   return (e, r, o, i, s) => r((u) => n(
     e,
     r,
     o,
     i,
     (c, a) => r((g) => s(
-      e._3 && !c._3 ? H(c._1, c._2, !0) : c,
-      t(Et(Mt.foldr, a))
+      e._3 && !c._3 ? F(c._1, c._2, !0) : c,
+      t(Lt(Xt.foldr, a))
     ))
   ));
-}, vN = /* @__PURE__ */ vf(() => {
-  const t = zs(xt(Kt((n) => n === "}"))("'}'"));
+}, ZT = /* @__PURE__ */ gf(() => {
+  const t = Nc(Ct(Mt((n) => n === "}"))("'}'"));
   return (n, e, r, o, i) => e((s) => {
     const u = n._3;
-    return e((c) => e((a) => Bn(
+    return e((c) => e((a) => Zn(
       n,
       e,
       r,
-      (g, l) => o(H(g._1, g._2, u), l),
-      (g, l) => e((d) => e((_) => {
-        const h = n._3 && !g._3 ? H(g._1, g._2, !0) : g;
+      (g, _) => o(F(g._1, g._2, u), _),
+      (g, _) => e((d) => e((l) => {
+        const h = n._3 && !g._3 ? F(g._1, g._2, !0) : g;
         return t(
           h,
           e,
           r,
-          (p, $) => o(H(p._1, p._2, u), $),
-          (p, $) => e((m) => {
-            const N = h._3 && !p._3 ? H(p._1, p._2, !0) : p;
-            return e((v) => {
-              const w = lf([
-                (k, E, I, D, z) => {
-                  const U = k._3;
-                  return JN(k, E, I, (P, R) => D(H(P._1, P._2, U), R), z);
+          ($, p) => o(F($._1, $._2, u), p),
+          ($, p) => e((m) => {
+            const y = h._3 && !$._3 ? F($._1, $._2, !0) : $;
+            return e((N) => {
+              const T = ml([
+                (k, L, G, D, Y) => {
+                  const X = k._3;
+                  return jT(k, L, G, (P, B) => D(F(P._1, P._2, X), B), Y);
                 },
-                (k, E, I, D, z) => {
-                  const U = k._3;
-                  return NN(k, E, I, (P, R) => D(H(P._1, P._2, U), R), z);
+                (k, L, G, D, Y) => {
+                  const X = k._3;
+                  return MT(k, L, G, (P, B) => D(F(P._1, P._2, X), B), Y);
                 },
-                $N
-              ]), y = n._3 && !N._3 ? H(N._1, N._2, !0) : N;
-              return e((k) => w(
-                y,
+                KT
+              ]), w = n._3 && !y._3 ? F(y._1, y._2, !0) : y;
+              return e((k) => T(
+                w,
                 e,
                 r,
                 o,
-                (E, I) => e((D) => {
-                  const z = y._3 && !E._3 ? H(E._1, E._2, !0) : E;
-                  return e((U) => Ie(
-                    z,
+                (L, G) => e((D) => {
+                  const Y = w._3 && !L._3 ? F(L._1, L._2, !0) : L;
+                  return e((X) => Dn(
+                    Y,
                     e,
                     r,
                     o,
-                    (P, R) => e((j) => {
-                      const et = z._3 && !P._3 ? H(P._1, P._2, !0) : P;
-                      return e((X) => rN(
-                        et,
+                    (P, B) => e((tt) => {
+                      const ct = Y._3 && !P._3 ? F(P._1, P._2, !0) : P;
+                      return e((q) => PT(
+                        ct,
                         e,
                         r,
                         o,
-                        (A, x) => e((C) => i(et._3 && !A._3 ? H(A._1, A._2, !0) : A, I))
+                        (R, E) => e((S) => i(ct._3 && !R._3 ? F(R._1, R._2, !0) : R, G))
                       ));
                     })
                   ));
@@ -15881,42 +19386,42 @@ const zu = (t) => (n) => (e) => (r) => {
       }))
     )));
   });
-}), TN = (t, n, e, r, o) => n((i) => ti("frame")(
+}), tv = (t, n, e, r, o) => n((i) => Yo("frame")(
   t,
   n,
   e,
   r,
   (s, u) => n((c) => {
-    const a = t._3 && !s._3 ? H(s._1, s._2, !0) : s;
-    return n((g) => cN(
+    const a = t._3 && !s._3 ? F(s._1, s._2, !0) : s;
+    return n((g) => RT(
       a,
       n,
       e,
       r,
-      (l, d) => n((_) => {
-        const h = a._3 && !l._3 ? H(l._1, l._2, !0) : l;
-        return n((p) => Bn(
+      (_, d) => n((l) => {
+        const h = a._3 && !_._3 ? F(_._1, _._2, !0) : _;
+        return n(($) => Zn(
           h,
           n,
           e,
           r,
-          ($, m) => n((N) => {
-            const v = Xs(Us(uf)), w = h._3 && !$._3 ? H($._1, $._2, !0) : $;
-            return n((y) => v(
-              w,
+          (p, m) => n((y) => {
+            const N = Xo(vc(gl)), T = h._3 && !p._3 ? F(p._1, p._2, !0) : p;
+            return n((w) => N(
+              T,
               n,
               e,
               r,
-              (k, E) => n((I) => {
-                const D = w._3 && !k._3 ? H(k._1, k._2, !0) : k;
-                return n((z) => Bn(
+              (k, L) => n((G) => {
+                const D = T._3 && !k._3 ? F(k._1, k._2, !0) : k;
+                return n((Y) => Zn(
                   D,
                   n,
                   e,
                   r,
-                  (U, P) => n((R) => o(
-                    D._3 && !U._3 ? H(U._1, U._2, !0) : U,
-                    { name: b("Just", d), ops: E }
+                  (X, P) => n((B) => o(
+                    D._3 && !X._3 ? F(X._1, X._2, !0) : X,
+                    { name: v("Just", d), ops: L }
                   ))
                 ));
               })
@@ -15926,82 +19431,167 @@ const zu = (t) => (n) => (e) => (r) => {
       })
     ));
   })
-)), yN = (t, n, e, r, o) => n((i) => Bn(
+)), nv = (t, n, e, r, o) => n((i) => Yo("inside")(
   t,
   n,
   e,
   r,
   (s, u) => n((c) => {
-    const a = t._3 && !s._3 ? H(s._1, s._2, !0) : s;
-    return n((g) => {
-      const l = (h, p) => n(($) => {
-        const m = Qn(TN), N = a._3 && !h._3 ? H(h._1, h._2, !0) : h;
-        return n((v) => m(
-          N,
+    const a = Ct(vn)("node identifier"), g = t._3 && !s._3 ? F(s._1, s._2, !0) : s;
+    return n((_) => a(
+      g,
+      n,
+      e,
+      r,
+      (d, l) => n((h) => {
+        const $ = g._3 && !d._3 ? F(d._1, d._2, !0) : d;
+        return n((p) => Zn(
+          $,
           n,
           e,
           r,
-          (w, y) => n((k) => {
-            const E = N._3 && !w._3 ? H(w._1, w._2, !0) : w;
-            return n((I) => Bn(
-              E,
+          (m, y) => n((N) => {
+            const T = $._3 && !m._3 ? F(m._1, m._2, !0) : m;
+            return n((w) => Xo(xl)(
+              T,
               n,
               e,
               r,
-              (D, z) => n((U) => {
-                const P = xt(_f)("'frame' or end of input"), R = E._3 && !D._3 ? H(D._1, D._2, !0) : D;
-                return n((j) => P(
-                  R,
+              (k, L) => n((G) => {
+                const D = T._3 && !k._3 ? F(k._1, k._2, !0) : k;
+                return n((Y) => Zn(
+                  D,
                   n,
                   e,
                   r,
-                  (et, X) => n((A) => o(
-                    R._3 && !et._3 ? H(et._1, et._2, !0) : et,
-                    {
-                      seed: (() => {
-                        if (p.tag === "Just")
-                          return p._1;
-                        if (p.tag === "Nothing")
-                          return 0;
-                        f();
-                      })(),
-                      frames: Et(Mt.foldr, y)
-                    }
-                  ))
+                  (X, P) => n((B) => o(D._3 && !X._3 ? F(X._1, X._2, !0) : X, { node: l, doc: L }))
                 ));
               })
             ));
           })
         ));
-      }), d = a._1, _ = a._2;
-      return n((h) => n((p) => mN(
-        H(d, _, !1),
-        n,
-        e,
-        ($, m) => {
-          const N = $._3;
-          return n((v) => N ? r($, m) : l(a, T));
-        },
-        ($, m) => n((N) => l($, b("Just", m)))
-      )));
-    });
+      })
+    ));
   })
-)), wN = (t) => {
-  const n = zm(t)(yN);
+)), xl = (t, n, e, r, o) => n((i) => {
+  const s = (a, g) => n((_) => {
+    const d = ue(ev()), l = t._3 && !a._3 ? F(a._1, a._2, !0) : a;
+    return n((h) => d(
+      l,
+      n,
+      e,
+      r,
+      ($, p) => n((m) => {
+        const y = Lt(Xt.foldr, p);
+        return o(
+          l._3 && !$._3 ? F($._1, $._2, !0) : $,
+          {
+            seed: (() => {
+              if (g.tag === "Nothing")
+                return 0;
+              if (g.tag === "Just")
+                return g._1;
+              f();
+            })(),
+            frames: yt((N) => {
+              if (N.tag === "TopFrame")
+                return v("Just", N._1);
+              if (N.tag === "TopInside")
+                return J;
+              f();
+            })(y),
+            interiors: yt((N) => {
+              if (N.tag === "TopInside")
+                return v("Just", N._1);
+              if (N.tag === "TopFrame")
+                return J;
+              f();
+            })(y)
+          }
+        );
+      })
+    ));
+  }), u = t._1, c = t._2;
+  return n((a) => n((g) => XT(
+    F(u, c, !1),
+    n,
+    e,
+    (_, d) => {
+      const l = _._3;
+      return n((h) => l ? r(_, d) : s(t, J));
+    },
+    (_, d) => n((l) => s(_, v("Just", d)))
+  )));
+}), ev = /* @__PURE__ */ gf(() => _T.defer((t) => (n, e, r, o, i) => {
+  const s = n._1, u = n._2;
+  return e((c) => e((a) => nv(
+    F(s, u, !1),
+    e,
+    r,
+    (g, _) => e((d) => e((l) => tv(n, e, r, o, (h, $) => e((p) => i(h, sf("TopFrame", $)))))),
+    (g, _) => e((d) => i(g, sf("TopInside", _)))
+  )));
+})), rv = /* @__PURE__ */ (() => {
+  const t = Ct((n, e, r, o, i) => e((s) => e((u) => Zn(
+    n,
+    e,
+    r,
+    o,
+    (c, a) => e((g) => e((_) => {
+      const d = n._3 && !c._3 ? F(c._1, c._2, !0) : c;
+      return xc(
+        d,
+        e,
+        r,
+        o,
+        (l, h) => e(($) => i(d._3 && !l._3 ? F(l._1, l._2, !0) : l, h))
+      );
+    }))
+  ))))("'frame', 'inside', or end of input");
+  return (n, e, r, o, i) => e((s) => e((u) => e((c) => e((a) => Zn(
+    n,
+    e,
+    r,
+    o,
+    (g, _) => e((d) => e((l) => {
+      const h = n._3 && !g._3 ? F(g._1, g._2, !0) : g;
+      return xl(
+        h,
+        e,
+        r,
+        o,
+        ($, p) => e((m) => {
+          const y = h._3 && !$._3 ? F($._1, $._2, !0) : $;
+          return e((N) => e((T) => {
+            const w = n._3 && !y._3 ? F(y._1, y._2, !0) : y;
+            return t(
+              w,
+              e,
+              r,
+              o,
+              (k, L) => e((G) => i(w._3 && !k._3 ? F(k._1, k._2, !0) : k, p))
+            );
+          }));
+        })
+      );
+    }))
+  )))));
+})(), ov = (t) => {
+  const n = mT(t)(rv);
   if (n.tag === "Left")
-    return kt("Left", { msg: n._1._1, line: n._1._2.line, column: n._1._2.column });
+    return Et("Left", { msg: n._1._1, line: n._1._2.line, column: n._1._2.column });
   if (n.tag === "Right")
-    return kt("Right", n._1);
+    return Et("Right", n._1);
   f();
-}, LN = (t) => {
-  const n = wN(t);
+}, iv = (t) => {
+  const n = ov(t);
   if (n.tag === "Left")
-    return kt("Left", n._1.msg);
+    return Et("Left", n._1.msg);
   if (n.tag === "Right")
-    return kt("Right", n._1);
+    return Et("Right", n._1);
   f();
 };
-function kN(t, n, e, r) {
+function sv(t, n, e, r) {
   if (typeof window < "u") {
     var o = window[e];
     if (o != null && r instanceof o)
@@ -16017,7 +19607,7 @@ function kN(t, n, e, r) {
   }
   return t;
 }
-function _o(t) {
+function si(t) {
   return function(n) {
     return function(e) {
       return function() {
@@ -16026,60 +19616,106 @@ function _o(t) {
     };
   };
 }
-const bN = function() {
+const uv = function() {
   return window;
 };
-function EN(t) {
+function cv(t) {
   return function(n) {
     return function() {
       return n.requestAnimationFrame(t);
     };
   };
 }
-const xN = (t) => t, CN = (t) => () => t.clientWidth || 0, SN = () => window.devicePixelRatio || 1, GN = (t, n) => {
+const av = (t) => t, fv = (t) => () => t.clientWidth || 0, gv = () => window.devicePixelRatio || 1, lv = (t, n) => {
   n.innerHTML = t;
-}, Zu = (t, n, e) => {
+}, Ws = (t, n, e) => {
   t.style.setProperty(n, e);
-}, IN = (t) => (n) => t === n, pf = (t) => t, $f = (t) => (n) => {
-  const e = pt.compare(t)(n);
+}, _v = (t) => (n) => t === n, Jl = (t) => t, Tl = (t, n, e) => ({ tag: t, _1: n, _2: e }), vl = (t) => (n) => {
+  const e = ft.compare(t)(n);
   if (e === "LT" || e === "EQ")
     return t;
   if (e === "GT")
     return n;
   f();
-}, PN = (t) => (n) => {
-  const e = pt.compare(t)(n);
+}, dv = (t) => (n) => {
+  const e = ft.compare(t)(n);
   if (e === "LT")
     return n;
   if (e === "EQ" || e === "GT")
     return t;
   f();
-}, AN = /* @__PURE__ */ pf("CanvasRenderer"), RN = /* @__PURE__ */ pf("SvgRenderer"), FN = (t) => (n) => {
-  const e = t - n * ct(ce(lc(t / n)));
+}, hv = /* @__PURE__ */ Tl("AutoSize"), cf = /* @__PURE__ */ Jl("CanvasRenderer"), pv = /* @__PURE__ */ Jl("SvgRenderer"), $v = (t) => (n) => {
+  const e = t - n * nt($n(Ne(t / n)));
   return n <= 0 ? 0 : e < 0 ? e + n : e;
-}, BN = (t) => J((n) => (e) => {
+}, mv = (t) => x((n) => (e) => {
   const r = t(e);
   return () => (n(), r());
 })(() => {
-}), QN = (t) => {
-  const n = LN(t);
+}), wl = () => Q_() / 1e3, Ds = (t) => (n) => (e) => (r) => (o) => (i) => (s) => (u) => (c) => (a) => {
+  const g = Mn(s.layout), _ = R1(s.layout), d = { center: { x: _.x + _.w / 2, y: g.y + g.h / 2 }, zoom: Mu(s.layout)(g)(0) }, l = Xu(s.layout)(d), h = () => {
+    const N = wl(), T = c.value;
+    return c.value = N, T === 0 ? 0 : N - T;
+  }, $ = cp(s)(vl(a)(s.totalDuration)), p = i ? $ : { ...$, levels: z((N) => ({ ...N, state: { ...N.state, frameTitle: "" } }))($.levels) }, m = s.dives.length === 0 && (l.w + 48) * 1.0909090909090908 <= 1100 && (l.h + 48) * 1.0909090909090908 <= 1400, y = m ? { ...p, camera: d, levels: z((N) => ({ ...N, state: { ...N.state, camera: d } }))(p.levels) } : p;
+  if (n === "CanvasRenderer")
+    return () => {
+      const N = h(), T = av(t), w = Vr({ padding: 8, outputAspect: J })(y), k = (() => {
+        if (e.tag === "FixedSize")
+          return { w: e._1, h: e._2 };
+        if (e.tag === "AutoSize") {
+          if (m)
+            return { w: w.vw * 1.0909090909090908, h: w.vh * 1.0909090909090908 };
+          const R = fv(t)();
+          return { w: R, h: w.vw <= 0 ? R : R * w.vh / w.vw };
+        }
+        f();
+      })(), L = gv(), G = k.w * L, D = k.h * L, Y = D_(T)(), X = H_(T)(), P = O_(T)(G);
+      Y !== G && P();
+      const B = z_(T)(D);
+      if (X !== D && B(), Ws(t, "height", un($n(sr(k.h))) + "px"), e.tag === "FixedSize")
+        Ws(t, "width", un($n(sr(k.w))) + "px");
+      else if (e.tag === "AutoSize") {
+        const R = un($n(sr(k.w))) + "px";
+        m && Ws(t, "width", R);
+      } else
+        f();
+      const tt = W_(T)();
+      or(tt)(), li(tt)({ scaleX: L, scaleY: L })();
+      const ct = u.value, q = hJ(r)(o)(tt)({ width: k.w, height: k.h })(y)(N)(ct)();
+      return u.value = q, ir(tt)();
+    };
+  if (n === "SvgRenderer")
+    return () => {
+      const N = h(), T = u.value, w = AJ((() => {
+        if (e.tag === "AutoSize")
+          return J;
+        if (e.tag === "FixedSize")
+          return e._1 <= 0 || e._2 <= 0 ? J : v("Just", e._1 / e._2);
+        f();
+      })())(r)(o)(y)(N)(T);
+      return u.value = w.springs, si("viewBox")(w.parts.viewBox)(t)(), si("preserveAspectRatio")("xMidYMid meet")(t)(), e.tag === "FixedSize" ? (si("width")(un($n(sr(e._1))))(t)(), si("height")(un($n(sr(e._2))))(t)()) : e.tag === "AutoSize" || f(), lv(w.parts.body, t);
+    };
+  f();
+}, yv = (t) => {
+  const n = iv(t);
   if (n.tag === "Left")
-    return kt("Left", n._1);
+    return Et("Left", n._1);
   if (n.tag === "Right") {
-    const e = Bm(n._1);
+    const e = _l(n._1)(ll)._1;
     if (e.tag === "Left")
-      return kt("Left", e._1.msg);
+      return Et("Left", e._1.msg);
     if (e.tag === "Right")
-      return kt("Right", e._1);
+      return Et("Right", e._1);
   }
   f();
-}, vi = (t) => (n) => {
-  const e = ln((r) => r.startT <= n && n < r.endT)(t.spans);
+}, Hs = (t) => (n) => {
+  const e = jt((r) => r.startT <= n && n < r.endT)(t.spans);
   if (e.tag === "Just") {
     if (e._1.scene.tag === "Structural")
       return e._1.scene._1.to;
     if (e._1.scene.tag === "DataFlow")
       return e._1.scene._1.keyframe;
+    if (e._1.scene.tag === "EnterNode" || e._1.scene.tag === "ExitNode")
+      return "";
     f();
   }
   if (e.tag === "Nothing") {
@@ -16089,132 +19725,86 @@ const xN = (t) => t, CN = (t) => () => t.clientWidth || 0, SN = () => window.dev
         return t.spans[r].scene._1.to;
       if (t.spans[r].scene.tag === "DataFlow")
         return t.spans[r].scene._1.keyframe;
+      if (t.spans[r].scene.tag === "EnterNode" || t.spans[r].scene.tag === "ExitNode")
+        return "";
       f();
     }
     return "";
   }
   f();
-}, DN = (t) => (n) => {
-  if (n.tag === "Nothing")
-    return t.viewBox;
-  if (n.tag === "Just") {
-    const e = n._1.w / n._1.h, r = t.vw / e, o = t.vh * e, i = t.vw / t.vh;
-    return n._1.w <= 0 || n._1.h <= 0 || t.vw <= 0 || t.vh <= 0 ? t.viewBox : i > e ? Mn(Xn("Fixed", Un(0)(20)(2)))(t.vx) + " " + Mn(Xn(
-      "Fixed",
-      Un(0)(20)(2)
-    ))(t.vy - (r - t.vh) / 2) + " " + Mn(Xn("Fixed", Un(0)(20)(2)))(t.vw) + " " + Mn(Xn(
-      "Fixed",
-      Un(0)(20)(2)
-    ))(r) : i < e ? Mn(Xn("Fixed", Un(0)(20)(2)))(t.vx - (o - t.vw) / 2) + " " + Mn(Xn(
-      "Fixed",
-      Un(0)(20)(2)
-    ))(t.vy) + " " + Mn(Xn("Fixed", Un(0)(20)(2)))(o) + " " + Mn(Xn(
-      "Fixed",
-      Un(0)(20)(2)
-    ))(t.vh) : t.viewBox;
-  }
-  f();
-}, Ti = (t) => (n) => (e) => (r) => (o) => (i) => (s) => (u) => (c) => {
-  const a = vl(i)($f(c)(i.totalDuration));
-  if (n === "CanvasRenderer")
-    return () => {
-      const g = pc(), l = u.value;
-      u.value = g;
-      const d = xN(t), _ = Sc(i.layout)(a.camera), h = _.w + 48, p = _.h + 48, $ = (() => {
-        if (e.tag === "Just")
-          return { w: e._1.w, h: e._1.h };
-        if (e.tag === "Nothing") {
-          const U = CN(t)();
-          return { w: U, h: h <= 0 ? U : U * p / h };
-        }
-        f();
-      })(), m = SN(), N = $.w * m, v = $.h * m, w = Sg(d)(), y = Gg(d)(), k = Ig(d)(N);
-      w !== N && k();
-      const E = Pg(d)(v);
-      y !== v && E(), Zu(t, "height", an(ce(jr($.h))) + "px"), e.tag === "Just" ? Zu(t, "width", an(ce(jr($.w))) + "px") : e.tag === "Nothing" || f();
-      const I = Cg(d)();
-      hr(I)(), ss(I)({ scaleX: m, scaleY: m })();
-      const D = s.value, z = j$(r)(o)(I)({ width: $.w, height: $.h })(i.layout)(a)(l === 0 ? 0 : (g - l) / 1e3)(D)();
-      return s.value = z, pr(I)();
-    };
-  if (n === "SvgRenderer") {
-    const g = fm(r)(o)(i.layout)(a), l = _o("viewBox")(DN(g)(e))(t);
-    return () => (l(), _o("preserveAspectRatio")("xMidYMid meet")(t)(), e.tag === "Just" ? (_o("width")(an(ce(jr(e._1.w))))(t)(), _o("height")(an(ce(jr(e._1.h))))(t)()) : e.tag === "Nothing" || f(), GN(g.body, t));
-  }
-  f();
-}, WN = (t) => (n) => (e) => (r) => (o) => (i) => () => {
-  let s = 1, u = !0, c = !1, a = 0, g = 0;
-  const l = { value: Q }, d = { value: 0 };
-  let _ = !1, h = [];
-  Ti(t)(e)(r)(o)(i)(n)(l)(d)(0)();
-  const p = (y) => () => {
-    const k = h, E = u, I = { time: y, keyframe: vi(n)(y), playing: E };
-    return BN((D) => D(I))(k)();
-  }, $ = () => (u = !1, p(a)()), m = () => {
-    if (!_ && (c = !1, u)) {
-      const E = pc(), I = g;
-      g = E;
-      const D = s, z = a, U = FN(I === 0 ? z + 0 * D : z + (E - I) / 1e3 * D)(n.totalDuration + 0.8);
-      return a = U, Ti(t)(e)(r)(o)(i)(n)(l)(d)(U)(), p(U)(), N();
+}, Nv = { ...hd, tokenZoomFloor: 1, minZoom: 1.6, maxZoom: 3.2 }, xv = (t) => (n) => (e) => (r) => (o) => (i) => (s) => () => {
+  let u = 1, c = !0, a = !1, g = 0, _ = 0;
+  const d = { value: A }, l = { value: 0 };
+  let h = !1, $ = [];
+  Ds(t)(e)(r)(o)(i)(s)(n)(d)(l)(0)();
+  const p = (k) => () => {
+    const L = $, G = c, D = { time: k, keyframe: Hs(n)(k), playing: G };
+    return mv((Y) => Y(D))(L)();
+  }, m = () => (c = !1, p(g)()), y = () => {
+    if (!h && (a = !1, c)) {
+      const G = wl(), D = _;
+      _ = G;
+      const Y = u, X = g, P = $v(D === 0 ? X + 0 * Y : X + (G - D) * Y)(n.totalDuration + 0.8);
+      return g = P, Ds(t)(e)(r)(o)(i)(s)(n)(d)(l)(P)(), p(P)(), N();
     }
   }, N = () => {
-    if (!_ && !c) {
-      c = !0;
-      const E = bN();
-      EN(m)(E)();
+    if (!h && !a) {
+      a = !0;
+      const G = uv();
+      cv(y)(G)();
     }
-  }, v = () => (g = 0, u = !0, N()), w = () => (u || v(), p(a)());
-  return v(), {
+  }, T = () => (_ = 0, c = !0, N()), w = () => (c || T(), p(g)());
+  return T(), {
     play: w,
-    pause: $,
-    toggle: () => u ? $() : w(),
-    seek: (y) => {
-      const k = PN(0)($f(n.totalDuration)(y));
-      return () => (a = k, g = 0, Ti(t)(e)(r)(o)(i)(n)(l)(d)(k)(), p(k)());
+    pause: m,
+    toggle: () => c ? m() : w(),
+    seek: (k) => {
+      const L = dv(0)(vl(n.totalDuration)(k));
+      return () => (g = L, _ = 0, Ds(t)(e)(r)(o)(i)(s)(n)(d)(l)(L)(), p(L)());
     },
-    setSpeed: (y) => () => s = y,
-    currentTime: () => a,
+    setSpeed: (k) => () => u = k,
+    currentTime: () => g,
     currentKeyframe: () => {
-      const y = a;
-      return vi(n)(y);
+      const k = g;
+      return Hs(n)(k);
     },
-    isPlaying: () => u,
+    isPlaying: () => c,
     duration: n.totalDuration,
-    subscribe: (y) => () => {
-      h = gn(h)(y);
-      const E = a, I = u;
-      y({ time: E, keyframe: vi(n)(E), playing: I })();
-      const D = fc((z) => !IN(z)(y));
+    subscribe: (k) => () => {
+      $ = Dt($)(k);
+      const G = g, D = c;
+      k({ time: G, keyframe: Hs(n)(G), playing: D })();
+      const Y = kf((X) => !_v(X)(k));
       return () => {
-        h = D(h);
+        $ = Y($);
       };
     },
-    destroy: () => _ = !0
+    destroy: () => h = !0
   };
-}, qN = (t) => (n) => (e) => (r) => (o) => (i) => {
-  const s = QN(n);
-  if (s.tag === "Left")
-    return () => kt("Left", s._1);
-  if (s.tag === "Right") {
-    const u = s._1, c = Sp(u);
+}, Jv = (t) => (n) => (e) => (r) => (o) => (i) => (s) => {
+  const u = yv(n);
+  if (u.tag === "Left")
+    return () => Et("Left", u._1);
+  if (u.tag === "Right") {
+    const c = u._1, a = cg(c);
     return () => {
-      const a = c(), g = X_(X0)(D_)(u)(Rp(a)(u));
-      if (g.tag === "Left")
-        return kt("Left", "precompute failed");
-      if (g.tag === "Right") {
-        const l = WN(t)(g._1)(e)(r)(o)(i)();
-        return kt("Right", l);
+      const g = a(), _ = ag(c)(), d = Nh(Nv)(ah)(c)(fg(g)(_)(c));
+      if (d.tag === "Left")
+        return Et("Left", "precompute failed");
+      if (d.tag === "Right") {
+        const l = xv(t)(d._1)(e)(r)(o)(i)(s)();
+        return Et("Right", l);
       }
       f();
     };
   }
   f();
-}, tc = mn.createElement;
-mn.Fragment;
-function Ms(t) {
-  return (n) => Array.isArray(n.children) ? tc.apply(null, [t, n].concat(n.children)) : tc(t, n);
+}, af = In.createElement;
+In.Fragment;
+function wc(t) {
+  return (n) => Array.isArray(n.children) ? af.apply(null, [t, n].concat(n.children)) : af(t, n);
 }
-function HN(t) {
+function Tv(t) {
   return (n) => {
     const e = (r, o) => {
       var i = null;
@@ -16227,183 +19817,193 @@ function HN(t) {
       })), Object.assign({ ref: o }, r, i, s);
     };
     return () => {
-      const r = mn.forwardRef(
+      const r = In.forwardRef(
         (o, i) => t(n)(e(o, i))
       );
       return r.displayName = n, r;
     };
   };
 }
-const mf = /* @__PURE__ */ HN(Ms), ON = /* @__PURE__ */ mf("canvas")(), zN = (t, n) => {
-  const e = mn.useRef(n);
+const kl = /* @__PURE__ */ Tv(wc), vv = /* @__PURE__ */ kl("canvas")(), wv = (t, n) => {
+  const e = In.useRef(n);
   return e.current !== n && !t(e.current, n) && (e.current = n), e.current;
 };
-mn.memo;
-mn.memo;
-function nc(t, n) {
-  const [e, r] = mn.useState(
+In.memo;
+In.memo;
+function ff(t, n) {
+  const [e, r] = In.useState(
     typeof n == "function" ? () => n : n
   );
   return r.hasOwnProperty("$$reactBasicHooks$$cachedSetState") || (r.$$reactBasicHooks$$cachedSetState = (o) => () => r(o)), t(e, r.$$reactBasicHooks$$cachedSetState);
 }
-function VN(t, n, e) {
-  const r = zN(t, n);
-  mn.useEffect(e, [r]);
+function bl(t, n, e) {
+  const r = wv(t, n);
+  In.useEffect(e, [r]);
 }
-const YN = mn.useRef;
-function XN(t) {
+const kv = In.useRef;
+function bv(t) {
   return t.current;
 }
-mn.useContext;
-mn.useDebugValue;
-mn.useId;
-mn.useDeferredValue;
-mn.useSyncExternalStore;
-mn.useSyncExternalStore;
-function UN(t, n) {
+In.useContext;
+In.useDebugValue;
+In.useId;
+In.useDeferredValue;
+In.useSyncExternalStore;
+In.useSyncExternalStore;
+function Lv(t, n) {
   return n.displayName = t, n.toString = () => t, n;
 }
-mn.useEffectEvent || mn.experimental_useEffectEvent;
-const MN = (t) => (n) => (e) => () => VN((r, o) => t.eq(r)(o), n, e), KN = /* @__PURE__ */ $0(XN), jN = {
+In.useEffectEvent || In.experimental_useEffectEvent;
+const Ev = (t) => (n) => (e) => () => bl((r, o) => t.eq(r)(o), n, e), Sv = /* @__PURE__ */ N1(bv), Cv = {
   map: (t) => (n) => () => {
     const e = n();
     return t(e);
   }
-}, ZN = (t) => {
+}, Pv = (t) => {
   const n = {
     apply: (e) => (r) => () => {
       const o = e(), i = r();
       return o(i);
     },
-    Functor0: () => jN
+    Functor0: () => Cv
   };
   return { pure: (e) => () => e, Apply0: () => n };
-}, t2 = /* @__PURE__ */ MN({
-  eq: (t) => (n) => t._1 === n._1 && t._2._1 === n._2._1 && t._2._2._1 === n._2._2._1 && t._2._2._2._1 === n._2._2._2._1 && (t._2._2._2._2.tag === "Nothing" ? n._2._2._2._2.tag === "Nothing" : t._2._2._2._2.tag === "Just" && n._2._2._2._2.tag === "Just" && t._2._2._2._2._1.h === n._2._2._2._2._1.h && t._2._2._2._2._1.w === n._2._2._2._2._1.w)
-}), Nf = ZN().pure, n2 = /* @__PURE__ */ Ms(ON), e2 = /* @__PURE__ */ mf("svg")(), Jf = (t) => (n) => (e) => (r) => (o) => () => {
-  const i = YN(wf), s = nc((a, g) => L(a, g), T), u = s._1, c = nc((a, g) => L(a, g), { time: 0, keyframe: "", playing: !1 });
-  return t2(L(t, L(n, L(e, L(r, o)))))((() => {
-    const a = KN(i);
-    return () => {
-      const g = a(), l = Ye(g, T, Yt), d = (() => {
-        if (l.tag === "Just")
-          return kN(T, Yt, "Element", l._1);
-        if (l.tag === "Nothing")
-          return T;
-        f();
-      })();
-      if (d.tag === "Nothing")
-        return () => {
-        };
-      if (d.tag === "Just") {
-        const _ = qN(d._1)(t)(n === "svg" ? RN : AN)(o)(e === "dark" ? _m : e === "blueprint" ? lm : gm)(r)();
-        if (_.tag === "Left")
-          return Lf("[markgraf] " + _._1)(), () => {
-          };
-        if (_.tag === "Right") {
-          const h = _._1;
-          s._2(($) => b("Just", h))();
-          const p = h.subscribe(($) => c._2((m) => $))();
-          return () => (p(), h.destroy(), s._2(($) => T)());
-        }
+}, Gv = /* @__PURE__ */ Ev({ eq: (t) => (n) => t._1 === n._1 && t._2 === n._2 }), Zr = /* @__PURE__ */ Wi(Oi)(Cl), ku = Pv().pure, Iv = /* @__PURE__ */ wc(vv), Av = {
+  eq: (t) => (n) => (t.renderer === "CanvasRenderer" ? n.renderer === "CanvasRenderer" : t.renderer === "SvgRenderer" && n.renderer === "SvgRenderer") && (t.sizing.tag === "AutoSize" ? n.sizing.tag === "AutoSize" : t.sizing.tag === "FixedSize" && n.sizing.tag === "FixedSize" && t.sizing._1 === n.sizing._1 && t.sizing._2 === n.sizing._2) && t.source === n.source && (t.theme === "Light" ? n.theme === "Light" : t.theme === "Dark" ? n.theme === "Dark" : t.theme === "Blueprint" ? n.theme === "Blueprint" : t.theme === "Whiteboard" ? n.theme === "Whiteboard" : t.theme === "Isometric" && n.theme === "Isometric") && (t.transparency === "PaintBackground" ? n.transparency === "PaintBackground" : t.transparency === "TransparentBackground" && n.transparency === "TransparentBackground")
+}, Fv = /* @__PURE__ */ kl("svg")(), Ll = (t) => (n) => {
+  const e = rr(n.theme, J, qt), r = (() => {
+    if (e.tag === "Nothing")
+      return "light";
+    if (e.tag === "Just")
+      return e._1;
+    f();
+  })(), o = rr(n.renderer, J, qt), i = (() => {
+    if (o.tag === "Nothing")
+      return "canvas";
+    if (o.tag === "Just")
+      return o._1;
+    f();
+  })(), s = r === "light" ? v("Just", tf) : r === "dark" ? v("Just", pJ) : r === "blueprint" ? v("Just", $J) : r === "whiteboard" ? v("Just", mJ) : r === "isometric" ? v("Just", yJ) : J, u = i === "svg" ? v("Just", pv) : i === "canvas" ? v("Just", cf) : J, c = {
+    source: t,
+    renderer: (() => {
+      if (u.tag === "Nothing")
+        return cf;
+      if (u.tag === "Just")
+        return u._1;
+      f();
+    })(),
+    sizing: (() => {
+      const a = rr(n.width, J, qt);
+      if (a.tag === "Just") {
+        const g = rr(n.height, J, qt);
+        if (g.tag === "Just")
+          return Tl("FixedSize", a._1, g._1);
       }
+      return hv;
+    })(),
+    theme: (() => {
+      if (s.tag === "Nothing")
+        return tf;
+      if (s.tag === "Just")
+        return s._1;
       f();
-    };
-  })())(), Nf({
-    elementRef: i,
-    time: c._1.time,
-    keyframe: c._1.keyframe,
-    playing: c._1.playing,
-    duration: u.tag === "Just" ? u._1.duration : 0,
-    ready: (() => {
-      if (u.tag === "Just")
-        return !0;
-      if (u.tag === "Nothing")
+    })(),
+    transparency: (() => {
+      const a = rr(n.transparent, J, qt);
+      if (a.tag === "Nothing")
         return !1;
+      if (a.tag === "Just")
+        return a._1;
       f();
-    })(),
-    play: (() => {
-      if (u.tag === "Just")
-        return u._1.play;
-      if (u.tag === "Nothing")
-        return () => {
+    })() ? xJ : NJ
+  };
+  return () => {
+    const a = kv(Pl), g = ff((h, $) => b(h, $), J), _ = g._1, d = ff((h, $) => b(h, $), { time: 0, keyframe: "", playing: !1 });
+    Gv(b(i, r))((() => {
+      const h = kc("[markgraf] unknown renderer " + Os(i) + ", defaulting to canvas"), $ = (() => {
+        if (u.tag === "Nothing")
+          return !0;
+        if (u.tag === "Just")
+          return !1;
+        f();
+      })() ? h : () => {
+      };
+      return () => {
+        $();
+        const p = kc("[markgraf] unknown theme " + Os(r) + ", defaulting to light");
+        return (() => {
+          if (s.tag === "Nothing")
+            return !0;
+          if (s.tag === "Just")
+            return !1;
+          f();
+        })() && p(), () => {
         };
-      f();
-    })(),
-    pause: (() => {
-      if (u.tag === "Just")
-        return u._1.pause;
-      if (u.tag === "Nothing")
-        return () => {
-        };
-      f();
-    })(),
-    toggle: (() => {
-      if (u.tag === "Just")
-        return u._1.toggle;
-      if (u.tag === "Nothing")
-        return () => {
-        };
-      f();
-    })(),
-    seek: (a) => {
-      if (u.tag === "Just")
-        return u._1.seek(a);
-      if (u.tag === "Nothing")
-        return () => {
-        };
-      f();
-    },
-    setSpeed: (a) => {
-      if (u.tag === "Just")
-        return u._1.setSpeed(a);
-      if (u.tag === "Nothing")
-        return () => {
-        };
-      f();
-    }
-  })();
-}, r2 = /* @__PURE__ */ UN(
+      };
+    })())();
+    const l = Sv(a);
+    return bl(
+      (h, $) => Av.eq(h)($),
+      c,
+      () => {
+        const h = l(), $ = rr(h, J, qt), p = (() => {
+          if ($.tag === "Just")
+            return sv(J, qt, "Element", $._1);
+          if ($.tag === "Nothing")
+            return J;
+          f();
+        })();
+        if (p.tag === "Nothing")
+          return () => {
+          };
+        if (p.tag === "Just") {
+          const m = Jv(p._1)(c.source)(c.renderer)(c.sizing)(c.theme)(c.transparency)(!0)();
+          if (m.tag === "Left")
+            return Fl("[markgraf] " + m._1)(), () => {
+            };
+          if (m.tag === "Right") {
+            const y = m._1;
+            g._2((T) => v("Just", y))();
+            const N = y.subscribe((T) => d._2((w) => T))();
+            return () => (N(), y.destroy(), g._2((T) => J)());
+          }
+        }
+        f();
+      }
+    ), ku({
+      elementRef: a,
+      time: d._1.time,
+      keyframe: d._1.keyframe,
+      playing: d._1.playing,
+      duration: _.tag === "Just" ? _._1.duration : 0,
+      ready: (() => {
+        if (_.tag === "Nothing")
+          return !1;
+        if (_.tag === "Just")
+          return !0;
+        f();
+      })(),
+      play: Zr((h) => h.play)(_),
+      pause: Zr((h) => h.pause)(_),
+      toggle: Zr((h) => h.toggle)(_),
+      seek: (h) => Zr(($) => $.seek(h))(_),
+      setSpeed: (h) => Zr(($) => $.setSpeed(h))(_)
+    })();
+  };
+}, Rv = /* @__PURE__ */ Lv(
   "MarkgrafPlayer",
   (t) => {
-    const n = Ye(t.renderer, T, Yt), e = (() => {
-      if (n.tag === "Nothing")
+    const n = Ll(t.src)({ renderer: t.renderer, width: t.width, height: t.height, theme: t.theme, transparent: t.transparent })(), e = rr(t.renderer, J, qt);
+    return (() => {
+      if (e.tag === "Nothing")
         return "canvas";
-      if (n.tag === "Just")
-        return n._1;
+      if (e.tag === "Just")
+        return e._1;
       f();
-    })(), r = Jf(t.src)(e)((() => {
-      const o = Ye(t.theme, T, Yt);
-      if (o.tag === "Nothing")
-        return "light";
-      if (o.tag === "Just")
-        return o._1;
-      f();
-    })())((() => {
-      const o = Ye(t.transparent, T, Yt);
-      if (o.tag === "Nothing")
-        return !1;
-      if (o.tag === "Just")
-        return o._1;
-      f();
-    })())((() => {
-      const o = Ye(t.width, T, Yt);
-      if (o.tag === "Just") {
-        const i = Ye(t.height, T, Yt);
-        if (i.tag === "Just")
-          return b("Just", { w: o._1, h: i._1 });
-        if (i.tag === "Nothing")
-          return T;
-        f();
-      }
-      if (o.tag === "Nothing")
-        return T;
-      f();
-    })())();
-    return Nf(e === "svg" ? Ms(e2)({ className: "markgraf-player", ref: r.elementRef }) : n2({ className: "markgraf-player", ref: r.elementRef }))();
+    })() === "svg" ? ku(wc(Fv)({ className: "markgraf-player", ref: n.elementRef }))() : ku(Iv({ className: "markgraf-player", ref: n.elementRef }))();
   }
-), i2 = (t, n) => Jf(t)(n?.renderer ?? "canvas")(n?.theme ?? "light")(n?.transparent ?? !1), s2 = r2;
+), Qv = (t, n) => Ll(t)(n ?? {}), Wv = Rv;
 export {
-  s2 as MarkgrafPlayer,
-  i2 as useMarkgraf
+  Wv as MarkgrafPlayer,
+  Qv as useMarkgraf
 };
