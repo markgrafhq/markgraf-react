@@ -51,6 +51,8 @@ export interface UseMarkgrafOptions<R extends "canvas" | "svg" = "canvas"> {
   theme?: "light" | "dark" | "blueprint";
   /** When `true`, skip the background fill so the page bg shows through. */
   transparent?: boolean;
+  /** When `true`, the player holds on its current frame; `false` resumes. */
+  paused?: boolean;
 }
 
 /**
@@ -88,14 +90,8 @@ export interface MarkgrafPlayerProps {
   transparent?: boolean;
   width?: number;
   height?: number;
-  /**
-   * Map of keyframe names to callbacks.  Each callback fires once when the
-   * player enters that keyframe (not on every animation frame).  Callbacks
-   * registered when the player is already in the matching frame fire
-   * immediately.  Use `useMarkgraf` if you need more control (e.g. pausing
-   * from the callback).
-   */
-  onFrameEnter?: Record<string, () => void>;
+  /** When `true`, the player holds on its current frame; `false` resumes. */
+  paused?: boolean;
 }
 
 /**
