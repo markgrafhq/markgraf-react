@@ -2,7 +2,7 @@
 import { MarkgrafPlayer } from "@markgrafhq/markgraf-react";
 
 const src = `seed 1
-frame v1 {
+keyframe v1 {
   +node a "A"
   +node b "B"
   +edge a b

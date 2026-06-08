@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { MarkgrafPlayer } from "@markgrafhq/markgraf-react";
 
 const requestResponse = `seed 1
-frame v1 {
+keyframe v1 {
   +node client "Client"
   +node api "API"
   +edge client api
@@ -10,7 +10,7 @@ frame v1 {
 }`;
 
 const cacheFlow = `seed 1
-frame v1 {
+keyframe v1 {
   +node app "App"
   +node cache "Cache"
   +node db "Database"
