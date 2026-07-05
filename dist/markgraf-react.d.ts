@@ -82,8 +82,13 @@ export function useMarkgraf(
 
 export interface MarkgrafPlayerProps {
   src: string;
-  /** `"canvas"` (default) or `"svg"`. */
-  renderer?: "canvas" | "svg";
+  /**
+   * `"canvas"` (default), `"svg"`, or `"sdf"` (alias `"webgl"`) — the WebGL
+   * raymarched 3D renderer.  The SDF renderer is self-driving: it ignores
+   * `width`/`height` (it fills its container) and isn't available through the
+   * lower-level `useMarkgraf` hook.
+   */
+  renderer?: "canvas" | "svg" | "sdf" | "webgl";
   /** Visual theme. `"light"` (default), `"dark"`, or `"blueprint"`. */
   theme?: "light" | "dark" | "blueprint";
   /** When `true`, skip the background fill so the page bg shows through. */
