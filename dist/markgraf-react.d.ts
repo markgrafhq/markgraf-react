@@ -3,6 +3,51 @@
 
 import type { FC, MutableRefObject } from "react";
 
+export type MarkgrafCueKind = "step" | "tokenLine";
+export type MarkgrafPlaybackDirection = "auto" | "forward" | "backward";
+
+export interface MarkgrafPlaybackOptions {
+  direction?: MarkgrafPlaybackDirection;
+  speed?: number;
+  duration?: number;
+  loop?: boolean;
+  stopAt?: MarkgrafCueKind[];
+}
+
+export interface MarkgrafCueBase {
+  readonly id: string;
+  readonly index: number;
+  readonly kind: MarkgrafCueKind;
+  readonly time: number;
+  readonly endTime: number;
+  readonly path: readonly string[];
+}
+
+export interface MarkgrafStepCue extends MarkgrafCueBase {
+  readonly kind: "step";
+  readonly name: string;
+}
+
+export interface MarkgrafTokenLineCue extends MarkgrafCueBase {
+  readonly kind: "tokenLine";
+  readonly tokenIndex: number;
+  readonly lineIndex: number;
+  readonly text: string;
+  readonly from: string;
+  readonly to: string;
+}
+
+export type MarkgrafCue = MarkgrafStepCue | MarkgrafTokenLineCue;
+
+export interface MarkgrafCompleteEvent {
+  readonly reason: "target" | "boundary" | string;
+  readonly direction: "forward" | "backward";
+  readonly targetId: string;
+  readonly targetStep: string;
+  readonly reached: boolean;
+  readonly time: number;
+}
+
 /**
  * Reactive view of a mounted markgraf player.  `time`, `keyframe`, and
  * `playing` update on every animation frame; the imperative methods are
@@ -27,21 +72,25 @@ export interface MarkgrafApi<E extends Element = HTMLCanvasElement> {
   readonly duration: number;
   /** `true` once parse + layout + first render have completed. */
   readonly ready: boolean;
-  play(): void;
+  readonly cues: readonly MarkgrafCue[];
+  readonly steps: readonly MarkgrafStepCue[];
+  play(options?: MarkgrafPlaybackOptions): void;
+  playWith(options?: MarkgrafPlaybackOptions): void;
   pause(): void;
   toggle(): void;
   /** Clamped to `[0, duration]`.  Pauses the player. */
   seek(seconds: number): void;
+  seekCue(cueId: string): void;
+  seekStep(stepName: string): void;
+  playToCue(cueId: string, options?: MarkgrafPlaybackOptions): void;
+  playToStep(stepName: string, options?: MarkgrafPlaybackOptions): void;
+  playNext(options?: MarkgrafPlaybackOptions): void;
+  playPrevious(options?: MarkgrafPlaybackOptions): void;
   /** `1.0` is normal playback speed. */
   setSpeed(speed: number): void;
-  /**
-   * Register a callback that fires every time the player enters the named
-   * keyframe.  Fires immediately if already in that frame.  Returns an
-   * unsubscribe function.
-   */
-  onFrameEnter(frameName: string, callback: () => void): () => void;
-  /** Seek to the start of the named keyframe.  No-op if the frame doesn't exist. */
-  seekFrame(frameName: string): void;
+  onCueEnter(callback: (cue: MarkgrafCue) => void): () => void;
+  onStepEnter(stepName: string, callback: (cue: MarkgrafStepCue) => void): () => void;
+  onComplete(callback: (event: MarkgrafCompleteEvent) => void): () => void;
 }
 
 export interface UseMarkgrafOptions<R extends "canvas" | "svg" = "canvas"> {
