@@ -137,7 +137,7 @@ const Xn = (t) => (n) => t, D = function(t) {
     return (e) => Yt.foldr((r) => (o) => t.Semigroup0().append(e(r))(o))(n);
   }
 }, wi = null;
-function Sn(t, n, e) {
+function kn(t, n, e) {
   return t == null ? n : e(t);
 }
 const b = (t, n) => ({ tag: "Tuple", _1: t, _2: n }), Vn = (t) => (n) => b(t, n), Ga = (t) => t._2, Ia = (t) => t._1, E$ = function(t) {
@@ -20698,7 +20698,7 @@ const h_ = (t) => (n) => (e) => (r) => {
 }, li = (t) => ({ pure: (n) => (e) => t.Applicative0().pure(b(n, e)), Apply0: () => $m(t) }), ym = (t) => {
   const n = { Applicative0: () => li(t), Bind1: () => fi(t) };
   return { state: (e) => (r) => t.Applicative0().pure(e(r)), Monad0: () => n };
-}, Mo = (t, n) => ({ tag: t, _1: n }), kr = (t, n) => ({ tag: t, _1: n }), _c = (t) => t, pr = (t, n) => ({ tag: t, _1: n }), Pl = (t) => t, kn = /* @__PURE__ */ ym(Fe), H5 = (t) => (e) => {
+}, Mo = (t, n) => ({ tag: t, _1: n }), kr = (t, n) => ({ tag: t, _1: n }), _c = (t) => t, pr = (t, n) => ({ tag: t, _1: n }), Pl = (t) => t, Sn = /* @__PURE__ */ ym(Fe), H5 = (t) => (e) => {
   let r = e, o = !0, i;
   for (; o; ) {
     const s = r;
@@ -20750,7 +20750,7 @@ const h_ = (t) => (n) => (e) => (r) => {
     f();
   }
   return i;
-}, O5 = /* @__PURE__ */ T((t) => (n) => tt(F)(n)()(t))(G), Ut = /* @__PURE__ */ fi(Fe), te = kn.state((t) => b(t, t)), _n = /* @__PURE__ */ li(Fe), xm = (t) => (e) => {
+}, O5 = /* @__PURE__ */ T((t) => (n) => tt(F)(n)()(t))(G), Ut = /* @__PURE__ */ fi(Fe), te = Sn.state((t) => b(t, t)), _n = /* @__PURE__ */ li(Fe), xm = (t) => (e) => {
   let r = e, o = !0, i;
   for (; o; ) {
     const s = r;
@@ -20943,7 +20943,7 @@ const h_ = (t) => (n) => (e) => (r) => {
   return (e) => T((r) => (o) => Yn(n, Xn, r, e(o)))(G);
 }, Zf = /* @__PURE__ */ Nm(F), t0 = /* @__PURE__ */ Nm(F), aL = (t) => {
   const n = t.span;
-  return kn.state((e) => b(void 0, { ...e, currentSpan: n }));
+  return Sn.state((e) => b(void 0, { ...e, currentSpan: n }));
 }, of = (t) => (n) => ({ structural: [...t.structural, ...n.structural], flow: t.flow || n.flow, dives: [...t.dives, ...n.dives] }), cL = (t) => (n) => n.kind === "Animated" || H5(n.id)(t), hc = {
   graphNodes: [],
   graphEdges: G,
@@ -20991,7 +20991,7 @@ const h_ = (t) => (n) => (e) => (r) => {
   if (t.kind.tag === "FillNodeWithoutTransition")
     return G;
   f();
-}, hL = (t) => t0(dL)(t.events), dr = (t) => kn.state((n) => b(
+}, hL = (t) => t0(dL)(t.events), dr = (t) => Sn.state((n) => b(
   void 0,
   (() => {
     if (n.error.tag === "Just")
@@ -21007,7 +21007,7 @@ const h_ = (t) => (n) => (e) => (r) => {
   if (n.error.tag === "Just")
     return _n.pure();
   if (n.error.tag === "Nothing")
-    return xm(t.node)(n.interiorOf) ? dr("node " + t.node + " has more than one `inside` block") : kn.state((e) => b(void 0, { ...e, interiorOf: tt(F)(t.node)(t.doc)(e.interiorOf) }));
+    return xm(t.node)(n.interiorOf) ? dr("node " + t.node + " has more than one `inside` block") : Sn.state((e) => b(void 0, { ...e, interiorOf: tt(F)(t.node)(t.doc)(e.interiorOf) }));
   f();
 })), mL = (t) => Ut.bind(te)((n) => {
   const e = t.tag === "Just" && t._1 !== "" ? t._1 : "kf-" + an(n.kfCounter);
@@ -21019,8 +21019,8 @@ const h_ = (t) => (n) => (e) => (r) => {
     kfCounter: n.kfCounter + 1 | 0,
     currentKf: w("Just", e)
   };
-  return kn.state((o) => b(void 0, r));
-}), we = (t) => (n) => Ut.bind(kn.state((e) => b(void 0, { ...e, currentSpan: t })))(() => dr(n)), V_ = (t) => (n) => Ut.bind(te)((e) => W5(n)(e.stepNames) ? we(t)("duplicate step name " + n) : kn.state((r) => b(
+  return Sn.state((o) => b(void 0, r));
+}), we = (t) => (n) => Ut.bind(Sn.state((e) => b(void 0, { ...e, currentSpan: t })))(() => dr(n)), V_ = (t) => (n) => Ut.bind(te)((e) => W5(n)(e.stepNames) ? we(t)("duplicate step name " + n) : Sn.state((r) => b(
   void 0,
   {
     ...r,
@@ -21032,20 +21032,20 @@ const h_ = (t) => (n) => (e) => (r) => {
     const n = t.ops._1;
     return Ut.bind((() => {
       const e = n.span;
-      return kn.state((r) => b(void 0, { ...r, currentSpan: e }));
+      return Sn.state((r) => b(void 0, { ...r, currentSpan: e }));
     })())(() => n.op.tag === "Step" ? V_(n.span)(n.op._1.name) : dr("step marker frame did not contain a step"));
   }
   if (t.ops.tag === "Seq" && t.ops._1.length === 1 && t.ops._1[0].tag === "Leaf") {
     const n = t.ops._1[0]._1;
     return Ut.bind((() => {
       const e = n.span;
-      return kn.state((r) => b(void 0, { ...r, currentSpan: e }));
+      return Sn.state((r) => b(void 0, { ...r, currentSpan: e }));
     })())(() => n.op.tag === "Step" ? V_(n.span)(n.op._1.name) : dr("step marker frame did not contain a step"));
   }
   return dr("step marker frame did not contain a step");
 }, yL = (t) => Ut.bind((() => {
   const n = t.span;
-  return kn.state((e) => b(void 0, { ...e, currentSpan: n }));
+  return Sn.state((e) => b(void 0, { ...e, currentSpan: n }));
 })())(() => Ut.bind(te)((n) => {
   if (n.error.tag === "Just")
     return _n.pure();
@@ -21058,7 +21058,7 @@ const h_ = (t) => (n) => (e) => (r) => {
   + detail: Detail
 }`);
       const e = t.op._1;
-      return kn.state((r) => b(
+      return Sn.state((r) => b(
         void 0,
         { ...r, enterStack: Lt(r.enterStack)(e.id), scenes: Lt(r.scenes)(rs("EnterNode", e.id)) }
       ));
@@ -21069,7 +21069,7 @@ const h_ = (t) => (n) => (e) => (r) => {
         return dr("`out` without a matching `into`");
       if (e.tag === "Just") {
         const r = e._1.init;
-        return kn.state((o) => b(void 0, { ...o, enterStack: r, scenes: Lt(o.scenes)(Oy) }));
+        return Sn.state((o) => b(void 0, { ...o, enterStack: r, scenes: Lt(o.scenes)(Oy) }));
       }
       f();
     }
@@ -21082,7 +21082,7 @@ const h_ = (t) => (n) => (e) => (r) => {
   if (t.error.tag === "Nothing") {
     if (t.currentKf.tag === "Just") {
       const n = t.currentKf._1;
-      return kn.state((e) => b(void 0, { ...e, scenes: Lt(e.scenes)(rs("Hold", n)) }));
+      return Sn.state((e) => b(void 0, { ...e, scenes: Lt(e.scenes)(rs("Hold", n)) }));
     }
     if (t.currentKf.tag === "Nothing")
       return _n.pure();
@@ -21092,7 +21092,7 @@ const h_ = (t) => (n) => (e) => (r) => {
   const r = "ev-" + an(e.eventCounter);
   return Ut.bind((() => {
     const o = { ...e, eventCounter: e.eventCounter + 1 | 0 };
-    return kn.state((i) => b(void 0, o));
+    return Sn.state((i) => b(void 0, o));
   })())(() => _n.pure({ events: [{ id: r, kind: n, when: t }], firstId: w("Just", r), lastId: w("Just", r) }));
 }), wL = (t) => t.tag === "DataFlow" ? w("Just", t._1) : v, TL = (t) => bt((n) => Al(n)(t.graphEdges))(jt(Gi, q5(t.currEdges))), NL = (t) => (n) => {
   const e = ht((o) => o.from.node === n.id || o.to.node === n.id, TL(t)), r = dc(H1)((o) => (i) => {
@@ -21218,7 +21218,7 @@ const h_ = (t) => (n) => (e) => (r) => {
   return gr(r)(e.currEdges) ? Jr(n.newFrom)(e.currNodes) ? Jr(n.newTo)(e.currNodes) ? r !== o && gr(o)(e.currEdges) ? we((() => {
     const i = 2 < t.operands.length ? t.operands[2] : t.span, s = 3 < t.operands.length ? t.operands[3] : t.span;
     return { line: i.line, column: i.column, endLine: s.endLine, endColumn: s.endColumn };
-  })())("cannot repoint " + n.from + "→" + n.to + " to " + n.newFrom + "→" + n.newTo + ": target edge already exists") : kn.state((i) => b(
+  })())("cannot repoint " + n.from + "→" + n.to + " to " + n.newFrom + "→" + n.newTo + ": target edge already exists") : Sn.state((i) => b(
     void 0,
     {
       ...i,
@@ -21237,7 +21237,7 @@ const h_ = (t) => (n) => (e) => (r) => {
 }), SL = (t) => {
   if (t.op.tag === "AddNode") {
     const n = t.op._1;
-    return Ut.bind(te)((e) => Jr(n.id)(e.currNodes) ? we(0 < t.operands.length ? t.operands[0] : t.span)("cannot add node " + n.id + ": already exists") : kn.state((r) => b(
+    return Ut.bind(te)((e) => Jr(n.id)(e.currNodes) ? we(0 < t.operands.length ? t.operands[0] : t.span)("cannot add node " + n.id + ": already exists") : Sn.state((r) => b(
       void 0,
       {
         ...r,
@@ -21256,7 +21256,7 @@ const h_ = (t) => (n) => (e) => (r) => {
         return we(0 < t.operands.length ? t.operands[0] : t.span)(r._1);
       if (r.tag === "Right") {
         const o = r._1;
-        return kn.state((i) => b(
+        return Sn.state((i) => b(
           void 0,
           {
             ...i,
@@ -21276,7 +21276,7 @@ const h_ = (t) => (n) => (e) => (r) => {
         return we(0 < t.operands.length ? t.operands[0] : t.span)("cannot modify node " + n.id + ": does not exist");
       if (n.label.tag === "Just") {
         const r = n.label._1;
-        return kn.state((o) => b(void 0, { ...o, graphNodes: uL(n.id)(r)(o.graphNodes) }));
+        return Sn.state((o) => b(void 0, { ...o, graphNodes: uL(n.id)(r)(o.graphNodes) }));
       }
       if (n.label.tag === "Nothing")
         return _n.pure();
@@ -21293,7 +21293,7 @@ const h_ = (t) => (n) => (e) => (r) => {
       return gr(i)(e.currEdges) ? we((() => {
         const s = 0 < t.operands.length ? t.operands[0] : t.span, u = 1 < t.operands.length ? t.operands[1] : t.span;
         return { line: s.line, column: s.column, endLine: u.endLine, endColumn: u.endColumn };
-      })())((n.directed ? "cannot add edge " : "cannot add connection ") + (n.directed ? n.from + "→" + n.to : n.from + "--" + n.to) + ": already exists") : kn.state((s) => b(
+      })())((n.directed ? "cannot add edge " : "cannot add connection ") + (n.directed ? n.from + "→" + n.to : n.from + "--" + n.to) + ": already exists") : Sn.state((s) => b(
         void 0,
         {
           ...s,
@@ -21312,7 +21312,7 @@ const h_ = (t) => (n) => (e) => (r) => {
     const n = t.op._1;
     return Ut.bind(te)((e) => {
       const r = n.directed ? n.from + "->" + n.to : n.from <= n.to ? "conn:" + n.from + "--" + n.to : "conn:" + n.to + "--" + n.from;
-      return gr(r)(e.currEdges) ? kn.state((o) => b(void 0, { ...o, currEdges: Hi(F)(r)(o.currEdges) })) : we((() => {
+      return gr(r)(e.currEdges) ? Sn.state((o) => b(void 0, { ...o, currEdges: Hi(F)(r)(o.currEdges) })) : we((() => {
         const o = 0 < t.operands.length ? t.operands[0] : t.span, i = 1 < t.operands.length ? t.operands[1] : t.span;
         return { line: o.line, column: o.column, endLine: i.endLine, endColumn: i.endColumn };
       })())((n.directed ? "cannot delete edge " : "cannot delete connection ") + (n.directed ? n.from + "→" + n.to : n.from + "--" + n.to) + ": does not exist");
@@ -21321,7 +21321,7 @@ const h_ = (t) => (n) => (e) => (r) => {
   return t.op.tag === "RepointEdge" ? kL(t)(t.op._1) : _n.pure();
 }, LL = (t) => Ut.bind((() => {
   const n = t.span;
-  return kn.state((e) => b(void 0, { ...e, currentSpan: n }));
+  return Sn.state((e) => b(void 0, { ...e, currentSpan: n }));
 })())(() => SL(t)), Cm = (t) => (n) => (e) => Ut.bind(Rl(LL)(e))(() => Ut.bind(te)((r) => {
   const o = n.tag === "Just" && n._1 !== "" ? n._1 : "kf-" + an(r.kfCounter);
   if (En((s) => s.id === o, r.keyframes))
@@ -21339,7 +21339,7 @@ const h_ = (t) => (n) => (e) => (r) => {
       f();
     })()
   };
-  return kn.state((s) => b(void 0, i));
+  return Sn.state((s) => b(void 0, i));
 })), j_ = (t) => (n) => {
   const e = Du(n.ops), r = ht(
     (i) => i.op.tag === "AddNode" || i.op.tag === "DelNode" || i.op.tag === "ModNode" || i.op.tag === "AddEdge" || i.op.tag === "DelEdge" || i.op.tag === "RepointEdge",
@@ -21350,7 +21350,7 @@ const h_ = (t) => (n) => (e) => (r) => {
   );
   return 0 < o.length ? Ut.bind((() => {
     const i = o[0].span;
-    return kn.state((s) => b(void 0, { ...s, currentSpan: i }));
+    return Sn.state((s) => b(void 0, { ...s, currentSpan: i }));
   })())(() => dr("still/title blocks hold a still snapshot; they cannot contain movement tokens (`api ~> db`) or dive commands (`into`/`out`)")) : t === "TitleCard" && r.length === 0 ? dr(n.name.tag === "Just" && n.name._1 !== "" ? 'title "' + n.name._1 + '" has an empty body; give it nodes/edges to title, or use a still' : "title has an empty body; give it nodes/edges to title, or use a still") : Ut.bind(Cm(t)(n.name)(r))(() => xL);
 }, EL = (t) => (n) => {
   const e = bt(wL)(n.scenes), r = ht(cL(K5(D((s) => s.keyframe)(e))), n.keyframes), o = cr(F.compare, Zf((s) => s.nodes)(r), Zf(_L)(e)), i = cr(F.compare, t0((s) => s.edges)(r), t0(hL)(e));
@@ -21457,7 +21457,7 @@ const h_ = (t) => (n) => (e) => (r) => {
     const e = n._1;
     return Ut.bind((() => {
       const r = e.span;
-      return kn.state((o) => b(void 0, { ...o, currentSpan: r }));
+      return Sn.state((o) => b(void 0, { ...o, currentSpan: r }));
     })())(() => AL(t)(e));
   }
   if (n.tag === "Seq" || n.tag === "GroupSeq")
@@ -21491,7 +21491,7 @@ const h_ = (t) => (n) => (e) => (r) => {
     const e = n.currentKf._1;
     return Ut.bind(Ys(Qy)(t))((r) => Ut.bind(te)((o) => {
       const i = { ...o, scenes: Lt(o.scenes)(rs("DataFlow", { keyframe: e, events: r.events, focus: v })) };
-      return kn.state((s) => b(void 0, i));
+      return Sn.state((s) => b(void 0, i));
     }));
   }
   f();
@@ -25154,9 +25154,9 @@ const Vm = (t) => t, Sa = (t) => () => {
   return () => (n(), r());
 })(() => {
 }), l1 = (t) => (n) => {
-  const e = Sn(t, v, qt);
+  const e = kn(t, v, qt);
   if (e.tag === "Just") {
-    const r = Sn(e._1.stopAt, v, qt);
+    const r = kn(e._1.stopAt, v, qt);
     if (r.tag === "Nothing")
       return n;
     if (r.tag === "Just")
@@ -25271,9 +25271,9 @@ const Vm = (t) => t, Sa = (t) => () => {
     destroy: () => (o = !0, i())
   };
 }, o$ = () => O2() / 1e3, xA = (t) => (n) => {
-  const e = Sn(t, v, qt);
+  const e = kn(t, v, qt);
   if (e.tag === "Just") {
-    const r = Sn(e._1.loop, v, qt);
+    const r = kn(e._1.loop, v, qt);
     if (r.tag === "Nothing")
       return n;
     if (r.tag === "Just")
@@ -25327,7 +25327,7 @@ const Vm = (t) => t, Sa = (t) => () => {
     f();
   };
 }, wA = (t) => (n) => (() => {
-  const e = Sn(t, v, qt);
+  const e = kn(t, v, qt);
   if (e.tag === "Just")
     return { ...e._1, direction: n < 0 ? "backward" : "forward" };
   if (e.tag === "Nothing")
@@ -25340,9 +25340,9 @@ const Vm = (t) => t, Sa = (t) => () => {
     };
   f();
 })(), g1 = (t) => (n) => {
-  const e = Sn(t, v, qt);
+  const e = kn(t, v, qt);
   if (e.tag === "Just") {
-    const r = Sn(e._1.direction, v, qt);
+    const r = kn(e._1.direction, v, qt);
     if (r.tag === "Just") {
       if (r._1 === "backward" || r._1 === "reverse")
         return -1;
@@ -25465,15 +25465,15 @@ const Vm = (t) => t, Sa = (t) => () => {
   ), i = o.length - 1 | 0;
   return i >= 0 && i < o.length ? w("Just", o[i]) : v;
 }, lf = (t) => (n) => (e) => {
-  const r = Sn(n, v, qt);
+  const r = kn(n, v, qt);
   if (r.tag === "Just") {
-    const o = Sn(r._1.speed, v, qt);
+    const o = kn(r._1.speed, v, qt);
     if (o.tag === "Just") {
       const i = Qo(1e-4)(o._1 < 0 ? -o._1 : o._1);
       return () => t.value = i;
     }
     if (o.tag === "Nothing") {
-      const i = Sn(r._1.duration, v, qt);
+      const i = kn(r._1.duration, v, qt);
       if (i.tag === "Just" && e.tag === "Just") {
         const s = e._1 / i._1, u = Qo(1e-4)(s < 0 ? -s : s);
         if (i._1 > 0)
@@ -25489,9 +25489,9 @@ const Vm = (t) => t, Sa = (t) => () => {
     };
   f();
 }, SA = (t) => (n) => (e) => (r) => {
-  const o = r.time - n, i = o < 0 ? -o <= 1e-4 : o <= 1e-4, s = r.time < n - 1e-4 || i && r.index < e, u = s ? -1 : 1, a = r.time > n + 1e-4 || i && r.index > e, c = Sn(t, v, qt);
+  const o = r.time - n, i = o < 0 ? -o <= 1e-4 : o <= 1e-4, s = r.time < n - 1e-4 || i && r.index < e, u = s ? -1 : 1, a = r.time > n + 1e-4 || i && r.index > e, c = kn(t, v, qt);
   if (c.tag === "Just") {
-    const l = Sn(c._1.direction, v, qt);
+    const l = kn(c._1.direction, v, qt);
     if (l.tag === "Just") {
       if (l._1 === "forward")
         return i || a ? w("Just", 1) : v;
@@ -27181,12 +27181,12 @@ const wn = /* @__PURE__ */ Vs(GR), f$ = (t) => (n) => (e) => () => ks((r, o) => 
       (N, C) => N === C,
       t.source,
       () => {
-        const N = J(), C = Sn(N, v, qt);
+        const N = J(), C = kn(N, v, qt);
         if (C.tag === "Nothing")
           return () => {
           };
         if (C.tag === "Just") {
-          const S = sR(C._1)(), P = Sn(S, v, qt);
+          const S = sR(C._1)(), P = kn(S, v, qt);
           if (P.tag === "Nothing")
             return () => {
             };
@@ -27294,7 +27294,7 @@ const wn = /* @__PURE__ */ Vs(GR), f$ = (t) => (n) => (e) => () => ks((r, o) => 
     }))();
   }
 ), b6 = /* @__PURE__ */ bo(C6), k6 = /* @__PURE__ */ bo(a$), S6 = /* @__PURE__ */ f$({ eq: (t) => (n) => t._1 === n._1 && t._2 === n._2 }), L6 = /* @__PURE__ */ f$({ eq: (t) => (n) => t._1 === n._1 && t._2 === n._2 }), De = /* @__PURE__ */ Fr(oi)(Fa), Ra = l$().pure, E6 = /* @__PURE__ */ bo(c$), P6 = {
-  eq: (t) => (n) => (t.renderer === "CanvasRenderer" ? n.renderer === "CanvasRenderer" : t.renderer === "SvgRenderer" && n.renderer === "SvgRenderer") && (t.sizing.tag === "AutoSize" ? n.sizing.tag === "AutoSize" : t.sizing.tag === "FixedSize" && n.sizing.tag === "FixedSize" && t.sizing._1 === n.sizing._1 && t.sizing._2 === n.sizing._2) && t.source === n.source && (t.theme === "Light" ? n.theme === "Light" : t.theme === "Dark" ? n.theme === "Dark" : t.theme === "Blueprint" ? n.theme === "Blueprint" : t.theme === "Whiteboard" ? n.theme === "Whiteboard" : t.theme === "Isometric" && n.theme === "Isometric") && (t.transparency === "PaintBackground" ? n.transparency === "PaintBackground" : t.transparency === "TransparentBackground" && n.transparency === "TransparentBackground")
+  eq: (t) => (n) => (t.renderer === "CanvasRenderer" ? n.renderer === "CanvasRenderer" : t.renderer === "SvgRenderer" && n.renderer === "SvgRenderer") && t.showTitle === n.showTitle && (t.sizing.tag === "AutoSize" ? n.sizing.tag === "AutoSize" : t.sizing.tag === "FixedSize" && n.sizing.tag === "FixedSize" && t.sizing._1 === n.sizing._1 && t.sizing._2 === n.sizing._2) && t.source === n.source && (t.theme === "Light" ? n.theme === "Light" : t.theme === "Dark" ? n.theme === "Dark" : t.theme === "Blueprint" ? n.theme === "Blueprint" : t.theme === "Whiteboard" ? n.theme === "Whiteboard" : t.theme === "Isometric" && n.theme === "Isometric") && (t.transparency === "PaintBackground" ? n.transparency === "PaintBackground" : t.transparency === "TransparentBackground" && n.transparency === "TransparentBackground")
 }, A6 = /* @__PURE__ */ Xl("svg")(), G1 = (t) => k6({
   className: "markgraf-player",
   style: { position: "relative", width: "100%", height: "100%" },
@@ -27303,7 +27303,7 @@ const wn = /* @__PURE__ */ Vs(GR), f$ = (t) => (n) => (e) => () => ks((r, o) => 
       source: t.src,
       speed: 1,
       playing: (() => {
-        const n = Sn(t.paused, v, qt);
+        const n = kn(t.paused, v, qt);
         if (n.tag === "Nothing")
           return !0;
         if (n.tag === "Just")
@@ -27313,19 +27313,19 @@ const wn = /* @__PURE__ */ Vs(GR), f$ = (t) => (n) => (e) => () => ks((r, o) => 
     })
   ]
 }), p$ = (t) => (n) => {
-  const e = Sn(n.theme, v, qt), r = (() => {
+  const e = kn(n.theme, v, qt), r = (() => {
     if (e.tag === "Nothing")
       return "light";
     if (e.tag === "Just")
       return e._1;
     f();
-  })(), o = Sn(n.renderer, v, qt), i = (() => {
+  })(), o = kn(n.renderer, v, qt), i = (() => {
     if (o.tag === "Nothing")
       return "canvas";
     if (o.tag === "Just")
       return o._1;
     f();
-  })(), s = Sn(n.paused, v, qt), u = (() => {
+  })(), s = kn(n.paused, v, qt), u = (() => {
     if (s.tag === "Nothing")
       return !1;
     if (s.tag === "Just")
@@ -27341,9 +27341,9 @@ const wn = /* @__PURE__ */ Vs(GR), f$ = (t) => (n) => (e) => () => ks((r, o) => 
       f();
     })(),
     sizing: (() => {
-      const _ = Sn(n.width, v, qt);
+      const _ = kn(n.width, v, qt);
       if (_.tag === "Just") {
-        const d = Sn(n.height, v, qt);
+        const d = kn(n.height, v, qt);
         if (d.tag === "Just")
           return e$("FixedSize", _._1, d._1);
       }
@@ -27357,13 +27357,21 @@ const wn = /* @__PURE__ */ Vs(GR), f$ = (t) => (n) => (e) => () => ks((r, o) => 
       f();
     })(),
     transparency: (() => {
-      const _ = Sn(n.transparent, v, qt);
+      const _ = kn(n.transparent, v, qt);
       if (_.tag === "Nothing")
         return !1;
       if (_.tag === "Just")
         return _._1;
       f();
-    })() ? Kk : Uk
+    })() ? Kk : Uk,
+    showTitle: (() => {
+      const _ = kn(n.showTitle, v, qt);
+      if (_.tag === "Nothing")
+        return !0;
+      if (_.tag === "Just")
+        return _._1;
+      f();
+    })()
   };
   return () => {
     const _ = re(wi), d = T1((h, $) => b(h, $), v), g = d._1, p = T1((h, $) => b(h, $), { time: 0, keyframe: "", playing: !1 });
@@ -27394,7 +27402,7 @@ const wn = /* @__PURE__ */ Vs(GR), f$ = (t) => (n) => (e) => () => ks((r, o) => 
       (h, $) => P6.eq(h)($),
       l,
       () => {
-        const h = m(), $ = Sn(h, v, qt), x = (() => {
+        const h = m(), $ = kn(h, v, qt), x = (() => {
           if ($.tag === "Just")
             return iA(v, qt, "Element", $._1);
           if ($.tag === "Nothing")
@@ -27405,7 +27413,7 @@ const wn = /* @__PURE__ */ Vs(GR), f$ = (t) => (n) => (e) => () => ks((r, o) => 
           return () => {
           };
         if (x.tag === "Just") {
-          const y = EA(x._1)(l.source)(l.renderer)(l.sizing)(l.theme)(l.transparency)(!0)();
+          const y = EA(x._1)(l.source)(l.renderer)(l.sizing)(l.theme)(l.transparency)(l.showTitle)();
           if (y.tag === "Left")
             return R$("[markgraf] " + y._1)(), () => {
             };
@@ -27491,7 +27499,15 @@ const wn = /* @__PURE__ */ Vs(GR), f$ = (t) => (n) => (e) => () => ks((r, o) => 
 }, R6 = /* @__PURE__ */ Yl(
   "MarkgrafHeadlessPlayer",
   (t) => {
-    const n = p$(t.src)({ renderer: t.renderer, width: t.width, height: t.height, theme: t.theme, transparent: t.transparent, paused: t.paused })(), e = Sn(t.renderer, v, qt);
+    const n = p$(t.src)({
+      renderer: t.renderer,
+      width: t.width,
+      height: t.height,
+      theme: t.theme,
+      transparent: t.transparent,
+      showTitle: t.showTitle,
+      paused: t.paused
+    })(), e = kn(t.renderer, v, qt);
     return (() => {
       if (e.tag === "Nothing")
         return "canvas";
@@ -27503,7 +27519,7 @@ const wn = /* @__PURE__ */ Vs(GR), f$ = (t) => (n) => (e) => () => ks((r, o) => 
 ), F6 = /* @__PURE__ */ Yl(
   "MarkgrafPlayer",
   (t) => Ra((() => {
-    const n = Sn(t.renderer, v, qt), e = (() => {
+    const n = kn(t.renderer, v, qt), e = (() => {
       if (n.tag === "Nothing")
         return "canvas";
       if (n.tag === "Just")
