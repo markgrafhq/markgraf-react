@@ -1,12 +1,13 @@
 import type { Meta, StoryObj } from "@storybook/react";
+import React from "react";
 import { useMarkgraf } from "@markgrafhq/markgraf-react";
 
 const src = `seed 1
-keyframe v1 {
-  +node client "Client"
-  +node api "API"
-  +edge client api
-  client -> api "GET /user/42"
+scene v1 {
+  + client: Client
+  + api: API
+  + client -> api
+  client ~> api: GET /user/42
 }`;
 
 function CustomControls() {

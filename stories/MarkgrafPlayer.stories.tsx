@@ -1,25 +1,26 @@
 import type { Meta, StoryObj } from "@storybook/react";
+import React from "react";
 import { MarkgrafPlayer } from "@markgrafhq/markgraf-react";
 
 const requestResponse = `seed 1
-keyframe v1 {
-  +node client "Client"
-  +node api "API"
-  +edge client api
-  client -> api "GET /user/42"
+scene v1 {
+  + client: Client
+  + api: API
+  + client -> api
+  client ~> api: GET /user/42
 }`;
 
 const cacheFlow = `seed 1
-keyframe v1 {
-  +node app "App"
-  +node cache "Cache"
-  +node db "Database"
-  +edge app cache
-  +edge cache db
-  app -> cache "read"
-  cache -> db "miss"
-  db -> cache "row"
-  cache -> app "value"
+scene v1 {
+  + app: App
+  + cache: Cache
+  + db: Database
+  + app -> cache
+  + cache -> db
+  app ~> cache: read
+  cache ~> db: miss
+  cache <~ db: row
+  app <~ cache: value
 }`;
 
 const meta: Meta<typeof MarkgrafPlayer> = {
