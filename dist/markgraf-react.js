@@ -27533,7 +27533,7 @@ const wn = /* @__PURE__ */ Vs(GR), f$ = (t) => (n) => (e) => () => ks((r, o) => 
   onCueEnter: (n) => gf(t.onCueEnter(_f(n))()),
   onStepEnter: (n, e) => gf(t.onStepEnter(n)(_f(e))()),
   onComplete: (n) => gf(t.onComplete(_f(n))())
-}), H6 = (t, n) => B6(p$(t)(n ?? {})), Q6 = F6;
+}), H6 = (t, n) => B6(p$(t)(n ?? {})()), Q6 = F6;
 export {
   Q6 as MarkgrafPlayer,
   H6 as useMarkgraf
