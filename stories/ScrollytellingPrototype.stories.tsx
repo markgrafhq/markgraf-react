@@ -120,10 +120,16 @@ function modeFromUrl(): Mode {
 }
 
 function ScrollytellingPrototype() {
-  const api = useMarkgraf(source, { paused: true, theme: "light" });
+  const api = useMarkgraf(source, {
+    paused: true,
+    showTitle: false,
+    theme: "light",
+    transparent: true,
+  });
   const apiRef = useRef(api);
   const sectionsRef = useRef<Array<HTMLElement | null>>([]);
   const frameRef = useRef<number | null>(null);
+  const lastActiveRef = useRef(0);
   const [active, setActive] = useState(0);
   const [mode, setMode] = useState<Mode>(modeFromUrl);
 
@@ -131,8 +137,27 @@ function ScrollytellingPrototype() {
 
   useEffect(() => {
     if (!api.ready || mode !== "chapters") return;
+    const current = apiRef.current.steps.find((step) => step.name === chapters[active].step);
+    const movingBackward = active < lastActiveRef.current;
+    const adjacent = movingBackward ? chapters[active + 1] : chapters[active - 1];
+    const previous = apiRef.current.steps.find((step) => step.name === adjacent?.step);
+    lastActiveRef.current = active;
+    if (!current) return;
+
+    const from = previous?.time ?? (movingBackward ? apiRef.current.duration : 0);
+    const startedAt = window.performance.now();
     apiRef.current.pause();
-    apiRef.current.seekStep(chapters[active].step);
+    apiRef.current.seek(from);
+
+    let frame = 0;
+    const animate = (now: number) => {
+      const progress = Math.min(1, (now - startedAt) / 1200);
+      const eased = 1 - (1 - progress) ** 3;
+      apiRef.current.seek(from + (current.time - from) * eased);
+      if (progress < 1) frame = window.requestAnimationFrame(animate);
+    };
+    frame = window.requestAnimationFrame(animate);
+    return () => window.cancelAnimationFrame(frame);
   }, [active, api.ready, mode]);
 
   useEffect(() => {
@@ -205,26 +230,14 @@ function ScrollytellingPrototype() {
   }, [mode, api.ready]);
 
   const chooseMode = (next: Mode) => {
-    setMode(next);
     apiRef.current.pause();
-    apiRef.current.seekStep(chapters[active].step);
+    if (next === "scrub") apiRef.current.seekStep(chapters[active].step);
+    setMode(next);
   };
 
   return (
     <main className="scrolly">
       <style>{styles}</style>
-      <header className="scrolly__masthead">
-        <div className="scrolly__wordmark">MARKGRAF / FIELD NOTE 07</div>
-        <div className="scrolly__dek">
-          <span>SCROLL-DRIVEN SYSTEM EXPLANATION</span>
-          <span>{mode === "chapters" ? "DIRECTED CHAPTERS" : "CONTINUOUS SCRUB"}</span>
-        </div>
-        <h1>A request,<br />opened up.</h1>
-        <p>
-          The prose advances the system. The system gives the prose a place to stand.
-          Keep scrolling; the diagram remains pinned.
-        </p>
-      </header>
 
       <div className="scrolly__layout">
         <article className="scrolly__chapters" aria-label="Request journey">
@@ -257,12 +270,6 @@ function ScrollytellingPrototype() {
             data-step-count={api.steps.length}
             data-step-names={api.steps.map((step) => step.name).join(",")}
           >
-            <div className="stage__topline">
-              <span>LIVE SYSTEM MAP</span>
-              <span className="stage__status">
-                <i /> {api.ready ? "SYNCHRONIZED" : "LAYING OUT"}
-              </span>
-            </div>
             <canvas ref={api.elementRef} className="stage__canvas" />
             <div className="stage__readout">
               <span>{chapters[active].number} / {chapters[active].eyebrow}</span>
@@ -279,7 +286,7 @@ function ScrollytellingPrototype() {
           aria-pressed={mode === "chapters"}
           onClick={() => chooseMode("chapters")}
         >
-          Chapter cuts
+          Play chapters
         </button>
         <button
           type="button"
@@ -319,31 +326,16 @@ const styles = `
 
   * { box-sizing: border-box; }
   html { scroll-behavior: smooth; }
-  body { margin: 0; background: var(--paper); }
+  body { margin: 0; background: #f7f7f5; }
 
   .scrolly {
     min-height: 100vh;
     color: var(--ink);
-    background:
-      linear-gradient(90deg, transparent calc(50% - 1px), rgba(25,33,42,.055) 50%, transparent calc(50% + 1px)),
-      radial-gradient(circle at 8% 4%, rgba(240,90,63,.08), transparent 28rem),
-      var(--paper);
+    background: transparent;
     font-family: Georgia, "Times New Roman", serif;
   }
 
-  .scrolly__masthead {
-    min-height: 86vh;
-    padding: 32px clamp(24px, 6vw, 96px) 72px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: auto 1fr auto;
-    border-bottom: 1px solid var(--ink);
-  }
-
-  .scrolly__wordmark,
-  .scrolly__dek,
   .chapter__eyebrow,
-  .stage__topline,
   .stage__readout,
   .mode-switcher,
   .chapter code {
@@ -352,30 +344,13 @@ const styles = `
     text-transform: uppercase;
   }
 
-  .scrolly__wordmark { font-size: 11px; font-weight: 700; }
-  .scrolly__dek { justify-self: end; display: grid; gap: 4px; text-align: right; font-size: 10px; }
-  .scrolly__masthead h1 {
-    grid-column: 1 / -1;
-    align-self: center;
-    margin: 40px 0;
-    font-size: clamp(72px, 13vw, 196px);
-    font-weight: 400;
-    line-height: .73;
-    letter-spacing: -.075em;
-  }
-  .scrolly__masthead p {
-    grid-column: 2;
-    max-width: 36rem;
-    margin: 0;
-    font-size: clamp(19px, 2.1vw, 29px);
-    line-height: 1.25;
-  }
-
   .scrolly__layout {
     display: grid;
-    grid-template-columns: minmax(24rem, .9fr) minmax(32rem, 1.1fr);
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
     align-items: start;
   }
+  .scrolly__chapters,
+  .scrolly__stage { min-width: 0; }
 
   .scrolly__chapters { padding-left: clamp(24px, 5vw, 72px); }
   .chapter {
@@ -400,7 +375,7 @@ const styles = `
     position: absolute;
     left: -4px;
     top: 0;
-    box-shadow: 0 0 0 5px var(--paper);
+    box-shadow: 0 0 0 5px #f7f7f5;
   }
   .chapter__copy { border-top: 1px solid var(--ink); padding-top: 16px; }
   .chapter__eyebrow { color: var(--signal); font-size: 11px; }
@@ -413,25 +388,24 @@ const styles = `
     top: 0;
     height: 100vh;
     padding: clamp(18px, 3vw, 46px);
-    border-left: 1px solid var(--ink);
     display: grid;
     place-items: center;
   }
   .stage__frame {
     width: 100%;
-    min-height: min(76vh, 780px);
+    min-height: min(84vh, 820px);
     display: grid;
-    grid-template-rows: auto 1fr auto;
-    background: #f9f6ee;
-    border: 1px solid var(--ink);
-    box-shadow: 16px 16px 0 var(--blue);
+    grid-template-rows: 1fr auto;
+    background: transparent;
   }
-  .stage__topline,
-  .stage__readout { display: flex; justify-content: space-between; gap: 16px; padding: 14px 16px; font-size: 10px; }
-  .stage__topline { border-bottom: 1px solid var(--ink); }
-  .stage__readout { border-top: 1px solid var(--ink); }
-  .stage__status { color: var(--blue); }
-  .stage__status i { display: inline-block; width: 7px; height: 7px; margin-right: 5px; border-radius: 50%; background: #2aa36b; }
+  .stage__readout {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 14px 16px;
+    border-top: 1px solid var(--rule);
+    font-size: 10px;
+  }
   .stage__canvas { width: 100%; height: 100%; min-height: 420px; display: block; }
 
   .mode-switcher {
@@ -461,13 +435,10 @@ const styles = `
   }
   .mode-switcher button[aria-pressed="true"] { color: var(--ink); background: var(--paper); }
 
-  @media (max-width: 860px) {
-    .scrolly__masthead { min-height: 72vh; grid-template-columns: 1fr; }
-    .scrolly__dek { display: none; }
-    .scrolly__masthead p { grid-column: 1; }
+  @media (max-width: 420px) {
     .scrolly__layout { display: flex; flex-direction: column-reverse; }
-    .scrolly__stage { z-index: 4; width: 100%; height: 48vh; padding: 10px; border: 0; border-bottom: 1px solid var(--ink); background: var(--paper); }
-    .stage__frame { min-height: 0; height: 100%; box-shadow: 7px 7px 0 var(--blue); }
+    .scrolly__stage { z-index: 4; width: 100%; height: 48vh; padding: 10px; border-bottom: 1px solid var(--rule); background: rgba(247,247,245,.96); }
+    .stage__frame { min-height: 0; height: 100%; }
     .stage__canvas { min-height: 0; }
     .scrolly__chapters { padding-left: 18px; }
     .chapter { min-height: 86vh; padding-right: 24px; }
