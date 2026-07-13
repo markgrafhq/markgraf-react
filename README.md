@@ -1,6 +1,6 @@
 # @markgrafhq/markgraf-react
 
-React hook + component for embedding [markgraf](https://github.com/i-am-the-slime/markgraf) animations. Drives play/pause/seek imperatively and exposes `time`, `currentKeyframe`, and `playing` as reactive state.
+React hook + component for embedding [markgraf](https://github.com/i-am-the-slime/markgraf) animations. Drives play/pause/seek imperatively and exposes `time`, `keyframe`, and `playing` as reactive state.
 
 ## Install
 
@@ -9,30 +9,31 @@ bun add @markgrafhq/markgraf-react
 # or: npm install @markgrafhq/markgraf-react
 ```
 
-Also pull in the embed CSS for canvas styling:
+Import the package CSS for player styling:
 
 ```js
-import "@markgrafhq/markgraf-embed/css";
+import "@markgrafhq/markgraf-react/css";
 ```
 
 ## `<MarkgrafPlayer src=... />`
 
-Headless component — renders a `<canvas>` (default) or `<svg>` with the scene drawn directly into it. Bring your own controls.
+Headless component that draws the scene directly into the selected Canvas2D, SVG, or WebGL surface. Bring your own controls.
 
 ```jsx
 import { MarkgrafPlayer } from "@markgrafhq/markgraf-react";
 
 const src = `seed 1
-keyframe v1 {
-  +node client "Client"
-  +node api "API"
-  +edge client api
-  client -> api "GET"
+scene v1 {
+  + client: Client
+  + api: API
+  + client -> api
+  client ~> api: GET
 }`;
 
 export default function App() {
   return <MarkgrafPlayer src={src} />;
   // Or: <MarkgrafPlayer src={src} renderer="svg" />
+  // Or: <MarkgrafPlayer src={src} renderer="sdf" />
 }
 ```
 
@@ -84,6 +85,7 @@ export function Player({ src }) {
 
 - **`canvas`** (default) — Canvas2D with DPR-aware scaling and label springs. Fastest, best for many tokens.
 - **`svg`** — Inline SVG. Easier to inspect/style, scales crisply at any zoom, no DPR concerns. No spring labels.
+- **`sdf`** (alias **`webgl`**) — WebGL raymarched 3D rendering; available through `MarkgrafPlayer` only.
 
 ## License
 
