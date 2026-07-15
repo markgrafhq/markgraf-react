@@ -130,8 +130,10 @@ function ScrollytellingPrototype() {
   const sectionsRef = useRef<Array<HTMLElement | null>>([]);
   const frameRef = useRef<number | null>(null);
   const lastActiveRef = useRef(0);
+  const replayNowRef = useRef(false);
   const [active, setActive] = useState(0);
   const [mode, setMode] = useState<Mode>(modeFromUrl);
+  const [replayNonce, setReplayNonce] = useState(0);
 
   apiRef.current = api;
 
@@ -145,26 +147,60 @@ function ScrollytellingPrototype() {
     if (!current) return;
 
     const from = previous?.time ?? (movingBackward ? apiRef.current.duration : 0);
-    const startedAt = window.performance.now();
-    apiRef.current.pause();
-    apiRef.current.seek(from);
-
+    const durationMs = Math.min(4000, Math.max(2400, Math.abs(current.time - from) * 650));
+    const immediate = replayNowRef.current;
+    replayNowRef.current = false;
     let frame = 0;
-    const animate = (now: number) => {
-      const progress = Math.min(1, (now - startedAt) / 1200);
-      const eased = 1 - (1 - progress) ** 3;
-      apiRef.current.seek(from + (current.time - from) * eased);
-      if (progress < 1) frame = window.requestAnimationFrame(animate);
+    let timer = 0;
+    let started = false;
+
+    const start = () => {
+      started = true;
+      const startedAt = window.performance.now();
+      apiRef.current.pause();
+      apiRef.current.seek(from);
+
+      const animate = (now: number) => {
+        const progress = Math.min(1, (now - startedAt) / durationMs);
+        const eased = 1 - (1 - progress) ** 3;
+        apiRef.current.seek(from + (current.time - from) * eased);
+        if (progress < 1) frame = window.requestAnimationFrame(animate);
+      };
+      frame = window.requestAnimationFrame(animate);
     };
-    frame = window.requestAnimationFrame(animate);
-    return () => window.cancelAnimationFrame(frame);
-  }, [active, api.ready, mode]);
+
+    const scheduleAfterSettle = () => {
+      if (started) return;
+      window.clearTimeout(timer);
+      timer = window.setTimeout(start, 500);
+    };
+
+    if (immediate) {
+      timer = window.setTimeout(start, 0);
+    } else {
+      scheduleAfterSettle();
+      window.addEventListener("scroll", scheduleAfterSettle, { passive: true });
+      window.addEventListener("scrollend", scheduleAfterSettle);
+    }
+    return () => {
+      window.removeEventListener("scroll", scheduleAfterSettle);
+      window.removeEventListener("scrollend", scheduleAfterSettle);
+      window.clearTimeout(timer);
+      window.cancelAnimationFrame(frame);
+      if (started) apiRef.current.seek(current.time);
+    };
+  }, [active, api.ready, mode, replayNonce]);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
     const url = new URL(window.location.href);
     url.searchParams.set("scrolly", mode);
     window.history.replaceState({}, "", url);
+  }, [mode]);
+
+  useEffect(() => {
+    document.documentElement.classList.toggle("markgraf-chapter-snap", mode === "chapters");
+    return () => document.documentElement.classList.remove("markgraf-chapter-snap");
   }, [mode]);
 
   useEffect(() => {
@@ -235,6 +271,19 @@ function ScrollytellingPrototype() {
     setMode(next);
   };
 
+  const goToChapter = (index: number) => {
+    const next = Math.max(0, Math.min(chapters.length - 1, index));
+    chooseMode("chapters");
+    setActive(next);
+    sectionsRef.current[next]?.scrollIntoView({ behavior: "smooth", block: "center" });
+  };
+
+  const replay = () => {
+    chooseMode("chapters");
+    replayNowRef.current = true;
+    setReplayNonce((nonce) => nonce + 1);
+  };
+
   return (
     <main className="scrolly">
       <style>{styles}</style>
@@ -281,6 +330,19 @@ function ScrollytellingPrototype() {
 
       <nav className="mode-switcher" aria-label="Prototype interaction mode">
         <span>PROTOTYPE</span>
+        <button type="button" disabled={active === 0} onClick={() => goToChapter(active - 1)}>
+          Previous
+        </button>
+        <button type="button" onClick={replay}>
+          Replay
+        </button>
+        <button
+          type="button"
+          disabled={active === chapters.length - 1}
+          onClick={() => goToChapter(active + 1)}
+        >
+          Next
+        </button>
         <button
           type="button"
           aria-pressed={mode === "chapters"}
@@ -326,6 +388,7 @@ const styles = `
 
   * { box-sizing: border-box; }
   html { scroll-behavior: smooth; }
+  html.markgraf-chapter-snap { scroll-snap-type: y mandatory; }
   body { margin: 0; background: #f7f7f5; }
 
   .scrolly {
@@ -361,6 +424,8 @@ const styles = `
     padding: 12vh clamp(28px, 4vw, 72px) 12vh 0;
     opacity: .34;
     transition: opacity 320ms ease;
+    scroll-snap-align: center;
+    scroll-snap-stop: always;
   }
   .chapter[data-active="true"] { opacity: 1; }
   .chapter__rail { align-self: stretch; display: flex; flex-direction: column; align-items: center; gap: 14px; padding-top: 8px; }
@@ -433,6 +498,7 @@ const styles = `
     text-transform: inherit;
     cursor: pointer;
   }
+  .mode-switcher button:disabled { opacity: .35; cursor: default; }
   .mode-switcher button[aria-pressed="true"] { color: var(--ink); background: var(--paper); }
 
   @media (max-width: 420px) {
