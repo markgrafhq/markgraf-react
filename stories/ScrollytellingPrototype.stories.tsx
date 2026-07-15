@@ -154,12 +154,8 @@ function ScrollytellingPrototype() {
     let timer = 0;
     let started = false;
 
-    const start = () => {
-      started = true;
+    const playSegment = () => {
       const startedAt = window.performance.now();
-      apiRef.current.pause();
-      apiRef.current.seek(from);
-
       const animate = (now: number) => {
         const progress = Math.min(1, (now - startedAt) / durationMs);
         const eased = 1 - (1 - progress) ** 3;
@@ -167,6 +163,33 @@ function ScrollytellingPrototype() {
         if (progress < 1) frame = window.requestAnimationFrame(animate);
       };
       frame = window.requestAnimationFrame(animate);
+    };
+
+    const start = () => {
+      started = true;
+      apiRef.current.pause();
+      const transportFrom = apiRef.current.time;
+      const transportDurationMs = Math.min(900, Math.max(240, Math.abs(from - transportFrom) * 120));
+
+      if (Math.abs(from - transportFrom) < 0.001) {
+        apiRef.current.seek(from);
+        playSegment();
+        return;
+      }
+
+      const startedAt = window.performance.now();
+      const transport = (now: number) => {
+        const progress = Math.min(1, (now - startedAt) / transportDurationMs);
+        const eased = progress * progress * (3 - 2 * progress);
+        apiRef.current.seek(transportFrom + (from - transportFrom) * eased);
+        if (progress < 1) {
+          frame = window.requestAnimationFrame(transport);
+        } else {
+          apiRef.current.seek(from);
+          playSegment();
+        }
+      };
+      frame = window.requestAnimationFrame(transport);
     };
 
     const scheduleAfterSettle = () => {
@@ -187,7 +210,6 @@ function ScrollytellingPrototype() {
       window.removeEventListener("scrollend", scheduleAfterSettle);
       window.clearTimeout(timer);
       window.cancelAnimationFrame(frame);
-      if (started) apiRef.current.seek(current.time);
     };
   }, [active, api.ready, mode, replayNonce]);
 
