@@ -51,6 +51,20 @@ scene response {
 step response`;
 
 type Mode = "chapters" | "scrub";
+// The core schedule ends each scene with a 0.5s absorbed-token hold. For this
+// fixed diagram, the genie enters its target during the preceding second. Rest
+// on the last detached travelling frame; crossing the cue remains part of the
+// next chapter's continuous playback.
+const TOKEN_HOLD_SECONDS = 0.5;
+const INITIAL_PRE_ROLL_LEAD_SECONDS = 1 / 60;
+const PRE_ABSORPTION_LEAD_SECONDS = 1.0;
+function chapterStopTime(index: number, cueTime: number): number {
+  const stopLead =
+    index === 0
+      ? INITIAL_PRE_ROLL_LEAD_SECONDS
+      : TOKEN_HOLD_SECONDS + PRE_ABSORPTION_LEAD_SECONDS;
+  return Math.max(0, cueTime - stopLead);
+}
 
 type Chapter = {
   step: string;
@@ -150,26 +164,33 @@ function ScrollytellingPrototype() {
     const current = apiRef.current.steps.find((step) => step.name === chapters[active].step);
     const priorActive = lastActiveRef.current;
     const movingBackward = active < priorActive;
-    const adjacent = movingBackward ? chapters[active + 1] : chapters[active - 1];
+    const adjacentIndex = movingBackward ? active + 1 : active - 1;
+    const adjacent = chapters[adjacentIndex];
     const previous = apiRef.current.steps.find((step) => step.name === adjacent?.step);
     const continuesFromCompleted =
       Math.abs(active - priorActive) === 1 && completedChapterRef.current === priorActive;
     lastActiveRef.current = active;
     if (!current) return;
+    const targetTime = chapterStopTime(active, current.time);
     const immediate = replayNowRef.current;
     replayNowRef.current = false;
     // Establish the topology immediately. Starting from an empty canvas makes
     // the page feel broken before the reader has asked it to animate.
     if (!chaptersInitializedRef.current) {
       chaptersInitializedRef.current = true;
-      seekTimeline(current.time);
+      seekTimeline(targetTime);
       completedChapterRef.current = active;
       return;
     }
     if (!immediate && active === priorActive && completedChapterRef.current === active) return;
 
-    const from = previous?.time ?? (movingBackward ? apiRef.current.duration : 0);
-    const durationMs = Math.min(4000, Math.max(2400, Math.abs(current.time - from) * 650));
+    const from =
+      previous === undefined
+        ? movingBackward
+          ? apiRef.current.duration
+          : 0
+        : chapterStopTime(adjacentIndex, previous.time);
+    const durationMs = Math.min(4000, Math.max(2400, Math.abs(targetTime - from) * 650));
     let frame = 0;
     let timer = 0;
     let transportDone = false;
@@ -182,11 +203,11 @@ function ScrollytellingPrototype() {
       const animate = (now: number) => {
         const progress = Math.min(1, (now - startedAt) / durationMs);
         const eased = 1 - (1 - progress) ** 3;
-        seekTimeline(from + (current.time - from) * eased);
+        seekTimeline(from + (targetTime - from) * eased);
         if (progress < 1) {
           frame = window.requestAnimationFrame(animate);
         } else {
-          seekTimeline(current.time);
+          seekTimeline(targetTime);
           completedChapterRef.current = active;
         }
       };
