@@ -129,6 +129,8 @@ function ScrollytellingPrototype() {
   const apiRef = useRef(api);
   const sectionsRef = useRef<Array<HTMLElement | null>>([]);
   const frameRef = useRef<number | null>(null);
+  const timelineTimeRef = useRef(api.time);
+  const lastScrollAtRef = useRef(0);
   const lastActiveRef = useRef(0);
   const replayNowRef = useRef(false);
   const [active, setActive] = useState(0);
@@ -136,6 +138,10 @@ function ScrollytellingPrototype() {
   const [replayNonce, setReplayNonce] = useState(0);
 
   apiRef.current = api;
+  const seekTimeline = (time: number) => {
+    timelineTimeRef.current = time;
+    apiRef.current.seek(time);
+  };
 
   useEffect(() => {
     if (!api.ready || mode !== "chapters") return;
@@ -152,62 +158,78 @@ function ScrollytellingPrototype() {
     replayNowRef.current = false;
     let frame = 0;
     let timer = 0;
-    let started = false;
+    let transportDone = false;
+    let settled = immediate;
+    let playing = false;
 
     const playSegment = () => {
+      playing = true;
       const startedAt = window.performance.now();
       const animate = (now: number) => {
         const progress = Math.min(1, (now - startedAt) / durationMs);
         const eased = 1 - (1 - progress) ** 3;
-        apiRef.current.seek(from + (current.time - from) * eased);
+        seekTimeline(from + (current.time - from) * eased);
         if (progress < 1) frame = window.requestAnimationFrame(animate);
       };
       frame = window.requestAnimationFrame(animate);
     };
 
-    const start = () => {
-      started = true;
-      apiRef.current.pause();
-      const transportFrom = apiRef.current.time;
-      const transportDurationMs = Math.min(900, Math.max(240, Math.abs(from - transportFrom) * 120));
+    const playWhenReady = () => {
+      if (transportDone && settled && !playing) playSegment();
+    };
 
-      if (Math.abs(from - transportFrom) < 0.001) {
-        apiRef.current.seek(from);
-        playSegment();
+    const finishTransport = () => {
+      seekTimeline(from);
+      transportDone = true;
+      playWhenReady();
+    };
+
+    const startTransport = () => {
+      apiRef.current.pause();
+      const transportFrom = timelineTimeRef.current;
+      const distance = Math.abs(from - transportFrom);
+      if (distance < 0.001) {
+        finishTransport();
         return;
       }
 
+      const transportDurationMs = distance * 200;
       const startedAt = window.performance.now();
       const transport = (now: number) => {
         const progress = Math.min(1, (now - startedAt) / transportDurationMs);
-        const eased = progress * progress * (3 - 2 * progress);
-        apiRef.current.seek(transportFrom + (from - transportFrom) * eased);
+        seekTimeline(transportFrom + (from - transportFrom) * progress);
         if (progress < 1) {
           frame = window.requestAnimationFrame(transport);
         } else {
-          apiRef.current.seek(from);
-          playSegment();
+          finishTransport();
         }
       };
       frame = window.requestAnimationFrame(transport);
     };
 
     const scheduleAfterSettle = () => {
-      if (started) return;
+      if (playing) return;
+      settled = false;
       window.clearTimeout(timer);
-      timer = window.setTimeout(start, 500);
+      const idleFor = window.performance.now() - lastScrollAtRef.current;
+      timer = window.setTimeout(() => {
+        const remaining = 500 - (window.performance.now() - lastScrollAtRef.current);
+        if (remaining > 1) {
+          scheduleAfterSettle();
+          return;
+        }
+        settled = true;
+        playWhenReady();
+      }, Math.max(0, 500 - idleFor));
     };
 
-    if (immediate) {
-      timer = window.setTimeout(start, 0);
-    } else {
+    if (!immediate) {
+      if (lastScrollAtRef.current === 0) lastScrollAtRef.current = window.performance.now();
       scheduleAfterSettle();
-      window.addEventListener("scroll", scheduleAfterSettle, { passive: true });
-      window.addEventListener("scrollend", scheduleAfterSettle);
     }
+    startTransport();
+
     return () => {
-      window.removeEventListener("scroll", scheduleAfterSettle);
-      window.removeEventListener("scrollend", scheduleAfterSettle);
       window.clearTimeout(timer);
       window.cancelAnimationFrame(frame);
     };
@@ -224,6 +246,14 @@ function ScrollytellingPrototype() {
     document.documentElement.classList.toggle("markgraf-chapter-snap", mode === "chapters");
     return () => document.documentElement.classList.remove("markgraf-chapter-snap");
   }, [mode]);
+
+  useEffect(() => {
+    const noteScroll = () => {
+      lastScrollAtRef.current = window.performance.now();
+    };
+    window.addEventListener("scroll", noteScroll, { passive: true });
+    return () => window.removeEventListener("scroll", noteScroll);
+  }, []);
 
   useEffect(() => {
     if (mode !== "chapters") return;
@@ -270,7 +300,7 @@ function ScrollytellingPrototype() {
       const end = next ?? apiRef.current.duration;
 
       setActive((current) => (current === index ? current : index));
-      if (from !== undefined && end > from) apiRef.current.seek(from + (end - from) * progress);
+      if (from !== undefined && end > from) seekTimeline(from + (end - from) * progress);
     };
 
     const schedule = () => {
@@ -289,12 +319,16 @@ function ScrollytellingPrototype() {
 
   const chooseMode = (next: Mode) => {
     apiRef.current.pause();
-    if (next === "scrub") apiRef.current.seekStep(chapters[active].step);
+    if (next === "scrub") {
+      const step = apiRef.current.steps.find((cue) => cue.name === chapters[active].step);
+      if (step) seekTimeline(step.time);
+    }
     setMode(next);
   };
 
   const goToChapter = (index: number) => {
     const next = Math.max(0, Math.min(chapters.length - 1, index));
+    lastScrollAtRef.current = window.performance.now();
     chooseMode("chapters");
     setActive(next);
     sectionsRef.current[next]?.scrollIntoView({ behavior: "smooth", block: "center" });
