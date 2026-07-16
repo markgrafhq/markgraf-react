@@ -18248,7 +18248,7 @@ const h_ = (t) => (n) => (e) => (r) => {
         return !1;
       f();
     })(),
-    halftoneShadows: !0,
+    halftoneShadows: !1,
     watermark: "",
     theme: t,
     outputAspect: r.width <= 0 || r.height <= 0 ? v : w("Just", r.width / r.height)
@@ -19115,7 +19115,7 @@ const h_ = (t) => (n) => (e) => (r) => {
         return !1;
       f();
     })(),
-    halftoneShadows: !0,
+    halftoneShadows: !1,
     watermark: "",
     theme: e,
     outputAspect: t
