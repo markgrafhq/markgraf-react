@@ -1,6 +1,6 @@
 {
   "name": "@markgrafhq/markgraf-react",
-  "version": "0.0.31",
+  "version": "0.0.32",
   "description": "React hook + component for embedding markgraf animations. Drives play/pause/seek and exposes time + keyframe as reactive state.",
   "type": "module",
   "main": "./dist/markgraf-react.js",
