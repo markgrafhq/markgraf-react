@@ -132,6 +132,7 @@ function ScrollytellingPrototype() {
   const timelineTimeRef = useRef(api.time);
   const lastScrollAtRef = useRef(0);
   const lastActiveRef = useRef(0);
+  const completedChapterRef = useRef(-1);
   const replayNowRef = useRef(false);
   const [active, setActive] = useState(0);
   const [mode, setMode] = useState<Mode>(modeFromUrl);
@@ -146,9 +147,12 @@ function ScrollytellingPrototype() {
   useEffect(() => {
     if (!api.ready || mode !== "chapters") return;
     const current = apiRef.current.steps.find((step) => step.name === chapters[active].step);
-    const movingBackward = active < lastActiveRef.current;
+    const priorActive = lastActiveRef.current;
+    const movingBackward = active < priorActive;
     const adjacent = movingBackward ? chapters[active + 1] : chapters[active - 1];
     const previous = apiRef.current.steps.find((step) => step.name === adjacent?.step);
+    const continuesFromCompleted =
+      Math.abs(active - priorActive) === 1 && completedChapterRef.current === priorActive;
     lastActiveRef.current = active;
     if (!current) return;
 
@@ -169,7 +173,12 @@ function ScrollytellingPrototype() {
         const progress = Math.min(1, (now - startedAt) / durationMs);
         const eased = 1 - (1 - progress) ** 3;
         seekTimeline(from + (current.time - from) * eased);
-        if (progress < 1) frame = window.requestAnimationFrame(animate);
+        if (progress < 1) {
+          frame = window.requestAnimationFrame(animate);
+        } else {
+          seekTimeline(current.time);
+          completedChapterRef.current = active;
+        }
       };
       frame = window.requestAnimationFrame(animate);
     };
@@ -186,9 +195,10 @@ function ScrollytellingPrototype() {
 
     const startTransport = () => {
       apiRef.current.pause();
+      completedChapterRef.current = -1;
       const transportFrom = timelineTimeRef.current;
       const distance = Math.abs(from - transportFrom);
-      if (distance < 0.001) {
+      if (continuesFromCompleted || distance < 0.001) {
         finishTransport();
         return;
       }
@@ -320,6 +330,7 @@ function ScrollytellingPrototype() {
   const chooseMode = (next: Mode) => {
     apiRef.current.pause();
     if (next === "scrub") {
+      completedChapterRef.current = -1;
       const step = apiRef.current.steps.find((cue) => cue.name === chapters[active].step);
       if (step) seekTimeline(step.time);
     }
