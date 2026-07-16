@@ -18,10 +18,14 @@ scene foundation {
   + edge -> service
   + service -> db
 }
+still foundationRest {
+}
 step foundation
 
 scene arrival {
   browser ~> edge: GET /profile
+}
+still arrivalRest {
 }
 step arrival
 
@@ -29,11 +33,15 @@ scene identity {
   edge ~> auth: verify session
   edge <~ auth: claims
 }
+still identityRest {
+}
 step identity
 
 scene cache {
   edge ~> cache: profile:42
   edge <~ cache: MISS
+}
+still cacheRest {
 }
 step cache
 
@@ -42,29 +50,22 @@ scene origin {
   service ~> db: SELECT user
   service <~ db: row
 }
+still originRest {
+}
 step origin
 
 scene response {
   edge <~ service: 200 profile
   browser <~ edge: JSON
 }
+still responseRest {
+}
 step response`;
 
 type Mode = "chapters" | "scrub";
-// The core schedule ends each scene with a 0.5s absorbed-token hold. For this
-// fixed diagram, the genie enters its target during the preceding second. Rest
-// on the last detached travelling frame; crossing the cue remains part of the
-// next chapter's continuous playback.
-const TOKEN_HOLD_SECONDS = 0.5;
-const INITIAL_PRE_ROLL_LEAD_SECONDS = 1 / 60;
-const PRE_ABSORPTION_LEAD_SECONDS = 1.0;
-function chapterStopTime(index: number, cueTime: number): number {
-  const stopLead =
-    index === 0
-      ? INITIAL_PRE_ROLL_LEAD_SECONDS
-      : TOKEN_HOLD_SECONDS + PRE_ABSORPTION_LEAD_SECONDS;
-  return Math.max(0, cueTime - stopLead);
-}
+// Step cues share an instant with the following scene. Rest one display frame
+// inside the preceding still so the upcoming token has not yet filled its source.
+const REST_FRAME_LEAD_SECONDS = 1 / 60;
 
 type Chapter = {
   step: string;
@@ -171,7 +172,7 @@ function ScrollytellingPrototype() {
       Math.abs(active - priorActive) === 1 && completedChapterRef.current === priorActive;
     lastActiveRef.current = active;
     if (!current) return;
-    const targetTime = chapterStopTime(active, current.time);
+    const targetTime = Math.max(0, current.time - REST_FRAME_LEAD_SECONDS);
     const immediate = replayNowRef.current;
     replayNowRef.current = false;
     // Establish the topology immediately. Starting from an empty canvas makes
@@ -189,7 +190,7 @@ function ScrollytellingPrototype() {
         ? movingBackward
           ? apiRef.current.duration
           : 0
-        : chapterStopTime(adjacentIndex, previous.time);
+        : Math.max(0, previous.time - REST_FRAME_LEAD_SECONDS);
     const durationMs = Math.min(4000, Math.max(2400, Math.abs(targetTime - from) * 650));
     let frame = 0;
     let timer = 0;
