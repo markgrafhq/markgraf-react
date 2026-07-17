@@ -173,16 +173,10 @@ function ScrollytellingPrototype() {
     lastActiveRef.current = active;
     if (!current) return;
     const targetTime = Math.max(0, current.time - REST_FRAME_LEAD_SECONDS);
-    const immediate = replayNowRef.current;
+    const initializing = !chaptersInitializedRef.current;
+    chaptersInitializedRef.current = true;
+    const immediate = replayNowRef.current || initializing;
     replayNowRef.current = false;
-    // Establish the topology immediately. Starting from an empty canvas makes
-    // the page feel broken before the reader has asked it to animate.
-    if (!chaptersInitializedRef.current) {
-      chaptersInitializedRef.current = true;
-      seekTimeline(targetTime);
-      completedChapterRef.current = active;
-      return;
-    }
     if (!immediate && active === priorActive && completedChapterRef.current === active) return;
 
     const from =
