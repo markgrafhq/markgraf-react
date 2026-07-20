@@ -331,12 +331,16 @@ function ScrollytellingPrototype() {
       const section = sections[index];
       const rect = section.getBoundingClientRect();
       const progress = Math.max(0, Math.min(1, (marker - rect.top) / Math.max(1, rect.height)));
-      const from = apiRef.current.steps.find((step) => step.name === chapters[index].step)?.time;
-      const next = apiRef.current.steps.find((step) => step.name === chapters[index + 1]?.step)?.time;
-      const end = next ?? apiRef.current.duration;
+      const current = apiRef.current.steps.find((step) => step.name === chapters[index].step);
+      const previous = apiRef.current.steps.find((step) => step.name === chapters[index - 1]?.step);
+      const from = previous === undefined ? 0 : Math.max(0, previous.time - REST_FRAME_LEAD_SECONDS);
+      const end =
+        current === undefined
+          ? apiRef.current.duration
+          : Math.max(0, current.time - REST_FRAME_LEAD_SECONDS);
 
-      setActive((current) => (current === index ? current : index));
-      if (from !== undefined && end > from) seekTimeline(from + (end - from) * progress);
+      setActive((currentIndex) => (currentIndex === index ? currentIndex : index));
+      if (end > from) seekTimeline(from + (end - from) * progress);
     };
 
     const schedule = () => {
