@@ -5,52 +5,50 @@ import { useMarkgraf } from "@markgrafhq/markgraf-react";
 import "@markgrafhq/markgraf-react/css";
 
 const source = `seed 17
-scene foundation {
+scene opening {
   + browser: Browser
-  + edge: Edge gateway
-  + auth: Identity
-  + cache: Cache
-  + service: Profile service
-  + db: Primary database
-  + browser -> edge
-  + edge -> auth
-  + edge -> cache
-  + edge -> service
-  + service -> db
-}
-still foundationRest {
 }
 step foundation
 
+scene arrivalRoute {
+  + edge: Edge gateway
+  + browser -> edge
+}
 scene arrival {
   browser ~> edge: GET /profile
 }
-still arrivalRest {
-}
 step arrival
 
+scene identityRoute {
+  + auth: Identity
+  + edge -> auth
+}
 scene identity {
   edge ~> auth: verify session
   edge <~ auth: claims
 }
-still identityRest {
-}
 step identity
 
+scene cacheRoute {
+  + cache: Cache
+  + edge -> cache
+}
 scene cache {
   edge ~> cache: profile:42
   edge <~ cache: MISS
 }
-still cacheRest {
-}
 step cache
 
+scene originRoutes {
+  + service: Profile service
+  + db: Primary database
+  + edge -> service
+  + service -> db
+}
 scene origin {
   edge ~> service: fetch profile
   service ~> db: SELECT user
   service <~ db: row
-}
-still originRest {
 }
 step origin
 
@@ -58,14 +56,31 @@ scene response {
   edge <~ service: 200 profile
   browser <~ edge: JSON
 }
-still responseRest {
-}
 step response`;
 
-type Mode = "chapters" | "scrub";
-// Step cues share an instant with the following scene. Rest one display frame
-// inside the preceding still so the upcoming token has not yet filled its source.
-const REST_FRAME_LEAD_SECONDS = 1 / 60;
+type PlaybackStatus =
+  | "paused"
+  | "playing"
+  | "fast-forwarding"
+  | "rewinding"
+  | "stopped";
+const playbackIndicators: Record<PlaybackStatus, { icon: string; label: string }> = {
+  paused: { icon: "Ⅱ", label: "PAUSE" },
+  playing: { icon: "▶", label: "PLAY" },
+  "fast-forwarding": { icon: "▶▶", label: "FF" },
+  rewinding: { icon: "◀◀", label: "REW" },
+  stopped: { icon: "■", label: "STOP" },
+};
+// A step cue is the first frame after the outgoing token and label are consumed.
+// The following route starts there at zero progress, so exact-cue sampling keeps
+// it visually hidden without cutting the outgoing label short.
+const REST_FRAME_LEAD_SECONDS = 0;
+// Keep authored token velocities intact; only the constant host playback rate
+// changes. Seeking between chapters stays linear and quick.
+const FORWARD_TIMELINE_RATE = 1.25;
+const REWIND_TIMELINE_RATE = 8;
+const SEEK_TIMELINE_RATE = 5;
+const clampProgress = (progress: number) => Math.max(0, Math.min(1, progress));
 
 type Chapter = {
   step: string;
@@ -127,13 +142,6 @@ const chapters: Chapter[] = [
   },
 ];
 
-function modeFromUrl(): Mode {
-  if (typeof window === "undefined") return "chapters";
-  return new URLSearchParams(window.location.search).get("scrolly") === "scrub"
-    ? "scrub"
-    : "chapters";
-}
-
 function ScrollytellingPrototype() {
   const api = useMarkgraf(source, {
     paused: true,
@@ -143,16 +151,22 @@ function ScrollytellingPrototype() {
   });
   const apiRef = useRef(api);
   const sectionsRef = useRef<Array<HTMLElement | null>>([]);
-  const frameRef = useRef<number | null>(null);
   const timelineTimeRef = useRef(api.time);
   const lastScrollAtRef = useRef(0);
   const lastActiveRef = useRef(0);
   const completedChapterRef = useRef(-1);
   const chaptersInitializedRef = useRef(false);
   const replayNowRef = useRef(false);
+  const playbackStatusRef = useRef<PlaybackStatus>("paused");
   const [active, setActive] = useState(0);
-  const [mode, setMode] = useState<Mode>(modeFromUrl);
   const [replayNonce, setReplayNonce] = useState(0);
+  const [rewinding, setRewinding] = useState(false);
+  const [playbackStatus, setPlaybackStatus] = useState<PlaybackStatus>("paused");
+  const setTransportStatus = (next: PlaybackStatus) => {
+    if (playbackStatusRef.current === next) return;
+    playbackStatusRef.current = next;
+    setPlaybackStatus(next);
+  };
 
   apiRef.current = api;
   const seekTimeline = (time: number) => {
@@ -161,13 +175,12 @@ function ScrollytellingPrototype() {
   };
 
   useEffect(() => {
-    if (!api.ready || mode !== "chapters") return;
+    if (!api.ready) return;
     const current = apiRef.current.steps.find((step) => step.name === chapters[active].step);
     const priorActive = lastActiveRef.current;
     const movingBackward = active < priorActive;
-    const adjacentIndex = movingBackward ? active + 1 : active - 1;
-    const adjacent = chapters[adjacentIndex];
-    const previous = apiRef.current.steps.find((step) => step.name === adjacent?.step);
+    const previousChapter = chapters[active - 1];
+    const previous = apiRef.current.steps.find((step) => step.name === previousChapter?.step);
     const continuesFromCompleted =
       Math.abs(active - priorActive) === 1 && completedChapterRef.current === priorActive;
     lastActiveRef.current = active;
@@ -181,29 +194,59 @@ function ScrollytellingPrototype() {
 
     const from =
       previous === undefined
-        ? movingBackward
-          ? apiRef.current.duration
-          : 0
+        ? 0
         : Math.max(0, previous.time - REST_FRAME_LEAD_SECONDS);
-    const durationMs = Math.min(4000, Math.max(2400, Math.abs(targetTime - from) * 650));
+    let segmentFrom = from;
     let frame = 0;
     let timer = 0;
     let transportDone = false;
     let settled = immediate || continuesFromCompleted;
     let playing = false;
+    let rewindVisual = false;
+    const showRewind = (next: boolean) => {
+      if (next === rewindVisual) return;
+      rewindVisual = next;
+      setRewinding(next);
+      if (next) setTransportStatus("rewinding");
+    };
 
     const playSegment = () => {
       playing = true;
+      const stepDelta = targetTime - from;
+      const timelineRate = stepDelta < 0 ? REWIND_TIMELINE_RATE : FORWARD_TIMELINE_RATE;
+      const durationMs = Math.max(1, Math.abs(stepDelta) / timelineRate * 1000);
+      const progressStart =
+        Math.abs(stepDelta) < 0.001
+          ? 1
+          : clampProgress((segmentFrom - from) / stepDelta);
       const startedAt = window.performance.now();
+      const scrolling = (now: number) =>
+        lastScrollAtRef.current > 0 && now - lastScrollAtRef.current < 500;
       const animate = (now: number) => {
-        const progress = Math.min(1, (now - startedAt) / durationMs);
-        const eased = 1 - (1 - progress) ** 3;
-        seekTimeline(from + (targetTime - from) * eased);
+        if (scrolling(now)) {
+          showRewind(false);
+          setTransportStatus("paused");
+          segmentFrom = timelineTimeRef.current;
+          playing = false;
+          scheduleAfterSettle();
+          return;
+        }
+        setTransportStatus(
+          movingBackward && targetTime < segmentFrom - 0.001 ? "rewinding" : "playing",
+        );
+        showRewind(movingBackward && targetTime < segmentFrom - 0.001);
+        const progress = Math.min(
+          1,
+          progressStart + (now - startedAt) / durationMs,
+        );
+        seekTimeline(from + stepDelta * progress);
         if (progress < 1) {
           frame = window.requestAnimationFrame(animate);
         } else {
           seekTimeline(targetTime);
           completedChapterRef.current = active;
+          showRewind(false);
+          setTransportStatus(active === chapters.length - 1 ? "stopped" : "paused");
         }
       };
       frame = window.requestAnimationFrame(animate);
@@ -213,8 +256,10 @@ function ScrollytellingPrototype() {
       if (transportDone && settled && !playing) playSegment();
     };
 
-    const finishTransport = () => {
-      seekTimeline(from);
+    const finishTransport = (nextFrom: number) => {
+      showRewind(false);
+      segmentFrom = nextFrom;
+      seekTimeline(segmentFrom);
       transportDone = true;
       playWhenReady();
     };
@@ -223,21 +268,56 @@ function ScrollytellingPrototype() {
       apiRef.current.pause();
       completedChapterRef.current = -1;
       const transportFrom = timelineTimeRef.current;
+      const transportRewinds =
+        movingBackward && from < transportFrom - 0.001;
+      const transportFastForwards =
+        !transportRewinds && from > transportFrom + 0.001;
+      const segmentLo = Math.min(from, targetTime);
+      const segmentHi = Math.max(from, targetTime);
+      const canResumeVisibleSegment =
+        !movingBackward &&
+        !immediate &&
+        transportFrom >= segmentLo - 0.001 &&
+        transportFrom <= segmentHi + 0.001;
       const distance = Math.abs(from - transportFrom);
-      if (continuesFromCompleted || distance < 0.001) {
-        finishTransport();
+      if (distance < 0.001) {
+        finishTransport(from);
+        return;
+      }
+      if (canResumeVisibleSegment) {
+        finishTransport(transportFrom);
         return;
       }
 
-      const transportDurationMs = distance * 200;
+      const transportRate =
+        from < transportFrom ? REWIND_TIMELINE_RATE : SEEK_TIMELINE_RATE;
+      const transportDurationMs = distance / transportRate * 1000;
+      if (transportFastForwards) setTransportStatus("fast-forwarding");
       const startedAt = window.performance.now();
       const transport = (now: number) => {
+        const scrolling =
+          lastScrollAtRef.current > 0 &&
+          now - lastScrollAtRef.current < 500;
+        if (scrolling) {
+          showRewind(false);
+          setTransportStatus("paused");
+          scheduleAfterSettle();
+          return;
+        }
+        setTransportStatus(
+          transportRewinds
+            ? "rewinding"
+            : transportFastForwards
+              ? "fast-forwarding"
+              : "playing",
+        );
+        showRewind(transportRewinds);
         const progress = Math.min(1, (now - startedAt) / transportDurationMs);
         seekTimeline(transportFrom + (from - transportFrom) * progress);
         if (progress < 1) {
           frame = window.requestAnimationFrame(transport);
         } else {
-          finishTransport();
+          finishTransport(from);
         }
       };
       frame = window.requestAnimationFrame(transport);
@@ -245,6 +325,7 @@ function ScrollytellingPrototype() {
 
     const scheduleAfterSettle = () => {
       if (playing) return;
+      setTransportStatus("paused");
       settled = false;
       window.clearTimeout(timer);
       const idleFor = window.performance.now() - lastScrollAtRef.current;
@@ -255,33 +336,32 @@ function ScrollytellingPrototype() {
           return;
         }
         settled = true;
-        playWhenReady();
+        if (transportDone) playWhenReady();
+        else startTransport();
       }, Math.max(0, 500 - idleFor));
     };
 
-    if (!immediate && !continuesFromCompleted) {
+    const scrolling =
+      lastScrollAtRef.current > 0 &&
+      window.performance.now() - lastScrollAtRef.current < 500;
+    if (!scrolling && (immediate || continuesFromCompleted)) {
+      startTransport();
+    } else {
       if (lastScrollAtRef.current === 0) lastScrollAtRef.current = window.performance.now();
       scheduleAfterSettle();
     }
-    startTransport();
 
     return () => {
       window.clearTimeout(timer);
       window.cancelAnimationFrame(frame);
+      showRewind(false);
     };
-  }, [active, api.ready, mode, replayNonce]);
+  }, [active, api.ready, replayNonce]);
 
   useEffect(() => {
-    if (typeof window === "undefined") return;
-    const url = new URL(window.location.href);
-    url.searchParams.set("scrolly", mode);
-    window.history.replaceState({}, "", url);
-  }, [mode]);
-
-  useEffect(() => {
-    document.documentElement.classList.toggle("markgraf-chapter-snap", mode === "chapters");
+    document.documentElement.classList.add("markgraf-chapter-snap");
     return () => document.documentElement.classList.remove("markgraf-chapter-snap");
-  }, [mode]);
+  }, []);
 
   useEffect(() => {
     const noteScroll = () => {
@@ -292,8 +372,6 @@ function ScrollytellingPrototype() {
   }, []);
 
   useEffect(() => {
-    if (mode !== "chapters") return;
-
     const observer = new IntersectionObserver(
       (entries) => {
         const visible = entries
@@ -309,74 +387,23 @@ function ScrollytellingPrototype() {
 
     sectionsRef.current.forEach((section) => section && observer.observe(section));
     return () => observer.disconnect();
-  }, [mode]);
+  }, []);
 
-  useEffect(() => {
-    if (mode !== "scrub") return;
-
-    const sync = () => {
-      frameRef.current = null;
-      const marker = window.innerHeight * 0.56;
-      const sections = sectionsRef.current.filter(
-        (section): section is HTMLElement => section !== null,
-      );
-      if (!sections.length) return;
-
-      let index = sections.findIndex((section) => {
-        const rect = section.getBoundingClientRect();
-        return rect.top <= marker && rect.bottom > marker;
-      });
-      if (index < 0) index = sections[0].getBoundingClientRect().top > marker ? 0 : sections.length - 1;
-
-      const section = sections[index];
-      const rect = section.getBoundingClientRect();
-      const progress = Math.max(0, Math.min(1, (marker - rect.top) / Math.max(1, rect.height)));
-      const current = apiRef.current.steps.find((step) => step.name === chapters[index].step);
-      const previous = apiRef.current.steps.find((step) => step.name === chapters[index - 1]?.step);
-      const from = previous === undefined ? 0 : Math.max(0, previous.time - REST_FRAME_LEAD_SECONDS);
-      const end =
-        current === undefined
-          ? apiRef.current.duration
-          : Math.max(0, current.time - REST_FRAME_LEAD_SECONDS);
-
-      setActive((currentIndex) => (currentIndex === index ? currentIndex : index));
-      if (end > from) seekTimeline(from + (end - from) * progress);
-    };
-
-    const schedule = () => {
-      if (frameRef.current === null) frameRef.current = window.requestAnimationFrame(sync);
-    };
-
-    sync();
-    window.addEventListener("scroll", schedule, { passive: true });
-    window.addEventListener("resize", schedule);
-    return () => {
-      window.removeEventListener("scroll", schedule);
-      window.removeEventListener("resize", schedule);
-      if (frameRef.current !== null) window.cancelAnimationFrame(frameRef.current);
-    };
-  }, [mode, api.ready]);
-
-  const chooseMode = (next: Mode) => {
+  const pauseTransport = () => {
     apiRef.current.pause();
-    if (next === "scrub") {
-      completedChapterRef.current = -1;
-      const step = apiRef.current.steps.find((cue) => cue.name === chapters[active].step);
-      if (step) seekTimeline(step.time);
-    }
-    setMode(next);
+    setTransportStatus("paused");
   };
 
   const goToChapter = (index: number) => {
     const next = Math.max(0, Math.min(chapters.length - 1, index));
     lastScrollAtRef.current = window.performance.now();
-    chooseMode("chapters");
+    pauseTransport();
     setActive(next);
     sectionsRef.current[next]?.scrollIntoView({ behavior: "smooth", block: "center" });
   };
 
   const replay = () => {
-    chooseMode("chapters");
+    pauseTransport();
     replayNowRef.current = true;
     setReplayNonce((nonce) => nonce + 1);
   };
@@ -413,10 +440,77 @@ function ScrollytellingPrototype() {
           <div
             className="stage__frame"
             data-time={api.time}
+            data-cue-time={api.steps.find((step) => step.name === chapters[active].step)?.time}
             data-step-count={api.steps.length}
             data-step-names={api.steps.map((step) => step.name).join(",")}
+            data-rewinding={rewinding ? "true" : "false"}
           >
-            <canvas ref={api.elementRef} className="stage__canvas" />
+            <div className="stage__picture">
+              <svg className="rewind__shader" aria-hidden="true">
+                <defs>
+                  <filter
+                    id="vhs-rewind-distortion"
+                    x="-12%"
+                    y="-8%"
+                    width="124%"
+                    height="116%"
+                    colorInterpolationFilters="sRGB"
+                  >
+                    <feTurbulence
+                      type="fractalNoise"
+                      baseFrequency="0.006 0.16"
+                      numOctaves="2"
+                      seed="17"
+                      result="noise"
+                    >
+                      <animate
+                        attributeName="baseFrequency"
+                        values="0.004 0.12;0.011 0.21;0.003 0.15;0.008 0.26;0.004 0.12"
+                        dur="180ms"
+                        repeatCount="indefinite"
+                      />
+                    </feTurbulence>
+                    <feDisplacementMap
+                      in="SourceGraphic"
+                      in2="noise"
+                      scale="18"
+                      xChannelSelector="R"
+                      yChannelSelector="B"
+                      result="distorted"
+                    >
+                      <animate
+                        attributeName="scale"
+                        values="8;24;13;31;8"
+                        dur="240ms"
+                        repeatCount="indefinite"
+                      />
+                    </feDisplacementMap>
+                    <feOffset in="distorted" dx="-3" dy="0" result="red-offset" />
+                    <feFlood floodColor="#f05a3f" floodOpacity=".52" result="red" />
+                    <feComposite in="red" in2="red-offset" operator="in" result="red-ghost" />
+                    <feOffset in="distorted" dx="3" dy="0" result="cyan-offset" />
+                    <feFlood floodColor="#38a9c7" floodOpacity=".48" result="cyan" />
+                    <feComposite in="cyan" in2="cyan-offset" operator="in" result="cyan-ghost" />
+                    <feMerge>
+                      <feMergeNode in="red-ghost" />
+                      <feMergeNode in="cyan-ghost" />
+                      <feMergeNode in="distorted" />
+                    </feMerge>
+                  </filter>
+                </defs>
+              </svg>
+              <canvas ref={api.elementRef} className="stage__canvas" />
+              <div className="rewind__tracking" aria-hidden="true" />
+              <div
+                className="transport__osd"
+                data-state={playbackStatus}
+                role="status"
+                aria-live="polite"
+              >
+                <b aria-hidden="true">{playbackIndicators[playbackStatus].icon}</b>
+                <span>{playbackIndicators[playbackStatus].label}</span>
+              </div>
+            </div>
             <div className="stage__readout">
               <span>{chapters[active].number} / {chapters[active].eyebrow}</span>
               <span>{api.time.toFixed(2)}s</span>
@@ -425,7 +519,7 @@ function ScrollytellingPrototype() {
         </aside>
       </div>
 
-      <nav className="mode-switcher" aria-label="Prototype interaction mode">
+      <nav className="chapter-controls" aria-label="Chapter controls">
         <span>PROTOTYPE</span>
         <button type="button" disabled={active === 0} onClick={() => goToChapter(active - 1)}>
           Previous
@@ -439,20 +533,6 @@ function ScrollytellingPrototype() {
           onClick={() => goToChapter(active + 1)}
         >
           Next
-        </button>
-        <button
-          type="button"
-          aria-pressed={mode === "chapters"}
-          onClick={() => chooseMode("chapters")}
-        >
-          Play chapters
-        </button>
-        <button
-          type="button"
-          aria-pressed={mode === "scrub"}
-          onClick={() => chooseMode("scrub")}
-        >
-          Direct scrub
         </button>
       </nav>
     </main>
@@ -497,7 +577,7 @@ const styles = `
 
   .chapter__eyebrow,
   .stage__readout,
-  .mode-switcher,
+  .chapter-controls,
   .chapter code {
     font-family: "CommitMono", ui-monospace, monospace;
     letter-spacing: .08em;
@@ -554,11 +634,143 @@ const styles = `
     place-items: center;
   }
   .stage__frame {
-    width: 100%;
-    min-height: min(84vh, 820px);
+    width: min(100%, calc(100vh - 120px));
+    min-height: 0;
     display: grid;
-    grid-template-rows: 1fr auto;
+    grid-template-rows: auto auto;
     background: transparent;
+  }
+  .stage__picture {
+    position: relative;
+    height: auto;
+    min-height: 0;
+    aspect-ratio: 4 / 3;
+    border: 2px solid var(--ink);
+    background: var(--ink);
+    overflow: hidden;
+    isolation: isolate;
+  }
+  .rewind__shader {
+    position: absolute;
+    width: 0;
+    height: 0;
+    pointer-events: none;
+  }
+  .rewind__tracking {
+    position: absolute;
+    z-index: 3;
+    inset: 0;
+    overflow: hidden;
+    opacity: 0;
+    pointer-events: none;
+    background:
+      repeating-linear-gradient(
+        0deg,
+        rgba(25, 33, 42, .11) 0,
+        rgba(25, 33, 42, .11) 1px,
+        transparent 1px,
+        transparent 4px
+      ),
+      linear-gradient(
+        90deg,
+        rgba(240, 90, 63, .15),
+        transparent 16%,
+        transparent 82%,
+        rgba(56, 169, 199, .16)
+      );
+    mix-blend-mode: multiply;
+    transition: opacity 80ms linear;
+  }
+  .rewind__tracking::before {
+    content: "";
+    position: absolute;
+    left: -4%;
+    top: -24%;
+    width: 108%;
+    height: 18%;
+    background:
+      linear-gradient(
+        to bottom,
+        transparent,
+        rgba(247, 247, 245, .78) 28%,
+        rgba(25, 33, 42, .2) 33%,
+        rgba(247, 247, 245, .94) 39%,
+        transparent 72%
+      );
+    box-shadow:
+      0 7px 0 rgba(240, 90, 63, .14),
+      0 -4px 0 rgba(56, 169, 199, .13);
+    animation: rewind-tracking-band 520ms steps(8, end) infinite;
+  }
+  .transport__osd {
+    position: absolute;
+    z-index: 4;
+    top: 14px;
+    right: 16px;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    min-width: 68px;
+    padding: 5px 8px 4px;
+    color: #f7f7f5;
+    background: rgba(25, 33, 42, .9);
+    font: 9px "CommitMono", monospace;
+    letter-spacing: .13em;
+    text-transform: uppercase;
+    transition: opacity 120ms linear, box-shadow 120ms linear;
+  }
+  .transport__osd b {
+    min-width: 15px;
+    color: #b9c0c3;
+    font-weight: 700;
+    letter-spacing: -.08em;
+  }
+  .transport__osd[data-state="paused"] { opacity: .68; }
+  .transport__osd[data-state="playing"] b { color: #69a8c5; }
+  .transport__osd[data-state="stopped"] b { color: var(--signal); }
+  .transport__osd[data-state="rewinding"] {
+    box-shadow:
+      -3px 0 0 rgba(56, 169, 199, .75),
+      3px 0 0 rgba(240, 90, 63, .8);
+    animation: rewind-osd-blink 360ms steps(2, end) infinite;
+  }
+  .transport__osd[data-state="rewinding"] b {
+    color: var(--signal);
+    letter-spacing: -.12em;
+  }
+  .transport__osd[data-state="fast-forwarding"] {
+    box-shadow: 3px 0 0 rgba(105, 168, 197, .8);
+    animation: rewind-osd-blink 480ms steps(2, end) infinite;
+  }
+  .transport__osd[data-state="fast-forwarding"] b {
+    color: #69a8c5;
+  }
+  .stage__frame[data-rewinding="true"] .rewind__tracking { opacity: .9; }
+  .stage__frame[data-rewinding="true"] .stage__canvas {
+    filter: url("#vhs-rewind-distortion") contrast(1.18) saturate(.82);
+    animation: rewind-frame-jitter 110ms steps(3, end) infinite;
+    will-change: transform, filter;
+  }
+  .stage__frame[data-rewinding="true"] .stage__readout {
+    color: var(--signal);
+    border-top-color: rgba(240, 90, 63, .72);
+  }
+  @keyframes rewind-frame-jitter {
+    0%, 100% { transform: translate3d(0, 0, 0) skewX(0); }
+    18% { transform: translate3d(-2px, 1px, 0) skewX(-.18deg); }
+    42% { transform: translate3d(3px, -1px, 0) skewX(.25deg); }
+    68% { transform: translate3d(-1px, 0, 0) skewX(-.1deg); }
+    82% { transform: translate3d(4px, 1px, 0) skewX(.15deg); }
+  }
+  @keyframes rewind-tracking-band {
+    0% { top: -24%; transform: scaleY(.55); }
+    32% { top: 18%; transform: scaleY(1.15); }
+    67% { top: 61%; transform: scaleY(.72); }
+    100% { top: 112%; transform: scaleY(1.35); }
+  }
+  @keyframes rewind-osd-blink {
+    0%, 64% { opacity: 1; }
+    65%, 100% { opacity: .42; }
   }
   .stage__readout {
     display: flex;
@@ -568,9 +780,9 @@ const styles = `
     border-top: 1px solid var(--rule);
     font-size: 10px;
   }
-  .stage__canvas { width: 100%; height: 100%; min-height: 420px; display: block; }
+  .stage__canvas { width: 100%; height: 100%; display: block; background: #f7f7f5; }
 
-  .mode-switcher {
+  .chapter-controls {
     position: fixed;
     z-index: 20;
     right: 22px;
@@ -584,8 +796,8 @@ const styles = `
     box-shadow: 7px 7px 0 rgba(240,90,63,.9);
     font-size: 9px;
   }
-  .mode-switcher > span { padding: 0 8px; color: #b9c0c3; }
-  .mode-switcher button {
+  .chapter-controls > span { padding: 0 8px; color: #b9c0c3; }
+  .chapter-controls button {
     border: 0;
     padding: 9px 12px;
     color: #f8f3e8;
@@ -595,22 +807,31 @@ const styles = `
     text-transform: inherit;
     cursor: pointer;
   }
-  .mode-switcher button:disabled { opacity: .35; cursor: default; }
-  .mode-switcher button[aria-pressed="true"] { color: var(--ink); background: var(--paper); }
+  .chapter-controls button:disabled { opacity: .35; cursor: default; }
 
   @media (max-width: 420px) {
     .scrolly__layout { display: flex; flex-direction: column-reverse; }
     .scrolly__stage { z-index: 4; width: 100%; height: 48vh; padding: 10px; border-bottom: 1px solid var(--rule); background: rgba(247,247,245,.96); }
     .stage__frame { min-height: 0; height: 100%; }
-    .stage__canvas { min-height: 0; }
+    .stage__picture { min-height: 0; }
     .scrolly__chapters { padding-left: 18px; }
     .chapter { min-height: 86vh; padding-right: 24px; }
-    .mode-switcher { right: 12px; bottom: 12px; }
-    .mode-switcher > span { display: none; }
+    .chapter-controls { right: 12px; bottom: 12px; }
+    .chapter-controls > span { display: none; }
   }
 
   @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
     .chapter { transition: none; }
+    .stage__frame[data-rewinding="true"] .stage__canvas {
+      filter: grayscale(1) contrast(1.08);
+      animation: none;
+    }
+    .stage__frame[data-rewinding="true"] .rewind__tracking {
+      opacity: .2;
+      animation: none;
+    }
+    .rewind__tracking::before,
+    .transport__osd { animation: none; }
   }
 `;
