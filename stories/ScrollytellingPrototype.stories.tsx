@@ -1,8 +1,8 @@
 // PROTOTYPE — compare chapter-triggered playback with continuous scroll scrubbing.
 import type { Meta, StoryObj } from "@storybook/react";
 import React, { useEffect, useRef, useState } from "react";
-import { useMarkgraf } from "markgraf-react-published";
-import "markgraf-react-published/css";
+import { useMarkgraf } from "@markgrafhq/markgraf-react";
+import "@markgrafhq/markgraf-react/css";
 
 const source = `seed 17
 scene opening {

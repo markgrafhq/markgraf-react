@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import React from "react";
-import { useMarkgraf } from "markgraf-react-published";
+import { useMarkgraf } from "@markgrafhq/markgraf-react";
 
 const src = `seed 1
 scene v1 {

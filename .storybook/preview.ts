@@ -1,5 +1,5 @@
 import type { Preview } from "@storybook/react";
-import "markgraf-react-published/css";
+import "@markgrafhq/markgraf-react/css";
 
 const preview: Preview = {
   parameters: {
