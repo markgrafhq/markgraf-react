@@ -1,8 +1,8 @@
 // PROTOTYPE — compare chapter-triggered playback with continuous scroll scrubbing.
 import type { Meta, StoryObj } from "@storybook/react";
 import React, { useEffect, useRef, useState } from "react";
-import { useMarkgraf } from "@markgrafhq/markgraf-react";
-import "@markgrafhq/markgraf-react/css";
+import { useMarkgraf } from "markgraf-react-published";
+import "markgraf-react-published/css";
 
 const source = `seed 17
 scene opening {
@@ -64,13 +64,78 @@ type PlaybackStatus =
   | "fast-forwarding"
   | "rewinding"
   | "stopped";
-const playbackIndicators: Record<PlaybackStatus, { icon: string; label: string }> = {
-  paused: { icon: "Ⅱ", label: "PAUSE" },
-  playing: { icon: "▶", label: "PLAY" },
-  "fast-forwarding": { icon: "▶▶", label: "FF" },
-  rewinding: { icon: "◀◀", label: "REW" },
-  stopped: { icon: "■", label: "STOP" },
+type TapeIconName =
+  | "pause"
+  | "play"
+  | "fast-forward"
+  | "rewind"
+  | "stop"
+  | "previous"
+  | "next"
+  | "replay";
+
+const playbackIndicators: Record<PlaybackStatus, { icon: TapeIconName; label: string }> = {
+  paused: { icon: "pause", label: "PAUSE" },
+  playing: { icon: "play", label: "PLAY" },
+  "fast-forwarding": { icon: "fast-forward", label: "FF" },
+  rewinding: { icon: "rewind", label: "REW" },
+  stopped: { icon: "stop", label: "STOP" },
 };
+
+function TapeIcon({ name }: { name: TapeIconName }) {
+  let glyph: React.ReactNode;
+  switch (name) {
+    case "pause":
+      glyph = <>
+        <rect x="7" y="2" width="3" height="12" />
+        <rect x="14" y="2" width="3" height="12" />
+      </>;
+      break;
+    case "play":
+      glyph = <polygon points="8,2 17,8 8,14" />;
+      break;
+    case "fast-forward":
+      glyph = <>
+        <polygon points="3,2 11,8 3,14" />
+        <polygon points="10,2 18,8 10,14" />
+      </>;
+      break;
+    case "rewind":
+      glyph = <>
+        <polygon points="20,2 14,8 20,14" />
+        <polygon points="14,2 8,8 14,14" />
+      </>;
+      break;
+    case "stop":
+      glyph = <rect x="7" y="3" width="10" height="10" />;
+      break;
+    case "previous":
+      glyph = <>
+        <rect x="6" y="2" width="2.5" height="12" />
+        <polygon points="18,2 10,8 18,14" />
+      </>;
+      break;
+    case "next":
+      glyph = <>
+        <polygon points="6,2 14,8 6,14" />
+        <rect x="16" y="2" width="2.5" height="12" />
+      </>;
+      break;
+    case "replay":
+      glyph = <>
+        <path d="M17 4H11c-3.5 0-6 2.5-6 5.5s2.5 4.5 6 4.5h5" fill="none" stroke="currentColor" strokeWidth="3" />
+        <polygon points="14,1 20,4 14,7" />
+      </>;
+      break;
+  }
+  return (
+    <svg className="tape-icon" viewBox="0 0 24 16" aria-hidden="true" focusable="false">
+      <g className="tape-icon__back">{glyph}</g>
+      <g className="tape-icon__face">{glyph}</g>
+    </svg>
+  );
+}
+
 // A step cue is the first frame after the outgoing token and label are consumed.
 // The following route starts there at zero progress, so exact-cue sampling keeps
 // it visually hidden without cutting the outgoing label short.
@@ -507,8 +572,10 @@ function ScrollytellingPrototype() {
                 role="status"
                 aria-live="polite"
               >
-                <b aria-hidden="true">{playbackIndicators[playbackStatus].icon}</b>
-                <span>{playbackIndicators[playbackStatus].label}</span>
+                <span className="transport__glyph" aria-hidden="true">
+                  <TapeIcon name={playbackIndicators[playbackStatus].icon} />
+                </span>
+                <span className="transport__sr-only">{playbackIndicators[playbackStatus].label}</span>
               </div>
             </div>
             <div className="stage__readout">
@@ -520,19 +587,24 @@ function ScrollytellingPrototype() {
       </div>
 
       <nav className="chapter-controls" aria-label="Chapter controls">
-        <span>PROTOTYPE</span>
-        <button type="button" disabled={active === 0} onClick={() => goToChapter(active - 1)}>
-          Previous
+        <button
+          type="button"
+          aria-label="Previous chapter"
+          disabled={active === 0}
+          onClick={() => goToChapter(active - 1)}
+        >
+          <TapeIcon name="previous" />
         </button>
-        <button type="button" onClick={replay}>
-          Replay
+        <button type="button" aria-label="Replay chapter" onClick={replay}>
+          <TapeIcon name="replay" />
         </button>
         <button
           type="button"
+          aria-label="Next chapter"
           disabled={active === chapters.length - 1}
           onClick={() => goToChapter(active + 1)}
         >
-          Next
+          <TapeIcon name="next" />
         </button>
       </nav>
     </main>
@@ -702,48 +774,56 @@ const styles = `
       0 -4px 0 rgba(56, 169, 199, .13);
     animation: rewind-tracking-band 520ms steps(8, end) infinite;
   }
+  .tape-icon {
+    display: block;
+    width: 22px;
+    height: 16px;
+    overflow: visible;
+    shape-rendering: geometricPrecision;
+  }
+  .tape-icon__back {
+    color: #000;
+    fill: currentColor;
+    stroke: currentColor;
+    stroke-width: 3px;
+    stroke-linejoin: round;
+    transform: translate(.5px, .5px);
+  }
+  .tape-icon__back path { stroke-width: 6px; }
+  .tape-icon__face {
+    color: #fff;
+    fill: currentColor;
+  }
+  .transport__sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
   .transport__osd {
     position: absolute;
     z-index: 4;
-    top: 14px;
-    right: 16px;
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    min-width: 68px;
-    padding: 5px 8px 4px;
-    color: #f7f7f5;
-    background: rgba(25, 33, 42, .9);
-    font: 9px "CommitMono", monospace;
-    letter-spacing: .13em;
-    text-transform: uppercase;
-    transition: opacity 120ms linear, box-shadow 120ms linear;
+    top: 18px;
+    right: 20px;
+    width: 28px;
+    height: 22px;
+    color: #fff;
+    pointer-events: none;
   }
-  .transport__osd b {
-    min-width: 15px;
-    color: #b9c0c3;
-    font-weight: 700;
-    letter-spacing: -.08em;
+  .transport__glyph {
+    display: grid;
+    width: 100%;
+    height: 100%;
+    place-items: center;
   }
-  .transport__osd[data-state="paused"] { opacity: .68; }
-  .transport__osd[data-state="playing"] b { color: #69a8c5; }
-  .transport__osd[data-state="stopped"] b { color: var(--signal); }
-  .transport__osd[data-state="rewinding"] {
-    box-shadow:
-      -3px 0 0 rgba(56, 169, 199, .75),
-      3px 0 0 rgba(240, 90, 63, .8);
-    animation: rewind-osd-blink 360ms steps(2, end) infinite;
-  }
-  .transport__osd[data-state="rewinding"] b {
-    color: var(--signal);
-    letter-spacing: -.12em;
-  }
-  .transport__osd[data-state="fast-forwarding"] {
-    box-shadow: 3px 0 0 rgba(105, 168, 197, .8);
-    animation: rewind-osd-blink 480ms steps(2, end) infinite;
-  }
-  .transport__osd[data-state="fast-forwarding"] b {
-    color: #69a8c5;
+  .transport__glyph .tape-icon {
+    width: 23px;
+    height: 16px;
   }
   .stage__frame[data-rewinding="true"] .rewind__tracking { opacity: .9; }
   .stage__frame[data-rewinding="true"] .stage__canvas {
@@ -789,25 +869,39 @@ const styles = `
     bottom: 20px;
     display: flex;
     align-items: center;
-    gap: 5px;
-    padding: 5px;
-    color: #f8f3e8;
-    background: var(--ink);
-    box-shadow: 7px 7px 0 rgba(240,90,63,.9);
-    font-size: 9px;
+    gap: 14px;
   }
-  .chapter-controls > span { padding: 0 8px; color: #b9c0c3; }
   .chapter-controls button {
+    display: grid;
+    width: 42px;
+    height: 42px;
+    place-items: center;
     border: 0;
-    padding: 9px 12px;
-    color: #f8f3e8;
+    padding: 0;
+    color: #fff;
     background: transparent;
-    font: inherit;
-    letter-spacing: inherit;
-    text-transform: inherit;
     cursor: pointer;
+    transition: transform 70ms linear;
   }
-  .chapter-controls button:disabled { opacity: .35; cursor: default; }
+  .chapter-controls button .tape-icon {
+    width: 25px;
+    height: 18px;
+    transition: transform 70ms linear;
+  }
+  .chapter-controls button:hover:not(:disabled) .tape-icon {
+    transform: translateY(-1px);
+  }
+  .chapter-controls button:active:not(:disabled) .tape-icon {
+    transform: translate(1px, 1px);
+  }
+  .chapter-controls button:focus-visible {
+    outline: 2px solid #000;
+    outline-offset: 3px;
+  }
+  .chapter-controls button:disabled {
+    opacity: .2;
+    cursor: default;
+  }
 
   @media (max-width: 420px) {
     .scrolly__layout { display: flex; flex-direction: column-reverse; }
@@ -833,5 +927,6 @@ const styles = `
     }
     .rewind__tracking::before,
     .transport__osd { animation: none; }
+    .chapter-controls button { transition: none; }
   }
 `;
