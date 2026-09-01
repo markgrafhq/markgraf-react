@@ -5,11 +5,16 @@ import { useMarkgraf } from "@markgrafhq/markgraf-react";
 import "@markgrafhq/markgraf-react/css";
 
 const source = `seed 17
+step foundation
 scene opening {
   + browser: Browser
 }
-step foundation
+still foundationRest {
+}
 
+step arrival
+still arrivalSetup {
+}
 scene arrivalRoute {
   + edge: Edge gateway
   + browser -> edge
@@ -17,8 +22,10 @@ scene arrivalRoute {
 scene arrival {
   browser ~> edge: GET /profile
 }
-step arrival
 
+step identity
+still identitySetup {
+}
 scene identityRoute {
   + auth: Identity
   + edge -> auth
@@ -27,8 +34,10 @@ scene identity {
   edge ~> auth: verify session
   edge <~ auth: claims
 }
-step identity
 
+step cache
+still cacheSetup {
+}
 scene cacheRoute {
   + cache: Cache
   + edge -> cache
@@ -37,8 +46,10 @@ scene cache {
   edge ~> cache: profile:42
   edge <~ cache: MISS
 }
-step cache
 
+step origin
+still originSetup {
+}
 scene originRoutes {
   + service: Profile service
   + db: Primary database
@@ -50,13 +61,15 @@ scene origin {
   service ~> db: SELECT user
   service <~ db: row
 }
-step origin
 
+step response
+still responseSetup {
+}
 scene response {
   edge <~ service: 200 profile
   browser <~ edge: JSON
 }
-step response`;
+step complete`;
 
 type PlaybackStatus =
   | "paused"
@@ -136,14 +149,13 @@ function TapeIcon({ name }: { name: TapeIconName }) {
   );
 }
 
-// A step cue is the first frame after the outgoing token and label are consumed.
-// The following route starts there at zero progress, so exact-cue sampling keeps
-// it visually hidden without cutting the outgoing label short.
+// Step cues are chapter entrances. Each chapter begins with its route/camera
+// setup, plays its transaction, then stops exactly at the next chapter cue.
 const REST_FRAME_LEAD_SECONDS = 0;
 // Keep authored token velocities intact; only the constant host playback rate
 // changes. Seeking between chapters stays linear and quick.
 const FORWARD_TIMELINE_RATE = 1.25;
-const REWIND_TIMELINE_RATE = 8;
+const REWIND_DURATION_MS = 1000;
 const SEEK_TIMELINE_RATE = 5;
 const clampProgress = (progress: number) => Math.max(0, Math.min(1, progress));
 
@@ -242,25 +254,24 @@ function ScrollytellingPrototype() {
   useEffect(() => {
     if (!api.ready) return;
     const current = apiRef.current.steps.find((step) => step.name === chapters[active].step);
+    const nextChapter = chapters[active + 1];
+    const next = apiRef.current.steps.find(
+      (step) => step.name === (nextChapter?.step ?? "complete"),
+    );
     const priorActive = lastActiveRef.current;
     const movingBackward = active < priorActive;
-    const previousChapter = chapters[active - 1];
-    const previous = apiRef.current.steps.find((step) => step.name === previousChapter?.step);
     const continuesFromCompleted =
       Math.abs(active - priorActive) === 1 && completedChapterRef.current === priorActive;
     lastActiveRef.current = active;
-    if (!current) return;
-    const targetTime = Math.max(0, current.time - REST_FRAME_LEAD_SECONDS);
+    if (!current || !next) return;
+    const from = Math.max(0, current.time - REST_FRAME_LEAD_SECONDS);
+    const targetTime = Math.max(from, next.time - REST_FRAME_LEAD_SECONDS);
     const initializing = !chaptersInitializedRef.current;
     chaptersInitializedRef.current = true;
     const immediate = replayNowRef.current || initializing;
     replayNowRef.current = false;
     if (!immediate && active === priorActive && completedChapterRef.current === active) return;
 
-    const from =
-      previous === undefined
-        ? 0
-        : Math.max(0, previous.time - REST_FRAME_LEAD_SECONDS);
     let segmentFrom = from;
     let frame = 0;
     let timer = 0;
@@ -278,8 +289,7 @@ function ScrollytellingPrototype() {
     const playSegment = () => {
       playing = true;
       const stepDelta = targetTime - from;
-      const timelineRate = stepDelta < 0 ? REWIND_TIMELINE_RATE : FORWARD_TIMELINE_RATE;
-      const durationMs = Math.max(1, Math.abs(stepDelta) / timelineRate * 1000);
+      const durationMs = Math.max(1, stepDelta / FORWARD_TIMELINE_RATE * 1000);
       const progressStart =
         Math.abs(stepDelta) < 0.001
           ? 1
@@ -354,9 +364,10 @@ function ScrollytellingPrototype() {
         return;
       }
 
-      const transportRate =
-        from < transportFrom ? REWIND_TIMELINE_RATE : SEEK_TIMELINE_RATE;
-      const transportDurationMs = distance / transportRate * 1000;
+      const transportDurationMs =
+        transportRewinds
+          ? REWIND_DURATION_MS
+          : distance / SEEK_TIMELINE_RATE * 1000;
       if (transportFastForwards) setTransportStatus("fast-forwarding");
       const startedAt = window.performance.now();
       const transport = (now: number) => {
@@ -506,6 +517,9 @@ function ScrollytellingPrototype() {
             className="stage__frame"
             data-time={api.time}
             data-cue-time={api.steps.find((step) => step.name === chapters[active].step)?.time}
+            data-target-cue-time={api.steps.find(
+              (step) => step.name === (chapters[active + 1]?.step ?? "complete"),
+            )?.time}
             data-step-count={api.steps.length}
             data-step-names={api.steps.map((step) => step.name).join(",")}
             data-rewinding={rewinding ? "true" : "false"}
