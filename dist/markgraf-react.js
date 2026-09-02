@@ -3224,11 +3224,11 @@ const cN = function(t) {
         r = a, o = GN(c), i = _._1.tail;
         continue;
       }
-      if (_._1.head === "*" && 0 < _._1.tail.length && _._1.tail[0] === "*") {
+      if (!c.code && _._1.head === "*" && 0 < _._1.tail.length && _._1.tail[0] === "*") {
         r = a, o = FN(c), i = Ft(1, _._1.tail.length, _._1.tail);
         continue;
       }
-      if (a && _._1.head === "=" && 0 < _._1.tail.length && _._1.tail[0] === "=") {
+      if (a && !c.code && _._1.head === "=" && 0 < _._1.tail.length && _._1.tail[0] === "=") {
         r = a, o = IN(c), i = Ft(1, _._1.tail.length, _._1.tail);
         continue;
       }
