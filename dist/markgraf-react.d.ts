@@ -6,12 +6,29 @@ import type { FC, MutableRefObject } from "react";
 export type MarkgrafCueKind = "step" | "tokenLine";
 export type MarkgrafPlaybackDirection = "auto" | "forward" | "backward";
 
+/** Finite, monotonic spring-shaped playhead easing; it never overshoots. */
+export interface MarkgrafPlaybackEasing {
+  bounce?: 0;
+}
+
+/** Optional visual pulse on exactly one node, independent of the playhead. */
+export interface MarkgrafArrival {
+  node: string;
+  /** Ancestor node IDs, outermost first. Omit for a root-level node. */
+  path?: string[];
+  /** Defaults to 0.25; finite values are clamped to [0, 1]. */
+  bounce?: number;
+}
+
 export interface MarkgrafPlaybackOptions {
   direction?: MarkgrafPlaybackDirection;
   speed?: number;
+  /** Seconds for a bounded move; with easing/arrival, takes precedence over speed. */
   duration?: number;
   loop?: boolean;
   stopAt?: MarkgrafCueKind[];
+  easing?: MarkgrafPlaybackEasing;
+  arrival?: MarkgrafArrival;
 }
 
 export interface MarkgrafCueBase {
@@ -50,8 +67,8 @@ export interface MarkgrafCompleteEvent {
 
 /**
  * Reactive view of a mounted markgraf player.  `time`, `keyframe`, and
- * `playing` update on every animation frame; the imperative methods are
- * stable across renders.
+ * `playing` update on every animation frame. Imperative methods address the
+ * currently mounted player, including when retained across renders.
  *
  * `elementRef` is typed by the renderer you chose:
  * - default / `"canvas"` → `Ref<HTMLCanvasElement | null>`
@@ -78,7 +95,7 @@ export interface MarkgrafApi<E extends Element = HTMLCanvasElement> {
   playWith(options?: MarkgrafPlaybackOptions): void;
   pause(): void;
   toggle(): void;
-  /** Clamped to `[0, duration]`.  Pauses the player. */
+  /** Clamped to `[0, duration]`. Cancels a bounded move but preserves playing/paused state. */
   seek(seconds: number): void;
   seekCue(cueId: string): void;
   seekStep(stepName: string): void;
@@ -86,7 +103,7 @@ export interface MarkgrafApi<E extends Element = HTMLCanvasElement> {
   playToStep(stepName: string, options?: MarkgrafPlaybackOptions): void;
   playNext(options?: MarkgrafPlaybackOptions): void;
   playPrevious(options?: MarkgrafPlaybackOptions): void;
-  /** `1.0` is normal playback speed. */
+  /** `1.0` is normal. Does not change an opted-in move's captured deadline. */
   setSpeed(speed: number): void;
   onCueEnter(callback: (cue: MarkgrafCue) => void): () => void;
   onStepEnter(stepName: string, callback: (cue: MarkgrafStepCue) => void): () => void;
