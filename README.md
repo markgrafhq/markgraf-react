@@ -27,7 +27,7 @@ when a main-thread SVG player is required.
 
 ## `<MarkgrafPlayer src=... />`
 
-Headless component that draws the scene directly into the selected Canvas2D, SVG, or WebGL surface. Bring your own controls.
+Headless component that draws the scene directly into the selected Canvas2D or SVG surface. Bring your own controls.
 
 ```jsx
 import { MarkgrafPlayer } from "@markgrafhq/markgraf-react";
@@ -43,7 +43,6 @@ scene v1 {
 export default function App() {
   return <MarkgrafPlayer src={src} />;
   // Or: <MarkgrafPlayer src={src} renderer="svg" />
-  // Or: <MarkgrafPlayer src={src} renderer="sdf" />
 }
 ```
 
@@ -182,9 +181,10 @@ All seek methods retain the existing playing/paused state; a seek is not a pause
 
 ### Renderer choice
 
-- **`canvas`** (default) — Canvas2D with DPR-aware scaling and label springs. Fastest, best for many tokens.
+- **`canvas`** (default) — Canvas2D with DPR-aware scaling and label springs.
 - **`svg`** — Inline SVG. Easier to inspect/style, scales crisply at any zoom, no DPR concerns. No spring labels.
-- **`sdf`** (alias **`webgl`**) — WebGL raymarched 3D rendering; available through `MarkgrafPlayer` only.
+
+For readable diagrams, follow the [graph authoring guidance](https://github.com/i-am-the-slime/markgraf#writing-graphs-people-can-follow).
 
 ## License
 
