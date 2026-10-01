@@ -83,11 +83,58 @@ export function Player({ src }) {
 }
 ```
 
+### Live node views
+
+Canvas and SVG players can replace a node front face with live React content.
+Address a node by its DSL ID and, for nested `inside` graphs, by the ancestor
+node IDs from outermost to innermost. The path contains ancestors only: a
+root-level `api` uses `{ node: "api" }`; `api` inside `system` uses
+`{ node: "api", path: ["system"] }`.
+
+Keep the native surface and `api.viewLayer` as siblings in one stable
+`position: relative` wrapper. Render the layer for the whole player lifetime,
+including when the current array is empty, so adding or removing registrations
+does not recreate a transferred canvas:
+
+```jsx
+function Player({ src, connected }) {
+  const api = useMarkgraf(src, {
+    renderer: "svg",
+    nodeViews: [
+      {
+        node: "api",
+        path: ["system"],
+        content: <button onClick={() => alert("live")}>{connected ? "Online" : "Offline"}</button>,
+      },
+    ],
+  });
+
+  return (
+    <div style={{ position: "relative", width: 640, height: 360 }}>
+      <svg ref={api.elementRef} style={{ width: "100%", height: "100%" }} />
+      {api.viewLayer}
+    </div>
+  );
+}
+```
+
+The content box fills the node's declared logical width and height, rather
+than its projected screen bounds. A registered face keeps its native outline;
+an unregistered face retains its ordinary label fallback. Content stays live
+(it is not a screenshot or frozen subtree), preserving React context and
+component state across seeks, dives, reverse travel, and fresh JSX at the same
+address. During native travel, miniature/background modes, and the
+reverse-facing side it is inert; the reverse face is an opaque blank native
+back, so neither the label nor a child view shows through. Flat Canvas/SVG
+themes support node views; isometric themes and static exports retain the DSL
+representation. SDF/WebGL does not support node views.
+
 ### Returned API
 
 | Field          | Type                                  | Notes                                              |
 | -------------- | ------------------------------------- | -------------------------------------------------- |
 | `elementRef`   | `Ref<HTMLCanvasElement \| SVGSVGElement>` | attach to a `<canvas>` (default) or `<svg>`     |
+| `viewLayer`    | `ReactNode`                           | render beside `elementRef` in the same stable relative wrapper |
 | `time`         | `number`                              | seconds, updates each animation frame              |
 | `keyframe`     | `string`                              | name of the current scene span                     |
 | `playing`      | `boolean`                             |                                                    |

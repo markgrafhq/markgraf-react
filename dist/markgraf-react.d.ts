@@ -1,7 +1,7 @@
 // Type definitions for @markgrafhq/markgraf-react
 // Hand-written — the underlying implementation is compiled from PureScript.
 
-import type { FC, MutableRefObject } from "react";
+import type { FC, MutableRefObject, ReactNode } from "react";
 
 export type MarkgrafCueKind = "step" | "tokenLine";
 export type MarkgrafPlaybackDirection = "auto" | "forward" | "backward";
@@ -76,10 +76,15 @@ export interface MarkgrafCompleteEvent {
  */
 export interface MarkgrafApi<E extends Element = HTMLCanvasElement> {
   /**
-   * Attach to a `<canvas>` (default) or `<svg>` element.  The player
-   * draws directly into the element — no wrapper div.
+   * Attach to a `<canvas>` (default) or `<svg>` element. The player draws
+   * directly into the element.
    */
   readonly elementRef: MutableRefObject<E | null>;
+  /**
+   * Render adjacent to `elementRef` inside a stable `position: relative`
+   * wrapper. It owns the portal targets for registered node views.
+   */
+  readonly viewLayer: ReactNode;
   /** Seconds since the start of the animation. */
   readonly time: number;
   /** Name of the scene span currently being rendered. Empty before `ready`. */
@@ -110,8 +115,18 @@ export interface MarkgrafApi<E extends Element = HTMLCanvasElement> {
   onComplete(callback: (event: MarkgrafCompleteEvent) => void): () => void;
 }
 
+/**
+ * Live React content registered to one logical diagram node. `path` is the
+ * ancestor-node address, outermost first; omit it for a root-level node.
+ */
+export interface MarkgrafNodeView {
+  node: string;
+  path?: string[];
+  content: ReactNode;
+}
+
 export interface UseMarkgrafOptions<R extends "canvas" | "svg" = "canvas"> {
-  /** `"canvas"` (default) or `"svg"`.  Determines the type of `elementRef`. */
+  /** `"canvas"` (default) or `"svg"`. Determines the type of `elementRef`. */
   renderer?: R;
   /** Visual theme. `"light"` (default), `"dark"`, or `"blueprint"`. */
   theme?: "light" | "dark" | "blueprint";
@@ -119,20 +134,30 @@ export interface UseMarkgrafOptions<R extends "canvas" | "svg" = "canvas"> {
   transparent?: boolean;
   /** When `true`, the player holds on its current frame; `false` resumes. */
   paused?: boolean;
+  /** Live React content for selected Canvas/SVG node front faces. */
+  nodeViews?: readonly MarkgrafNodeView[];
 }
 
 /**
- * Mount a markgraf player and drive it imperatively.
+ * Mount a markgraf player and drive it imperatively. To use `nodeViews`, keep
+ * the canvas/SVG and returned `viewLayer` as siblings in one stable relative
+ * wrapper:
  *
  * ```tsx
- * // Canvas (default)
- * const api = useMarkgraf(src);
- * return <canvas ref={api.elementRef} />;
- *
- * // SVG
- * const api = useMarkgraf(src, { renderer: "svg" });
- * return <svg ref={api.elementRef} />;
+ * const api = useMarkgraf(src, {
+ *   nodeViews: [{ node: "api", path: ["system"], content: <Status /> }],
+ * });
+ * return <div style={{ position: "relative" }}>
+ *   <canvas ref={api.elementRef} />
+ *   {api.viewLayer}
+ * </div>;
  * ```
+ *
+ * The host box fills the node's declared logical width and height. Registered
+ * faces retain their native outline while unregistered faces retain their
+ * ordinary label fallback. Host content remains live rather than frozen and is
+ * inert while travelling or backgrounded. The native reverse-facing back is
+ * opaque and blank.
  *
  * When `src` or `renderer` changes the player is torn down and re-mounted.
  */
@@ -146,28 +171,31 @@ export function useMarkgraf(
   opts: UseMarkgrafOptions<"svg">,
 ): MarkgrafApi<SVGSVGElement>;
 
-export interface MarkgrafPlayerProps {
-  src: string;
-  /**
-   * `"canvas"` (default), `"svg"`, or `"sdf"` (alias `"webgl"`) — the WebGL
-   * raymarched 3D renderer.  The SDF renderer is self-driving: it ignores
-   * `width`/`height` (it fills its container) and isn't available through the
-   * lower-level `useMarkgraf` hook.
-   */
-  renderer?: "canvas" | "svg" | "sdf" | "webgl";
-  /** Visual theme. `"light"` (default), `"dark"`, or `"blueprint"`. */
-  theme?: "light" | "dark" | "blueprint";
-  /** When `true`, skip the background fill so the page bg shows through. */
-  transparent?: boolean;
-  width?: number;
-  height?: number;
-  /** When `true`, the player holds on its current frame; `false` resumes. */
-  paused?: boolean;
-}
+export type MarkgrafPlayerProps =
+  | {
+      src: string;
+      renderer?: "canvas" | "svg";
+      theme?: "light" | "dark" | "blueprint";
+      transparent?: boolean;
+      width?: number;
+      height?: number;
+      paused?: boolean;
+      nodeViews?: readonly MarkgrafNodeView[];
+    }
+  | {
+      src: string;
+      renderer: "sdf" | "webgl";
+      theme?: "light" | "dark" | "blueprint";
+      transparent?: boolean;
+      width?: number;
+      height?: number;
+      paused?: boolean;
+      nodeViews?: never;
+    };
 
 /**
- * Minimal player component — renders the canvas or svg element directly with
- * the markgraf scene drawn into it.  Bring your own controls via
- * `useMarkgraf` for anything richer.
+ * Minimal Canvas/SVG player. When `nodeViews` are supplied it owns the stable
+ * relative wrapper and overlay layer automatically. SDF/WebGL intentionally
+ * reject host views.
  */
 export const MarkgrafPlayer: FC<MarkgrafPlayerProps>;
