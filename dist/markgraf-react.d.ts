@@ -130,7 +130,10 @@ export interface UseMarkgrafOptions<R extends "canvas" | "svg" = "canvas"> {
   renderer?: R;
   /** Visual theme. `"light"` (default), `"dark"`, or `"blueprint"`. */
   theme?: "light" | "dark" | "blueprint";
-  /** When `true`, skip the background fill so the page bg shows through. */
+  /**
+   * Defaults to `true`: leave the outer Canvas/SVG surface transparent.
+   * Pass `false` to paint the selected theme's paper.
+   */
   transparent?: boolean;
   /** When `true`, the player holds on its current frame; `false` resumes. */
   paused?: boolean;
@@ -176,6 +179,7 @@ export type MarkgrafPlayerProps =
       src: string;
       renderer?: "canvas" | "svg";
       theme?: "light" | "dark" | "blueprint";
+      /** Defaults to `true`: leave the outer surface transparent; `false` paints theme paper. */
       transparent?: boolean;
       width?: number;
       height?: number;
@@ -194,8 +198,9 @@ export type MarkgrafPlayerProps =
     };
 
 /**
- * Minimal Canvas/SVG player. When `nodeViews` are supplied it owns the stable
- * relative wrapper and overlay layer automatically. SDF/WebGL intentionally
- * reject host views.
+ * Minimal Canvas/SVG player. Its outer Canvas/SVG surface is transparent by
+ * default; pass `transparent={false}` to paint theme paper. When `nodeViews`
+ * are supplied it owns the stable relative wrapper and overlay layer
+ * automatically. SDF/WebGL intentionally reject host views.
  */
 export const MarkgrafPlayer: FC<MarkgrafPlayerProps>;

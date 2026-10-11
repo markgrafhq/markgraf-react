@@ -46,6 +46,14 @@ export default function App() {
 }
 ```
 
+### Transparency
+
+Canvas and SVG players leave their outer surface transparent by default, for
+both animated and static sequence sources. Pass `transparent={false}` to
+`<MarkgrafPlayer>` (or `{ transparent: false }` to `useMarkgraf`) to paint the
+selected theme's paper instead. This affects only the outer surface; diagram
+nodes, captions, and nested surfaces retain their intended fills.
+
 ## `useMarkgraf(src, opts?)` — custom UI
 
 Markgraf does not draw scene names into the diagram. Render `api.keyframe` in
