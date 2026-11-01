@@ -125,6 +125,14 @@ export interface MarkgrafNodeView {
   content: ReactNode;
 }
 
+/** A browser-loadable upright font used for every diagram text role. */
+export interface MarkgrafFont {
+  family: string;
+  url: string;
+  /** CSS font-weight descriptor, e.g. `"400 700"` for a variable face. */
+  weight: string;
+}
+
 export interface UseMarkgrafOptions<R extends "canvas" | "svg" = "canvas"> {
   /** `"canvas"` (default) or `"svg"`. Determines the type of `elementRef`. */
   renderer?: R;
@@ -139,6 +147,11 @@ export interface UseMarkgrafOptions<R extends "canvas" | "svg" = "canvas"> {
   paused?: boolean;
   /** Live React content for selected Canvas/SVG node front faces. */
   nodeViews?: readonly MarkgrafNodeView[];
+  /**
+   * Load this face before measuring or drawing. It applies only to this
+   * Canvas/SVG player; omitted options retain Markgraf's ordinary families.
+   */
+  font?: MarkgrafFont;
 }
 
 /**
@@ -185,6 +198,7 @@ export type MarkgrafPlayerProps =
       height?: number;
       paused?: boolean;
       nodeViews?: readonly MarkgrafNodeView[];
+      font?: MarkgrafFont;
     }
   | {
       src: string;
@@ -195,12 +209,13 @@ export type MarkgrafPlayerProps =
       height?: number;
       paused?: boolean;
       nodeViews?: never;
+      font?: never;
     };
 
 /**
  * Minimal Canvas/SVG player. Its outer Canvas/SVG surface is transparent by
  * default; pass `transparent={false}` to paint theme paper. When `nodeViews`
  * are supplied it owns the stable relative wrapper and overlay layer
- * automatically. SDF/WebGL intentionally reject host views.
+ * automatically. SDF/WebGL intentionally reject host views and custom fonts.
  */
 export const MarkgrafPlayer: FC<MarkgrafPlayerProps>;

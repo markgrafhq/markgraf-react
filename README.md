@@ -54,6 +54,30 @@ both animated and static sequence sources. Pass `transparent={false}` to
 selected theme's paper instead. This affects only the outer surface; diagram
 nodes, captions, and nested surfaces retain their intended fills.
 
+### Custom typography
+
+Canvas and SVG accept one font descriptor for all diagram lettering, including
+nodes, edges, messages, variables, code spans, and sequence diagrams:
+
+```jsx
+const newspaperFont = {
+  family: "Newsreader",
+  url: new URL("./Newsreader.ttf", import.meta.url).href,
+  weight: "400 700",
+};
+
+<MarkgrafPlayer src={src} font={newspaperFont} />;
+// Headless: useMarkgraf(src, { font: newspaperFont })
+```
+
+Supply the actual font file and its CSS weight descriptor. Use an absolute or
+data URL so the inline Canvas worker can fetch it; cross-origin servers must
+allow CORS. The CSS Font Loading API is required. The face loads before layout
+measurement and before `ready`, so text and its boxes use matching metrics.
+The selected family belongs to that player; omitting `font` preserves the
+standard typography. SDF/WebGL does not support custom fonts and rejects the
+option rather than ignoring it.
+
 ## `useMarkgraf(src, opts?)` — custom UI
 
 Markgraf does not draw scene names into the diagram. Render `api.keyframe` in
