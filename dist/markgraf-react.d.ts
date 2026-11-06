@@ -65,6 +65,12 @@ export interface MarkgrafCompleteEvent {
   readonly time: number;
 }
 
+/** A node by its DSL ID and its ancestor node IDs, outermost first. */
+export interface MarkgrafNodeAddress {
+  readonly node: string;
+  readonly path: readonly string[];
+}
+
 /**
  * Reactive view of a mounted markgraf player.  `time`, `keyframe`, and
  * `playing` update on every animation frame. Imperative methods address the
@@ -113,6 +119,11 @@ export interface MarkgrafApi<E extends Element = HTMLCanvasElement> {
   onCueEnter(callback: (cue: MarkgrafCue) => void): () => void;
   onStepEnter(stepName: string, callback: (cue: MarkgrafStepCue) => void): () => void;
   onComplete(callback: (event: MarkgrafCompleteEvent) => void): () => void;
+  /**
+   * The node drawn under a page coordinate (e.g. a click's `clientX`/`clientY`),
+   * or `null` over empty space. `path` holds ancestor node IDs, outermost first.
+   */
+  nodeAt(clientX: number, clientY: number): MarkgrafNodeAddress | null;
 }
 
 /**

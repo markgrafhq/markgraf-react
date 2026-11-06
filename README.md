@@ -183,6 +183,23 @@ representation. SDF/WebGL does not support node views.
 | `playNext(options?)`, `playPrevious(options?)` | bounded playback | next/previous matching cue, or end/start boundary |
 | `onCueEnter(fn)`, `onStepEnter(name, fn)` | return an unsubscribe function | cue events in traversal order |
 | `onComplete(fn)` | returns an unsubscribe function | target/boundary completion, not cancellation |
+| `nodeAt(clientX, clientY)` | `{ node, path } \| null` | node drawn at a page point; pair it with your own click handler |
+
+### Clickable nodes
+
+`nodeAt` names the node under a page coordinate, using the same silhouette,
+clipping and occlusion as hover. Handle the pointer event yourself and ask it
+which node was hit:
+
+```jsx
+<canvas
+  ref={api.elementRef}
+  onClick={(e) => {
+    const hit = api.nodeAt(e.clientX, e.clientY);
+    if (hit?.node === "bank") api.playToStep("charge", { duration: 0.8, easing: {} });
+  }}
+/>
+```
 
 ### Finite spring-shaped bounded playback
 
