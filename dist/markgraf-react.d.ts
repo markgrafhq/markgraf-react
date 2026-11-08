@@ -154,6 +154,8 @@ export interface UseMarkgrafOptions<R extends "canvas" | "svg" = "canvas"> {
    * Pass `false` to paint the selected theme's paper.
    */
   transparent?: boolean;
+  /** Pass `true` to tint the node under the pointer. Off by default. */
+  hover?: boolean;
   /** When `true`, the player holds on its current frame; `false` resumes. */
   paused?: boolean;
   /** Live React content for selected Canvas/SVG node front faces. */
@@ -205,6 +207,8 @@ export type MarkgrafPlayerProps =
       theme?: "light" | "dark" | "blueprint";
       /** Defaults to `true`: leave the outer surface transparent; `false` paints theme paper. */
       transparent?: boolean;
+      /** Pass `true` to tint the node under the pointer. Off by default. */
+      hover?: boolean;
       width?: number;
       height?: number;
       paused?: boolean;
